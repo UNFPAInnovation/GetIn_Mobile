@@ -54,6 +54,74 @@ public interface IPatient extends ISubject{
 	 * @return the gender
 	 */
 	public abstract String getGender();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getpNumber();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getHolder_pNumber();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract Date getLMD();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getMarital_status();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getEducation_level();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getContraceptive_use();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getANC_status();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getANC_visit();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getEDD();
+	/**
+	 * @return the receive_sms
+	 */
+	public abstract String getReceive_sms();
+	/**
+	 * @return the follow_up
+	 */
+	public abstract String getFollow_up();
+	/**
+	 * @return the CUG_status
+	 */
+	public abstract String getCUG_status();
+	/**
+	 * @return the comment
+	 */
+	public abstract String getComment();
+	/**
+	 * @return the bleeding
+	 */
+	public abstract String getBleeding();
+	/**
+	 * @return the fever
+	 */
+	public abstract String getFever();
+	/**
+	 * @return the swollen_feet
+	 */
+	public abstract String getSwollen_feet();
+	/**
+	 * @return the blurred_vision
+	 */
+	public abstract String getBlurred_vision();
 
 	/**
 	 * @return the image
