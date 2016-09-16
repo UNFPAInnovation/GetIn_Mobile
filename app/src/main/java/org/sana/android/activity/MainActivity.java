@@ -593,11 +593,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
                 break;
-            case R.id.btn_training_mode:
+            case R.id.btn_map_girl:
                 String subj = getString(R.string.tr_subject);
-                String proc = getString(R.string.tr_procedure);
+//                String proc = getString(R.string.tr_procedure);
+                String reg_uuid = getString(R.string.procs_subject_short_form);
                 intent = new Intent(Intent.ACTION_VIEW)
-                        .setData(Uris.withAppendedUuid(Procedures.CONTENT_URI, proc))
+                        .setData(Uris.withAppendedUuid(Procedures.CONTENT_URI, reg_uuid))
                         .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, RUN_PROCEDURE);
