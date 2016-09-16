@@ -1,78 +1,125 @@
 <Procedure title="API Test"
     uuid="2bae218f-9c07-40ac-88fb-c7c60aa1d89d"
     version="1"
-    author="Sana"
-    description="A demonstration of functional elements">
-    <Page>
+    author="GetIn"
+    description="Follow Up">
+    
 
-    <Element id="1"
-        type="DATE"
-        concept="DATE"
-        question="Entry a date value."
-        answer=""/>
+    
+       
+    <Page>
+        <Element
+            id="1"
+            type="ENTRY"
+            concept="REASON FOR MISSING"
+            question="Reason for missing"
+            answer=""
+            />
+        <Element
+            id="2"
+            type="DATE"
+            concept="DATE  TO HONOUR"
+            question="Next date to honour"
+            answer=""
+            />
+        <Element id="3"
+            type="RADIO"
+            concept="FOLLOW UP LOCATION PATIENT HOUSE"
+            question="Are you at the girl's home?"
+            choices="Yes;No"
+            required="true"
+            answer=""/>
     </Page>
     <Page>
-    <Element id="2"
-        type="ENTRY"
-        concept="TEXT"
-        question="Enter text"
-        answer=""/>
+        <showif>
+            <criteria type="EQUALS" id="3" value="yes"/>
+        </showif>
+        <Element
+            id="3a"
+            concept="MENSTRUAL FLOW"
+            type="RADIO"
+            required="true"
+            question="Are you bleeding heavily?
+                              (Changing sanitary wear more than 4  times in space of 2hrs)"
+            choices="Yes;No"
+            answer=""
+            />
+        <Element
+            id="3b"
+            concept="FEVER"
+            type="RADIO"
+            required="true"
+            question="Do you have a fever?"
+            choices="Yes;No"
+            answer=""
+            />
+        <Element
+            id="3c"
+            concept="FEET SWELLING"
+            type="RADIO"
+            required="true"
+            question="Are you’re feet swollen? Even when u’ve not stood for a long time"
+            choices="Yes;No"
+            answer=""
+            />
+        <Element
+            id="3d"
+            concept="BLURRED VISION"
+            type="RADIO"
+            required="true"
+            question="Are you experiencing blurred vision?"
+            choices="Yes;No"
+            answer=""
+            />
     </Page>
     <Page>
-    <Element id="3"
-        type="SELECT"
-        concept="TEXT"
-        question="Select a single value."
-        choices="1;2;3;4"
-        answer=""/>
+        <ShowIf>
+                <and>
+                    <Criteria type="EQUALS" id="3a" value="YES" />
+
+                    <Criteria type="EQUALS" id="3b" value="YES" />
+
+                    <Criteria type="EQUALS" id="3c" value="YES" />
+
+                    <Criteria type="EQUALS" id="3d" value="YES" />
+                </and>
+
+        </ShowIf>
+        <Element
+            type="TEXT"
+            concept="HIGH RISK"
+            id="4a"
+            question="High Risk Patient. Please refer to Doctor. Add any additional comments."
+            answer=""
+             />
     </Page>
     <Page>
-    <Element id="4"
-        type="MULTI_SELECT"
-        concept="MULTIVALUE TEXT"
-        question="Select one or more values."
-        choices="1;2;3;4"
-        answer=""/>
+        <ShowIf>
+            <or>
+                <Criteria type="EQUALS" id="3a" value="YES" />
+
+                <Criteria type="EQUALS" id="3b" value="YES" />
+
+                <Criteria type="EQUALS" id="3c" value="YES" />
+
+                <Criteria type="EQUALS" id="3d" value="YES" />
+            </or>
+
+        </ShowIf>
+        <Element
+            type="ENTRY"
+            concept="LOW RISK"
+            id="4b"
+            question=" Risk Patient. Please refer to Doctor. Add any additional comments."
+            answer=""
+        />
     </Page>
     <Page>
-    <Element id="5"
-        type="RADIO"
-        concept="TEXT"
-        question="Select a single value."
-        choices="1;2;3;4"
-        answer="1"/>
+        <Element
+            id="5"
+            concept="FOLLOW UP RESULT"
+            type=""
+            />
     </Page>
-    <Page>
-    <Element id="6"
-        type="PICTURE"
-        concept="IMAGE"
-        question="Take a picture"
-        answer=""/>
-    </Page>
-    <!--
-    <Page>
-    <Element type="PLUGIN" id="7"
-        concept="FILE"
-        question="Demonstrate file input from another app."
-        action="org.sana.plugin.CAPTURE_FILE"
-        mimeType="application/xml"/>
-    </Page>
-    <Page>
-    <Element type="ENTRY_PLUGIN" id="8"
-        concept="TEXT"
-        question="Demonstrate text input from another app."
-        action="org.sana.plugin.CAPTURE_CHARS"
-        mimeType="text/plain"/>
-    </Page>
-    -->
-    <Page>
-    <ShowIf>
-        <Criteria type="EQUALS" id="4" value="1"/>
-    </ShowIf>
-    <Element id="9"
-        type="TEXT"
-        concept="OUTPUT"
-        question="EQUALS criteria. This will display if '1' was selected for question with id=4"
-        answer=""/>
-    </Page>
-</Procedure>
+
+    </Procedure>
