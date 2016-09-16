@@ -72,10 +72,100 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 	public String getGiven_name() {
 		return getStringField(Patients.Contract.GIVEN_NAME);
 	}
-
-	/* (non-Javadoc)
-	 * @see org.sana.api.IPatient#getFamily_name()
+    /* (non-Javadoc)
+	 * @see org.sana.api.IPatient#getpNumber()
 	 */
+    @Override
+    public String getpNumber() {
+        return getStringField(Patients.Contract.PNUMBER);
+    }
+
+    /* (non-Javadoc)
+	 * @see org.sana.api.IPatient#Holder_pNumber()
+	 */
+    @Override
+    public String getHolder_pNumber() {
+        return getStringField(Patients.Contract.HOLDER_pNUMBER);
+    }
+
+    @Override
+    public Date getLMD() {
+        return getDateField(Patients.Contract.LMD);
+    }
+
+    @Override
+    public String getMarital_status() {
+        return getStringField(Patients.Contract.MARITAL_STATUS);
+    }
+
+    @Override
+    public String getEducation_level() {
+        return getStringField(Patients.Contract.EDUCATION_LEVEL);
+    }
+
+    @Override
+    public String getContraceptive_use() {
+        return getStringField(Patients.Contract.CONTRACEPTIVE_USE);
+    }
+
+    @Override
+    public String getANC_status() {
+        return getStringField(Patients.Contract.ANC_STATUS);
+    }
+
+    @Override
+    public String getANC_visit() {
+        return getStringField(Patients.Contract.ANC_VISIT);
+    }
+
+    @Override
+    public String getEDD() {
+        return getStringField(Patients.Contract.EDD);
+    }
+
+    @Override
+    public String getReceive_sms() {
+        return getStringField(Patients.Contract.RECEIVE_SMS);
+    }
+
+    @Override
+    public String getFollow_up() {
+        return getStringField(Patients.Contract.FOLLOW_UP);
+    }
+
+    @Override
+    public String getCUG_status() {
+        return getStringField(Patients.Contract.CUG_STATUS);
+    }
+
+    @Override
+    public String getComment() {
+        return getStringField(Patients.Contract.COMMENT);
+    }
+
+    @Override
+    public String getBleeding() {
+        return getStringField(Patients.Contract.BLEEDING);
+    }
+
+    @Override
+    public String getFever() {
+        return getStringField(Patients.Contract.FEVER);
+    }
+
+    @Override
+    public String getSwollen_feet() {
+        return getStringField(Patients.Contract.SWOLLEN_FEET);
+    }
+
+    @Override
+    public String getBlurred_vision() {
+        return getStringField(Patients.Contract.BLURRED_VISION);
+    }
+
+    /* (non-Javadoc)
+     * @see org.sana.api.IPatient#getFamily_name()
+     */
 	@Override
 	public String getFamily_name() {
 		return getStringField(Patients.Contract.FAMILY_NAME);
@@ -130,6 +220,23 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setFamily_name(getFamily_name());
         obj.setGiven_name(getGiven_name());
         obj.setGender(getGender());
+        obj.setpNumber(getpNumber());
+        obj.setHolder_pNumber(getHolder_pNumber());
+        obj.setLMD(getLMD());
+        obj.setMarital_status(getMarital_status());
+        obj.setEducation_level(getEducation_level());
+        obj.setContraceptive_use(getContraceptive_use());
+        obj.setANC_status(getANC_status());
+        obj.setANC_visit(getANC_visit());
+        obj.setEDD(getEDD());
+        obj.setreceive_sms(getReceive_sms());
+        obj.setfollow_up(getFollow_up());
+        obj.setCUG_status(getCUG_status());
+        obj.setcomment(getComment());
+        obj.setBleeding(getBleeding());
+        obj.setFever(getFever());
+        obj.setSwollen_feet(getSwollen_feet());
+        obj.setBlurred_vision(getBlurred_vision());
         obj.setImage(getImage());
         obj.setLocation((Location) getLocation());
         obj.setSystemId(getSystemId());
@@ -263,6 +370,23 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         // Format the date for insert
         cv.put(Patients.Contract.DOB, Dates.toSQL(mPatient.getDob()));
         cv.put(Patients.Contract.GENDER, mPatient.getGender());
+        cv.put(Patients.Contract.PNUMBER, mPatient.getpNumber());
+        cv.put(Patients.Contract.HOLDER_pNUMBER, mPatient.getHolder_pNumber());
+        cv.put(Patients.Contract.LMD, Dates.toSQL(mPatient.getLMD()));
+        cv.put(Patients.Contract.MARITAL_STATUS, mPatient.getMarital_status());
+        cv.put(Patients.Contract.EDUCATION_LEVEL, mPatient.getEducation_level());
+        cv.put(Patients.Contract.CONTRACEPTIVE_USE, mPatient.getContraceptive_use());
+        cv.put(Patients.Contract.ANC_STATUS, mPatient.getANC_status());
+        cv.put(Patients.Contract.ANC_VISIT, mPatient.getANC_visit());
+        cv.put(Patients.Contract.EDD, mPatient.getEDD());
+        cv.put(Patients.Contract.RECEIVE_SMS, mPatient.getReceive_sms());
+        cv.put(Patients.Contract.FOLLOW_UP, mPatient.getFollow_up());
+        cv.put(Patients.Contract.CUG_STATUS, mPatient.getCUG_status());
+        cv.put(Patients.Contract.COMMENT, mPatient.getComment());
+        cv.put(Patients.Contract.BLEEDING, mPatient.getBleeding());
+        cv.put(Patients.Contract.FEVER, mPatient.getFever());
+        cv.put(Patients.Contract.SWOLLEN_FEET, mPatient.getSwollen_feet());
+        cv.put(Patients.Contract.BLURRED_VISION, mPatient.getBlurred_vision());
         cv.put(Patients.Contract.IMAGE, String.valueOf(mPatient.getImage()));
         //TODO update db and uncomment
         //cv.put(Patients.Contract.CONFIRMED, mPatient.getConfirmed());
