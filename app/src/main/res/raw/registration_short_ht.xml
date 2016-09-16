@@ -1,108 +1,194 @@
 <Procedure
-    title="Medical Registration Form"
+    title="Midwife mapping Form"
     author="GetIn"
     uuid="18785afb-6160-45a0-ac8c-1f5cbfaa6d92"
     version="1.0"
-    locale="ht"
+    locale="en"
     object_class="org.sana.core.Subject"
 	on_complete="intent://org.sana.provider/core/procedure/5299055a-c5e6-47e7-b649-dc17dac6019b#Intent;scheme=content;action=org.sana.android.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end">
       <Page>
-          <Element
-			id="1"
-			concept="CONTRACEPTIVE USE"
-			type="RADIO"
-			required="true"
-			question="Contraceptive Use Status"
-			choices="Yes,NO"
-			answer="NO"/>
-		<Element
-			id="2"
-			concept="ANC STATUS"
-			type="RADIO"
-			required="true"
-			question="What is your Anenatal Care Status?"
-			choices="Yes,No"
-                                 help text = “Choose whether Girl has attended ANC before”
-			values="Yes,No"/>
-	</Page>
+        <Element
+            id="demo"
+            type="TEXT"
+            concept="demographics text"
+            question="GIRLS DEMOGRAPHICS DETAILS"
+            />
+        <Element
+            id="1"
+            concept="GIVEN NAME"
+            type="ENTRY"
+            required="true"
+            question="Enter First Name"
+            answer=""
+            helpText="Please enter the given name"
+            />
+        <Element
+            id="2"
+            concept="FAMILY NAME"
+            type="ENTRY"
+            required="true"
+            question="Enter Last Name"
+            answer=""
+            />
+        <Element
+            id="3"
+            concept="DOB"
+            type="DATE"
+            required="true"
+            question="Enter Date of Birth"
+            answer=""
+            />
 
-	<Page>
-		<ShowIf>
-			<Criteria type="EQUALS" id="2" value="Yes"/>
-		</ShowIf>
-			<Element>
-				id="3"
-				concept="ANC SERVICES"
-				type="MULTI_SELECT"
-				required="true"
-				question="Services provided in ANC"
-                                           choices = “Pelvic Exam,Blood Pressure,Blood and Urine Tests”
-				answer=""/>
-	</Page>
+        <Element
+            id="4"
+            concept="AGE"
+            type="HIDDEN"
+            required="false"
+            question=""
+            answer=""/>
+    </Page>
+    <Page>
+        <Element
+            id="5"
+            concept="PNUMBER"
+            type="ENTRY"
+            required="true"
+            question="Enter Girl's Phone Number"
+            answer=""
+            />
+        <Element
+            id="6"
+            concept="holder_pnumber"
+            type="ENTRY"
+            required="true"
+            question="Enter PowerHolder's Number"
+            answer=""
+            />
+        <Element id="7" type="RADIO"
+            concept="LOCATION PATIENT HOUSE"
+            question="Are you at the girl's home?"
+            choices="Yes;No"
+            required="true"
+            answer=""/>
+    </Page>
+    <Page>
+        <showif>
+            <criteria type="EQUALS" id="7" value="yes"/>
+        </showif>
+        <Element
+            id="7a"
+            concept="LOCATION"
+            type="HIDDEN"
+            required="false"
+            question="Girl's Address/Location"
+            Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
+            action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
+        />
+    </Page>
+    <Page>
+        <showif>
+            <criteria type="EQUALS" id="7" value="no"/>
+        </showif>
+        <Element
+            id="7b"
+            concept="MANUAL LOCATION"
+            type="SELECT"
+            required="true"
+            question="Select Girl's location"
+            choices="Kayonza;
+                     Kihihi;
+                     Kinkizi;
+                     Rugazi;
+                     Bukinda;
+                     Kisasi;
+                     Kamwokya;
+                     Rugazi"
+            answer=""
 
-	<Page>
-		<Element>
-			id="4"
-			concept="NEXT ANC VISIT"
-			type="TEXT"
-			required="true"
-			question="Next ANC visit"
-			answer=""/>
-	
-	</Page>
-
-	<Page>
-		<Element>
-			id="5"
-			concept="LMD"
-			type="DATE"
-			required="true"
-			question="Last Menstruation Date"
-			answer=""
-		</Element>
-	</Page>
-<Page>
-		<ShowIf>
-			<Criteria type="EQUALS" id="5" value="Yes"/>
-		</ShowIf>
-			<Element>
-				id="6"
-				concept="EDD"
-				type="TEXT"
-				required="true"
-				question=""
-				answer=""/>
-	</Page>
-
-	<Page>
-		<Element>
-			id="7"
-			concept="SMS INTEREST"
-			type="RADIO"
-			required="true"
-			question="Interest in getting SMS"
-			choices="YES,NO"
-			answer="YES"
-		</Element>
-
-
-		<Element>
-			id="8"
-			concept="CUG STATUS"
-			type="RADIO"
-			required="true"
-			question="Do you want to receive follow up calls?"
-			choices="YES,NO"
-			answer="NO"
-</Element>
-	<Page>
-		<Element>
-			id="9"
-			concept="COMMENTS"
-			type="ENTRY"
-			required="true"
-			question="Any Comments"
-			answer=""
-		</Element>
-	</Page>	
+        />
+    </Page>
+    <Page>
+        <Element
+            id="9"
+            concept="MARITAL STATUS"
+            type="SELECT"
+            required="true"
+            question="Martial Status"
+            choices="SINGLE;MARRIED;DIVORCED"
+            answer=""
+            />
+        <Element
+            id="10"
+            concept="EDUCATION LEVEL"
+            type="SELECT"
+            required="true"
+            question="Highest Education Level"
+            choices="Primary_level;OLevel;Alevel;Tertiary"
+            answer=""/>
+        <Element
+            id="11"
+            concept="CONTRACEPTIVE USE"
+            type="RADIO"
+            choices="Yes;No"
+            question="Have you used Contraceptives before?"
+            answer=""/>
+    </Page>
+    <Page>
+        <Element
+        id="12"
+        type="RADIO" choices="Yes;No"
+        question="Have you attended ANC during this pregnancy?"
+        concept="ANC visit"
+        required="true"
+            answer=""
+            />
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="12" value="Yes"/>
+        </ShowIf>
+        <Element id="12a" type="DATE"
+            concept="ANC CARD DATE"
+            question="Enter Next ANC visit from Card"
+            required="true"
+            answer=""
+        />
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="12" value="No"/>
+        </ShowIf>
+        <Element id="12b" type="TEXT"
+            concept="GENERATED ANC CARD DATE"
+            question="Your next ANC visit is on Thursday 17.10.2016"
+        />
+    </Page>
+    <Page>
+        <Element
+            id="18"
+            type="TEXT"
+            question="GIRLS APPOINTMENT NOTES"
+            />
+        <Element
+            id="19"
+            type="ENTRY"
+            concept="ACTION TAKEN"
+            question="Action taken"
+            answer=""
+            />
+        <Element
+            id="20"
+            type="ENTRY"
+            concept="RISK IDENTIFIED"
+            question="Any RISK identified?"
+            answer=""
+            />
+        <Element
+            id="21"
+            type="DATE"
+            concept="NEXT APPOINTMENT"
+            question="Next Appointment Date"
+            answer=""
+            />
+    </Page>
 </Procedure>
