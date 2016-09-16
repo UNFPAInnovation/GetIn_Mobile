@@ -17,15 +17,8 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.sana.R;
 import org.sana.android.app.Locales;
-import org.sana.android.db.SanaDB;
-import org.sana.android.db.SanaDB.BinarySQLFormat;
-import org.sana.android.db.SanaDB.ImageSQLFormat;
-import org.sana.android.db.SanaDB.SoundSQLFormat;
 import org.sana.android.procedure.Procedure;
 import org.sana.android.procedure.ProcedureParseException;
-import org.sana.android.provider.Encounters;
-import org.sana.android.provider.Notifications;
-import org.sana.android.provider.Observations;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
 
@@ -363,7 +356,10 @@ public class SanaUtil {
         insertProcedure(ctx, R.raw.ssi_two_site);
         insertProcedure(ctx, R.raw.audio_upload_test);
         */
+        insertProcedure(ctx, R.raw.mapping_form_midwife);
         insertProcedure(ctx, R.raw.demonstration);
+        insertProcedure(ctx, R.raw.registration_short_en);
+        insertProcedure(ctx, R.raw.ssi);
         /*
         insertProcedure(ctx, R.raw.chain_test1);
         insertProcedure(ctx, R.raw.chain_test2);
@@ -371,7 +367,7 @@ public class SanaUtil {
         insertProcedure(ctx, R.raw.api_test_select);
         */
         /* Haiti procedures */
-        //insertProcedure(ctx, R.raw.ssi);
+//        insertProcedure(ctx, R.raw.ssi);
     }
 
     /** Returns true if the phone has telphony or wifi service
