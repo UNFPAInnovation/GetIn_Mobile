@@ -584,7 +584,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
                 break;
-            case R.id.btn_map_girl:
+            case R.id.btn_training_mode:
                 String subj = getString(R.string.tr_subject);
 //                String proc = getString(R.string.tr_procedure);
                 String reg_uuid = getString(R.string.procs_subject_short_form);

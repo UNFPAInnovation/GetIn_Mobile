@@ -77,13 +77,13 @@ public abstract class ProcedureElement {
         RADIO(""), 
         
         /** Provides capture of one or more images */
-        //PICTURE("image.jpg"),
+        PICTURE("image.jpg"),
         
         /** Provides capture of a single audio resource. */
-        //SOUND("sound.3gp"), 
+        SOUND("sound.3gp"),
         
         /** Provides attachment of a binary file for upload */
-        //BINARYFILE("binary.bin"), 
+        BINARYFILE("binary.bin"),
         
         /** A marker for invalid elements */
         INVALID(""), 
@@ -95,20 +95,20 @@ public abstract class ProcedureElement {
         DATE(""),
         
         /** Provides a viewable resource for patient education. */
-        //EDUCATION_RESOURCE(""),
+        EDUCATION_RESOURCE(""),
         
         /** Provides access to 3rd party tools for data capture where the data
          *  is returned directly. 
          */
-       // PLUGIN(""),
+       PLUGIN(""),
         
         /** Provides access to 3rd party tools for data capture where the data
          *  is not returned directly and must be manually entered by the user. 
          */
-        //ENTRY_PLUGIN(""),
+        ENTRY_PLUGIN(""),
         HIDDEN(""),
         AGE(""),
-        //TRUTH;
+        TRUTH;
     	
         private String filename;
 
