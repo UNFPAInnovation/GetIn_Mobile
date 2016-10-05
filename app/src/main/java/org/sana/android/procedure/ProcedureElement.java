@@ -1,21 +1,8 @@
 package org.sana.android.procedure;
 
-import java.net.URISyntaxException;
-
-import org.sana.R;
-import org.sana.android.activity.BaseRunner;
-import org.sana.android.activity.ProcedureRunner;
-import org.sana.android.media.AudioPlayer;
-import org.sana.android.media.EducationResource;
-import org.sana.android.util.SanaUtil;
-import org.w3c.dom.Node;
-
-import com.google.gson.Gson;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -26,6 +13,14 @@ import android.widget.Gallery;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import org.sana.R;
+import org.sana.android.media.AudioPlayer;
+import org.sana.android.media.EducationResource;
+import org.sana.android.util.SanaUtil;
+import org.w3c.dom.Node;
+
+import java.net.URISyntaxException;
 
 /**
  * A ProcedureElement is an item that can be placed on a page in a Sana 
@@ -77,13 +72,13 @@ public abstract class ProcedureElement {
         RADIO(""), 
         
         /** Provides capture of one or more images */
-        //PICTURE("image.jpg"),
+        PICTURE("image.jpg"),
         
         /** Provides capture of a single audio resource. */
-        //SOUND("sound.3gp"), 
+        SOUND("sound.3gp"),
         
         /** Provides attachment of a binary file for upload */
-        //BINARYFILE("binary.bin"), 
+        BINARYFILE("binary.bin"),
         
         /** A marker for invalid elements */
         INVALID(""), 
@@ -95,20 +90,20 @@ public abstract class ProcedureElement {
         DATE(""),
         
         /** Provides a viewable resource for patient education. */
-        //EDUCATION_RESOURCE(""),
+        EDUCATION_RESOURCE(""),
         
         /** Provides access to 3rd party tools for data capture where the data
          *  is returned directly. 
          */
-       // PLUGIN(""),
+        PLUGIN(""),
         
         /** Provides access to 3rd party tools for data capture where the data
          *  is not returned directly and must be manually entered by the user. 
          */
-        //ENTRY_PLUGIN(""),
+        ENTRY_PLUGIN(""),
         HIDDEN(""),
         AGE(""),
-        //TRUTH;
+        TRUTH;
     	
         private String filename;
 

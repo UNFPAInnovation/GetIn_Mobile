@@ -9,6 +9,7 @@
     <color name="due_today">#FF9933</color>
     <color name="grey_medium">#808080</color>
     <color name="grey_dark">#404040</color>
+    <color name="background_color">#00838F</color>
     <!-- Progress Dialog colors -->
     <color name="bg_progressdialog">#8C4406</color>
     <color name="fg_progressdialog">#FFFFFF</color>
@@ -40,7 +41,7 @@
     <color name="dim_foreground_inverse_disabled_holo_light">#80bebebe</color>
     <color name="hint_foreground_holo_light">#808080</color>
     <color name="highlighted_text_holo_dark">#6633b5e5</color>
-    <color name="highlighted_text_holo_light">#6633b5e5</color>
+    <color name="highlighted_text_holo_light">#f3394e56</color>
     <color name="link_text_holo_dark">#5c5cff</color>
     <color name="link_text_holo_light">#0000ee</color>
     
