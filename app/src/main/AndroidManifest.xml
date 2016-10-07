@@ -145,7 +145,7 @@
             </intent-filter>
         </activity>
 
-        <activity
+       <activity
             android:name="org.sana.android.activity.EncounterTaskList"
             android:label="@string/title_savedprocedure_list"
             android:screenOrientation="portrait" >
@@ -165,6 +165,7 @@
                 <data android:mimeType="vnd.android.cursor.item/org.sana.task.encounterTask" />
             </intent-filter>
         </activity>
+
         <activity
             android:name="org.sana.android.activity.NotificationList"
             android:label="@string/title_notifications_list"

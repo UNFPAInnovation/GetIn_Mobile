@@ -156,6 +156,7 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 				+ Contract.ENCOUNTER + " TEXT, "
 				+ Contract.PROCEDURE + " TEXT, "
 				+ Contract.SUBJECT + " TEXT, "
+
                 + Contract.CREATED + " INTEGER,"
                 + Contract.MODIFIED + " INTEGER"
 				+ ");";

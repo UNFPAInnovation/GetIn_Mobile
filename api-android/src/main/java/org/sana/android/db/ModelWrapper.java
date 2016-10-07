@@ -71,7 +71,7 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
     }
 
     public Date getDateField(String field){
-        String dateStr = getString(getColumnIndex(field));
+        String dateStr = getString(getColumnIndexOrThrow(field));
         try {
             return DateUtil.parseDate(dateStr);
         } catch (ParseException e) {

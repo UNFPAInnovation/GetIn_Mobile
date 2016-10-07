@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -35,7 +37,9 @@ import org.sana.android.app.DefaultActivityRunner;
 import org.sana.android.app.Locales;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
+import org.sana.android.db.impl.SubjectsHelper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
 import org.sana.android.media.EducationResource;
 import org.sana.android.procedure.Procedure;
@@ -54,13 +58,22 @@ import org.sana.android.task.ResetDatabaseTask;
 import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.IModel;
+import org.sana.api.task.EncounterTask;
+import org.sana.core.Encounter;
+import org.sana.core.Observer;
+import org.sana.core.Patient;
+import org.sana.core.Subject;
 import org.sana.net.Response;
+import org.sana.util.UUIDUtil;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 /**
  * Main Activity which handles user authentication and initializes services that
@@ -82,6 +95,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     public static final int VIEW_ENCOUNTER = 7;
     public static final int SETTINGS = 8;
     public static final int EXECUTE_TASK = 9;
+//    public static final int VIEW_ASSIGNED_TASK = 10;
     private Runner<Intent,Intent> runner;
 
     private String mWorkflow = "org.sana.android.app.workflow.DEFAULT";
@@ -183,8 +197,26 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         switch(Uris.getDescriptor(dataUri)){
                             case Uris.ENCOUNTER_ITEM:
                                 //startService(data);
+                            case Uris.ENCOUNTER_UUID:
+
+                            case Uris.SUBJECT_ITEM:
+                            case Uris.SUBJECT_UUID:
+                                startService(data);
+                                // Add the task creation after the
+                                // new patient has been sent to the
+                                // dispatch service
+                                Patient patient = getPatient(
+                                        data.getData());
+                                /**
+                                 * TODO
+                                 * work on the procedure to return and the observer
+                                 */
+                                List<EncounterTask> tasks = getVisits(
+                                        patient,null,null);
+                                createTasks(tasks);
+
                                 break;
-                            default:
+                                default:
                         }
                         mEncounter = Uri.EMPTY;
                         String onComplete = data.getStringExtra(Intents.EXTRA_ON_COMPLETE);
@@ -201,8 +233,33 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             }
                         }
                         break;
+
+//                    case VIEW_ASSIGNED_TASK:
+//                        //Uri task = data.getParcelableExtra(Intents.EXTRA_TASK);
+//                        int flags1 = data.getFlags();
+//                        uri = Uri.EMPTY;
+//
+//
+//                        if(data.hasCategory(Intents.CATEGORY_TASK_COMPLETE)){
+//                            Log.i(TAG, "....Task complete: "+ mTask);
+//                            uri = intent.getParcelableExtra(Intents.EXTRA_ENCOUNTER);
+//                            intent.setClass(this, ObservationList.class)
+//                                    .setData(uri)
+//                                    .putExtras(data);
+//                            startActivity(intent);
+//                        } else {
+//                            Log.i(TAG, "....Task in progress: "+ mTask);
+//                            //markTaskStatusInProgress(mTask);
+//                            uri = intent.getParcelableExtra(Intents.EXTRA_PROCEDURE);
+//                            intent.setAction(Intent.ACTION_VIEW)
+//                                    .setData(uri)
+//                                    .putExtras(data);
+//                            startActivityForResult(intent, EXECUTE_TASK);
+//                        }
+//                        break;
                     default:
                 }
+
 
                 //data.setAction(Intents.ACTION_OK);
                 //onNext(data);
@@ -583,6 +640,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
+                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_training_mode:
                 String subj = getString(R.string.tr_subject);
@@ -778,7 +836,206 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         return nowStr;
     }
 
-    @Override
+   // public Patient getPatient(Uri uri){
+        //uri   Patient px = PatientWrapper.get(this, uri);
+       // return px;
+    //}
+    public Patient getPatient(Uri uri){
+        return (Patient)PatientWrapper.get(this, uri);
+    }
+
+
+    public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer assignedTo) {
+        EncounterTask task = new EncounterTask();
+        //assignedTo =task.observer;
+//        assignedTo.
+          //Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, task.getUuid());
+        Date lmd = patient.getLMD();
+        String anc = patient.getANC_status();
+        //String uuid3 = patient.getUuid();
+        Date dob = patient.getDob();
+        task.getProcedure();
+        task.getSubject();
+        task.getObserver();
+
+
+        UUID  uui= UUID.randomUUID();
+
+
+         String uuid1 = uui.toString();
+        String patientuuid =uui.toString();
+        patient.setUuid(patientuuid);
+
+
+
+
+         assignedTo.setUuid(uuid1);
+
+
+
+            /**
+         * TODO
+         * think about the procedure or activity to call when the due date is reached
+         */
+
+        Date noe = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Calendar c1 = Calendar.getInstance();
+        c1.setTime(new Date());
+        Date x = c1.getTime();
+        long days = x.getTime() - lmd.getTime();
+        int day_of_week = c1.get(Calendar.DAY_OF_WEEK);
+
+
+        //String Due_Date;
+        long age = x.getTime() - dob.getTime();
+        long no_LMD = days * 60 * 24 * 60 * 1000;
+        Log.i(TAG, "the number of lmd days are" +no_LMD);
+
+        if (no_LMD < 84 && anc.equals("yes") && age < 25  ) {
+            switch (day_of_week) {
+
+                case Calendar.MONDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 8); // Adding 8 days
+                    //String output = sdf.format(c1.getTime());
+                    Date due_on = c1.getTime();
+                    //String observer = task.getUuid();
+                   //String p =procedure.setGuid();
+                    sdf.format(due_on);
+                    task.due_on= due_on;
+                    //task.getObserver();
+                    //task.getProcedure();
+
+
+                    //                    return task;
+
+                break;
+                case Calendar.TUESDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 7); // Adding 7 days
+                    //output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+
+                    break;
+                case Calendar.WEDNESDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 6); // Adding 6 days
+                    //output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+                    break;
+                case Calendar.THURSDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 5); // Adding 5 days
+                    //output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+//                    return task;
+                    break;
+                case Calendar.FRIDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 4); // Adding 4 days
+                    //output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+//                    return task;
+                    break;
+                case Calendar.SATURDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 3); // Adding 3 days
+                    //output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+//                    return task;
+                    break;
+                case Calendar.SUNDAY:
+//                    c1.setTime(new Date()); // Now use today date.
+                    c1.add(Calendar.DATE, 2); // Adding 2 days
+                    // output = sdf.format(c1.getTime());
+                    due_on = c1.getTime();
+                    sdf.format(due_on);
+                    task.due_on = due_on;
+
+
+
+//                    return task;
+                    break;
+                default:
+
+
+            }
+        }
+        return task;
+    }
+
+     public List<EncounterTask> getVisits(Patient patient, Procedure procedure, Observer observer){
+        //invoke methods from (2) above
+         //adding the encounterTasks to the list
+         List<EncounterTask> encounterTasks = null;
+         encounterTasks.add(calculateFirstVisit(patient, procedure, observer));
+         return encounterTasks;
+    }
+
+
+
+    public void createTasks(List<EncounterTask> tasks) {
+        org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED;
+        //String due_on = timeStamp();
+       // String uuid = ModelWrapper.getUuid(pati,getContentResolver());
+        EncounterTask task= new EncounterTask();
+       Date due_on = new Date();
+                sdf.format(due_on);
+          task.due_on = due_on;
+
+
+        UUID  uui= UUID.randomUUID();
+       String uuid1 = uui.toString();
+
+        task.getProcedure().setUuid( uuid1);
+        task.getSubject().setUuid( uuid1);
+        task.getObserver();
+
+
+
+        String due_on1 = due_on.toString();
+        for ( EncounterTask task1 : tasks) {
+            //due_on = new Date(); sdf.format(due_on);
+            //task.assignedTo =assignedTo;
+
+
+
+            ContentValues values = new ContentValues();
+            values.put(Tasks.Contract.OBSERVER,uuid1 );
+            values.put(Tasks.Contract.SUBJECT, uuid1);
+            values.put(Tasks.Contract.PROCEDURE, uuid1);
+            values.put(Tasks.Contract.DUE_DATE, due_on1);
+            values.put(Tasks.Contract.STATUS, task1.getStatus());
+            getContentResolver().insert(
+                    EncounterTasks.CONTENT_URI, values);
+
+
+            Bundle form = new Bundle();
+
+
+
+            // send to sync
+            Intent intent = new
+                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task1.getUuid ()));
+            intent.putExtra("form", form);
+            startService(intent);
+        }
+    }
+
+
+
+        @Override
     protected void handleBroadcast(Intent data){
         Log.i(TAG,"handleBroadcast()");
         cancelProgressDialogFragment();
