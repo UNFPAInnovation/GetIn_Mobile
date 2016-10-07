@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@drawable/main_background"
+    android:background="#00838F"
     android:gravity="fill_horizontal"
     android:orientation="horizontal" >
 
@@ -20,40 +20,57 @@
         android:gravity="fill_horizontal"
         android:orientation="vertical"  >
         
-        <Button
-            android:id="@+id/btn_main_register_patient"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="submit"
-            android:text="@string/button_main_register_patients" />
 
         <Button
             android:id="@+id/btn_main_select_patient"
-            android:layout_width="fill_parent"
+            android:layout_width="411dp"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:text="@string/button_main_select_patient" />
+            android:text="@string/button_main_select_patient"
+            android:drawableLeft="@drawable/ic_menu_allfriends"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/btn_main_procedures"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:text="@string/button_main_select_procedure" />
+            android:drawableLeft="@drawable/ic_menu_edit"
+            android:text="@string/button_main_select_procedure"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/btn_main_transfers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:text="@string/button_main_view_prior_encounters" />
+            android:drawableLeft="@drawable/ic_menu_archive"
+            android:text="@string/button_main_view_prior_encounters"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
-            android:id="@+id/button_main_notifications"
+            android:id="@+id/btn_main_register_patient"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:text="@string/button_main_view_notifications" />
+            android:drawableLeft="@drawable/ic_menu_ambulance"
+            android:text="@string/button_main_register_patients"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
+
+        <Button
+            android:id="@+id/button_main_notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:drawableLeft="@drawable/ic_menu_notifications"
+            android:text="@string/button_main_view_notifications"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
     </LinearLayout>
 </LinearLayout>

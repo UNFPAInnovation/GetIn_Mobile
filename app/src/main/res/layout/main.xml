@@ -3,7 +3,7 @@
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background_floating_material_dark"
+    android:background="@color/background_color"
     android:gravity="fill_vertical"
     android:orientation="vertical">
 
@@ -31,8 +31,7 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" android:id="@+id/actions" android:layout_marginTop="5dip" android:layout_gravity="bottom"
-        android:weightSum="1">
+        android:layout_height="fill_parent" android:id="@+id/actions" android:layout_marginTop="5dip" android:layout_gravity="bottom">
 
         <Button
             android:id="@+id/btn_main_select_patient"
@@ -41,7 +40,9 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_allfriends"
             android:text="@string/button_main_select_patient"
-            style="@style/Widget.Button.Large.Dark"/>
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/btn_main_transfers"
@@ -50,16 +51,31 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_archive"
             android:text="@string/button_main_view_prior_encounters"
-            style="@style/Widget.Button.Large.Dark"/>
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
-            android:id="@+id/btn_training_mode"
+            android:id="@+id/btn_map_girl"
             style="@style/Widget.Button.Large.Dark"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
-            android:text="@string/button_main_training_mode"/>
+            android:text="@string/button_main_training_mode"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_main_register_patient"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:text="@string/button_main_register_patients"
+            android:drawableLeft="@drawable/ic_menu_ambulance"
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/button_main_notifications"
@@ -68,14 +84,11 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_notifications"
             android:text="@string/button_main_view_notifications"
-            style="@style/Widget.Button.Large.Dark" />
-        <Button
-        android:id="@+id/btn_main_tasks"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_main_view_scheduled_tasks"
-            android:layout_weight="0.15"
-            android:onClick="submit"/>
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
+
     </LinearLayout>
 
 
@@ -88,7 +101,7 @@
         android:text="@string/button_main_select_procedure"
         style="@style/Widget.Button.Large.Dark" />
 
-    Button
+    <Button
         android:id="@+id/btn_main_tasks"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"

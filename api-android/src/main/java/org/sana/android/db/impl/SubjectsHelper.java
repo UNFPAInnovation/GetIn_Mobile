@@ -32,7 +32,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.sana.android.db.TableHelper;
-import org.sana.android.provider.Patients;
+
 import org.sana.android.provider.Patients.Contract;
 import org.sana.core.Subject;
 
