@@ -81,7 +81,7 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 	public ContentValues onInsert(ContentValues values) {
 		ContentValues vals = new ContentValues();
 		//vals.put(Contract.UUID, UUID.randomUUID().toString());
-        //vals.put(Contract.STATUS, Status.ACCEPTED.toString());
+        vals.put(Contract.STATUS,"");
         vals.put( Contract.OBSERVER, "");
         vals.put(Contract.ENCOUNTER, "");
         vals.put( Contract.PROCEDURE, "");

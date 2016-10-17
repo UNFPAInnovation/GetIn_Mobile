@@ -63,6 +63,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.AsyncTask.Status;
@@ -153,6 +154,8 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //this.dump();
+
+
     }
 
     /** {@inheritDoc} */

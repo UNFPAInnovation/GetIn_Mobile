@@ -10,6 +10,8 @@
     <color name="grey_medium">#808080</color>
     <color name="grey_dark">#404040</color>
     <color name="background_color">#00838F</color>
+    <color name="fern_green"> #667C26 </color>
+    <color name="copper_cayon">#3C277D</color>
     <!-- Progress Dialog colors -->
     <color name="bg_progressdialog">#8C4406</color>
     <color name="fg_progressdialog">#FFFFFF</color>

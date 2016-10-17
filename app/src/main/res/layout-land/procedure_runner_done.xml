@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
 	android:orientation="vertical" android:layout_width="fill_parent"
 	android:layout_height="fill_parent"
+	android:background="@color/fern_green"
 	android:gravity="center">
 	
 	<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -26,9 +27,11 @@
 	>	
 		<Button android:id="@+id/procedure_done_upload"
 		android:layout_width="fill_parent"
+			android:background="@color/goldenrod"
 		android:layout_height="wrap_content" android:text="@string/procedurerunner_upload" />
 		<Button android:id="@+id/procedure_done_back"
 		android:layout_width="fill_parent"
+			android:background="@color/light_blue"
 		android:layout_height="wrap_content" android:text="@string/procedurerunner_goback" />
 			
 	</LinearLayout>

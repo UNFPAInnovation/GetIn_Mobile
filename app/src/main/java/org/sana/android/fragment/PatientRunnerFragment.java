@@ -163,11 +163,88 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.GENDER +"'=" +val);
                 mPatient.setGender(val);
             }
+            if(field.compareToIgnoreCase(Patients.Contract.PNUMBER) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.PNUMBER +"'=" +val);
+                mPatient.setpNumber(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.HOLDER_pNUMBER) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.HOLDER_pNUMBER +"'=" +val);
+                mPatient.setHolder_pNumber(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.LMD) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.LMD + "'=" + val);
+                try {
+                    mPatient.setLMD(DateUtil.parseDate(val));
+                } catch (ParseException e) {
+                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.MARITAL_STATUS) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.MARITAL_STATUS +"'=" +val);
+                mPatient.setMarital_status(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.EDUCATION_LEVEL) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.EDUCATION_LEVEL +"'=" +val);
+                mPatient.setEducation_level(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.CONTRACEPTIVE_USE) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.CONTRACEPTIVE_USE +"'=" +val);
+                mPatient.setContraceptive_use(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.ANC_STATUS) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_STATUS +"'=" +val);
+                mPatient.setANC_status(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.ANC_VISIT) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_VISIT +"'=" +val);
+                mPatient.setANC_visit(val);
+            }
+
+            if(field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.EDD +"'=" +val);
+                mPatient.setHolder_pNumber(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.RECEIVE_SMS) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.RECEIVE_SMS +"'=" +val);
+                mPatient.setreceive_sms(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.FOLLOW_UP) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.FOLLOW_UP +"'=" +val);
+                mPatient.setfollow_up(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.CUG_STATUS) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.CUG_STATUS +"'=" +val);
+                mPatient.setHolder_pNumber(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.COMMENT) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.COMMENT +"'=" +val);
+                mPatient.setcomment(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.BLEEDING) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.BLEEDING +"'=" +val);
+                mPatient.setBleeding(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.FEVER) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.FEVER +"'=" +val);
+                mPatient.setFever(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.SWOLLEN_FEET) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.SWOLLEN_FEET +"'=" +val);
+                mPatient.setSwollen_feet(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.BLURRED_VISION) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.BLURRED_VISION +"'=" +val);
+                mPatient.setBlurred_vision(val);
+            }
+
+
             if(field.compareToIgnoreCase(Patients.Contract.IMAGE) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.IMAGE +"'=" +val);
                 URI file = URI.create(val);
                 mPatient.setImage(file);
             }
+
             if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
                 Location location = new Location();
@@ -224,10 +301,29 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient = new PatientParcel();
                 mPatient.setUuid(UUID.randomUUID().toString());
                 mPatient.setSystemId("");
+                mPatient.setDob(new Date());
                 mPatient.setFamily_name("");
                 mPatient.setGiven_name("");
                 mPatient.setGender("M");
-                mPatient.setDob(new Date());
+
+                mPatient.setLMD(new Date());
+                mPatient.setpNumber("");
+                mPatient.setHolder_pNumber("");
+                mPatient.setLMD(new Date());
+                mPatient.setMarital_status("");
+                mPatient.setContraceptive_use("");
+                mPatient.setEducation_level("");
+                mPatient.setContraceptive_use("");
+                mPatient.setANC_status("");
+                mPatient.setANC_visit("");
+                mPatient.setEDD("");
+                mPatient.setreceive_sms("");
+                mPatient.setfollow_up("");
+                mPatient.setCUG_status("");
+                mPatient.setBleeding("");
+                mPatient.setBlurred_vision("");
+                mPatient.setSwollen_feet("");
+                mPatient.setFever("");
                 uSubject = writeObject(mPatient, 0);
 
             } else {

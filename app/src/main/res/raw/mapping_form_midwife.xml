@@ -64,6 +64,14 @@
             question="Enter PowerHolder's Number"
             answer=""
             />
+        <Element
+            id="22"
+            type="DATE"
+            question="When was your last Menstruation Date"
+            concept="LMD"
+            required="true"
+            answer=""
+        />
         <Element id="7" type="RADIO"
             concept="LOCATION PATIENT HOUSE"
             question="Are you at the girl's home?"
@@ -120,6 +128,7 @@
         required="true"
             answer=""
             />
+
     </Page>
     <Page>
         <ShowIf>
@@ -138,7 +147,8 @@
         </ShowIf>
         <Element id="12b" type="TEXT"
             concept="GENERATED ANC CARD DATE"
-            question="Your next ANC visit is on Thursday 17.10.2016"
+            question="Your next ANC visit is on "
+            answer=""
         />
     </Page>
     <Page>
@@ -161,12 +171,13 @@
             question="Any RISK identified?"
             answer=""
             />
-        <Element
+       <!-- <Element
             id="21"
             type="DATE"
             concept="NEXT APPOINTMENT"
             question="Next Appointment Date"
             answer=""
             />
+            -->
     </Page>
 </Procedure>

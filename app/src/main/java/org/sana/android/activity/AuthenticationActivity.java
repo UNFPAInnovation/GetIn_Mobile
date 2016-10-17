@@ -184,14 +184,14 @@ public class AuthenticationActivity extends BaseActivity {
         mInputUsername.setEnabled(false);
         mInputPassword.setEnabled(false);
         ((Button) findViewById(R.id.btn_login)).setEnabled(false);
-        ((Button) findViewById(R.id.btn_configure)).setEnabled(false);
+        //((Button) findViewById(R.id.btn_configure)).setEnabled(false);
     }
 
     private void enableInput(){
         mInputUsername.setEnabled(true);
         mInputPassword.setEnabled(true);
         ((Button) findViewById(R.id.btn_login)).setEnabled(true);
-        ((Button) findViewById(R.id.btn_configure)).setEnabled(true);
+       // ((Button) findViewById(R.id.btn_configure)).setEnabled(true);
     }
 
     // Attempts a log-in
@@ -292,10 +292,10 @@ public class AuthenticationActivity extends BaseActivity {
                 setResult(RESULT_CANCELED);
                 finish();
                 break;
-            case R.id.btn_configure:
+            /*case R.id.btn_configure:
                 Intent configure = new Intent(this, BasicSettings.class);
                 startActivity(configure);
-                break;
+                break;*/
         default:
         }
     }

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
+    android:orientation="vertical"
     android:background="@color/copper_cayon"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:orientation="vertical"
@@ -40,20 +40,11 @@
             android:background="@color/light_blue"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
-            android:layout_weight=".333"
+            android:layout_weight=".5"
             android:layout_gravity="center_vertical"
             android:padding="5dp"/>
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/procedurerunner_info"
-            android:id="@+id/help"
-            android:layout_alignParentLeft="false"
-            android:layout_alignParentTop="false"
-            android:layout_weight=".333"
-            android:layout_gravity="center_vertical"
-            android:padding="5dp"/>
+
 
         <Button
             android:layout_width="wrap_content"
@@ -64,7 +55,7 @@
             android:layout_alignParentTop="false"
             android:layout_alignParentRight="true"
             android:background="@color/goldenrod"
-            android:layout_weight=".333"
+            android:layout_weight=".5"
             android:layout_gravity="center_vertical"
             android:padding="5dp"/>
     </LinearLayout>

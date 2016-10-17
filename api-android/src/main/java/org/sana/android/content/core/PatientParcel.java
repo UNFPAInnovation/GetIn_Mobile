@@ -55,7 +55,7 @@ public class PatientParcel extends Patient implements Parcelable {
 			setCreated(DateUtil.parseDate(in.readString()));
 			setModified(DateUtil.parseDate(in.readString()));
 			setDob(DateUtil.parseDate(in.readString()));
-			setLMD(DateUtil.parseDate(in.readString()));
+
 		} catch (ParseException e) {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
@@ -66,7 +66,15 @@ public class PatientParcel extends Patient implements Parcelable {
 		setpNumber(in.readString());
 
 		setHolder_pNumber(in.readString());
-//		setLMD(in.read());
+		try {
+			setCreated(DateUtil.parseDate(in.readString()));
+			setModified(DateUtil.parseDate(in.readString()));
+			setDob(DateUtil.parseDate(in.readString()));
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
 		setMarital_status(in.readString());
 		setEducation_level(in.readString());
 		setContraceptive_use(in.readString());
@@ -149,7 +157,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeString(getGiven_name());
 		dest.writeString(getFamily_name());
 		dest.writeString(getGender());
-
+		dest.writeString(getpNumber());
 		dest.writeString(getHolder_pNumber());
 		dest.writeString(DateUtil.format(getLMD()));
 		dest.writeString(getMarital_status());

@@ -41,6 +41,7 @@ import org.sana.api.IPatient;
 import org.sana.core.Location;
 import org.sana.core.Model;
 import org.sana.core.Patient;
+import org.sana.util.DateUtil;
 import org.sana.util.UUIDUtil;
 
 import android.content.ContentResolver;

@@ -49,13 +49,14 @@
             android:text="@string/general_exit"
             android:onClick="submit"
             android:layout_margin="5dp"/>
-        <Button
+       <!--> <Button
             android:id="@+id/btn_configure"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/button_configure"
             android:onClick="submit"
             android:layout_margin="5dp"/>
+            -->
     </LinearLayout>
     <TextView
             android:id="@+id/text_local_version"

@@ -1,5 +1,5 @@
 <Procedure
-    title="VHT Mapping Form"
+    title="mapping_form: Short Form"
     author="Marting"
     uuid="18785afb-6160-45a0-ac8c-1f5cbfaa6d92"
     version="1.0"
@@ -33,7 +33,7 @@
         <Element
             id="3"
             concept="DOB"
-            type="LMDDATE"
+            type="DATE"
             required="true"
             question="Enter Date of Birth"
             answer=""
@@ -64,15 +64,6 @@
             question="Enter PowerHolder's Number"
             answer=""
         />
-        <Element
-            id="19"
-            concept="LMD"
-            type="LMDDATE"
-            question="When was your last Menstrual period?"
-            required="true"
-            answer=""
-            helpText="Please enter when the last menstrual period was"
-            />
         <Element id="7" type="RADIO"
             concept="LOCATION PATIENT HOUSE"
             question="Are you at the girl's home?"
@@ -147,31 +138,35 @@
         </ShowIf>
         <Element id="12b" type="TEXT"
             concept="GENERATED ANC CARD DATE"
-            question="Your next ANC visit is on Thursday 17.10.2016"
+            question="Your next ANC visit is on "
+            answer=""
         />
     </Page>
     <Page>
         <Element
-            id="15"
-            type="RADIO"
-            choices="Yes;No"
-            concept="Receive SMS"
-            question="Would like to receive health messages on your phone?"
-            answer=""
+            id="18"
+            type="TEXT"
+            question="GIRLS APPOINTMENT NOTES"
         />
         <Element
-            id="16"
-            type="RADIO"
-            choices="Yes;No"
-            concept="CUG STATUS"
-            question="Would you like receive Follow up calls?"
-            answer=""
-        />
-        <Element
-            id="17"
+            id="19"
             type="ENTRY"
-            concept="COMMENT"
-            question="Record a general comment"
+            concept="ACTION TAKEN"
+            question="Action taken"
+            answer=""
+        />
+        <Element
+            id="20"
+            type="ENTRY"
+            concept="RISK IDENTIFIED"
+            question="Any RISK identified?"
+            answer=""
+        />
+        <Element
+            id="21"
+            type="DATE"
+            concept="NEXT APPOINTMENT"
+            question="Next Appointment Date"
             answer=""
         />
     </Page>

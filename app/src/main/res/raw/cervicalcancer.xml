@@ -5,21 +5,19 @@
 			concept="MENSTRUAL FLOW"
 			type="RADIO"
 			required="true"
-			question="Are you bleeding heavily? 
-                              (Changing sanitary wear more than 4  times in space of 2hrs)”
-                                choices="Yes,NO"
+			question="Are you bleeding heavily? (Changing sanitary wear more than 4  times in space of 2hrs)"
+            values=" Yes; NO"
 			answer="Yes"/>
  
          
           <Element
-			
-                                 id="2"
-			concept="FEVER"
-			type="RADIO"
-			required="true"
-			question="Do you have a fever?” 
-                                 choices="Yes,NO"
-			answer="Yes"/>
+			  	id="2"
+				concept="FEVER"
+				type="RADIO"
+				required="true"
+				question="Do you have a fever?"
+                choices="Yes,NO"
+				answer="Yes"/>
  
          
           <Element
@@ -27,8 +25,8 @@
 			concept="FEET SWELLING"
 			type="RADIO"
 			required="true"
-		question="Are you’re feet swollen? Even when u’ve not stood for a long time”
-                                choices="Yes,NO"
+		question="Are you’re feet swollen? Even when u’ve not stood for a long time"
+			  choices="Yes,NO"
 			answer="Yes"/>
  
           </Page>
@@ -38,8 +36,8 @@
 			concept="BLURRED VISION"
 			type="RADIO"
 			required="true"
-		question="Are you experiencing blurred vision?”
-                                choices="Yes,NO"
+			question="Are you experiencing blurred vision?"
+			  choices="Yes,NO"
 			answer="Yes"/>
  
           </Page>

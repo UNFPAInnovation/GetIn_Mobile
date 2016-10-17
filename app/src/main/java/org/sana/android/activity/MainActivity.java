@@ -194,11 +194,15 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                     case RUN_PROCEDURE:
                     case Intents.RUN_PROCEDURE:
                         // Handle any content type specific actions
-                        switch(Uris.getDescriptor(dataUri)){
+                        switch(Uris.getDescriptor(dataUri)) {
                             case Uris.ENCOUNTER_ITEM:
                                 //startService(data);
                             case Uris.ENCOUNTER_UUID:
+                                break;
+                            default:
+                        }
 
+                                switch(Uris.getDescriptor(dataUri)){
                             case Uris.SUBJECT_ITEM:
                             case Uris.SUBJECT_UUID:
                                 startService(data);
@@ -623,26 +627,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_ENCOUNTER);
                 break;
             case R.id.btn_main_register_patient:
-                intent = new Intent(Intent.ACTION_INSERT);
-                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
-                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.procs_subject_short_form)))
-                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-                startActivityForResult(intent, Intents.RUN_PROCEDURE);
-                break;
-            case R.id.btn_main_procedures:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_PROCEDURE);
-                break;
-            case R.id.btn_main_tasks:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
-                onSaveAppState(intent);
-                startActivityForResult(intent, PICK_ENCOUNTER_TASK);
-                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.btn_training_mode:
                 String subj = getString(R.string.tr_subject);
 //                String proc = getString(R.string.tr_procedure);
                 String reg_uuid = getString(R.string.procs_subject_short_form);
@@ -651,6 +635,29 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, RUN_PROCEDURE);
+
+                break;
+           /* case R.id.btn_main_procedures:
+                intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
+                startActivityForResult(intent, PICK_PROCEDURE);
+                break;*/
+            case R.id.btn_main_tasks:
+                intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
+                onSaveAppState(intent);
+                startActivityForResult(intent, PICK_ENCOUNTER_TASK);
+                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btn_training_mode:
+                intent = new Intent(Intent.ACTION_INSERT);
+                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
+                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                getString(R.string.procs_subject_short_form)))
+                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                startActivityForResult(intent, Intents.RUN_PROCEDURE);
+
                 break;
             /*
             case R.id.btn_main_unregistered_subject:
@@ -851,25 +858,34 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 //        assignedTo.
           //Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, task.getUuid());
         Date lmd = patient.getLMD();
+        //lmd.setDate(5);
+
+
         String anc = patient.getANC_status();
         //String uuid3 = patient.getUuid();
         Date dob = patient.getDob();
-        task.getProcedure();
+
         task.getSubject();
         task.getObserver();
+
+        procedure.getGuid();
 
 
         UUID  uui= UUID.randomUUID();
 
-
-         String uuid1 = uui.toString();
+        String uuid1 = uui.toString();
         String patientuuid =uui.toString();
         patient.setUuid(patientuuid);
+        assignedTo.setUuid(uuid1);
+
+        task.assigned_to = assignedTo;
+        task.procedure =null;
+        task.subject =patient;
 
 
 
 
-         assignedTo.setUuid(uuid1);
+
 
 
 
@@ -878,7 +894,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
          * think about the procedure or activity to call when the due date is reached
          */
 
-        Date noe = new Date();
+        //Date noe = new Date();
 //        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         Calendar c1 = Calendar.getInstance();
         c1.setTime(new Date());
@@ -889,10 +905,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         //String Due_Date;
         long age = x.getTime() - dob.getTime();
-        long no_LMD = days * 60 * 24 * 60 * 1000;
+        long no_LMD = days /( 60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" +no_LMD);
 
-        if (no_LMD < 84 && anc.equals("yes") && age < 25  ) {
+        if (no_LMD < 84 && anc.equals("No")   ) {
             switch (day_of_week) {
 
                 case Calendar.MONDAY:
@@ -989,22 +1005,22 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED;
         //String due_on = timeStamp();
        // String uuid = ModelWrapper.getUuid(pati,getContentResolver());
-        EncounterTask task= new EncounterTask();
+        //EncounterTask task= new EncounterTask();
        Date due_on = new Date();
-                sdf.format(due_on);
-          task.due_on = due_on;
+               sdf.format(due_on);
+          //tasks.
 
 
         UUID  uui= UUID.randomUUID();
        String uuid1 = uui.toString();
 
-        task.getProcedure().setUuid( uuid1);
-        task.getSubject().setUuid( uuid1);
-        task.getObserver();
+       String due_on1 = due_on.toString();
+       // tasks.getProcedure().setUuid( uuid1);
+       // tasks.getSubject().setUuid( uuid1);
+        //task.getObserver();
+        //tasks.
 
 
-
-        String due_on1 = due_on.toString();
         for ( EncounterTask task1 : tasks) {
             //due_on = new Date(); sdf.format(due_on);
             //task.assignedTo =assignedTo;
@@ -1016,18 +1032,22 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             values.put(Tasks.Contract.SUBJECT, uuid1);
             values.put(Tasks.Contract.PROCEDURE, uuid1);
             values.put(Tasks.Contract.DUE_DATE, due_on1);
-            values.put(Tasks.Contract.STATUS, task1.getStatus());
+            values.put(Tasks.Contract.STATUS, status.toString());
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
 
             Bundle form = new Bundle();
-
+            form.putString(Tasks.Contract.OBSERVER,uuid1 );
+            form.putString(Tasks.Contract.SUBJECT,uuid1);
+            form.putString(Tasks.Contract.PROCEDURE,uuid1);
+            form.putString(Tasks.Contract.DUE_DATE, due_on1);
+            form.putString(Tasks.Contract.STATUS,status.toString());
 
 
             // send to sync
             Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task1.getUuid ()));
+                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task1.toString()));
             intent.putExtra("form", form);
             startService(intent);
         }

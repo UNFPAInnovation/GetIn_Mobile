@@ -13,6 +13,7 @@ import org.sana.net.Response;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -31,8 +32,14 @@ public class ProcedureRunner extends BaseRunner
 {
     public static final String TAG = ProcedureRunner.class.getSimpleName();
 
+    private static final int error = Color.argb(225, 225, 127, 127);
+    private static final int worker = Color.argb(225, 127, 127, 225);
+    private static final int patient = Color.argb(225, 193, 127, 225);
+
     // Fragment
     private ProcedureRunnerFragment mProcedureRunnerFragment = null;
+
+
 
     /** {@inheritDoc} */
     @Override
@@ -40,6 +47,7 @@ public class ProcedureRunner extends BaseRunner
         super.onCreate(instance);
     	Locales.updateLocale(this, getString(R.string.force_locale));
         setContentView(R.layout.procedure_runner_activity);
+
     }
 
     /** {@inheritDoc} */
@@ -50,6 +58,7 @@ public class ProcedureRunner extends BaseRunner
         if (fragment.getClass() == ProcedureRunnerFragment.class) {
             mProcedureRunnerFragment = (ProcedureRunnerFragment) fragment;
             mProcedureRunnerFragment.setProcedureListener(this);
+
         }
     }
     

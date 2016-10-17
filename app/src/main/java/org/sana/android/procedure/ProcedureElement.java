@@ -3,6 +3,7 @@ package org.sana.android.procedure;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -218,6 +219,7 @@ public abstract class ProcedureElement {
         if(cachedView == null || cachedContext != c) {
             cachedView = createView(c);
             cachedContext = c;
+
         }
         return cachedView;
     }

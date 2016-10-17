@@ -120,6 +120,8 @@ public class SubjectsHelper extends TableHelper<Subject>{
                 + Contract.CONTACT_TWO 		+ " TEXT,"
                 + Contract.CONTACT_THREE 	+ " TEXT,"
                 + Contract.CONTACT_FOUR 	+ " TEXT"
+
+
                 //TODO update db, replace line above, and uncomment
                 //+ Contract.CONTACT_FOUR + " TEXT,"
                 //+ Contract.CONFIRMED + " BOOLEAN,"
@@ -141,7 +143,7 @@ public class SubjectsHelper extends TableHelper<Subject>{
 				sql += onCreate();
 			} else {
                 sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.CONFIRMED + " BOOLEAN";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DOB_ESTIMATED + " BOOLEAN";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DOB + " BOOLEAN";
             }
 	    }
 		return sql;

@@ -3,7 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
-    compileOptions{
+    compileOptions {
         encoding "UTF-8"
     }
     useLibrary 'org.apache.http.legacy'
@@ -30,6 +30,7 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/DEPENDENCIES'
     }
+    sourceSets { main { java.srcDirs = ['src/main/java', 'src/test/java', 'src/test/java/2'] } }
 }
 
 dependencies {

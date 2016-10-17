@@ -2,7 +2,7 @@
 <!-- Language: EN -->
 <!-- Docs say that all the identifiers should be in lower case -->
 <resources>
-    <string name="app_name">Sana</string>
+    <string name="app_name">GetIn</string>
 
     <!--  Activity titles  -->
     <string name="title_register_new_patient">Register New Patient</string>
@@ -26,16 +26,19 @@
     <!-- Main menu buttons  -->
     <string name="button_main_education">Education Resources</string>
     <string name="button_main_new_encounter">Encounters</string>
-    <string name="button_main_view_prior_encounters">View Prior Encounters</string>
+    <string name="button_main_view_prior_encounters">View Girls Mapped by You</string>
     <string name="button_main_view_notifications">Notifications</string>
     <string name="button_main_view_patients">Patients</string>
     <string name="button_main_view_scheduled_tasks">Assigned tasks</string>
-    <string name="button_main_register_patients">Call Ambulance</string>
+    <string name="button_main_register_patients">View All Mapped Girls</string>
     <string name="button_main_select_procedure">Select Procedure</string>
     <string name="button_main_select_patient">View Mapped Girls</string>
     <string name="button_main_training_mode">Map Girl</string>
     <string name="btn_map_girl">Map Girl</string>
     <string name="button_configure">Configure</string>
+    <string name="button_upcoming_appointments">Up Coming Appointments</string>
+    <string name="button_call_ambulance">Call Ambulance</string>
+    <string name="button_girls_mapped_by_you">Girls mapped by You</string>
 
     <!--  General Phrases -->
     <string name="general_ok">Okay</string>

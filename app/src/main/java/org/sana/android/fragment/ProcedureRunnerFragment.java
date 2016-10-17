@@ -24,6 +24,7 @@ import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.BaseColumns;
@@ -93,6 +94,8 @@ public class ProcedureRunnerFragment extends BaseRunnerFragment {
     public void onActivtyCreated(Bundle instance){
     	super.onActivityCreated(instance);
     	setRetainInstance(true);
+
+
     	
     }
 

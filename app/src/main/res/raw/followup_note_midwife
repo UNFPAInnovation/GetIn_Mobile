@@ -1,0 +1,36 @@
+<Procedure
+    title="mapping_form: Short Form"
+    author="Donald"
+    uuid="20b631d9-412a-448d-8a01-d403161a6e0b"
+    version="1.0"
+    locale="en"
+    class="org.sana.core.Observer">
+<Page>
+    <Element
+        id="18"
+        type="TEXT"
+        question="GIRLS FOLLOW UP NOTES"
+    />
+    <Element
+        id="19"
+        type="ENTRY"
+        concept="MISSING REASON"
+        question="Reason for Missing"
+        answer=""
+    />
+    <Element
+        id="20"
+        type="ENTRY"
+        concept="ACTION TAKEN"
+        question="Any Action Taken?"
+        answer=""
+    />
+    <Element
+        id="21"
+        type="DATE"
+        concept="NEXT APPOINTMENT"
+        question="Next Appointment Date"
+        answer=""
+    />
+</Page>
+    </Procedure>

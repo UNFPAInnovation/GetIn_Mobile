@@ -1,0 +1,36 @@
+<Procedure
+    title="mapping_form: Short Form"
+    author="Donald"
+    uuid="2de33d41-012d-407b-9156-a76c7c38653f"
+    version="1.0"
+    locale="en"
+    class="org.sana.core.Observer">
+<Page>
+    <Element
+        id="1"
+        type="TEXT"
+        question="GIRLS APPOINTMENT NOTES"
+    />
+    <Element
+        id="2"
+        type="ENTRY"
+        concept="ACTION TAKEN"
+        question="Action taken"
+        answer=""
+    />
+    <Element
+        id="3"
+        type="ENTRY"
+        concept="RISK IDENTIFIED"
+        question="Any RISK identified?"
+        answer=""
+    />
+    <Element
+        id="4"
+        type="DATE"
+        concept="NEXT APPOINTMENT"
+        question="Next Appointment Date"
+        answer=""
+    />
+</Page>
+    </Procedure>
