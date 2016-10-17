@@ -72,7 +72,7 @@ public class MainActivityTest {//extends ActivityInstrumentationTestCase<MainAct
 			Patient patient = new Patient();
 			Procedure procedure =Procedure.fromXMLString(null);
 			Observer assignedTo = new Observer();
-
+ 
 			patient.getANC_status();
 			patient.getLMD();
 			patient.setLMD(new Date(2016, 8, 23));
