@@ -67,6 +67,7 @@ import org.sana.net.Response;
 import org.sana.util.UUIDUtil;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -852,44 +853,39 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     }
 
 
-    public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer assignedTo) {
+    public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer observer) {
         EncounterTask task = new EncounterTask();
         //assignedTo =task.observer;
 //        assignedTo.
           //Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, task.getUuid());
         Date lmd = patient.getLMD();
-        //lmd.setDate(5);
-
-
         String anc = patient.getANC_status();
-        //String uuid3 = patient.getUuid();
         Date dob = patient.getDob();
+        Date anc_visit = patient.getANC_visit();
+
 
         task.getSubject();
         task.getObserver();
 
-        procedure.getGuid();
-
+        //procedure.getGuid();
 
         UUID  uui= UUID.randomUUID();
 
         String uuid1 = uui.toString();
         String patientuuid =uui.toString();
         patient.setUuid(patientuuid);
-        assignedTo.setUuid(uuid1);
+        observer.setUuid(uuid1);
+        //procedure.getGuid();
+        patient.uuid =uuid1;
 
-        task.assigned_to = assignedTo;
-        task.procedure =null;
+        //procedure.getResources().openRawResource(R.raw.midwife_appointment_note);
+
+       task.assigned_to= observer;
+        //task.procedure = ;
         task.subject =patient;
 
 
-
-
-
-
-
-
-            /**
+        /**
          * TODO
          * think about the procedure or activity to call when the due date is reached
          */
@@ -904,11 +900,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
         //String Due_Date;
-        long age = x.getTime() - dob.getTime();
+      //  long age = x.getTime() - dob.getTime();
         long no_LMD = days /( 60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" +no_LMD);
 
-        if (no_LMD < 84 && anc.equals("No")   ) {
+        if (no_LMD < 84 && anc.equals("yes")   ) {
             switch (day_of_week) {
 
                 case Calendar.MONDAY:
@@ -988,6 +984,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             }
         }
+
+
+
         return task;
     }
 
@@ -1003,51 +1002,49 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
     public void createTasks(List<EncounterTask> tasks) {
         org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED;
-        //String due_on = timeStamp();
-       // String uuid = ModelWrapper.getUuid(pati,getContentResolver());
+        //String due_on = .
+        //String uuid = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
+        String uuid1 =  ModelWrapper.getUuid(Observers.CONTENT_URI,getContentResolver());
+       // String uuid3 = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
         //EncounterTask task= new EncounterTask();
-       Date due_on = new Date();
-               sdf.format(due_on);
+
           //tasks.
 
-
         UUID  uui= UUID.randomUUID();
-       String uuid1 = uui.toString();
+       String uuid = uui.toString();
+        //String uuid1 = uui.toString();
+        String uuid2 = uui.toString();
 
-       String due_on1 = due_on.toString();
-       // tasks.getProcedure().setUuid( uuid1);
-       // tasks.getSubject().setUuid( uuid1);
-        //task.getObserver();
-        //tasks.
-
-
-        for ( EncounterTask task1 : tasks) {
+        for ( EncounterTask task : tasks) {
             //due_on = new Date(); sdf.format(due_on);
-            //task.assignedTo =assignedTo;
-
+            //String uuid4 =task.getObserver().setUuid();
+            //task.getSubject().setUuid(uuid);
+            //task.getProcedure().setUuid(uuid2);
+            //Date due_on = task.due_on;
+            //sdf.format(due_on);
 
 
             ContentValues values = new ContentValues();
-            values.put(Tasks.Contract.OBSERVER,uuid1 );
-            values.put(Tasks.Contract.SUBJECT, uuid1);
-            values.put(Tasks.Contract.PROCEDURE, uuid1);
-            values.put(Tasks.Contract.DUE_DATE, due_on1);
-            values.put(Tasks.Contract.STATUS, status.toString());
+            values.put(Tasks.Contract.OBSERVER,uuid1);
+            values.put(Tasks.Contract.SUBJECT,uuid);
+            values.put(Tasks.Contract.PROCEDURE,task.assigned_to.toString());
+            values.put(Tasks.Contract.DUE_DATE, task.due_on.toString());
+            values.put(Tasks.Contract.STATUS, task.status.toString());
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
 
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
-            form.putString(Tasks.Contract.SUBJECT,uuid1);
-            form.putString(Tasks.Contract.PROCEDURE,uuid1);
-            form.putString(Tasks.Contract.DUE_DATE, due_on1);
+            form.putString(Tasks.Contract.SUBJECT,uuid);
+            form.putString(Tasks.Contract.PROCEDURE,uuid2);
+            form.putString(Tasks.Contract.DUE_DATE, task.due_on.toString());
             form.putString(Tasks.Contract.STATUS,status.toString());
 
 
             // send to sync
             Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task1.toString()));
+                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task.toString()));
             intent.putExtra("form", form);
             startService(intent);
         }
