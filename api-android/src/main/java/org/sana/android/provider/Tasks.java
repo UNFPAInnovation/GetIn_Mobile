@@ -41,13 +41,13 @@ public interface Tasks {
 
 	public static interface Contract<T> extends BaseContract<T>{
 		
-		public static final String DUE_DATE = "due_date";
+		public static final String DUE_DATE = "due_on";
 		public static final String OBSERVER = "observer";
 		public static final String STARTED = "started";
 		public static final String COMPLETED = "completed";
 		public static final String STATUS = "status";
 		public static final String SUBJECT = "subject";
-		public static final String PROCEDURE = "subject";
+		public static final String PROCEDURE = "procedure";
 		
 	}
 
