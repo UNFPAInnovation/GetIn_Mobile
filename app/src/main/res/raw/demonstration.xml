@@ -118,7 +118,7 @@
         <Element
             id="5"
             concept="FOLLOW UP RESULT"
-            type=""
+            type="TEXT"
             />
     </Page>
 
