@@ -198,8 +198,15 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
             }
             if(field.compareToIgnoreCase(Patients.Contract.ANC_VISIT) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_VISIT +"'=" +val);
-                mPatient.setANC_visit(val);
+
+                try {
+                    mPatient.setANC_visit(DateUtil.parseDate(val));
+                } catch (ParseException e) {
+                    Log.e(TAG, e.getMessage());
+                    e.printStackTrace();
+                }
             }
+
 
             if(field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.EDD +"'=" +val);
@@ -315,7 +322,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setEducation_level("");
                 mPatient.setContraceptive_use("");
                 mPatient.setANC_status("");
-                mPatient.setANC_visit("");
+                mPatient.setANC_visit(new Date());
                 mPatient.setEDD("");
                 mPatient.setreceive_sms("");
                 mPatient.setfollow_up("");
