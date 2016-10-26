@@ -124,7 +124,7 @@
         id="12"
         type="RADIO" choices="Yes;No"
         question="Have you attended ANC during this pregnancy?"
-        concept="ANC visit"
+        concept="ANC Status"
         required="true"
             answer=""
             />
@@ -141,16 +141,17 @@
             answer=""
         />
     </Page>
-    <Page>
+   <!-- <Page>
         <ShowIf>
             <Criteria type="EQUALS" id="12" value="No"/>
         </ShowIf>
-        <Element id="12b" type="TEXT"
+        <Element id="12b" type="DATE"
             concept="GENERATED ANC CARD DATE"
             question="Your next ANC visit is on "
             answer=""
         />
     </Page>
+    -->
     <Page>
         <Element
             id="18"
