@@ -53,7 +53,7 @@ public class Patient extends Subject implements IPatient{
 	@Expose
 	public String ANC_status;
 	@Expose
-	public String ANC_visit;
+	public Date ANC_visit;
 	@Expose
 	public String EDD;
 	@Expose
@@ -250,13 +250,13 @@ public class Patient extends Subject implements IPatient{
 	 * @see org.sana.core.IPatient#getANC_visit()
 	 */
 	@Override
-	public String getANC_visit() {
+	public Date getANC_visit() {
 		return ANC_visit;
 	}
 	/**
 	 * @param ANC_visit the ANC_visit to set
 	 */
-	public void setANC_visit(String ANC_visit) {
+	public void setANC_visit(Date ANC_visit) {
 		this.ANC_visit = ANC_visit;
 	}
 	/* (non-Javadoc)

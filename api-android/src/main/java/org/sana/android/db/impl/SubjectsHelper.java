@@ -98,7 +98,7 @@ public class SubjectsHelper extends TableHelper<Subject>{
 				+ Contract.EDUCATION_LEVEL	+ " TEXT,"
 				+ Contract.CONTRACEPTIVE_USE + " TEXT,"
 				+ Contract.ANC_STATUS 		+ " TEXT,"
-				+ Contract.ANC_VISIT 		+ " TEXT,"
+				+ Contract.ANC_VISIT 		+ " DATE,"
 				+ Contract.EDD		 		+ " DATE,"
 				+ Contract.RECEIVE_SMS 		+ " TEXT,"
 				+ Contract.FOLLOW_UP 		+ " TEXT,"

@@ -85,7 +85,7 @@ public interface IPatient extends ISubject{
 	/**
 	 * @return the pNumber
 	 */
-	public abstract String getANC_visit();
+	public abstract Date getANC_visit();
 	/**
 	 * @return the pNumber
 	 */
