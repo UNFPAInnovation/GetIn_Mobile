@@ -115,8 +115,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
     }
 
     @Override
-    public String getANC_visit() {
-        return getStringField(Patients.Contract.ANC_VISIT);
+    public Date getANC_visit() {
+        return getDateField(Patients.Contract.ANC_VISIT);
     }
 
     @Override
@@ -378,7 +378,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.EDUCATION_LEVEL, mPatient.getEducation_level());
         cv.put(Patients.Contract.CONTRACEPTIVE_USE, mPatient.getContraceptive_use());
         cv.put(Patients.Contract.ANC_STATUS, mPatient.getANC_status());
-        cv.put(Patients.Contract.ANC_VISIT, mPatient.getANC_visit());
+        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(mPatient.getANC_visit()));
         cv.put(Patients.Contract.EDD, mPatient.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, mPatient.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, mPatient.getFollow_up());

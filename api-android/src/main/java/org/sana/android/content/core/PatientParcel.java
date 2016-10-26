@@ -79,7 +79,15 @@ public class PatientParcel extends Patient implements Parcelable {
 		setEducation_level(in.readString());
 		setContraceptive_use(in.readString());
 		setANC_status(in.readString());
-		setANC_visit(in.readString());
+
+		try {
+
+			setANC_visit(DateUtil.parseDate(in.readString()));
+
+		} catch (ParseException e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException(e);
+		}
 		setEDD(in.readString());
 		setreceive_sms(in.readString());
 		setfollow_up(in.readString());
@@ -164,7 +172,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeString(getEducation_level());
 		dest.writeString(getContraceptive_use());
 		dest.writeString(getANC_status());
-		dest.writeString(getANC_visit());
+		dest.writeString(DateUtil.format(getANC_visit()));
 		dest.writeString(getEDD());
 		dest.writeString(getReceive_sms());
 		dest.writeString(getFollow_up());
