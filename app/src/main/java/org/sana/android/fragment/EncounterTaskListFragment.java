@@ -75,7 +75,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
     //repetitive queries for the patient and procedure info.
     protected static final String SELECT = "SELECT" +
         "encountertask.uuid AS uuid, " +
-        "encountertask.due_date AS due_on, " +
+        "encountertask.due_on AS due_on, " +
         "encountertask.subject AS subject_uuid, " +
         "subject.given_name AS subject_given_name, " +
         "subject.family_name AS subject_family_name, " +

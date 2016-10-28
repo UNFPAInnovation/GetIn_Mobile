@@ -55,7 +55,7 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 	public static final String SELECT_COMPOUND = "SELECT"
 		+ "encountertask._id AS encountertask_id,"
 		+ "encountertask.uuid AS encountertask_uuid,"
-		+ "encountertask.due_on AS ,"
+		+ "encountertask.due_on AS due_on ,"
 		+ "encountertask.modified AS modified,"
 		+ "patient._id AS patient_id,"
 		+ "patient.uuid AS patient_uuid,"
@@ -157,8 +157,8 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 				+ Contract.PROCEDURE + " TEXT, "
 				+ Contract.SUBJECT + " TEXT, "
 
-                + Contract.CREATED + " INTEGER,"
-                + Contract.MODIFIED + " INTEGER"
+                + Contract.CREATED + " DATE,"
+                + Contract.MODIFIED + " DATE"
 				+ ");";
 		
 	}

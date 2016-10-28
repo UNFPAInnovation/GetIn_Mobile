@@ -857,32 +857,26 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         EncounterTask task = new EncounterTask();
         //assignedTo =task.observer;
 //        assignedTo.
-          //Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, task.getUuid());
+        //Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, task.getUuid());
         Date lmd = patient.getLMD();
         String anc = patient.getANC_status();
         Date dob = patient.getDob();
         Date anc_visit = patient.getANC_visit();
 
+        //String uuid = this.get
+        String uuid1 =  mSubject.getLastPathSegment();
+       String uuid3 = mObserver.getLastPathSegment();
 
-        task.getSubject();
-        task.getObserver();
+  // observer.uuid = mObserver.getPath();
+        //patient.uuid =uuid3;
 
-        //procedure.getGuid();
-
-        UUID  uui= UUID.randomUUID();
-
-        String uuid1 = uui.toString();
-        String patientuuid =uui.toString();
-        patient.setUuid(patientuuid);
-        observer.setUuid(uuid1);
-        //procedure.getGuid();
-        patient.uuid =uuid1;
-
-        //procedure.getResources().openRawResource(R.raw.midwife_appointment_note);
-
-       task.assigned_to= observer;
+        // observer.setUuid(uuid1);
+        //patient.setUuid(uuid3);
+       
+        //task.assigned_to = ;
         //task.procedure = ;
-        task.subject =patient;
+        //task.subject = patient;
+
 
 
         /**
@@ -900,12 +894,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
         //String Due_Date;
-      //  long age = x.getTime() - dob.getTime();
-        long no_LMD = days /( 60 * 24 * 60 * 1000);
-        Log.i(TAG, "the number of lmd days are" +no_LMD);
+        //  long age = x.getTime() - dob.getTime();
+        long no_LMD = days / (60 * 24 * 60 * 1000);
+        Log.i(TAG, "the number of lmd days are" + no_LMD);
 
-        if (no_LMD < 84 && anc.equals("yes")   ) {
-            switch (day_of_week) {
+        if ( /*no_LMD < 84 && */anc.equals("Yes")) {
+       /*     switch (day_of_week) {
 
                 case Calendar.MONDAY:
 //                    c1.setTime(new Date()); // Now use today date.
@@ -983,10 +977,15 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
             }
+        }*/
+
+            Date due_on = patient.getANC_visit();
+           sdf.format(due_on);
+            task.due_on = due_on;
+
+
+
         }
-
-
-
         return task;
     }
 
@@ -1002,32 +1001,27 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
     public void createTasks(List<EncounterTask> tasks) {
         org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED;
-        //String due_on = .
+
         //String uuid = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
-        String uuid1 =  ModelWrapper.getUuid(Observers.CONTENT_URI,getContentResolver());
-       // String uuid3 = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
+        String uuid1 = mObserver.getLastPathSegment();
+       String uuid3 = mSubject.getLastPathSegment();
         //EncounterTask task= new EncounterTask();
 
+        InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
           //tasks.
 
-        UUID  uui= UUID.randomUUID();
-       String uuid = uui.toString();
+        //UUID  uui= UUID.randomUUID();
+       //String uuid2 = uuid.toString();
         //String uuid1 = uui.toString();
-        String uuid2 = uui.toString();
+        //String uuid2 = uui.toString();
 
         for ( EncounterTask task : tasks) {
-            //due_on = new Date(); sdf.format(due_on);
-            //String uuid4 =task.getObserver().setUuid();
-            //task.getSubject().setUuid(uuid);
-            //task.getProcedure().setUuid(uuid2);
-            //Date due_on = task.due_on;
-            //sdf.format(due_on);
 
 
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
-            values.put(Tasks.Contract.SUBJECT,uuid);
-            values.put(Tasks.Contract.PROCEDURE,task.assigned_to.toString());
+           values.put(Tasks.Contract.SUBJECT,uuid3.toString());
+            values.put(Tasks.Contract.PROCEDURE,uuid.toString());
             values.put(Tasks.Contract.DUE_DATE, task.due_on.toString());
             values.put(Tasks.Contract.STATUS, task.status.toString());
             getContentResolver().insert(
@@ -1036,8 +1030,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
-            form.putString(Tasks.Contract.SUBJECT,uuid);
-            form.putString(Tasks.Contract.PROCEDURE,uuid2);
+            form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
+            form.putString(Tasks.Contract.PROCEDURE,uuid.toString());
             form.putString(Tasks.Contract.DUE_DATE, task.due_on.toString());
             form.putString(Tasks.Contract.STATUS,status.toString());
 
