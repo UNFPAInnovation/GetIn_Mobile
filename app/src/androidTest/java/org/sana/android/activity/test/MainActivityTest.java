@@ -28,6 +28,7 @@
 package org.sana.android.activity.test;
 
 import org.junit.Test;
+import org.sana.R;
 import org.sana.android.activity.MainActivity;
 import org.sana.android.procedure.Procedure;
 import org.sana.api.task.EncounterTask;
@@ -38,6 +39,7 @@ import android.annotation.TargetApi;
 import android.os.Build;
 import android.test.ActivityInstrumentationTestCase;
 
+import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -49,14 +51,14 @@ import static org.junit.Assert.assertEquals;
  *
  */
 @TargetApi(Build.VERSION_CODES.FROYO)
-public class MainActivityTest {//extends ActivityInstrumentationTestCase<MainActivity> {
+public class MainActivityTest extends ActivityInstrumentationTestCase<MainActivity> {
 	/**
-	 * @param activityClass
-	 *
+	 * @param
+	 */
 	public MainActivityTest() {
 		super("org.sana", MainActivity.class);
 	}
-*/
+
 	public static final String TAG = MainActivityTest.class.getSimpleName();
 
 		MainActivity mainy = new MainActivity();
@@ -70,7 +72,7 @@ public class MainActivityTest {//extends ActivityInstrumentationTestCase<MainAct
 			// onView(withText("Say hello!")).perform(click());
 
 			Patient patient = new Patient();
-			Procedure procedure =Procedure.fromXMLString(null);
+			Procedure procedure =Procedure.fromRawResource(getActivity(), R.raw.mapping_form_vht);
 			Observer assignedTo = new Observer();
  
 			patient.getANC_status();
