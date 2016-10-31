@@ -628,14 +628,15 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_ENCOUNTER);
                 break;
             case R.id.btn_main_register_patient:
-                String subj = getString(R.string.tr_subject);
-//                String proc = getString(R.string.tr_procedure);
-                String reg_uuid = getString(R.string.procs_subject_short_form);
-                intent = new Intent(Intent.ACTION_VIEW)
-                        .setData(Uris.withAppendedUuid(Procedures.CONTENT_URI, reg_uuid))
-                        .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
+                intent = new Intent(Intent.ACTION_INSERT);
+                //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
+                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                getString(R.string.procs_subject_short_form1)))
+                        .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
+                                .mapping_form_midwife)
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-                startActivityForResult(intent, RUN_PROCEDURE);
+                startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
                 break;
            /* case R.id.btn_main_procedures:
@@ -651,17 +652,19 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_training_mode:
-                intent = new Intent(Intent.ACTION_INSERT);
-                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
-                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
-                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.procs_subject_short_form)))
+
+                String subj = getString(R.string.tr_subject);
+//                String proc = getString(R.string.tr_procedure);
+                String reg_uuid = getString(R.string.procs_subject_short_form);
+                intent = new Intent(Intent.ACTION_VIEW)
+                        .setData(Uris.withAppendedUuid(Procedures.CONTENT_URI, reg_uuid))
+                        .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-                startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                startActivityForResult(intent, RUN_PROCEDURE);
 
                 break;
-            /*
-            case R.id.btn_main_unregistered_subject:
+
+            /*case R.id.btn_main_unregistered_subject:
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
@@ -670,8 +673,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                 .registration_short_en)
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
-                break;
-            */
+                break;*/
+
             case R.id.btn_exit:
                 clearCredentials();
                 onClearAppState();
