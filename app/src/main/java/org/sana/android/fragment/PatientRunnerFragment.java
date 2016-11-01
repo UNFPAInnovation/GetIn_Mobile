@@ -311,7 +311,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setDob(new Date());
                 mPatient.setFamily_name("");
                 mPatient.setGiven_name("");
-                mPatient.setGender("M");
+                mPatient.setGender("F");
 
                 mPatient.setLMD(new Date());
                 mPatient.setpNumber("");
@@ -331,6 +331,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setBlurred_vision("");
                 mPatient.setSwollen_feet("");
                 mPatient.setFever("");
+                mPatient.setLocation(new Location());
                 uSubject = writeObject(mPatient, 0);
 
             } else {

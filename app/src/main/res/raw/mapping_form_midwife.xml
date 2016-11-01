@@ -1,7 +1,7 @@
 <Procedure
     title="mapping_form: Short Form"
-    author="Marting"
-    uuid="18785afb-6160-45a0-ac8c-1f5cbfaa6d92"
+    author="Martin"
+    uuid="ece3937b-a1ec-4ef1-ada7-c6dfd119ba6c"
     version="1.0"
     locale="en"
     class="org.sana.core.Subject">
@@ -72,12 +72,13 @@
             required="true"
             answer=""
         />
+        </Page>
+    <Page>
         <Element id="7" type="RADIO"
             concept="LOCATION PATIENT HOUSE"
             question="Are you at the girl's home?"
-            choices="Yes;No"
-            required="true"
-            answer=""/>
+            answer="Yes"
+            choices="Yes;No" />
         </Page>
         <Page>
         <showif>
