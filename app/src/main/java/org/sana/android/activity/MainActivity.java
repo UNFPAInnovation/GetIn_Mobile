@@ -70,6 +70,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -205,13 +206,16 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
                                 switch(Uris.getDescriptor(dataUri)){
                             case Uris.SUBJECT_ITEM:
-                            case Uris.SUBJECT_UUID:
                                 startService(data);
+                            case Uris.SUBJECT_UUID:
+                               // startService(data);
                                 // Add the task creation after the
                                 // new patient has been sent to the
                                 // dispatch service
                                 Patient patient = getPatient(
                                         data.getData());
+
+
                                 /**
                                  * TODO
                                  * work on the procedure to return and the observer
@@ -872,7 +876,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
   // observer.uuid = mObserver.getPath();
         //patient.uuid =uuid3;
-
         // observer.setUuid(uuid1);
         //patient.setUuid(uuid3);
        
@@ -995,7 +998,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
      public List<EncounterTask> getVisits(Patient patient, Procedure procedure, Observer observer){
         //invoke methods from (2) above
          //adding the encounterTasks to the list
-         List<EncounterTask> encounterTasks = null;
+       List<EncounterTask> encounterTasks = new ArrayList<EncounterTask>();
          encounterTasks.add(calculateFirstVisit(patient, procedure, observer));
          return encounterTasks;
     }
@@ -1026,7 +1029,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
             values.put(Tasks.Contract.PROCEDURE,uuid.toString());
             values.put(Tasks.Contract.DUE_DATE, task.due_on.toString());
-            values.put(Tasks.Contract.STATUS, task.status.toString());
+            values.put(Tasks.Contract.STATUS, status.toString());
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
