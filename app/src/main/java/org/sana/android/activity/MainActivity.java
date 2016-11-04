@@ -1027,8 +1027,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,uuid.toString());
-            values.put(Tasks.Contract.DUE_DATE, task.due_on.toString());
+            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
@@ -1037,8 +1037,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,uuid.toString());
-            form.putString(Tasks.Contract.DUE_DATE, task.due_on.toString());
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
 
 
