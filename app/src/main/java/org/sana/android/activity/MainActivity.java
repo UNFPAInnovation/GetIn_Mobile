@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -39,7 +37,6 @@ import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
-import org.sana.android.db.impl.SubjectsHelper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
 import org.sana.android.media.EducationResource;
 import org.sana.android.procedure.Procedure;
@@ -59,12 +56,9 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
-import org.sana.core.Encounter;
 import org.sana.core.Observer;
 import org.sana.core.Patient;
-import org.sana.core.Subject;
 import org.sana.net.Response;
-import org.sana.util.UUIDUtil;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -75,7 +69,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
 /**
  * Main Activity which handles user authentication and initializes services that
@@ -1030,8 +1023,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
-            getContentResolver().insert(
-                    EncounterTasks.CONTENT_URI, values);
+//            getContentResolver().insert(
+//                    EncounterTasks.CONTENT_URI, values);
 
 
             Bundle form = new Bundle();
