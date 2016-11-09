@@ -216,6 +216,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                         data.getData());
 
 
+
                                 /**
                                  * TODO
                                  * work on the procedure to return and the observer
@@ -904,8 +905,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         long no_LMD = days / (60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" + no_LMD);
 
-        if ( /*no_LMD < 84 && */anc.equals("Yes")) {
-       /*     switch (day_of_week) {
+        if ( no_LMD < 84 && anc.equals("Yes")) {
+       /*   switch (day_of_week) {
 
                 case Calendar.MONDAY:
 //                    c1.setTime(new Date()); // Now use today date.
@@ -986,7 +987,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         }*/
 
             Date due_on = patient.getANC_visit();
-           sdf.format(due_on);
+
             task.due_on = due_on;
 
 
@@ -999,7 +1000,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         //invoke methods from (2) above
          //adding the encounterTasks to the list
        List<EncounterTask> encounterTasks = new ArrayList<EncounterTask>();
-         encounterTasks.add(calculateFirstVisit(patient, procedure, observer));
+         encounterTasks.add(calculateFirstVisit(patient, procedure,observer));
          return encounterTasks;
     }
 
@@ -1012,8 +1013,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         String uuid1 = mObserver.getLastPathSegment();
        String uuid3 = mSubject.getLastPathSegment();
         //EncounterTask task= new EncounterTask();
-
-        InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
+    String uuid = UUID.randomUUID().toString();
+        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
           //tasks.
 
         //UUID  uui= UUID.randomUUID();
@@ -1030,6 +1031,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
+           values.put(Tasks.Contract.UUID,uuid);
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
@@ -1040,6 +1042,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
+            form.putString(Tasks.Contract.UUID,uuid);
 
 
             // send to sync
