@@ -68,7 +68,7 @@
             id="8"
             type="DATE"
             question="When was your last Menstruation Date"
-            concept="LAST MENSTRUATION DATE"
+            concept="LMD"
             required="true"
             answer=""
         />

@@ -75,6 +75,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -214,6 +215,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                 // dispatch service
                                 Patient patient = getPatient(
                                         data.getData());
+
 
 
                                 /**
@@ -871,18 +873,17 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Date anc_visit = patient.getANC_visit();
 
         //String uuid = this.get
-        String uuid1 =  mSubject.getLastPathSegment();
-       String uuid3 = mObserver.getLastPathSegment();
+        String uuid1 = mSubject.getLastPathSegment();
+        String uuid3 = mObserver.getLastPathSegment();
 
-  // observer.uuid = mObserver.getPath();
+        // observer.uuid = mObserver.getPath();
         //patient.uuid =uuid3;
         // observer.setUuid(uuid1);
         //patient.setUuid(uuid3);
-       
+
         //task.assigned_to = ;
         //task.procedure = ;
         //task.subject = patient;
-
 
 
         /**
@@ -892,11 +893,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         //Date noe = new Date();
 //        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        Calendar c1 = Calendar.getInstance();
-        c1.setTime(new Date());
-        Date x = c1.getTime();
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(new Date());
+        Date x = c2.getTime();
         long days = x.getTime() - lmd.getTime();
-        int day_of_week = c1.get(Calendar.DAY_OF_WEEK);
+        int day_of_week = c2.get(Calendar.DAY_OF_WEEK);
 
 
         //String Due_Date;
@@ -904,116 +905,146 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         long no_LMD = days / (60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" + no_LMD);
 
-        if ( /*no_LMD < 84 && */anc.equals("Yes")) {
-       /*     switch (day_of_week) {
+        if (no_LMD > 84 && anc.equals("No")) {
+            Calendar c1 = Calendar.getInstance();
+            c1.setTime(new Date());
+            Date due_on= c1.getTime();
+            switch (day_of_week) {
 
                 case Calendar.MONDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 8); // Adding 8 days
-                    //String output = sdf.format(c1.getTime());
-                    Date due_on = c1.getTime();
-                    //String observer = task.getUuid();
-                   //String p =procedure.setGuid();
-                    sdf.format(due_on);
-                    task.due_on= due_on;
-                    //task.getObserver();
-                    //task.getProcedure();
+                    task.due_on = due_on;
 
-
-                    //                    return task;
-
-                break;
+                    break;
                 case Calendar.TUESDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 7); // Adding 7 days
-                    //output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
 
                     break;
                 case Calendar.WEDNESDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 6); // Adding 6 days
-                    //output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
                     break;
+
                 case Calendar.THURSDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 5); // Adding 5 days
-                    //output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
-//                    return task;
+
                     break;
                 case Calendar.FRIDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 4); // Adding 4 days
-                    //output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
-//                    return task;
+
                     break;
                 case Calendar.SATURDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 3); // Adding 3 days
-                    //output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
-//                    return task;
                     break;
                 case Calendar.SUNDAY:
-//                    c1.setTime(new Date()); // Now use today date.
                     c1.add(Calendar.DATE, 2); // Adding 2 days
-                    // output = sdf.format(c1.getTime());
-                    due_on = c1.getTime();
-                    sdf.format(due_on);
                     task.due_on = due_on;
 
-
-
-//                    return task;
                     break;
                 default:
 
 
             }
-        }*/
 
+        }
+        else if(no_LMD < 84 && anc.equals("No")){
+            Calendar c = Calendar.getInstance();
+           // c.setTime(lmd);
+           // c.add(Calendar.DATE,84);
+           // int new_LMD =(int)no_LMD;
+           // c.add(Calendar.DATE,-new_LMD);
+           //Date dif =c.getTime();
+
+            int new_lmd = (int)no_LMD;
+           int rand_diff = 84-new_lmd;
+            Random rand = new Random();
+
+            int randomNum = rand.nextInt((new_lmd-0) + 1) + 0;
+          c.add(Calendar.DATE,randomNum);// Add random number to current date
+            Date due_on = c.getTime();
+            int due_day_of_week = c.get(Calendar.DAY_OF_WEEK);
+
+
+        Log.i(TAG,"the new date is" +due_on);
+
+            switch(due_day_of_week) {
+                case Calendar.MONDAY:
+                    c.add(Calendar.DATE, 4); // Adding 4 days
+                    //Date due_on =c.getTime();
+                    task.due_on = due_on;
+
+                    break;
+                case Calendar.TUESDAY:
+                    c.add(Calendar.DATE, 3); // Adding 3 days
+                    task.due_on = due_on;
+
+                    break;
+                case Calendar.WEDNESDAY:
+                    c.add(Calendar.DATE, 6); // Adding 6 days
+                    task.due_on = due_on;
+                    break;
+
+                case Calendar.THURSDAY:
+                    c.add(Calendar.DATE, 5); // Adding 5 days
+                    task.due_on = due_on;
+
+                    break;
+                case Calendar.FRIDAY:
+                    c.add(Calendar.DATE, 4); // Adding 4 days
+                    task.due_on = due_on;
+
+                    break;
+                case Calendar.SATURDAY:
+                    c.add(Calendar.DATE, 5); // Adding 3 days
+                    task.due_on = due_on;
+                    break;
+
+                case Calendar.SUNDAY:
+                    c.add(Calendar.DATE, 4); // Adding 2 days
+                    task.due_on = due_on;
+
+                    break;
+                default:
+            }
+        }
+        else if (anc.equals("Yes")){
             Date due_on = patient.getANC_visit();
-           sdf.format(due_on);
+
             task.due_on = due_on;
-
-
 
         }
         return task;
     }
 
+
+
+
+
+
+
      public List<EncounterTask> getVisits(Patient patient, Procedure procedure, Observer observer){
         //invoke methods from (2) above
          //adding the encounterTasks to the list
        List<EncounterTask> encounterTasks = new ArrayList<EncounterTask>();
-         encounterTasks.add(calculateFirstVisit(patient, procedure, observer));
+         encounterTasks.add(calculateFirstVisit(patient, procedure,observer));
          return encounterTasks;
     }
 
 
 
     public void createTasks(List<EncounterTask> tasks) {
-        org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED;
+        org.sana.api.task.Status status = org.sana.api.task.Status.ASSIGNED ;
 
         //String uuid = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
         String uuid1 = mObserver.getLastPathSegment();
        String uuid3 = mSubject.getLastPathSegment();
         //EncounterTask task= new EncounterTask();
-
-        InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
+    String uuid = UUID.randomUUID().toString();
+        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
           //tasks.
 
         //UUID  uui= UUID.randomUUID();
@@ -1027,9 +1058,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,uuid.toString());
-            values.put(Tasks.Contract.DUE_DATE, task.due_on.toString());
+            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
+           values.put(Tasks.Contract.UUID,uuid);
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
@@ -1037,9 +1069,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,uuid.toString());
-            form.putString(Tasks.Contract.DUE_DATE, task.due_on.toString());
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
+            form.putString(Tasks.Contract.UUID,uuid);
 
 
             // send to sync

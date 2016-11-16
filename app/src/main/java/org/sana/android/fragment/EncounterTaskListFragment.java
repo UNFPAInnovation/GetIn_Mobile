@@ -259,7 +259,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
 
     //TODO try reading from intent
     public String getSelectedStatus(){
-        return "Assigned";
+        return "ASSIGNED";
     }
 
     public String getSelection(){
