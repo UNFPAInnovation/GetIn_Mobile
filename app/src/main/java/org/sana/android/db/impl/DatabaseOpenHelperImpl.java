@@ -80,7 +80,8 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 				ObservationsHelper.getInstance().onCreate(),
 				ObserversHelper.getInstance().onCreate(),
 				ProceduresHelper.getInstance().onCreate(),
-				SubjectsHelper.getInstance().onCreate()
+				SubjectsHelper.getInstance().onCreate(),
+                AmbulanceDriversHelper.getInstance().onCreate()
 		};
 		//db.acquireReference();
 		for(String sql:create){
