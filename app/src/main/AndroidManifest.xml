@@ -127,6 +127,18 @@
             </intent-filter>
         </activity>
         <activity
+            android:name="org.sana.android.activity.PatientViewActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/title_procedures_list" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.dir/org.sana.activity" />
+            </intent-filter>
+
+
+        </activity>
+        <activity
             android:name="org.sana.android.activity.EncounterList"
             android:label="@string/title_savedprocedure_list"
             android:screenOrientation="portrait">
