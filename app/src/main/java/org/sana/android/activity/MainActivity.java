@@ -199,7 +199,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         // Handle any content type specific actions
                         switch(Uris.getDescriptor(dataUri)) {
                             case Uris.ENCOUNTER_ITEM:
-                                //startService(data);
+                               // startService(data);
                             case Uris.ENCOUNTER_UUID:
                                 break;
                             default:
@@ -670,6 +670,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
                 break;
 
+
             /*case R.id.btn_main_unregistered_subject:
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
@@ -786,7 +787,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Bundle form = new Bundle();
         form.putString(Tasks.Contract.STATUS,String.valueOf(status.code));
         form.putString(Tasks.Contract.MODIFIED,now);
-        getContentResolver().update(task,values,null,null);
+       int updated = getContentResolver().update(task,values,null,null);
 
         // send to sync
         Intent intent = new Intent(Intents.ACTION_UPDATE,task);
@@ -876,14 +877,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         String uuid1 = mSubject.getLastPathSegment();
         String uuid3 = mObserver.getLastPathSegment();
 
-        // observer.uuid = mObserver.getPath();
-        //patient.uuid =uuid3;
-        // observer.setUuid(uuid1);
-        //patient.setUuid(uuid3);
 
-        //task.assigned_to = ;
-        //task.procedure = ;
-        //task.subject = patient;
+
+
 
 
         /**
@@ -891,8 +887,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
          * think about the procedure or activity to call when the due date is reached
          */
 
-        //Date noe = new Date();
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        /*If girls is greater than 12 weeks pregnant and has never attended ANC*
+        *Get the day of week when she is mapped
+        * Add the number of days to either Tuesday or Thursday
+         */
         Calendar c2 = Calendar.getInstance();
         c2.setTime(new Date());
         Date x = c2.getTime();
@@ -907,41 +905,48 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         if (no_LMD > 84 && anc.equals("No")) {
             Calendar c1 = Calendar.getInstance();
-            c1.setTime(new Date());
-            Date due_on= c1.getTime();
+            //c1.setTime(new Date());
+
             switch (day_of_week) {
 
                 case Calendar.MONDAY:
                     c1.add(Calendar.DATE, 8); // Adding 8 days
+                    Date due_on= c1.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.TUESDAY:
                     c1.add(Calendar.DATE, 7); // Adding 7 days
+                     due_on= c1.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.WEDNESDAY:
                     c1.add(Calendar.DATE, 6); // Adding 6 days
+                    due_on= c1.getTime();
                     task.due_on = due_on;
                     break;
 
                 case Calendar.THURSDAY:
                     c1.add(Calendar.DATE, 5); // Adding 5 days
+                    due_on= c1.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.FRIDAY:
                     c1.add(Calendar.DATE, 4); // Adding 4 days
+                    due_on= c1.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.SATURDAY:
                     c1.add(Calendar.DATE, 3); // Adding 3 days
+                    due_on= c1.getTime();
                     task.due_on = due_on;
                     break;
                 case Calendar.SUNDAY:
                     c1.add(Calendar.DATE, 2); // Adding 2 days
+                    due_on= c1.getTime();
                     task.due_on = due_on;
 
                     break;
@@ -951,66 +956,75 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             }
 
         }
+        /* If girl is less than 12 weeks pregnant and has never attended ANC
+        Get a random number , add it to the day she was mapped
+        Then work out the logic of her appointment being between Tuesday and Thursday
+         */
         else if(no_LMD < 84 && anc.equals("No")){
             Calendar c = Calendar.getInstance();
-           // c.setTime(lmd);
-           // c.add(Calendar.DATE,84);
-           // int new_LMD =(int)no_LMD;
-           // c.add(Calendar.DATE,-new_LMD);
-           //Date dif =c.getTime();
-
-            int new_lmd = (int)no_LMD;
-           int rand_diff = 84-new_lmd;
+            int new_lmd = (int)no_LMD; // cast lmd to int (maximum of random number to be generated)
+           int rand_diff = 84-new_lmd; // The minimum of the random number to be generated
             Random rand = new Random();
 
-            int randomNum = rand.nextInt((new_lmd-0) + 1) + 0;
-          c.add(Calendar.DATE,randomNum);// Add random number to current date
-            Date due_on = c.getTime();
-            int due_day_of_week = c.get(Calendar.DAY_OF_WEEK);
+            int randomNum = rand.nextInt((rand_diff-0) )  ; // generate a random number btn current weeks of gestation and the maximum days left to go to 12th week
+            // if (randomNum<42)
+            c.add(Calendar.DATE,randomNum);// Add random number to current date
+            Date rand_due_on = c.getTime(); //get date instance
+            c.setTime(rand_due_on); // set it as calendar object
+            int due_day_of_week = c.get(Calendar.DAY_OF_WEEK); // get day of week
 
 
-        Log.i(TAG,"the new date is" +due_on);
+        Log.i(TAG,"the new date is" +rand_due_on);
 
             switch(due_day_of_week) {
                 case Calendar.MONDAY:
-                    c.add(Calendar.DATE, 4); // Adding 4 days
-                    //Date due_on =c.getTime();
+                    c.add(Calendar.DATE, 3); // Adding 4 days
+                    Date due_on =c.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.TUESDAY:
-                    c.add(Calendar.DATE, 3); // Adding 3 days
+                    c.add(Calendar.DATE, 2); // Adding 3 days
+                    due_on =c.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.WEDNESDAY:
                     c.add(Calendar.DATE, 6); // Adding 6 days
+                    due_on =c.getTime();
                     task.due_on = due_on;
                     break;
 
                 case Calendar.THURSDAY:
                     c.add(Calendar.DATE, 5); // Adding 5 days
+                    due_on =c.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.FRIDAY:
                     c.add(Calendar.DATE, 4); // Adding 4 days
+                    due_on =c.getTime();
                     task.due_on = due_on;
 
                     break;
                 case Calendar.SATURDAY:
                     c.add(Calendar.DATE, 5); // Adding 3 days
+                    due_on =c.getTime();
                     task.due_on = due_on;
                     break;
 
                 case Calendar.SUNDAY:
                     c.add(Calendar.DATE, 4); // Adding 2 days
+                    due_on= c.getTime();
                     task.due_on = due_on;
 
                     break;
                 default:
             }
         }
+        /*if girl has ever attended ANC
+        *Pick ANC date from card
+         */
         else if (anc.equals("Yes")){
             Date due_on = patient.getANC_visit();
 
@@ -1044,7 +1058,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
        String uuid3 = mSubject.getLastPathSegment();
         //EncounterTask task= new EncounterTask();
     String uuid = UUID.randomUUID().toString();
-        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_note);
+        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_notexml);
           //tasks.
 
         //UUID  uui= UUID.randomUUID();
@@ -1058,7 +1072,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
            values.put(Tasks.Contract.UUID,uuid);
@@ -1069,7 +1083,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_procedure));
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
             form.putString(Tasks.Contract.UUID,uuid);
@@ -1077,7 +1091,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             // send to sync
             Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, task.toString()));
+                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, uuid));
             intent.putExtra("form", form);
             startService(intent);
         }
