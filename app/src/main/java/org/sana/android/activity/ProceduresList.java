@@ -5,6 +5,7 @@ import org.sana.R;
 import org.sana.android.app.Locales;
 import org.sana.android.content.Intents;
 import org.sana.android.provider.Procedures;
+import org.sana.android.provider.Subjects;
 
 import android.app.ListActivity;
 import android.content.ContentUris;
@@ -42,6 +43,8 @@ public class ProceduresList extends ListActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Uri uri = getIntent().getData();
+
+
 
         if (uri == null) {
             uri = Procedures.CONTENT_URI;
@@ -90,5 +93,15 @@ public class ProceduresList extends ListActivity {
     final void sync(Context context, Uri uri){
     	Intent intent = new Intent(context.getString(R.string.intent_action_read),uri);
     	context.startService(intent);
+    }
+    public void submit(View v) {
+        Intent intent = null;
+        switch (v.getId()) {
+            case R.id.btn_view_girl_details:
+
+                Intent k = new Intent(this, PatientViewActivity.class);
+                startActivity(k);
+                break;
+        }
     }
 }
