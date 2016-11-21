@@ -148,6 +148,7 @@ public final class Uris {
 	public static final int SUBJECT = 512 << CONTENT_SHIFT;
 	public static final int ENCOUNTER_TASK = 1024 << CONTENT_SHIFT;
 	public static final int OBSERVATION_TASK = 2048 << CONTENT_SHIFT;
+    public static final int AMBULANCE_DRIVER = 4096 << CONTENT_SHIFT;
 	
 	// dir match codes OBJECT | ITEMS
 	public static final int CONCEPT_DIR = CONCEPT | ITEMS;
@@ -162,6 +163,7 @@ public final class Uris {
 	public static final int SUBJECT_DIR = SUBJECT | ITEMS;
 	public static final int ENCOUNTER_TASK_DIR = ENCOUNTER_TASK | ITEMS;
 	public static final int OBSERVATION_TASK_DIR = OBSERVATION_TASK | ITEMS;
+    public static final int AMBULANCE_DRIVER_DIR = AMBULANCE_DRIVER | ITEMS;
 	
 	// item match codes OBJECT | ITEM_ID
 	public static final int CONCEPT_ITEM = CONCEPT | ITEM_ID;
@@ -176,6 +178,7 @@ public final class Uris {
 	public static final int SUBJECT_ITEM = SUBJECT | ITEM_ID;
 	public static final int ENCOUNTER_TASK_ITEM = ENCOUNTER_TASK | ITEM_ID;
 	public static final int OBSERVATION_TASK_ITEM = OBSERVATION_TASK | ITEM_ID;
+    public static final int AMBULANCE_DRIVER_ITEM= AMBULANCE_DRIVER | ITEM_ID;
 	
 	// item match codes OBJECT | ITEM_UUID
 	public static final int CONCEPT_UUID = CONCEPT | ITEM_UUID;
@@ -190,6 +193,7 @@ public final class Uris {
 	public static final int SUBJECT_UUID = SUBJECT | ITEM_UUID;
 	public static final int ENCOUNTER_TASK_UUID = ENCOUNTER_TASK | ITEM_UUID;
 	public static final int OBSERVATION_TASK_UUID = OBSERVATION_TASK | ITEM_UUID;
+    public static final int AMBULANCE_DRIVER_UUID= AMBULANCE_DRIVER | ITEM_UUID;
 	
 	// Matcher for mapping the Uri to code mappings 
 	private static final UriMatcher mMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -242,6 +246,11 @@ public final class Uris {
 		mMatcher.addURI(Models.AUTHORITY, "tasks/observation/", OBSERVATION_TASK_DIR);
 		mMatcher.addURI(Models.AUTHORITY, "tasks/observation/#", OBSERVATION_TASK_ITEM);
 		mMatcher.addURI(Models.AUTHORITY, "tasks/observation/*", OBSERVATION_TASK_UUID);
+
+        // Add ambulance driver
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/", SUBJECT_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/#", SUBJECT_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/*", SUBJECT_UUID);
 		
 	}
 	

@@ -752,6 +752,14 @@ public class DispatchService extends Service{
                                 bcastCode = 400;
                             }
                             break;
+                            case Uris.AMBULANCE_DRIVER:
+                                // TODO Implement AmbulanceDriver request handling
+                                // Get response handler for ambulance driver
+                                // Check for GET Method
+                                // Call get request - MDSInterface2.apiGet should work
+                                // Handle response
+                                // See examples above.
+                                break;
                         case Uris.PACKAGE_DIR:
                             Logf.D(TAG, "handleMessage(Message)",
                                     "PACKAGE update request");

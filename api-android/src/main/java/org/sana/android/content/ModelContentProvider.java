@@ -34,6 +34,7 @@ import org.sana.android.db.DBUtils;
 import org.sana.android.db.DatabaseManager;
 import org.sana.android.db.DatabaseOpenHelper;
 import org.sana.android.db.TableHelper;
+import org.sana.android.db.impl.AmbulanceDriversHelper;
 import org.sana.android.db.impl.ConceptsHelper;
 import org.sana.android.db.impl.EncounterTasksHelper;
 import org.sana.android.db.impl.EncountersHelper;
@@ -110,6 +111,8 @@ public abstract class ModelContentProvider extends ContentProvider {
 			return SubjectsHelper.getInstance();
 		case(Uris.ENCOUNTER_TASK):
 			return EncounterTasksHelper.getInstance();
+            case Uris.AMBULANCE_DRIVER:
+                return AmbulanceDriversHelper.getInstance();
 		default:
 			throw new IllegalArgumentException("Invalid uri in "
 						+"getTableHelper(): " + uri.toString());
