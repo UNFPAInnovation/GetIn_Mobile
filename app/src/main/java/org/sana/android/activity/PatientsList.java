@@ -296,12 +296,14 @@ public class PatientsList extends FragmentActivity implements
                 // TODO Should really use an asset file
                 int resId = getProcedureResourceId("registration_short");
                 // Default to english version
-                resId  = (resId != 0)? resId: R.raw.registration_short_en;
+                //resId  = (resId != 0)? resId: R.raw.registration_short_en;
+                resId  = (resId != 0)? resId: R.raw.mapping_form_midwife;
                 // build launch intent
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.procs_subject_short_form)))
+                               // getString(R.string.procs_subject_short_form)))
+                                getString(R.string.cfg_midwife_procedure)))
                         .putExtra(Intents.EXTRA_PROCEDURE_ID, resId);
                 startActivityForResult(intent, CREATE_PATIENT);
                 break;
