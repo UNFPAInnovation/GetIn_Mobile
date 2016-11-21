@@ -523,21 +523,21 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         String id = null;
         String imagePath = null;
         TextView name = (TextView) view.findViewById(R.id.name);
-        TextView systemId = (TextView)view.findViewById(R.id.system_id);
+        //TextView systemId = (TextView)view.findViewById(R.id.system_id);
         ImageView image = (ImageView)view.findViewById(R.id.image);
         try{
             c = ModelWrapper.getOneByUuid(Subjects.CONTENT_URI, context.getContentResolver(), uuid);
             if(c != null && c.moveToFirst()){
                 familyName = c.getString(c.getColumnIndex(Patients.Contract.FAMILY_NAME));
                 givenName = c.getString(c.getColumnIndex(Patients.Contract.GIVEN_NAME));
-                id = c.getString(c.getColumnIndex(Patients.Contract.PATIENT_ID));
+               // id = c.getString(c.getColumnIndex(Patients.Contract.PATIENT_ID));
                 displayName = StringUtil.formatPatientDisplayName(givenName, familyName);
                 imagePath = c.getString(c.getColumnIndex(Patients.Contract.IMAGE));
             }
         } finally {
             if(c != null) c.close();
             name.setText((TextUtils.isEmpty(displayName)? "null": displayName));
-            systemId.setText((TextUtils.isEmpty(id)? "null id":id));
+           // systemId.setText((TextUtils.isEmpty(id)? "null id":id));
             setImage(image,imagePath);
         }
     }
