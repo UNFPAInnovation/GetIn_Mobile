@@ -255,5 +255,8 @@
     <string name="title_basic_settings">Basic Settings</string>
     <string name="setting_upload_foreground">Notify upload</string>
     <string name="prompt_default">Use default value</string>
+    <string name="title_activity_ambulance_driver_list">Ambulance Drivers
+    </string>
+    <string name="action_settings">Settings</string>
 
 </resources>
