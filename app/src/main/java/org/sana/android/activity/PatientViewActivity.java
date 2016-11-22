@@ -44,7 +44,9 @@ public class PatientViewActivity extends PatientsList {
         edd = (TextView) findViewById(R.id.girlDetail_edd);
         back = (Button) findViewById(R.id.btn_exit1);
 
-
+        // call getIntent().getData()
+        // Use the data Uri - should Patient Uri passed from the EncountersList
+        // Inflate Patient from the database PatientWrapper.get
         Patient patient = new Patient();
         Date lmd = patient.getLMD();
 
