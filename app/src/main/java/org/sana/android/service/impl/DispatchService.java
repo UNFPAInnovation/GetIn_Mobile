@@ -73,6 +73,7 @@ import org.apache.http.auth.Credentials;
 import org.apache.http.auth.UsernamePasswordCredentials;
 import org.apache.http.client.CredentialsProvider;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -106,12 +107,14 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 
 import org.sana.api.task.EncounterTask;
+import org.sana.core.AmbulanceDriver;
 import org.sana.core.Model;
 import org.sana.core.Patient;
 import org.sana.core.Procedure;
 import org.sana.net.Response;
 import org.sana.core.Subject;
 import org.sana.net.http.HttpTaskFactory;
+import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
 import org.sana.net.http.handler.EncounterResponseHandler;
 import org.sana.net.http.handler.EncounterTaskResponseHandler;
 
@@ -752,9 +755,13 @@ public class DispatchService extends Service{
                                 bcastCode = 400;
                             }
                             break;
-                            case Uris.AMBULANCE_DRIVER:
+                            case Uris.AMBULANCE_DRIVER_DIR:
                                 // TODO Implement AmbulanceDriver request handling
                                 // Get response handler for ambulance driver
+                                AmbulanceDriverResponseHandler ambulanceHandler = new AmbulanceDriverResponseHandler();
+                                Response<Collection<AmbulanceDriver>> adResponse = MDSInterface2.apiGet(uri,
+                                        username,password, ambulanceHandler);
+
                                 // Check for GET Method
                                 // Call get request - MDSInterface2.apiGet should work
                                 // Handle response
