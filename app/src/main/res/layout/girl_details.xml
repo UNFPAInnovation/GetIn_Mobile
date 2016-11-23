@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/copper_cayon"
+    android:gravity="left"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/girlDetail_age1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="center_horizontal"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="GIRLS PREGNANCY DETAILS"
+        android:textColor="@color/light_gray"/>
+    <TextView
+        android:id="@+id/girlDetail_age"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="left"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="AGE:"
+        android:textColor="@color/light_gray"/>
+    <TextView
+        android:id="@+id/girlDetail_edd"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="left"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="EXPECTED DATE OF DELIVERY"
+        android:textColor="@color/light_gray"/>
+    <TextView
+        android:id="@+id/girlDetail_mapping_date"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="left"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="MAPPED ON"
+        android:textColor="@color/light_gray"/>
+    <TextView
+        android:id="@+id/girlDetail_trimester"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:gravity="left"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+        android:text="TRIMESTER"
+        android:textColor="@color/light_gray"/>
+    <Button
+        android:id="@+id/btn_exit1"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/general_exit"
+        android:onClick="submit"
+        android:layout_margin="5dp"
+        android:layout_gravity="center"
+        android:minWidth="128dp"
+        android:padding="16dp"/>
+
+
+</LinearLayout>

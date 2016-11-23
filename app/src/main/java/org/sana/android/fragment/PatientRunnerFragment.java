@@ -56,7 +56,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        showCompleteConfirmation = false;
+        showCompleteConfirmation = true;
     }
 
     @Override

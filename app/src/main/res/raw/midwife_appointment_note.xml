@@ -1,13 +1,15 @@
 <Procedure
-    title="mapping_form: Short Form"
+    title="Appointment_Note"
     author="Donald"
-    uuid="2de33d41-012d-407b-9156-a76c7c38653f"
+    uuid="cae406f2-faff-45ca-b2f0-6f7d361675c0"
     version="1.0"
     locale="en"
-    class="org.sana.core.Observer">
+    class= "org.sana.core.Subject"
+   >
 <Page>
     <Element
         id="1"
+        concept="SUB HEADING"
         type="TEXT"
         question="GIRLS APPOINTMENT NOTES"
     />

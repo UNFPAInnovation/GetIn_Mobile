@@ -30,4 +30,23 @@
             android:ellipsize="marquee"
         	android:focusable="false" 
         	android:focusableInTouchMode="false" android:textAppearance="?android:attr/textAppearanceLarge"/>
+	<LinearLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="12dip"
+		>
+	<Button
+		android:id="@+id/btn_view_girl_details"
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:onClick="submit"
+		android:drawableLeft="@drawable/ic_menu_allfriends"
+		android:text="@string/button_view_girl_details"
+		style="@style/Widget.Button.Large.Dark"
+		android:background="#9E9D24"
+		android:layout_margin="10dp"/>
+		</LinearLayout>
+
 </LinearLayout>

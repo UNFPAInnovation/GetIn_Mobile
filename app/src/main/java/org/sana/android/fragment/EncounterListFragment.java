@@ -11,6 +11,7 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 import org.sana.R;
 import org.sana.android.Constants;
+import org.sana.android.activity.PatientViewActivity;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.content.DispatchResponseReceiver;
@@ -57,6 +58,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -327,6 +329,33 @@ public class EncounterListFragment extends ListFragment implements LoaderCallbac
             setPatient(context,view,patientUUid);
             Log.d(TAG, "Putting data into position: " + position);
             mData.put(position,data);
+            // call findViewById
+            // Get Button reference - replace with id from encounterlist_item layout
+            Button button = (Button)view.findViewById(R.id.button);
+            // Attach some data
+            // Attach the patient uuid
+            // Attach to button as Tag
+            button.setTag(patientUUid);
+            // Set onClickListener
+            button.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    // Begin click listener on click method
+                    // call getTag to retrieve patient uuid
+                    String uuid = String.valueOf(v.getTag());
+                    // construct the Patient Uri - Uris.withAppendedUuid()
+                    Uri uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
+                    // Construct and Intent
+                    Intent k = new Intent(getActivity(), PatientViewActivity.class);
+                    // set the data Uri of the Intent to be the Patient Uri
+                    k.setData(uri);
+                    // call startActivity
+                    startActivity(k);
+                    // End click listener on click method
+
+                }
+            });
         }
 
         public View getView(final int pos, View inView, ViewGroup parent) {
@@ -336,6 +365,7 @@ public class EncounterListFragment extends ListFragment implements LoaderCallbac
                 //        .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
                 inView = mInflater.inflate(R.layout.encounterlist_item, parent,false);
             }
+            // Add button to encounterlist_item
 
             final CheckBox cBox = (CheckBox) inView.findViewById(R.id.checkbox);
             // CheckBox
