@@ -31,7 +31,8 @@ public class AmbulanceDriversHelper extends TableHelper<AmbulanceDriver> {
                 // Fill in the fields of the AmbulanceDriver class
                 + AmbulanceDrivers.Contract.PHONE_NUMBER + " TEXT,"
                 + AmbulanceDrivers.Contract.FIRST_NAME + " TEXT,"
-                +AmbulanceDrivers.Contract.SURNAME+ " TEXT,"
+                + AmbulanceDrivers.Contract.LAST_NAME + " TEXT,"
+                + AmbulanceDrivers.Contract.LOCATION + " TEXT"
                 + ");";
     }
 

@@ -1,14 +1,21 @@
 package org.sana.core;
 
+import com.google.gson.annotations.Expose;
+
 /**
  * Created by winkler.em@gmail.com, on 11/18/2016.
  */
 public class AmbulanceDriver extends Model{
     public static final String TAG = AmbulanceDriver.class.getSimpleName();
     // Add fields
+    @Expose
     public String phoneNumber;
+    @Expose
     public String firstName;
-    public String surname;
+    @Expose
+    public String lastName;
+    @Expose
+    public String location;
 
     public String getFirstName() {
         return firstName;
@@ -26,11 +33,19 @@ public class AmbulanceDriver extends Model{
         this.phoneNumber = phoneNumber;
     }
 
-    public String getSurname() {
-        return surname;
+    public String getLastname() {
+        return lastName;
     }
 
-    public void setSurname(String surname) {
-        this.surname = surname;
+    public void setLastname(String lastname) {
+        this.lastName = lastname;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

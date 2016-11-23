@@ -239,6 +239,9 @@
     <!-- Patients Related -->
     <string name="msg_no_patients">No Patients</string>
 
+    <!-- ambulance drivers and vht Related -->
+    <string name="msg_drivers_vht">contact list is empty</string>
+
     <!-- Authentication Screen -->
     <string name="authentication_sana">GetIn</string>
     <string name="authentication_username">Username</string>

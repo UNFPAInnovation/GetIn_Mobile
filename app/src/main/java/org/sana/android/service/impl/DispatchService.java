@@ -27,106 +27,6 @@
  */
 package org.sana.android.service.impl;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.lang.reflect.Field;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Queue;
-import java.util.PriorityQueue;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.Executors;
-
-
-import org.apache.http.HttpHost;
-import org.apache.http.HttpResponse;
-import org.apache.http.auth.AuthScope;
-import org.apache.http.auth.Credentials;
-import org.apache.http.auth.UsernamePasswordCredentials;
-import org.apache.http.client.CredentialsProvider;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpUriRequest;
-import org.apache.http.impl.client.AbstractHttpClient;
-import org.apache.http.impl.client.BasicCredentialsProvider;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.util.EntityUtils;
-
-import org.sana.R;
-import org.sana.android.Constants;
-import org.sana.android.activity.EncounterList;
-import org.sana.android.activity.MainActivity;
-import org.sana.android.app.Locales;
-import org.sana.android.app.NotificationFactory;
-import org.sana.android.content.ModelContext;
-import org.sana.android.content.ModelEntity;
-import org.sana.android.content.Uris;
-import org.sana.android.content.Intents;
-import org.sana.android.content.core.PatientWrapper;
-import org.sana.android.db.ModelWrapper;
-import org.sana.android.net.MDSInterface;
-import org.sana.android.net.MDSInterface2;
-import org.sana.android.provider.EncounterTasks;
-import org.sana.android.provider.Encounters;
-import org.sana.android.provider.BaseContract;
-import org.sana.android.provider.Patients;
-import org.sana.android.provider.Procedures;
-import org.sana.android.provider.Subjects;
-import org.sana.android.service.QueueManager;
-import org.sana.android.util.Logf;
-import org.sana.android.util.SanaUtil;
-
-import org.sana.api.task.EncounterTask;
-import org.sana.core.AmbulanceDriver;
-import org.sana.core.Model;
-import org.sana.core.Patient;
-import org.sana.core.Procedure;
-import org.sana.net.Response;
-import org.sana.core.Subject;
-import org.sana.net.http.HttpTaskFactory;
-import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
-import org.sana.net.http.handler.EncounterResponseHandler;
-import org.sana.net.http.handler.EncounterTaskResponseHandler;
-
-import org.sana.net.http.handler.PatientResponseHandler;
-import org.sana.util.DateUtil;
-
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
-
 import android.app.Notification;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -138,9 +38,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -149,9 +47,91 @@ import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpUriRequest;
+import org.apache.http.impl.client.AbstractHttpClient;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.sana.R;
+import org.sana.android.Constants;
+import org.sana.android.activity.EncounterList;
+import org.sana.android.activity.MainActivity;
+import org.sana.android.app.Locales;
+import org.sana.android.app.NotificationFactory;
+import org.sana.android.content.Intents;
+import org.sana.android.content.ModelContext;
+import org.sana.android.content.ModelEntity;
+import org.sana.android.content.Uris;
+import org.sana.android.content.core.PatientWrapper;
+import org.sana.android.db.ModelWrapper;
+import org.sana.android.net.MDSInterface2;
+import org.sana.android.provider.EncounterTasks;
+import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Patients;
+import org.sana.android.provider.Procedures;
+import org.sana.android.provider.Subjects;
+import org.sana.android.service.QueueManager;
+import org.sana.android.util.Logf;
+import org.sana.android.util.SanaUtil;
+import org.sana.api.task.EncounterTask;
+import org.sana.core.AmbulanceDriver;
+import org.sana.core.Model;
+import org.sana.core.Patient;
+import org.sana.core.Procedure;
+import org.sana.core.Subject;
+import org.sana.net.Response;
+import org.sana.net.http.HttpTaskFactory;
+import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
+import org.sana.net.http.handler.EncounterTaskResponseHandler;
+import org.sana.net.http.handler.PatientResponseHandler;
+import org.sana.util.DateUtil;
+
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.lang.reflect.Type;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Implementation of the dispatch server as an Android service.
@@ -657,8 +637,10 @@ public class DispatchService extends Service{
                                     null;
                             Log.d(TAG, "...method=" + method + ", " +
                                     "data=" + msgUri);
-                            if (method.equals("GET"))
+                            if (method.equals("GET")) {
                                 request = new HttpGet(uri);
+                                Log.d(TAG, "<><> ...... the request is ......." + request);
+                            }
                             else if (method.equals("POST")) {
                                 patientResponse = MDSInterface2.postPatient(
                                             DispatchService.this, patient,
@@ -759,11 +741,21 @@ public class DispatchService extends Service{
                                 // TODO Implement AmbulanceDriver request handling
                                 // Get response handler for ambulance driver
                                 AmbulanceDriverResponseHandler ambulanceHandler = new AmbulanceDriverResponseHandler();
-                                Response<Collection<AmbulanceDriver>> adResponse = MDSInterface2.apiGet(uri,
-                                        username,password, ambulanceHandler);
 
                                 // Check for GET Method
-                                // Call get request - MDSInterface2.apiGet should work
+                                try {
+                                    if(method.equals("GET")){
+                                        // Call get request - MDSInterface2.apiGet should work
+                                        Response<Collection<AmbulanceDriver>> adResponse = MDSInterface2.apiGet(uri,
+                                                username,password, ambulanceHandler);
+                                        request = new HttpGet(uri);
+
+                                    }
+
+                                }catch (Exception e){
+                                    Log.e(TAG, "........"+e.getMessage());
+                                }
+
                                 // Handle response
                                 // See examples above.
                                 break;
