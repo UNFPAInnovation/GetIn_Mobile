@@ -71,10 +71,11 @@ public class AmbulanceDriverListFragment extends ListFragment implements
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getActivity(),
-                mUri,
+                Uri.parse("content://"
+                        + "org.sana.provider" + "/core/ambulancedriver"),
                 mProjection,
                 null, null, AmbulanceDrivers.FIRST_NAME_SORT_ORDER);
-        return loader;
+        return null;
     }
 
     @Override
