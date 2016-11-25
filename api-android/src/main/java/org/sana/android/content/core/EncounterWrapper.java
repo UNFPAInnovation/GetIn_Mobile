@@ -39,7 +39,7 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 	public IProcedure getProcedure() {
 		return new Procedure(getString(getColumnIndex(Encounters.Contract.PROCEDURE)));
 	}
-
+ //changed from Contract.PROCEDURE to Contract.Observer
 	@Override
 	public Observer getObserver() {
 		return new Observer(getString(getColumnIndex(Encounters.Contract.PROCEDURE)));
