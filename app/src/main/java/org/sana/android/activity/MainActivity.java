@@ -862,6 +862,34 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         return (Patient)PatientWrapper.get(this, uri);
     }
 
+    public void setEdd(Patient patient){
+      Date lmd =  patient.getLMD();
+
+
+        Calendar c3= Calendar.getInstance();
+        c3.setTime(new Date());
+        Date x1 = c3.getTime();
+        long day = x1.getTime() - lmd.getTime();
+
+        long days1 = day / (1000 * 60 * 60 * 24);
+        int age1 = (int) (days1);
+
+        int gestation_days = 280;
+
+        c3.setTime(lmd);
+        c3.add(Calendar.DATE, gestation_days);
+        // age.setText((age1));
+        Date edd1 = c3.getTime();
+
+        ContentValues val = new ContentValues();
+        val.put(Patients.Contract.EDD,sdf.format(edd1));
+
+        String uuid1 = mSubject.getLastPathSegment();
+        Uri uri = Uris.withAppendedUuid(Patients.CONTENT_URI,uuid1);
+        getContentResolver().update(
+              uri, val,null,null);
+    }
+
 
     public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer observer) {
         EncounterTask task = new EncounterTask();
@@ -876,6 +904,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         //String uuid = this.get
         String uuid1 = mSubject.getLastPathSegment();
         String uuid3 = mObserver.getLastPathSegment();
+
 
 
 
