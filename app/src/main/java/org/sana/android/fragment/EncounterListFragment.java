@@ -331,7 +331,7 @@ public class EncounterListFragment extends ListFragment implements LoaderCallbac
             mData.put(position,data);
             // call findViewById
             // Get Button reference - replace with id from encounterlist_item layout
-            Button button = (Button)view.findViewById(R.id.button);
+            Button button = (Button)view.findViewById(R.id.btn_view_girl_details);
             // Attach some data
             // Attach the patient uuid
             // Attach to button as Tag
