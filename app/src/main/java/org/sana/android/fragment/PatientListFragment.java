@@ -69,6 +69,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
 		Contract.PATIENT_ID,
 		Contract.LOCATION,
 		Contract.IMAGE,
+            Contract.EDD,
         Contract.DOB
 		};
     
@@ -191,6 +192,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         TextView name;
         TextView systemId;
         TextView location;
+        TextView edd;
         TextView label;
         int position = 1;
     }
@@ -319,7 +321,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             String displayName = StringUtil.formatPatientDisplayName(givenName, familyName);
             TextView name = (TextView) view.findViewById(R.id.name);
             name.setText(displayName);
-            
+
             TextView systemId = (TextView)view.findViewById(R.id.system_id);
             String id = ((Cursor) this.getItem(position)).getString(3);
             //String id = mWrapper.getStringField(Contract.PATIENT_ID);
@@ -337,6 +339,19 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             //String id = mWrapper.getStringField(Contract.PATIENT_ID);
             dobView.setText((TextUtils.isEmpty(localDobStr)? dobStr:
                     localDobStr));
+
+            TextView eddView = (TextView)view.findViewById(R.id.EDD);
+            String eddStr = ((Cursor) this.getItem(position)).getString(5);
+            String localEddStr = null;
+            Date edd1 = null;
+            try {
+                localEddStr = this.getDateStringFromSQL(eddStr);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            //String id = mWrapper.getStringField(Contract.PATIENT_ID);
+            eddView.setText((TextUtils.isEmpty(localEddStr)? eddStr:
+                    localEddStr));
             
             TextView location = (TextView)view.findViewById(R.id.location);
             String locationVal = ((Cursor) this.getItem(position)).getString(4);
