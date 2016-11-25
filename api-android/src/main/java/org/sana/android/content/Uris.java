@@ -32,6 +32,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
+import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.provider.Concepts;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
@@ -248,9 +249,9 @@ public final class Uris {
 		mMatcher.addURI(Models.AUTHORITY, "tasks/observation/*", OBSERVATION_TASK_UUID);
 
         // Add ambulance driver
-        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/", SUBJECT_DIR);
-        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/#", SUBJECT_ITEM);
-        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/*", SUBJECT_UUID);
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/", AMBULANCE_DRIVER_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/#", AMBULANCE_DRIVER_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/*", AMBULANCE_DRIVER_UUID);
 		
 	}
 	
@@ -372,64 +373,69 @@ public final class Uris {
 	 * @throws IllegalArgumentException if the mime type can not be determined.
 	 */
 	public static String getType(Uri uri) {
-		switch (getDescriptor(uri)){
-		case CONCEPT_DIR:
-			return Concepts.CONTENT_TYPE;
-		case CONCEPT_UUID:
-		case CONCEPT_ITEM:
-			return Concepts.CONTENT_ITEM_TYPE;
-		case ENCOUNTER_DIR:
-			return Encounters.CONTENT_TYPE;
-		case ENCOUNTER_UUID:
-		case ENCOUNTER_ITEM:
-			return Encounters.CONTENT_ITEM_TYPE;
-		case EVENT_DIR:
-			return Events.CONTENT_TYPE;
-		case EVENT_UUID:
-		case EVENT_ITEM:
-			return Events.CONTENT_ITEM_TYPE;
-		case INSTRUCTION_DIR:
-			return Instructions.CONTENT_TYPE;
-		case INSTRUCTION_UUID:
-		case INSTRUCTION_ITEM:
-			return Instructions.CONTENT_ITEM_TYPE;
-		case NOTIFICATION_DIR:
-			return Notifications.CONTENT_TYPE;
-		case NOTIFICATION_UUID:
-		case NOTIFICATION_ITEM:
-			return Notifications.CONTENT_ITEM_TYPE;
-		case OBSERVATION_DIR:
-			return Observations.CONTENT_TYPE;
-		case OBSERVATION_UUID:
-		case OBSERVATION_ITEM:
-			return Observations.CONTENT_ITEM_TYPE;
-		case OBSERVER_DIR:
-			return Observers.CONTENT_TYPE;
-		case OBSERVER_UUID:
-		case OBSERVER_ITEM:
-			return Observers.CONTENT_ITEM_TYPE;
-		case PROCEDURE_DIR:
-			return Procedures.CONTENT_TYPE;
-		case PROCEDURE_UUID:
-		case PROCEDURE_ITEM:
-			return Procedures.CONTENT_ITEM_TYPE;
-		case SUBJECT_DIR:
-			return Subjects.CONTENT_TYPE;
-		case SUBJECT_UUID:
-		case SUBJECT_ITEM:
-			return Subjects.CONTENT_ITEM_TYPE;
-		case ENCOUNTER_TASK_DIR:
-			return EncounterTasks.CONTENT_TYPE;
-		case ENCOUNTER_TASK_UUID:
-		case ENCOUNTER_TASK_ITEM:
-			return EncounterTasks.CONTENT_ITEM_TYPE;
-		case OBSERVATION_TASK_DIR:
-			return ObservationTasks.CONTENT_TYPE;
-		case OBSERVATION_TASK_UUID:
-		case OBSERVATION_TASK_ITEM:
-			return ObservationTasks.CONTENT_ITEM_TYPE;
-		case PACKAGE_DIR:
-			return "application/vnd.android.package-archive";
+        switch (getDescriptor(uri)) {
+            case CONCEPT_DIR:
+                return Concepts.CONTENT_TYPE;
+            case CONCEPT_UUID:
+            case CONCEPT_ITEM:
+                return Concepts.CONTENT_ITEM_TYPE;
+            case ENCOUNTER_DIR:
+                return Encounters.CONTENT_TYPE;
+            case ENCOUNTER_UUID:
+            case ENCOUNTER_ITEM:
+                return Encounters.CONTENT_ITEM_TYPE;
+            case EVENT_DIR:
+                return Events.CONTENT_TYPE;
+            case EVENT_UUID:
+            case EVENT_ITEM:
+                return Events.CONTENT_ITEM_TYPE;
+            case INSTRUCTION_DIR:
+                return Instructions.CONTENT_TYPE;
+            case INSTRUCTION_UUID:
+            case INSTRUCTION_ITEM:
+                return Instructions.CONTENT_ITEM_TYPE;
+            case NOTIFICATION_DIR:
+                return Notifications.CONTENT_TYPE;
+            case NOTIFICATION_UUID:
+            case NOTIFICATION_ITEM:
+                return Notifications.CONTENT_ITEM_TYPE;
+            case OBSERVATION_DIR:
+                return Observations.CONTENT_TYPE;
+            case OBSERVATION_UUID:
+            case OBSERVATION_ITEM:
+                return Observations.CONTENT_ITEM_TYPE;
+            case OBSERVER_DIR:
+                return Observers.CONTENT_TYPE;
+            case OBSERVER_UUID:
+            case OBSERVER_ITEM:
+                return Observers.CONTENT_ITEM_TYPE;
+            case PROCEDURE_DIR:
+                return Procedures.CONTENT_TYPE;
+            case PROCEDURE_UUID:
+            case PROCEDURE_ITEM:
+                return Procedures.CONTENT_ITEM_TYPE;
+            case SUBJECT_DIR:
+                return Subjects.CONTENT_TYPE;
+            case SUBJECT_UUID:
+            case SUBJECT_ITEM:
+                return Subjects.CONTENT_ITEM_TYPE;
+            case ENCOUNTER_TASK_DIR:
+                return EncounterTasks.CONTENT_TYPE;
+            case ENCOUNTER_TASK_UUID:
+            case ENCOUNTER_TASK_ITEM:
+                return EncounterTasks.CONTENT_ITEM_TYPE;
+            case OBSERVATION_TASK_DIR:
+                return ObservationTasks.CONTENT_TYPE;
+            case OBSERVATION_TASK_UUID:
+            case OBSERVATION_TASK_ITEM:
+                return ObservationTasks.CONTENT_ITEM_TYPE;
+            case AMBULANCE_DRIVER_DIR:
+                return AmbulanceDrivers.CONTENT_TYPE;
+            case AMBULANCE_DRIVER_ITEM:
+            case AMBULANCE_DRIVER_UUID:
+                return AmbulanceDrivers.CONTENT_ITEM_TYPE;
+            case PACKAGE_DIR:
+			    return "application/vnd.android.package-archive";
 		default:
 			throw new IllegalArgumentException("Invalid uri. No match");
 		}

@@ -7,8 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -39,7 +37,6 @@ import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
-import org.sana.android.db.impl.SubjectsHelper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
 import org.sana.android.media.EducationResource;
 import org.sana.android.procedure.Procedure;
@@ -59,15 +56,11 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
-import org.sana.core.Encounter;
 import org.sana.core.Observer;
 import org.sana.core.Patient;
-import org.sana.core.Subject;
 import org.sana.net.Response;
-import org.sana.util.UUIDUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -624,9 +617,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Intent intent = null;
         switch(v.getId()){
             case R.id.btn_main_select_patient:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_PATIENT);
+//                intent = new Intent(Intent.ACTION_PICK);
+//                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
+//                startActivityForResult(intent, PICK_PATIENT);
+                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_main_transfers:
                 intent = new Intent(Intent.ACTION_VIEW);

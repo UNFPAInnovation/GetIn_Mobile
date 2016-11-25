@@ -49,7 +49,8 @@ public class ModelContentProviderImpl extends ModelContentProvider {
 	@Override
 	public boolean onCreate() {
 		Log.i(TAG, "onCreate() called");
-		String name = getContext().getString(R.string.db_name);
+//		String name = getContext().getString(R.string.db_name);
+		String name = "models4.db";
 		int version = getContext().getResources().getInteger(R.integer.cfg_db_version_value);
 		Log.i(TAG, "onCreate(). version:" + version);
 		mOpener = DatabaseOpenHelperImpl.getInstance(getContext().getApplicationContext(),name, version);
