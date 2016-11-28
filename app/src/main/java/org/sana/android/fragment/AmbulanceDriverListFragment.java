@@ -1,6 +1,7 @@
 package org.sana.android.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,6 +21,7 @@ import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
+import org.sana.android.content.Intents;
 import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.widget.ScrollCompleteListener;
 import org.sana.util.StringUtil;
@@ -28,6 +31,7 @@ import org.sana.util.StringUtil;
  */
 public class AmbulanceDriverListFragment extends ListFragment implements
         LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
+    public static final String TAG = AmbulanceDriverListFragment.class.getName();
 
     static final String[] mProjection = new String[] {
             AmbulanceDrivers.Contract._ID,
@@ -74,7 +78,7 @@ public class AmbulanceDriverListFragment extends ListFragment implements
                 mUri,
                 mProjection,
                 null, null, AmbulanceDrivers.FIRST_NAME_SORT_ORDER);
-        return null;
+        return loader;
     }
 
     @Override
@@ -144,10 +148,10 @@ public class AmbulanceDriverListFragment extends ListFragment implements
 
             int position = this.getCursor().getPosition();
 
-            String firstName = ((Cursor)getItem(position)).getString(2);
-            String lastName = ((Cursor)getItem(position)).getString(3);
-            String phoneNumber = ((Cursor)getItem(position)).getString(1);
-            String location = ((Cursor)getItem(position)).getString(4);
+            String firstName = ((Cursor)getItem(position)).getString(1);
+            String lastName = ((Cursor)getItem(position)).getString(2);
+            String phoneNumber = ((Cursor)getItem(position)).getString(3);
+//            String location = ((Cursor)getItem(position)).getString(4);
 
             //format the first name and the last name and then set the name textview with the formatted string
             String displayName = StringUtil.formatPatientDisplayName(firstName, lastName);
@@ -159,8 +163,8 @@ public class AmbulanceDriverListFragment extends ListFragment implements
             phoneNumberTextView.setText(phoneNumber);
 
             //create the location textView and set its text to the string from the database
-            TextView locationTextView = (TextView) view.findViewById(R.id.ambulance_driver_location);
-            locationTextView.setText(location);
+//            TextView locationTextView = (TextView) view.findViewById(R.id.ambulance_driver_location);
+//            locationTextView.setText(location);
 
 
             if(cursor.isLast() || cursor.getPosition() >= (cursor.getCount()*0.8)){
@@ -168,5 +172,23 @@ public class AmbulanceDriverListFragment extends ListFragment implements
                     mScrollListener.onScrollComplete();
             }
         }
+    }
+    public final boolean sync(Context context, Uri uri){
+        Log.d(TAG, "sync(Context,Uri)");
+        boolean result = false;
+//        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+//        long lastSync = prefs.getLong("patient_sync", 0);
+//        long now = System.currentTimeMillis();
+//        Log.d(TAG, "last: " + lastSync +", now: " + now+ ", delta: " + (now-lastSync) + ", doSync: " + ((now - lastSync) > 86400000));
+//        // TODO
+//        // Once a day 86400000
+//        if((now - lastSync) > delta){
+//            Logf.W(TAG, "sync(): synchronizing patient list");
+//            prefs.edit().putLong("patient_sync", now).commit();
+            Intent intent = new Intent(Intents.ACTION_READ,uri);
+            context.startService(intent);
+            result = true;
+//        }
+        return result;
     }
 }

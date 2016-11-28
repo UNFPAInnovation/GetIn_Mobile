@@ -1,32 +1,6 @@
 
 package org.sana.android.fragment;
 
-import java.io.FileNotFoundException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Locale;
-
-import org.joda.time.DateTime;
-import org.sana.R;
-import org.sana.android.Constants;
-import org.sana.android.app.Locales;
-import org.sana.android.app.Preferences;
-import org.sana.android.content.Intents;
-import org.sana.android.content.core.PatientWrapper;
-import org.sana.android.provider.Patients;
-import org.sana.android.provider.Patients.Contract;
-import org.sana.android.provider.Subjects;
-import org.sana.android.util.Bitmaps;
-import org.sana.android.util.Dates;
-import org.sana.android.util.Logf;
-
-import org.sana.android.widget.ScrollCompleteListener;
-import org.sana.core.Patient;
-import org.sana.util.DateUtil;
-import org.sana.util.StringUtil;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -41,7 +15,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,12 +26,34 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
+import org.joda.time.DateTime;
+import org.sana.R;
+import org.sana.android.Constants;
+import org.sana.android.app.Locales;
+import org.sana.android.app.Preferences;
+import org.sana.android.content.Intents;
+import org.sana.android.provider.Patients;
+import org.sana.android.provider.Patients.Contract;
+import org.sana.android.util.Bitmaps;
+import org.sana.android.util.Dates;
+import org.sana.android.util.Logf;
+import org.sana.android.widget.ScrollCompleteListener;
+import org.sana.core.Patient;
+import org.sana.util.StringUtil;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Fragment displaying all patients.
  * 
  * @author Sana Development Team
  */
 public class PatientListFragment extends ListFragment implements LoaderCallbacks<Cursor>, ScrollCompleteListener {
+
     public static final String TAG = PatientListFragment.class.getSimpleName();
 
     private static final int PATIENTS_LOADER = 0;

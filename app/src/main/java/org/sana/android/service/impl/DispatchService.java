@@ -749,7 +749,7 @@ public class DispatchService extends Service{
                                         // Call get request - MDSInterface2.apiGet should work
                                         Response<Collection<AmbulanceDriver>> adResponse = MDSInterface2.apiGet(uri,
                                                 username,password, ambulanceHandler);
-                                        request = new HttpGet(uri);
+//                                        request = new HttpGet(uri);
                                         // Handle response
                                         // See examples above.
                                         bcastCode = createOrUpdateAmbulanceDrivers(adResponse.getMessage(), startId);
@@ -1342,12 +1342,12 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
 
         // Don't add uuid initially
         if(!exists(AmbulanceDrivers.CONTENT_URI, ambulanceDriver)){
-            contentValues.put(Patients.Contract.UUID, ambulanceDriver.uuid);
+            contentValues.put(AmbulanceDrivers.Contract.UUID, ambulanceDriver.uuid);
             insert.add(contentValues);
         } else {
             update.add(
                     new ModelEntity(
-                            Uris.withAppendedUuid(Subjects.CONTENT_URI, ambulanceDriver.uuid),
+                            Uris.withAppendedUuid(AmbulanceDrivers.CONTENT_URI, ambulanceDriver.uuid),
                             contentValues));
         }
     }

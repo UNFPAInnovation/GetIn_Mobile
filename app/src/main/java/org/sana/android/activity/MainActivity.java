@@ -622,6 +622,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 //                startActivityForResult(intent, PICK_PATIENT);
                 intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
                 startActivity(intent);
+                startService(intent);
+//                String uuid = UUID.randomUUID().toString();
+//                Log.v(TAG, " "+uuid);
                 break;
             case R.id.btn_main_transfers:
                 intent = new Intent(Intent.ACTION_VIEW);
