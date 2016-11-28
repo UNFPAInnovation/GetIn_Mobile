@@ -54,6 +54,7 @@ import org.json.JSONTokener;
 import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.db.SanaDB.BinarySQLFormat;
 import org.sana.android.db.SanaDB.ImageSQLFormat;
@@ -1310,20 +1311,12 @@ public class MDSInterface2 {
         try {
             URI target = getURI(context, Subjects.CONTENT_URI.getPath() + "/");
             Map<String,String> values = new HashMap<String,String>();
-            values.put(Patients.Contract.GIVEN_NAME, patient.getGiven_name());
-            values.put(Patients.Contract.FAMILY_NAME, patient.getFamily_name());
-            values.put(Patients.Contract.GENDER, patient.getGender());
-            if(patient.getLocation() != null &&
-                    !TextUtils.isEmpty(patient.getLocation().getUuid())) {
-                values.put(Patients.Contract.LOCATION,
-                        patient.getLocation().getUuid());
-            } else {
-                values.put(Patients.Contract.LOCATION,
+            values = PatientWrapper.toForm(patient);
+            String locationUUID = values.get(Patients.Contract.LOCATION + "__uuid");
+            if(!UUIDUtil.isValid(locationUUID)){
+                values.put(Patients.Contract.LOCATION + "__uuid",
                         context.getString(R.string.cfg_default_location));
             }
-            values.put(Patients.Contract.UUID, patient.getUuid());
-            values.put(Patients.Contract.PATIENT_ID, patient.system_id);
-            values.put(Patients.Contract.DOB, Dates.toSQL(patient.getDob()));
             response = MDSInterface2.apiPost(target, username, password,
                     values, handler);
         } catch (URISyntaxException e) {
@@ -1348,19 +1341,14 @@ public class MDSInterface2 {
             URI target = getURI(context, Subjects.CONTENT_URI.getPath() + "/"
             + patient.getUuid());
             Map<String,String> values = new HashMap<String,String>();
-            values.put(Patients.Contract.GIVEN_NAME, patient.getGiven_name());
-            values.put(Patients.Contract.FAMILY_NAME, patient.getFamily_name());
-            values.put(Patients.Contract.GENDER, patient.getGender());
-            if(patient.getLocation() != null &&
-                    !TextUtils.isEmpty(patient.getLocation().getUuid())) {
+            values = PatientWrapper.toForm(patient);
+            // Patient UUID is in the URI here for a PUT request
+            values.remove(Patients.Contract.UUID);
+            String locationUUID = values.get(Patients.Contract.LOCATION + "__uuid");
+            if(!UUIDUtil.isValid(locationUUID)){
                 values.put(Patients.Contract.LOCATION + "__uuid",
-                        patient.getLocation().getUuid());
-            } else {
-                values.put(Patients.Contract.LOCATION + "__uuid",
-                        context.getString(R.string.cfg_default_location));
+                    context.getString(R.string.cfg_default_location));
             }
-            values.put(Patients.Contract.PATIENT_ID, patient.system_id);
-            values.put(Patients.Contract.DOB, Dates.toSQL(patient.getDob()));
             response = MDSInterface2.apiPut(target, username, password,
                     values, null, handler);
         } catch (URISyntaxException e) {
