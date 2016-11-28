@@ -29,6 +29,8 @@ package org.sana.android.content.core;
 
 import java.net.URI;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.sana.android.content.Uris;
@@ -400,5 +402,69 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
             uri = context.getContentResolver().insert(Patients.CONTENT_URI,cv);
         }
         return uri;
+    }
+
+    public static ContentValues toValues(Patient object){
+        ContentValues cv = new ContentValues();
+        // TODO Check this.
+        cv.put(Patients.Contract.UUID, object.getUuid());
+        cv.put(Patients.Contract.PATIENT_ID, object.getSystemId());
+        cv.put(Patients.Contract.GIVEN_NAME, object.getGiven_name());
+        cv.put(Patients.Contract.FAMILY_NAME, object.getFamily_name());
+        // Format the date for insert
+        cv.put(Patients.Contract.DOB, Dates.toSQL(object.getDob()));
+        cv.put(Patients.Contract.GENDER, object.getGender());
+        cv.put(Patients.Contract.PNUMBER, object.getpNumber());
+        cv.put(Patients.Contract.HOLDER_pNUMBER, object.getHolder_pNumber());
+        cv.put(Patients.Contract.LMD, Dates.toSQL(object.getLMD()));
+        cv.put(Patients.Contract.MARITAL_STATUS, object.getMarital_status());
+        cv.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
+        cv.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
+        cv.put(Patients.Contract.ANC_STATUS, object.getANC_status());
+        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+        cv.put(Patients.Contract.EDD, object.getEDD());
+        cv.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
+        cv.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
+        cv.put(Patients.Contract.CUG_STATUS, object.getCUG_status());
+        cv.put(Patients.Contract.COMMENT, object.getComment());
+        cv.put(Patients.Contract.BLEEDING, object.getBleeding());
+        cv.put(Patients.Contract.FEVER, object.getFever());
+        cv.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
+        cv.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
+        if(object.getLocation() != null)
+            cv.put(Patients.Contract.LOCATION, object.getLocation().getUuid());
+        return cv;
+    }
+
+    public static Map<String, String> toForm(Patient object){
+        Map<String,String> form = new HashMap<>();
+        // TODO Check this
+        form.put(Patients.Contract.UUID, object.getUuid());
+        form.put(Patients.Contract.PATIENT_ID, object.getSystemId());
+        form.put(Patients.Contract.GIVEN_NAME, object.getGiven_name());
+        form.put(Patients.Contract.FAMILY_NAME, object.getFamily_name());
+        // Format the date for insert
+        form.put(Patients.Contract.DOB, Dates.toSQL(object.getDob()));
+        form.put(Patients.Contract.GENDER, object.getGender());
+        form.put(Patients.Contract.PNUMBER, object.getpNumber());
+        form.put(Patients.Contract.HOLDER_pNUMBER, object.getHolder_pNumber());
+        form.put(Patients.Contract.LMD, Dates.toSQL(object.getLMD()));
+        form.put(Patients.Contract.MARITAL_STATUS, object.getMarital_status());
+        form.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
+        form.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
+        form.put(Patients.Contract.ANC_STATUS, object.getANC_status());
+        form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+        form.put(Patients.Contract.EDD, object.getEDD());
+        form.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
+        form.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
+        form.put(Patients.Contract.CUG_STATUS, object.getCUG_status());
+        form.put(Patients.Contract.COMMENT, object.getComment());
+        form.put(Patients.Contract.BLEEDING, object.getBleeding());
+        form.put(Patients.Contract.FEVER, object.getFever());
+        form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
+        form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
+        if(object.getLocation() != null)
+            form.put(Patients.Contract.LOCATION+"__uuid", object.getLocation().getUuid());
+        return form;
     }
 }
