@@ -820,7 +820,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         values.put(Tasks.Contract.COMPLETED, now);
         values.put(EncounterTasks.Contract.ENCOUNTER, uuid);
         values.put(Tasks.Contract.MODIFIED, now);
-
+        int updated = getContentResolver().update(task, values, null, null);
         Bundle form = new Bundle();
         form.putString(Tasks.Contract.STATUS, status.toString());
         form.putString(Tasks.Contract.MODIFIED,now);
