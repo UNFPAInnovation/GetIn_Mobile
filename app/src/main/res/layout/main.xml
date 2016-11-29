@@ -79,15 +79,25 @@
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-
-
-        <Button
-            android:id="@+id/button_main_notifications"
+      <!--  <Button
+            android:id="@+id/btn_main_view_completed_tasks"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
+            android:text="@string/button_view_completed_tasks"
             android:drawableLeft="@drawable/ic_menu_notifications"
-            android:text="@string/button_main_view_notifications"
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/> -->
+
+
+        <Button
+            android:id="@+id/button_call_ambulance"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:drawableLeft="@drawable/ic_menu_refresh"
+            android:text="@string/button_call_ambulance"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
