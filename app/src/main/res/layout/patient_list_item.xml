@@ -56,18 +56,19 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textIsSelectable="true" />
             <TextView
-                android:id="@+id/system_id"
-                android:text="system id"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:padding="1dp"
-                android:singleLine="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/light_gray"
-                android:textIsSelectable="true" />
+            android:id="@+id/system_id"
+            android:text="system id"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:padding="1dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="@color/light_gray"
+            android:textIsSelectable="true" />
+
 
             <TextView
                 android:id="@+id/dob"
