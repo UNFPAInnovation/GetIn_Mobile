@@ -21,7 +21,7 @@
         android:orientation="vertical"  >
 
 
-        <Button
+      <!--  <Button
             android:id="@+id/btn_main_select_patient"
             android:layout_width="411dp"
             android:layout_height="wrap_content"
@@ -29,7 +29,7 @@
             android:text="@string/button_main_select_patient"
             android:drawableLeft="@drawable/ic_menu_allfriends"
             android:background="#9E9D24"
-            android:layout_margin="10dp"/>
+            android:layout_margin="10dp"/> -->
 
 
 
@@ -55,22 +55,31 @@
 
         <Button
             android:id="@+id/btn_main_tasks"
-            android:layout_width="fill_parent"
+            android:layout_width="422dp"
             android:layout_height="wrap_content"
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             android:text="@string/button_upcoming_appointments"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
-
-
         <Button
-            android:id="@+id/button_main_notifications"
-            android:layout_width="match_parent"
+            android:id="@+id/btn_main_view_completed_tasks"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_notifications"
-            android:text="@string/button_main_view_notifications"
+            android:text="@string/button_view_completed_tasks"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
+
+        <Button
+            android:id="@+id/button_call_ambulance"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:drawableLeft="@drawable/ic_menu_refresh"
+            android:text="@string/button_call_ambulance"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 

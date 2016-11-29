@@ -52,6 +52,7 @@
             id="6"
             concept="PNUMBER"
             type="ENTRY"
+            numeric="DIALPAD"
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
@@ -60,6 +61,7 @@
             id="7"
             concept="HOLDER PNUMBER"
             type="ENTRY"
+            numeric="DIALPAD"
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
@@ -162,14 +164,14 @@
         <Element
             id="17"
             type="ENTRY"
-            concept="ACTION TAKEN"
+            concept=" MIDWIFE ACTION TAKEN"
             question="Action taken"
             answer=""
             />
         <Element
             id="18"
             type="ENTRY"
-            concept="RISK IDENTIFIED"
+            concept="MIDWIFE RISK IDENTIFIED"
             question="Any RISK identified?"
             answer=""
             />
