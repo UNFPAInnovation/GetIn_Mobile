@@ -92,7 +92,7 @@
             android:layout_margin="10dp"/>
 
         <Button
-            android:id="@+id/button_main_notifications"
+            android:id="@+id/button_call_ambulance"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
