@@ -3,8 +3,7 @@
     author="Donald"
     uuid="20b631d9-412a-448d-8a01-d403161a6e0b"
     version="1.0"
-    locale="en"
-    class="org.sana.core.Observer">
+    locale="en">
 <Page>
     <Element
         id="18"
@@ -14,21 +13,21 @@
     <Element
         id="19"
         type="ENTRY"
-        concept="MISSING REASON"
+        concept="MIDWIFE MISSING REASON"
         question="Reason for Missing"
         answer=""
     />
     <Element
         id="20"
         type="ENTRY"
-        concept="ACTION TAKEN"
+        concept="MIDWIFE ACTION TAKEN"
         question="Any Action Taken?"
         answer=""
     />
     <Element
         id="21"
         type="DATE"
-        concept="NEXT APPOINTMENT"
+        concept="MIDWIFE NEXT APPOINTMENT DATE"
         question="Next Appointment Date"
         answer=""
     />
