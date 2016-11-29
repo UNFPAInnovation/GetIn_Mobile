@@ -1,5 +1,5 @@
 <Procedure
-    title="mapping_form: Short Form"
+    title="FollowUp note VHT"
     author="Donald"
     uuid="41927637-c95c-4afe-8dd3-ee21e75acc72"
     version="1.0"
@@ -15,7 +15,7 @@
 
     <Element
         id="2"
-        concept="MISSED APPOINTMENT STATUS"
+        concept="VHT MISSED APPOINTMENT STATUS"
         type="RADIO"
         required="true"
         question="Has the Girl Missed ANC?"
@@ -30,7 +30,7 @@
         <Page>
         <Element
             id="3"
-            concept="MISSING REASON"
+            concept="VHT MISSING REASON"
             type="ENTRY"
             required="true"
             question="Reasons for missing ANC"
@@ -114,7 +114,7 @@
     <Element
         id="8"
         type="ENTRY"
-        concept="ACTION TAKEN"
+        concept="VHT ACTION TAKEN"
         question="Action taken"
         answer=""
     />
@@ -123,14 +123,14 @@
     <Element
         id="9"
         type="DATE"
-        concept="NEXT APPOINTMENT"
+        concept="VHT NEXT APPOINTMENT"
         question="Next Appointment Date"
         answer=""
     />
         <Element
             id="10"
             type="RADIO"
-            concept="FOLLOW UP THROUGH"
+            concept="VHT FOLLOW UP MEANS"
             required="true"
             question="FollowUp as a result of?"
             choices="Call,Personal Visit"
