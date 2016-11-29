@@ -617,11 +617,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Intent intent = null;
         switch(v.getId()){
             case R.id.btn_main_select_patient:
-//                intent = new Intent(Intent.ACTION_PICK);
-//                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
-//                startActivityForResult(intent, PICK_PATIENT);
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
-                startActivity(intent);
+                intent = new Intent(Intent.ACTION_PICK);
+               intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
+               startActivityForResult(intent, PICK_PATIENT);
+
                 break;
             case R.id.btn_main_transfers:
                 intent = new Intent(Intent.ACTION_VIEW);
@@ -662,6 +661,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, RUN_PROCEDURE);
+
+                break;
+            case R.id.button_call_ambulance:
+
+                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                startActivity(intent);
 
                 break;
 
