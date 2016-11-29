@@ -51,7 +51,8 @@
         <Element
             id="6"
             concept="PNUMBER"
-            type="NUMERIC"
+            type="ENTRY"
+            numeric="DIALPAD"
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
@@ -59,7 +60,8 @@
         <Element
             id="7"
             concept="HOLDER PNUMBER"
-            type="NUMERIC"
+            numeric="DIALPAD"
+            type="ENTRY"
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
