@@ -1101,7 +1101,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
+            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
            values.put(Tasks.Contract.UUID,uuid);
