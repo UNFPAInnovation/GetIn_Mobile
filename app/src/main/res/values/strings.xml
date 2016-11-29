@@ -39,6 +39,7 @@
     <string name="button_upcoming_appointments">Up Coming Appointments</string>
     <string name="button_call_ambulance">Call Ambulance</string>
     <string name="button_view_girl_details">View Girl Details</string>
+    <string name="button_view_completed_tasks"> Completed Appointments</string>
     <string name="button_girls_mapped_by_you">Girls mapped by You</string>
 
     <!--  General Phrases -->
