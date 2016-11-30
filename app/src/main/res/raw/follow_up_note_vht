@@ -1,7 +1,7 @@
 <Procedure
     title="FollowUp note VHT"
     author="Donald"
-    uuid="41927637-c95c-4afe-8dd3-ee21e75acc72"
+    uuid="a6bae73a-d07a-4df0-9830-f243383d9778"
     version="1.0"
     locale="en"
     class="org.sana.core.Observer">
@@ -26,19 +26,15 @@
     <Page>
     <ShowIf>
         <Criteria type="EQUALS" id="2" value="YES" />
-
-        <Page>
+    </ShowIf>
         <Element
             id="3"
             concept="VHT MISSING REASON"
             type="ENTRY"
             required="true"
             question="Reasons for missing ANC"
-            values=" Yes; NO"
+            values=" Yes;NO"
             answer="Yes"/>
-   </Page>
-    </ShowIf>
-
     </Page>
 
     <Page>
