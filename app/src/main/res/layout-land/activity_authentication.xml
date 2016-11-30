@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background_color"
+    android:background="@color/Cyan"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     tools:context="org.sana.android.activity.AuthenticationActivity" >
@@ -40,13 +40,15 @@
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@color/deep_pink"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="@string/authentication_login" />
         <Button
             android:id="@+id/btn_exit"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/general_exit"
+            android:background="@color/deep_pink"
             android:onClick="submit"
             android:layout_margin="5dp"/>
        <!--> <Button

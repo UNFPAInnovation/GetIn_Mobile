@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
-    android:background="@color/copper_cayon"
+    android:background="@color/Cyan"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,14 +9,14 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/copper_cayon"
+        android:background="@color/Cyan"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/elements"
         android:layout_above="@+id/navbar" android:weightSum="1">
 
         <ViewSwitcher
-            android:background="@color/copper_cayon"
+            android:background="@color/Cyan"
             android:layout_width="match_parent"
             android:layout_height="fill_parent"
             android:id="@+id/viewSwitcher2"/>
@@ -37,7 +37,7 @@
             android:layout_height="wrap_content"
             android:text="@string/procedurerunner_previous"
             android:id="@+id/previous"
-            android:background="@color/light_blue"
+            android:background="@color/deep_pink"
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:layout_weight=".5"
@@ -54,7 +54,7 @@
             android:layout_alignParentLeft="false"
             android:layout_alignParentTop="false"
             android:layout_alignParentRight="true"
-            android:background="@color/goldenrod"
+            android:background="@color/inch_worm"
             android:layout_weight=".5"
             android:layout_gravity="center_vertical"
             android:padding="5dp"/>

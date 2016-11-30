@@ -3,7 +3,7 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="#00838F"
+    android:background="@color/Cyan"
     android:gravity="fill_horizontal"
     android:orientation="horizontal" >
 
@@ -40,7 +40,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_archive"
             android:text="@string/button_main_view_prior_encounters"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
         <Button
@@ -50,7 +50,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
             android:text="@string/button_main_register_patients"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
         <Button
@@ -60,7 +60,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             android:text="@string/button_upcoming_appointments"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
         <Button
             android:id="@+id/btn_main_view_completed_tasks"
@@ -69,7 +69,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_notifications"
             android:text="@string/button_view_completed_tasks"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
 
@@ -80,7 +80,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_refresh"
             android:text="@string/button_call_ambulance"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
     </LinearLayout>

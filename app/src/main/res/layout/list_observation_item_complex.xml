@@ -3,7 +3,7 @@
     android:id="@+id/observation_item"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/rounded_rectangle_light_goldenrod"
+    android:background="@color/deep_pink"
     android:orientation="vertical" >
 
     <TextView

@@ -5,6 +5,7 @@
               android:layout_height="wrap_content"
               android:id="@+id/element"
               android:focusableInTouchMode="true"
+              android:background="@color/Cyan"
               android:weightSum="1">
 
     <TextView

@@ -3,7 +3,7 @@
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background_color"
+    android:background="@color/Cyan"
     android:gravity="fill_vertical"
     android:orientation="vertical">
 
@@ -41,7 +41,7 @@
             android:drawableLeft="@drawable/ic_menu_allfriends"
             android:text="@string/button_main_register_patients"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
         <Button
@@ -52,7 +52,7 @@
             android:drawableLeft="@drawable/ic_menu_archive"
             android:text="@string/button_girls_mapped_by_you"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
         <Button
@@ -63,7 +63,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
             android:text="@string/button_main_training_mode"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
 
@@ -76,7 +76,7 @@
             android:text="@string/button_upcoming_appointments"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
       <!--  <Button
@@ -99,7 +99,7 @@
             android:drawableLeft="@drawable/ic_menu_refresh"
             android:text="@string/button_call_ambulance"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
 

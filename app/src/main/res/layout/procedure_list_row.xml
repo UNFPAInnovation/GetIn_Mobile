@@ -7,6 +7,7 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
+	android:background="@color/Cyan"
     android:padding="12dip"
     >
         <TextView
@@ -35,6 +36,7 @@
 		android:layout_width="fill_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
+		android:background="@color/Cyan"
 		android:padding="12dip"
 		>
 	<Button
@@ -45,7 +47,7 @@
 		android:drawableLeft="@drawable/ic_menu_allfriends"
 		android:text="@string/button_view_girl_details"
 		style="@style/Widget.Button.Large.Dark"
-		android:background="#9E9D24"
+		android:background="@color/deep_pink"
 		android:layout_margin="10dp"/>
 		</LinearLayout>
 

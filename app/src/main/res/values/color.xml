@@ -4,6 +4,11 @@
     <color name="light_blue">#60c5eb</color>
     <color name="light_goldenrod">#EEDD82</color>
     <color name="goldenrod">#DAA520</color>
+    <color name="violet_red">#D31D8C</color>
+    <color name="deep_pink">#EE88CD</color>
+    <color name="Cyan">#4DC5D6</color>
+    <color name="pale_turquoise">#A5F2F3 </color>
+    <color name="inch_worm">#BCDD11</color>
     <color name="past_due">#FF3300</color>
     <color name="complete">#00CC00</color>
     <color name="due_today">#FF9933</color>
