@@ -1,7 +1,7 @@
 <Procedure
     title="Appointment_Note"
     author="Donald"
-    uuid="cae406f2-faff-45ca-b2f0-6f7d361675c0"
+    uuid="ae0775ec-5a8c-4f2c-8c78-13325e26f03f"
     version="1.0"
     locale="en"
     class= "org.sana.core.Subject"

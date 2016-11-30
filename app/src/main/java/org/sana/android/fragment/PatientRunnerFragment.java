@@ -210,7 +210,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
 
             if(field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.EDD +"'=" +val);
-                mPatient.setHolder_pNumber(val);
+                mPatient.setEDD(val);
             }
             if(field.compareToIgnoreCase(Patients.Contract.RECEIVE_SMS) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.RECEIVE_SMS +"'=" +val);
@@ -222,7 +222,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
             }
             if(field.compareToIgnoreCase(Patients.Contract.CUG_STATUS) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.CUG_STATUS +"'=" +val);
-                mPatient.setHolder_pNumber(val);
+                mPatient.setCUG_status(val);
             }
             if(field.compareToIgnoreCase(Patients.Contract.COMMENT) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.COMMENT +"'=" +val);
