@@ -360,6 +360,7 @@ public class SanaUtil {
        // insertProcedure(ctx, R.raw.demonstration);
        // insertProcedure(ctx, R.raw.registration_short_en);
         insertProcedure(ctx, R.raw.midwife_appointment_note);
+        insertProcedure(ctx, R.raw.follow_up_note_vht);
         //insertProcedure(ctx, R.raw.mapping_form_vht);
 //        insertProcedure(ctx, R.raw.ssi);
         /*
