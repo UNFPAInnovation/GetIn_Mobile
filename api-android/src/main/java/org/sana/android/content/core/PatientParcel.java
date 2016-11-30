@@ -102,6 +102,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		setSystemId(in.readString());
 		setConfirmed((in.readInt() == 1));
 		setDobEstimated((in.readInt() == 1));
+        setLocation(in.readString());
 	}
 
 	/**
@@ -141,6 +142,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		setSystemId(patient.getSystemId());
 		setConfirmed(patient.getConfirmed());
 		setDobEstimated(patient.isDobEstimated());
+        setLocation(patient.getLocation());
 	}
 
 	public PatientParcel(){}
@@ -187,6 +189,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeString(getSystemId());
 		dest.writeInt((getConfirmed())? 1: 0);
 		dest.writeInt((isDobEstimated())? 1: 0);
+        dest.writeString(getLocation());
 	}
 
 	public static final Parcelable.Creator<PatientParcel> CREATOR =
