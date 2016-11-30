@@ -254,13 +254,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
 
             if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
-                Location location = new Location();
-                if(UUIDUtil.isValid(val)) {
-                    location.setUuid(val);
-                } else {
-                    location.setName(val);
-                }
-                mPatient.setLocation(location);
+                mPatient.setLocation(val);
             }
             if(field.compareToIgnoreCase(Patients.Contract.CONFIRMED) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.CONFIRMED + "'=" + val);
@@ -331,7 +325,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setBlurred_vision("");
                 mPatient.setSwollen_feet("");
                 mPatient.setFever("");
-                mPatient.setLocation(new Location());
+                mPatient.setLocation("");
                 uSubject = writeObject(mPatient, 0);
 
             } else {
@@ -544,9 +538,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         map.put(Patients.Contract.FAMILY_NAME, patient.getFamily_name());
         map.put(Patients.Contract.DOB, Dates.toSQL(patient.getDob()));
         map.put(Patients.Contract.GENDER, patient.getGender());
-        map.put(Patients.Contract.LOCATION,((patient.getLocation() != null)
-                ? patient.getLocation().getUuid():
-                getString(R.string.cfg_default_location)));
+        map.put(Patients.Contract.LOCATION, patient.getLocation());
         //map.put(Patients.Contract., patient.);
         return map;
     }
@@ -563,9 +555,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         //TODO update db and uncomment
         //values.put(Patients.Contract.CONFIRMED, patient.getConfirmed());
         //values.put(Patients.Contract.DOB_ESTIMATED, patient.isDobEstimated());
-        values.put(Patients.Contract.LOCATION, ((patient.getLocation() != null)
-                ? patient.getLocation().getUuid() :
-                getString(R.string.cfg_default_location)));
+        values.put(Patients.Contract.LOCATION, patient.getLocation());
         // Add the UUID if this is a temporary object-i.e we are creating
         if(state == 0) {
             values.put(Patients.Contract.UUID, patient.getUuid());

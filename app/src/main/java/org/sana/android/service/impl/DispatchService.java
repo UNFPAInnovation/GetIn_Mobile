@@ -264,7 +264,7 @@ public class DispatchService extends Service{
                 vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
                 vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
                 vals.put(Patients.Contract.GENDER, p.getGender());
-                vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
+                vals.put(Patients.Contract.LOCATION, p.getLocation());
                 vals.put(Patients.Contract.UUID, p.getUuid());
                 vals.put(Patients.Contract.PATIENT_ID, p.system_id);
                 vals.put(Patients.Contract.DOB, p.getDob().toString());
@@ -1333,7 +1333,7 @@ public class DispatchService extends Service{
             vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
             vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
             vals.put(Patients.Contract.GENDER, p.getGender());
-            vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
+            vals.put(Patients.Contract.LOCATION, p.getLocation());
             vals.put(Patients.Contract.PATIENT_ID, p.system_id);
             vals.put(Patients.Contract.DOB, DateUtil.format(p.getDob()));
             ////////////////////////////////////////////////////////////
