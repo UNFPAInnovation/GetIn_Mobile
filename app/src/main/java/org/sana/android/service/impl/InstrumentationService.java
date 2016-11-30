@@ -35,6 +35,7 @@ import org.sana.android.activity.ProcedureRunner;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.ObservationWrapper;
 import org.sana.android.provider.Observations;
+import org.sana.android.provider.Patients;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -274,6 +275,13 @@ public class InstrumentationService extends Service {
 		vals.put(Observations.Contract.VALUE, String.valueOf(value));
 		getContentResolver().update(uri, vals, null, null);
 	}
+
+    final void updateSubject(Uri uri, Object value){
+        Log.i(TAG, "Updating: " + uri + ", value: " + value);
+        ContentValues values = new ContentValues();
+        values.put(Patients.Contract.LOCATION, String.valueOf(value));
+        getContentResolver().update(uri, values, null, null);
+    }
 	
 	class LocationInstrumentationListener implements LocationListener{
 
@@ -322,7 +330,16 @@ public class InstrumentationService extends Service {
 			String locStr = "( "+location.getLatitude() +", "+ location.getLongitude()+", " + accuracy+" )";
 
 			if(!Uris.isEmpty(uri))
-				updateObservation(uri,locStr);
+                switch(Uris.getDescriptor(uri)){
+                    case Uris.OBSERVATION_ITEM:
+                    case Uris.OBSERVATION_UUID:
+                        updateObservation(uri,locStr);
+                        break;
+                    case Uris.SUBJECT_ITEM:
+                    case Uris.SUBJECT_UUID:
+                        updateSubject(uri, locStr);
+                        break;
+                }
 			if(replyTo != null){
 				try {
 					Intent reply = new Intent();
