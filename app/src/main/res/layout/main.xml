@@ -33,17 +33,17 @@
         android:layout_width="match_parent"
         android:layout_height="fill_parent" android:id="@+id/actions" android:layout_marginTop="5dip" android:layout_gravity="bottom">
 
-        <Button
-            android:id="@+id/btn_main_select_patient"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="submit"
-            android:drawableLeft="@drawable/ic_menu_allfriends"
-            android:text="@string/button_main_register_patients"
-            style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
-            android:layout_margin="10dp"/>
-
+        <!-- <Button
+             android:id="@+id/btn_main_select_patient"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:onClick="submit"
+             android:drawableLeft="@drawable/ic_menu_allfriends"
+             android:text="@string/button_main_register_patients"
+             style="@style/Widget.Button.Large.Dark"
+             android:background="#9E9D24"
+             android:layout_margin="10dp"/>
+ -->
         <Button
             android:id="@+id/btn_main_transfers"
             android:layout_width="fill_parent"
@@ -79,7 +79,8 @@
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-      <!--  <Button
+
+        <Button
             android:id="@+id/btn_main_view_completed_tasks"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -88,8 +89,7 @@
             android:drawableLeft="@drawable/ic_menu_notifications"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
-            android:layout_margin="10dp"/> -->
-
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/button_call_ambulance"
