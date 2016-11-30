@@ -1112,7 +1112,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
             form.putString(Tasks.Contract.UUID,uuid);
