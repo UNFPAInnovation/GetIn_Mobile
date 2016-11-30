@@ -27,9 +27,15 @@
  */
 package org.sana.core;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.TypeVariable;
+import java.net.URI;
+import java.text.ParseException;
+import java.util.Collection;
 import java.util.Date;
 
 import org.sana.api.IModel;
+import org.sana.util.DateUtil;
 
 /**
  * The basic implementation of the core behavior of the core objects in the 
@@ -99,8 +105,108 @@ public abstract class Model implements IModel{
 		this.uuid = java.util.UUID.fromString(uuid).toString();
 	}
 	
-        @Override        
-        public String toString(){
-            return String.format("<%s %s>",this.getClass().getSimpleName(),uuid);
+    @Override
+    public String toString(){
+        return String.format("<%s %s>",this.getClass().getSimpleName(),uuid);
+    }
+
+    /**
+     * Returns the {@link java.lang.String String} representation of a field.
+     *
+     * @param fieldName
+     * @return
+     */
+    public String getField(String fieldName) {
+        String fieldStr = null;
+        Object fieldVal = null;
+        try {
+            Field field = getClass().getField(fieldName);
+            Class<?> klazz = field.getType();
+            fieldVal = field.get(this);
+            if (klazz.isAssignableFrom(Collection.class)) {
+                TypeVariable<? extends Class<?>>[] params = klazz.getTypeParameters();
+                int size = params.length;
+                for (TypeVariable<? extends Class<?>> tv : params) {
+
+                    ;
+                }
+                fieldStr = String.valueOf(field.get(this));
+            } else if (klazz.isAssignableFrom(Date.class)) {
+                fieldStr = (fieldVal != null) ?
+                        DateUtil.format((Date) fieldVal) : "";
+            } else {
+                fieldStr = String.valueOf(field.get(this));
+            }
+        } catch (NoSuchFieldException e) {
+            //e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
+        return fieldStr;
+    }
+
+    /**
+     * Sets the value of a field from a {@link java.lang.String String}
+     * representation
+     *
+     * @param fieldName
+     * @param value
+     * @return
+     */
+    public boolean setField(String fieldName, String value) {
+        boolean fieldSet = false;
+        try {
+            Field field = getClass().getField(fieldName);
+            Class<?> klazz = field.getType();
+            if (klazz.isAssignableFrom(String.class)) {
+                field.set(this, String.valueOf(value));
+            } else if (klazz.isAssignableFrom(CharSequence.class)) {
+                field.set(this, String.valueOf(value));
+            } else if (klazz.isAssignableFrom(Boolean.TYPE)) {
+                field.setBoolean(this, Boolean.parseBoolean(value));
+            } else if (klazz.isAssignableFrom(Integer.TYPE)) {
+                field.setInt(this, Integer.parseInt(value));
+            } else if (klazz.isAssignableFrom(Double.TYPE)) {
+                field.setDouble(this, Double.parseDouble(value));
+            } else if (klazz.isAssignableFrom(Character.TYPE)) {
+                char ch = (value == null) ? ' ' : value.charAt(0);
+                field.setChar(this, ch);
+            } else if (klazz.isAssignableFrom(Byte.TYPE)) {
+                field.setShort(this, Byte.parseByte(value));
+            } else if (klazz.isAssignableFrom(Short.TYPE)) {
+                field.setShort(this, Short.parseShort(value));
+            } else if (klazz.isAssignableFrom(Long.TYPE)) {
+                field.setLong(this, Long.parseLong(value));
+            } else if (klazz.isAssignableFrom(Float.TYPE)) {
+                field.setFloat(this, Float.parseFloat(value));
+            } else if (klazz.isAssignableFrom(Date.class)) {
+                field.set(this, DateUtil.parseDate(value));
+            } else if (klazz.isAssignableFrom(URI.class)) {
+                field.set(this, URI.create(value));
+            } else if (klazz.isArray()) {
+                field.getGenericType()
+                ;
+            } else if (klazz.isAssignableFrom(Collection.class)) {
+                TypeVariable<? extends Class<?>>[] p = klazz.getTypeParameters();
+                Class<?> parameterizedKlazz = klazz.getTypeParameters().getClass();
+
+            } else {
+                TypeVariable<? extends Class<?>>[] p = klazz.getTypeParameters();
+                throw new IllegalArgumentException("Type not allowed: "
+                        + klazz.getSimpleName() + ", " + klazz.getGenericSuperclass().toString());
+            }
+            fieldSet = true;
+        } catch (NoSuchFieldException e) {
+            //e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (NullPointerException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return fieldSet;
+    }
 }
