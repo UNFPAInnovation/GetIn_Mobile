@@ -1,19 +1,30 @@
 package org.sana.android.activity;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.sana.R;
+import org.sana.android.db.DatabaseHelper;
 import org.sana.android.fragment.AmbulanceDriverListFragment;
 import org.sana.android.provider.AmbulanceDrivers;
 
-public class AmbulanceDriverListActivity extends FragmentActivity {
+import java.util.ArrayList;
+
+public class AmbulanceDriverListActivity extends FragmentActivity implements AmbulanceDriverListFragment.OnDriverSelectedListener{
 
     AmbulanceDriverListFragment mAmbulanceDriverListFragment;
     protected ProgressDialog mProgressDialog = null;
+    private ArrayList<String> driverDetailsArrayList = new ArrayList<String>();
+    private Dialog dialog;
     public static final String TAG = AmbulanceDriverListActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +42,7 @@ public class AmbulanceDriverListActivity extends FragmentActivity {
         super.onAttachFragment(fragment);
         if(fragment.getClass() == AmbulanceDriverListFragment.class){
             mAmbulanceDriverListFragment = (AmbulanceDriverListFragment) fragment;
+            mAmbulanceDriverListFragment.setOnDriverSelectedListener(this);
             if(mAmbulanceDriverListFragment.sync(this, AmbulanceDrivers.CONTENT_URI)) {
                 showProgressDialog(getString(R.string.general_synchronizing),
                         getString(R.string.general_fetching_drivers));
@@ -51,5 +63,62 @@ public class AmbulanceDriverListActivity extends FragmentActivity {
             mProgressDialog.dismiss();
             mProgressDialog = null;
         }
+    }
+
+    @Override
+    public void onDriverSelected(long driverId) {
+
+        int maxIndex = AmbulanceDriverListFragment.data.size()/2;
+
+
+        String [] data = {
+                ""+AmbulanceDriverListFragment.data.get((int)driverId)
+//                ""+AmbulanceDriverListFragment.data.get((int)driverId-1),
+//                ""+AmbulanceDriverListFragment.data.get((int)driverId-1)
+        };
+        Toast.makeText(this, ""+AmbulanceDriverListFragment.data.size()+" the id is "+driverId, Toast.LENGTH_SHORT).show();
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Driver details")
+                .setItems(data, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicked okay
+                    }
+                })
+                .create();
+        builder.show();
+
+    }
+
+    /**
+     * get the database items and populate
+     * an array list.
+     * @return ArrayList
+     */
+    public ArrayList<String> getDriverDetails(long driverId){
+        //open database helper class
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        //get a readable database
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        final String selectQuery = "SELECT first_name, last_name, phone_number FROM ambulancedriver ";//WHERE " + BaseContract._ID+
+               // "=" +driverId;
+        //fetching the data using the cursor
+        final Cursor cursor = db.rawQuery(selectQuery,null);
+
+        startManagingCursor(cursor);
+        while(cursor.moveToNext()){
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.FIRST_NAME)));
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.LAST_NAME)));
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.PHONE_NUMBER)));
+        }
+
+        return driverDetailsArrayList;
     }
 }

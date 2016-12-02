@@ -617,12 +617,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Intent intent = null;
         switch(v.getId()){
             case R.id.btn_main_select_patient:
-//                intent = new Intent(Intent.ACTION_PICK);
-//                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
-//                startActivityForResult(intent, PICK_PATIENT);
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
-                startActivity(intent);
-                startService(intent);
+                intent = new Intent(Intent.ACTION_PICK);
+                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
+                startActivityForResult(intent, PICK_PATIENT);
+
+//                startService(intent);
 //                String uuid = UUID.randomUUID().toString();
 //                Log.v(TAG, " "+uuid);
                 break;
@@ -643,11 +642,13 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
                 break;
-           /* case R.id.btn_main_procedures:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_PROCEDURE);
-                break;*/
+            case R.id.btn_main_procedures:
+//                intent = new Intent(Intent.ACTION_PICK);
+//                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
+//                startActivityForResult(intent, PICK_PROCEDURE);
+                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                startActivity(intent);
+                break;
             case R.id.btn_main_tasks:
                 intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
