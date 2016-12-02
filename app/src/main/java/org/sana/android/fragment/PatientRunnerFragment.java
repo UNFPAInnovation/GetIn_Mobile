@@ -353,7 +353,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setEducation_level("");
                 mPatient.setContraceptive_use("");
                 mPatient.setANC_status("");
-                mPatient.setANC_visit(new Date());
+               // mPatient.setANC_visit(new Date());
                 mPatient.setEDD("");
                 mPatient.setreceive_sms("");
                 mPatient.setfollow_up("");

@@ -225,7 +225,10 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setEducation_level(getEducation_level());
         obj.setContraceptive_use(getContraceptive_use());
         obj.setANC_status(getANC_status());
-        obj.setANC_visit(getANC_visit());
+
+
+        if (obj.getANC_visit()!=null){
+        obj.setANC_visit(getANC_visit());}
         obj.setEDD(getEDD());
         obj.setreceive_sms(getReceive_sms());
         obj.setfollow_up(getFollow_up());
@@ -408,12 +411,16 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.GENDER, object.getGender());
         cv.put(Patients.Contract.PNUMBER, object.getpNumber());
         cv.put(Patients.Contract.HOLDER_pNUMBER, object.getHolder_pNumber());
+
+
         cv.put(Patients.Contract.LMD, Dates.toSQL(object.getLMD()));
         cv.put(Patients.Contract.MARITAL_STATUS, object.getMarital_status());
         cv.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
         cv.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
         cv.put(Patients.Contract.ANC_STATUS, object.getANC_status());
-        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+
+        if (object.getANC_visit()!=null){
+        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
         cv.put(Patients.Contract.EDD, object.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
@@ -445,7 +452,9 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
         form.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
         form.put(Patients.Contract.ANC_STATUS, object.getANC_status());
-        form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+
+        if(object.getANC_visit()!= null){
+        form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
         form.put(Patients.Contract.EDD, object.getEDD());
         form.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         form.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
