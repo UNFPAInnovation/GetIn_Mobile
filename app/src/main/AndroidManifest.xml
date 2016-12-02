@@ -107,6 +107,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
 
                 <data android:mimeType="vnd.android.cursor.dir/org.sana.subject"/>
+                <data android:mimeType="vnd.android.cursor.dir/org.sana.patient"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT"/>
