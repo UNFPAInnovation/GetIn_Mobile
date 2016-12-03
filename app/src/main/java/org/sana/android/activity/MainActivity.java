@@ -639,6 +639,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
                 break;
+            case R.id.btn_main_view_ambulance_drivers:
+                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                startActivity(intent);
+                break;
            /* case R.id.btn_main_procedures:
                 intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
@@ -649,7 +653,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
-                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_training_mode:
 
