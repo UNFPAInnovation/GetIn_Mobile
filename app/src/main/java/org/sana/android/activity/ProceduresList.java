@@ -1,12 +1,6 @@
 
 package org.sana.android.activity;
 
-import org.sana.R;
-import org.sana.android.app.Locales;
-import org.sana.android.content.Intents;
-import org.sana.android.provider.Procedures;
-import org.sana.android.provider.Subjects;
-
 import android.app.ListActivity;
 import android.content.ContentUris;
 import android.content.Context;
@@ -18,6 +12,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
+
+import org.sana.R;
+import org.sana.android.app.Locales;
+import org.sana.android.content.Intents;
+import org.sana.android.provider.Procedures;
 
 /** Displays a list of Procedures.
  * 
@@ -96,12 +95,12 @@ public class ProceduresList extends ListActivity {
     }
     public void submit(View v) {
         Intent intent = null;
-        switch (v.getId()) {
-            case R.id.btn_view_girl_details:
-
-                Intent k = new Intent(this, PatientViewActivity.class);
-                startActivity(k);
-                break;
-        }
+//        switch (v.getId()) {
+//            case R.id.btn_view_girl_details:
+//
+//                Intent k = new Intent(this, PatientViewActivity.class);
+//                startActivity(k);
+//                break;
+//        }
     }
 }

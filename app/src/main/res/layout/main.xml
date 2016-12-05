@@ -3,7 +3,7 @@
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/Cyan"
+    android:background="@color/background_color"
     android:gravity="fill_vertical"
     android:orientation="vertical">
 
@@ -31,22 +31,19 @@
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        android:id="@+id/actions"
-        android:layout_marginTop="5dip"
-        android:layout_gravity="bottom">
+        android:layout_height="fill_parent" android:id="@+id/actions" android:layout_marginTop="5dip" android:layout_gravity="bottom">
 
-        <Button
-            android:id="@+id/btn_main_select_patient"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:onClick="submit"
-            android:drawableLeft="@drawable/ic_menu_allfriends"
-            android:text="@string/button_main_register_patients"
-            style="@style/Widget.Button.Large.Dark"
-            android:background="@color/deep_pink"
-            android:layout_margin="10dp"/>
-
+        <!-- <Button
+             android:id="@+id/btn_main_select_patient"
+             android:layout_width="fill_parent"
+             android:layout_height="wrap_content"
+             android:onClick="submit"
+             android:drawableLeft="@drawable/ic_menu_allfriends"
+             android:text="@string/button_main_register_patients"
+             style="@style/Widget.Button.Large.Dark"
+             android:background="#9E9D24"
+             android:layout_margin="10dp"/>
+ -->
         <Button
             android:id="@+id/btn_main_transfers"
             android:layout_width="fill_parent"
@@ -55,7 +52,7 @@
             android:drawableLeft="@drawable/ic_menu_archive"
             android:text="@string/button_girls_mapped_by_you"
             style="@style/Widget.Button.Large.Dark"
-            android:background="@color/deep_pink"
+            android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
         <Button
@@ -66,7 +63,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
             android:text="@string/button_main_training_mode"
-            android:background="@color/deep_pink"
+            android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
 
@@ -79,10 +76,11 @@
             android:text="@string/button_upcoming_appointments"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             style="@style/Widget.Button.Large.Dark"
-            android:background="@color/deep_pink"
+            android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-      <!--  <Button
+
+        <Button
             android:id="@+id/btn_main_view_completed_tasks"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -91,8 +89,7 @@
             android:drawableLeft="@drawable/ic_menu_notifications"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
-            android:layout_margin="10dp"/> -->
-
+            android:layout_margin="10dp"/>
 
         <Button
             android:id="@+id/button_call_ambulance"
@@ -102,9 +99,8 @@
             android:drawableLeft="@drawable/ic_menu_refresh"
             android:text="@string/button_call_ambulance"
             style="@style/Widget.Button.Large.Dark"
-            android:background="@color/deep_pink"
-            android:layout_margin="10dp"
-            android:inputType="number"/>
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
 
     </LinearLayout>

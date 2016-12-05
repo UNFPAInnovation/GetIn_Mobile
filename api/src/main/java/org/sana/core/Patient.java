@@ -6,7 +6,6 @@ package org.sana.core;
 import java.net.URI;
 import java.util.Date;
 
-import org.sana.api.ILocation;
 import org.sana.api.IPatient;
 
 import com.google.gson.annotations.Expose;
@@ -31,7 +30,7 @@ public class Patient extends Subject implements IPatient{
     @Expose
     public URI image;
     @Expose
-    public Location location;
+    public String location;
     @Expose
     public String system_id;
 	@Expose
@@ -157,7 +156,7 @@ public class Patient extends Subject implements IPatient{
 	 * @see org.sana.api.IPatient#getLocation()
 	 */
 	@Override
-	public ILocation getLocation() {
+	public String getLocation() {
 		return location;
 	}
 
@@ -169,7 +168,7 @@ public class Patient extends Subject implements IPatient{
 		this.system_id = system_id;
 	}
 
-	public void setLocation(Location location){
+	public void setLocation(String location){
 		this.location = location;
 	}
 

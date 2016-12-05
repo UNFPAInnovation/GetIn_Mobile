@@ -107,6 +107,7 @@
                 <category android:name="android.intent.category.DEFAULT"/>
 
                 <data android:mimeType="vnd.android.cursor.dir/org.sana.subject"/>
+                <data android:mimeType="vnd.android.cursor.dir/org.sana.patient"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT"/>
@@ -439,8 +440,10 @@
         <service android:name=".android.service.impl.InstrumentationService">
             <intent-filter>
                 <action android:name="org.sana.android.intent.ACTION_RECORD_GPS"/>
-
-                <data android:mimeType="vnd.android.cursor.item/org.sana.observation"/>
+                <data
+                    android:host="org.sana.provider"
+                    android:mimeType="vnd.android.cursor.item/*"
+                    android:scheme="content"/>
             </intent-filter>
         </service>
 

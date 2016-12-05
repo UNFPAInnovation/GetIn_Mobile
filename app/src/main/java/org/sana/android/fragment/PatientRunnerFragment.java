@@ -4,6 +4,7 @@ package org.sana.android.fragment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.sana.R;
+import org.sana.android.activity.PatientRunner;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.PatientParcel;
@@ -36,6 +38,7 @@ import org.sana.util.UUIDUtil;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
 import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -132,6 +135,38 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         for(String concept: page.getConcepts()){
             String id = page.elementWithConcept(concept);
             String val = page.getElementValue(id);
+            ProcedureElement element = page.getElementById(id);
+            switch (element.getType()){
+                case HIDDEN:
+                    if (!skipHidden && !TextUtils.isEmpty(element.getAction())) {
+                        Intent intent;
+                        try {
+                            Intent reply = new Intent();
+                            reply.setClass(getActivity(),
+                                    PatientRunner.class);
+                            reply.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                            reply.putExtra("id", element.getId());
+                            // the getCurrentIndex() returns a 1 based index
+                            reply.putExtra("page",
+                                    this.mProcedure.getCurrentIndex() - 1);
+                            PendingIntent replyTo = PendingIntent.getActivity(
+                                    getActivity(),
+                                    PatientRunner.OBJECT_FIELD_RESULT_CODE,
+                                    reply, 0);
+                            intent = Intent.parseUri(element.getAction(),
+                                    Intent.URI_INTENT_SCHEME);
+                            intent.setData(uSubject);
+                            intent.putExtra(Intent.EXTRA_INTENT, replyTo);
+                            intent.putExtra("extra_data", reply.getExtras());
+                            getActivity().startService(intent);
+                        } catch (URISyntaxException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    break;
+                default:
+                    // Others do nothing here.
+            }
             String field = concept.replace(" ","_");
             Log.d(TAG,"\tsetting field'" + field + "' for concept '" +
                     concept + "'");
@@ -251,17 +286,13 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 URI file = URI.create(val);
                 mPatient.setImage(file);
             }
-
+            // Commenting this out-set indirectly through InstrumentationService
+            /*
             if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
-                Location location = new Location();
-                if(UUIDUtil.isValid(val)) {
-                    location.setUuid(val);
-                } else {
-                    location.setName(val);
-                }
-                mPatient.setLocation(location);
+                mPatient.setLocation(val);
             }
+            */
             if(field.compareToIgnoreCase(Patients.Contract.CONFIRMED) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.CONFIRMED + "'=" + val);
                 mPatient.setConfirmed(Boolean.valueOf(val));
@@ -322,7 +353,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setEducation_level("");
                 mPatient.setContraceptive_use("");
                 mPatient.setANC_status("");
-                mPatient.setANC_visit(new Date());
+               // mPatient.setANC_visit(new Date());
                 mPatient.setEDD("");
                 mPatient.setreceive_sms("");
                 mPatient.setfollow_up("");
@@ -331,7 +362,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setBlurred_vision("");
                 mPatient.setSwollen_feet("");
                 mPatient.setFever("");
-                mPatient.setLocation(new Location());
+                mPatient.setLocation("");
                 uSubject = writeObject(mPatient, 0);
 
             } else {
@@ -544,9 +575,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         map.put(Patients.Contract.FAMILY_NAME, patient.getFamily_name());
         map.put(Patients.Contract.DOB, Dates.toSQL(patient.getDob()));
         map.put(Patients.Contract.GENDER, patient.getGender());
-        map.put(Patients.Contract.LOCATION,((patient.getLocation() != null)
-                ? patient.getLocation().getUuid():
-                getString(R.string.cfg_default_location)));
+        map.put(Patients.Contract.LOCATION, patient.getLocation());
         //map.put(Patients.Contract., patient.);
         return map;
     }
@@ -563,9 +592,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         //TODO update db and uncomment
         //values.put(Patients.Contract.CONFIRMED, patient.getConfirmed());
         //values.put(Patients.Contract.DOB_ESTIMATED, patient.isDobEstimated());
-        values.put(Patients.Contract.LOCATION, ((patient.getLocation() != null)
-                ? patient.getLocation().getUuid() :
-                getString(R.string.cfg_default_location)));
+        values.put(Patients.Contract.LOCATION, patient.getLocation());
         // Add the UUID if this is a temporary object-i.e we are creating
         if(state == 0) {
             values.put(Patients.Contract.UUID, patient.getUuid());

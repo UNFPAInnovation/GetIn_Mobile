@@ -31,23 +31,18 @@ import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 import org.sana.android.content.Uris;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Subjects;
 import org.sana.android.util.Dates;
-import org.sana.api.ILocation;
 import org.sana.api.IPatient;
 import org.sana.core.Location;
-import org.sana.core.Model;
 import org.sana.core.Patient;
-import org.sana.util.DateUtil;
 import org.sana.util.UUIDUtil;
 
 import android.content.ContentResolver;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -230,7 +225,10 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setEducation_level(getEducation_level());
         obj.setContraceptive_use(getContraceptive_use());
         obj.setANC_status(getANC_status());
-        obj.setANC_visit(getANC_visit());
+
+
+        if (obj.getANC_visit()!=null){
+        obj.setANC_visit(getANC_visit());}
         obj.setEDD(getEDD());
         obj.setreceive_sms(getReceive_sms());
         obj.setfollow_up(getFollow_up());
@@ -241,7 +239,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setSwollen_feet(getSwollen_feet());
         obj.setBlurred_vision(getBlurred_vision());
         obj.setImage(getImage());
-        obj.setLocation((Location) getLocation());
+        obj.setLocation(getLocation());
         obj.setSystemId(getSystemId());
         //obj.setDobEstimated(getDobEstimated());
         //obj.setConfirmed(getConfirmed());
@@ -252,10 +250,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 	 * @see org.sana.api.IPatient#getLocation()
 	 */
 	@Override
-	public ILocation getLocation() {
-		Location location = new Location();
-		location.setName(getStringField(Patients.Contract.LOCATION));
-		return location;
+	public String getLocation() {
+		return getStringField(Patients.Contract.LOCATION);
 	}
 
     /**
@@ -380,7 +376,9 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.EDUCATION_LEVEL, mPatient.getEducation_level());
         cv.put(Patients.Contract.CONTRACEPTIVE_USE, mPatient.getContraceptive_use());
         cv.put(Patients.Contract.ANC_STATUS, mPatient.getANC_status());
-        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(mPatient.getANC_visit()));
+        if(mPatient.getANC_visit() != null) {
+            cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(mPatient.getANC_visit()));
+        }
         cv.put(Patients.Contract.EDD, mPatient.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, mPatient.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, mPatient.getFollow_up());
@@ -394,8 +392,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         //TODO update db and uncomment
         //cv.put(Patients.Contract.CONFIRMED, mPatient.getConfirmed());
         //cv.put(Patients.Contract.DOB_ESTIMATED, mPatient.isDobEstimated());
-        if(mPatient.getLocation() != null)
-            cv.put(Patients.Contract.LOCATION, mPatient.getLocation().getUuid());
+        cv.put(Patients.Contract.LOCATION, mPatient.getLocation());
         if(exists){
             context.getContentResolver().update(uri,cv,null,null);
         } else {
@@ -416,12 +413,16 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.GENDER, object.getGender());
         cv.put(Patients.Contract.PNUMBER, object.getpNumber());
         cv.put(Patients.Contract.HOLDER_pNUMBER, object.getHolder_pNumber());
+
+
         cv.put(Patients.Contract.LMD, Dates.toSQL(object.getLMD()));
         cv.put(Patients.Contract.MARITAL_STATUS, object.getMarital_status());
         cv.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
         cv.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
         cv.put(Patients.Contract.ANC_STATUS, object.getANC_status());
-        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+
+        if (object.getANC_visit()!=null){
+        cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
         cv.put(Patients.Contract.EDD, object.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
@@ -432,7 +433,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
         cv.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         if(object.getLocation() != null)
-            cv.put(Patients.Contract.LOCATION, object.getLocation().getUuid());
+            cv.put(Patients.Contract.LOCATION, object.getLocation());
         return cv;
     }
 
@@ -453,7 +454,9 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.EDUCATION_LEVEL, object.getEducation_level());
         form.put(Patients.Contract.CONTRACEPTIVE_USE, object.getContraceptive_use());
         form.put(Patients.Contract.ANC_STATUS, object.getANC_status());
-        form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));
+
+        if(object.getANC_visit()!= null){
+        form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
         form.put(Patients.Contract.EDD, object.getEDD());
         form.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         form.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
@@ -463,8 +466,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.FEVER, object.getFever());
         form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
         form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
-        if(object.getLocation() != null)
-            form.put(Patients.Contract.LOCATION+"__uuid", object.getLocation().getUuid());
+        form.put(Patients.Contract.LOCATION, object.getLocation());
         return form;
     }
 }

@@ -45,7 +45,7 @@
             android:layout_margin="10dp"/>
 -->
         <Button
-            android:id="@+id/btn_main_transfers"
+            android:id="@+id/btn_main_select_patient"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
@@ -90,6 +90,18 @@
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_main_view_ambulance_drivers"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:text="@string/btn_main_view_ambulance_drivers"
+            android:drawableLeft="@drawable/ic_menu_allfriends"
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
 
         <Button
             android:id="@+id/button_call_ambulance"

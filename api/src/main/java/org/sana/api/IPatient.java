@@ -127,8 +127,12 @@ public interface IPatient extends ISubject{
 	 * @return the image
 	 */
 	public abstract java.net.URI getImage();
-	
-	public abstract ILocation getLocation();
+
+    /**
+     * Returns the location and a 2-tuple string contain
+     * @return
+     */
+	public abstract String getLocation();
 
     public abstract String getSystemId();
 

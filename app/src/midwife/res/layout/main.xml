@@ -79,16 +79,16 @@
             android:background="@color/deep_pink"
             android:layout_margin="10dp"/>
 
-      <!--  <Button
-            android:id="@+id/btn_main_view_completed_tasks"
+       <Button
+            android:id="@+id/btn_main_view_ambulance_drivers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:text="@string/button_view_completed_tasks"
-            android:drawableLeft="@drawable/ic_menu_notifications"
+            android:text="@string/btn_main_view_ambulance_drivers"
+           android:drawableLeft="@drawable/ic_menu_allfriends"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
-            android:layout_margin="10dp"/> -->
+            android:layout_margin="10dp"/>
 
 
         <Button

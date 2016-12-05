@@ -1,136 +1,122 @@
 <Procedure
-    title="FollowUp note VHT"
+    title="FollowUp_note_VHT"
     author="Donald"
     uuid="a6bae73a-d07a-4df0-9830-f243383d9778"
     version="1.0"
     locale="en"
-    class="org.sana.core.Observer">
+    >
 <Page>
     <Element
-        id="1"
+        id="1z"
         type="TEXT"
         question="GIRLS FOLlOW UP NOTES"></Element>
-
-
-
     <Element
-        id="2"
+        id="1"
         concept="VHT MISSED APPOINTMENT STATUS"
         type="RADIO"
         required="true"
         question="Has the Girl Missed ANC?"
-        values=" Yes; NO"
-        answer="Yes"/>
+        answer="Yes"
+        choices="Yes;No"/>
     </Page>
-
     <Page>
     <ShowIf>
-        <Criteria type="EQUALS" id="2" value="YES" />
-    </ShowIf>
+        <Criteria type="EQUALS" id="1" value="Yes" />
+        </ShowIf>
+
         <Element
             id="3"
             concept="VHT MISSING REASON"
             type="ENTRY"
             required="true"
             question="Reasons for missing ANC"
-            values=" Yes;NO"
-            answer="Yes"/>
-    </Page>
+            answer=""
+            />
 
+   </Page>
     <Page>
+        <Element
+            id="2"
+            type="TEXT"
+            question="RISK ASSESMENT"></Element>
             <Element
-                id="4"
+                id="3a"
                 concept="MENSTRUAL FLOW"
                 type="RADIO"
                 required="true"
                 question="Are you bleeding heavily? (Changing sanitary wear more than 4  times in space of 2hrs)"
-                values=" Yes; NO"
-                answer="Yes"/>
-
-
-            <Element
-                id="5"
+                answer="Yes"
+                choices="Yes;No"/>
+        <Element
+                id="3b"
                 concept="FEVER"
                 type="RADIO"
                 required="true"
                 question="Do you have a fever?"
-                choices="Yes,NO"
-                answer="Yes"/>
-
-</Page>
+                answer="Yes"
+                choices="Yes;No"/>
+    </Page>
     <Page>
             <Element
-                id="6"
+                id="3c"
                 concept="FEET SWELLING"
                 type="RADIO"
                 required="true"
                 question="Are you’re feet swollen? Even when u’ve not stood for a long time"
-                choices="Yes,NO"
-                answer="Yes"/>
-
-
-
-            <Element
-                id="7"
+                answer="Yes"
+                choices="Yes;No"/>
+        <Element
+                id="3d"
                 concept="BLURRED VISION"
                 type="RADIO"
                 required="true"
                 question="Are you experiencing blurred vision?"
-                choices="Yes,NO"
-                answer="Yes"/>
-
-
-
-            <ShowIf>
+                answer="Yes"
+                choices="Yes;No"/>
+    </Page>
+        <Page>
+        <ShowIf>
                 <or>
                     <and>
-                        <Criteria type="EQUALS" id="1" value="YES" />
+                        <Criteria type="EQUALS" id="3a" value="YES" />
                     </and>
                     <and>
-                        <Criteria type="EQUALS" id="2" value="YES" />
-
+                        <Criteria type="EQUALS" id="3b" value="YES" />
                     </and>
                     <and>
-                        <Criteria type="EQUALS" id="3" value="YES" />
-
+                        <Criteria type="EQUALS" id="3c" value="YES" />
                     </and>
                     <and>
-                        <Criteria type="EQUALS" id="4" value="YES" />
-
+                        <Criteria type="EQUALS" id="3d" value="YES" />
                     </and>
                 </or>
             </ShowIf>
-            <Element type="ENTRY" concept="HIGHRISK" id="7"
-                question="High Risk Patient. Please refer to Doctor. Add any additional comments."
-                answer="" />
+            <Element type="TEXT" concept="HIGHRISK" id="4"
+                question="High Risk Patient. Please refer to Doctor. Call Ambulance Immediately"
+                 />
         </Page>
-
     <Page>
-
-    <Element
-        id="8"
+        <Element
+        id="5"
         type="ENTRY"
         concept="VHT ACTION TAKEN"
         question="Action taken"
         answer=""
     />
-
-    />
     <Element
-        id="9"
+        id="6"
         type="DATE"
         concept="VHT NEXT APPOINTMENT"
         question="Next Appointment Date"
         answer=""
     />
         <Element
-            id="10"
+            id="7"
             type="RADIO"
             concept="VHT FOLLOW UP MEANS"
             required="true"
             question="FollowUp as a result of?"
-            choices="Call,Personal Visit"
+            choices="Call; Personal Visit"
             answer="Personal Visit"/>
-
-</Page>
+    </Page>
     </Procedure>

@@ -100,6 +100,7 @@ public abstract class BaseRunner extends FragmentActivity implements BaseRunnerF
     public static final int IMPLICIT_PLUGIN_INTENT_REQUEST_CODE = 8;
     public static final int OBSERVATION_RESULT_CODE = 16;
     public static final int TELEPHONY_CODE = 32;
+    public static final int OBJECT_FIELD_RESULT_CODE = 64;
 
     // State instance fields
     private static String[] params;

@@ -138,7 +138,7 @@
             <Criteria type="EQUALS" id="14" value="Yes"/>
         </ShowIf>
         <Element id="15a" type="DATE"
-            concept="ANC CARD DATE"
+            concept="ANC VISIT"
             question="Enter Next ANC visit from Card"
             required="true"
             answer=""
