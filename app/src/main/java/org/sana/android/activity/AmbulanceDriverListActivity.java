@@ -3,9 +3,11 @@ package org.sana.android.activity;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.CursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
 
@@ -21,6 +23,9 @@ public class AmbulanceDriverListActivity extends FragmentActivity implements Amb
     protected ProgressDialog mProgressDialog = null;
     private ArrayList<String> driverDetailsArrayList = new ArrayList<String>();
     private Dialog dialog;
+    private Cursor mCursor;
+    private CursorAdapter mCursorAdapter;
+
     public static final String TAG = AmbulanceDriverListActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +80,7 @@ public class AmbulanceDriverListActivity extends FragmentActivity implements Amb
 //        Toast.makeText(this, ""+AmbulanceDriverListFragment.data.size()+" the id is "+driverId + " max index: "+maxIndex
 //                , Toast.LENGTH_SHORT).show();
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Driver details")
                 .setItems(data, new DialogInterface.OnClickListener() {
                     @Override
@@ -88,7 +93,12 @@ public class AmbulanceDriverListActivity extends FragmentActivity implements Amb
                     public void onClick(DialogInterface dialog, int which) {
                         //user clicked okay
                     }
-                })
+                }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //dismiss the dialog
+            }
+        })
                 .create();
         builder.show();
 
