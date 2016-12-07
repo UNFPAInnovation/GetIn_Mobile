@@ -226,9 +226,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setContraceptive_use(getContraceptive_use());
         obj.setANC_status(getANC_status());
 
-
-        if (obj.getANC_visit()!=null){
-        obj.setANC_visit(getANC_visit());}
+        obj.setANC_visit(getANC_visit());
         obj.setEDD(getEDD());
         obj.setreceive_sms(getReceive_sms());
         obj.setfollow_up(getFollow_up());
