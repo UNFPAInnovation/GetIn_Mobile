@@ -27,11 +27,11 @@
  */
 package org.sana.android.db;
 
-import org.sana.R;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+
+import org.sana.R;
 
 /**
  * This class helps open, create, and upgrade the database file.
@@ -46,7 +46,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 	 * 
 	 * @param context
 	 */
-    DatabaseHelper(Context context) {
+    public DatabaseHelper(Context context) {
         super(context, context.getString(R.string.db_name), 
         		null, 
         		context.getResources().getInteger(R.integer.cfg_db_version_value));

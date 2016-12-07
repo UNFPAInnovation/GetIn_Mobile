@@ -4,16 +4,16 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.database.Cursor;
-import android.net.Uri;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.CursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v7.app.AlertDialog;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.sana.R;
+import org.sana.android.db.DatabaseHelper;
 import org.sana.android.fragment.AmbulanceDriverListFragment;
 import org.sana.android.provider.AmbulanceDrivers;
 
@@ -25,17 +25,6 @@ public class AmbulanceDriverListActivity extends FragmentActivity implements Amb
     protected ProgressDialog mProgressDialog = null;
     private ArrayList<String> driverDetailsArrayList = new ArrayList<String>();
     private Dialog dialog;
-    private Cursor mCursor;
-    private CursorAdapter mCursorAdapter;
-    private Uri mUri = AmbulanceDrivers.CONTENT_URI;
-
-    static final String[] mProjection = new String[] {
-            AmbulanceDrivers.Contract._ID,
-            AmbulanceDrivers.Contract.FIRST_NAME,
-            AmbulanceDrivers.Contract.LAST_NAME,
-            AmbulanceDrivers.Contract.PHONE_NUMBER
-    };
-
     public static final String TAG = AmbulanceDriverListActivity.class.getName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,58 +67,58 @@ public class AmbulanceDriverListActivity extends FragmentActivity implements Amb
 
     @Override
     public void onDriverSelected(long driverId) {
+
         int maxIndex = AmbulanceDriverListFragment.data.size()/2;
 
-        String selection = AmbulanceDrivers.Contract._ID +"=" +(int)driverId;
-        //queries the ambulance driver and returns the results
-        mCursor = getContentResolver().query(
-                mUri,
-                mProjection,
-                selection,
-                null,
-                null
-        );
 
-        //handle the exception or error in case the cursor is null
-        if(mCursor == null){
-            //handle the error
-            Log.e(TAG,"the cursor is null");
-        }else if(mCursor.getCount()<1){
-            //in case there is no match
-            Log.v(TAG, "no match found");
-        }else{
-            //handle the results from the cursor
+        String [] data = {
+                ""+AmbulanceDriverListFragment.data.get((int)driverId)
+//                ""+AmbulanceDriverListFragment.data.get((int)driverId-1),
+//                ""+AmbulanceDriverListFragment.data.get((int)driverId-1)
+        };
+        Toast.makeText(this, ""+AmbulanceDriverListFragment.data.size()+" the id is "+driverId, Toast.LENGTH_SHORT).show();
 
-            mCursorAdapter = new SimpleCursorAdapter(this, android.R.layout.simple_list_item_1,
-                    mCursor,new String[]{AmbulanceDrivers.Contract.FIRST_NAME, AmbulanceDrivers.Contract.LAST_NAME,
-            AmbulanceDrivers.Contract.PHONE_NUMBER},new int[]{android.R.id.text1,android.R.id.text2,
-            R.id.phoneNumber});
-            //Toast.makeText(this, "results from the cursor \n", Toast.LENGTH_SHORT).show();
-            final AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Driver details")
-                    .setAdapter(mCursorAdapter, new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Driver details")
+                .setItems(data, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
-                        }
-                    })
-                    .setPositiveButton("Call", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-
-                        }
-                    })
-                    .create();
-            builder.show();
-
-        }
+                    }
+                })
+                .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        //user clicked okay
+                    }
+                })
+                .create();
+        builder.show();
 
     }
 
+    /**
+     * get the database items and populate
+     * an array list.
+     * @return ArrayList
+     */
+    public ArrayList<String> getDriverDetails(long driverId){
+        //open database helper class
+        DatabaseHelper databaseHelper = new DatabaseHelper(this);
+        //get a readable database
+        SQLiteDatabase db = databaseHelper.getReadableDatabase();
+        final String selectQuery = "SELECT first_name, last_name, phone_number FROM ambulancedriver ";//WHERE " + BaseContract._ID+
+               // "=" +driverId;
+        //fetching the data using the cursor
+        final Cursor cursor = db.rawQuery(selectQuery,null);
+
+        startManagingCursor(cursor);
+        while(cursor.moveToNext()){
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.FIRST_NAME)));
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.LAST_NAME)));
+            driverDetailsArrayList.add(cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.PHONE_NUMBER)));
+        }
+
+        return driverDetailsArrayList;
+    }
 }
