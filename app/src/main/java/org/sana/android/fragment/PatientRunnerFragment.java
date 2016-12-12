@@ -242,6 +242,14 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 }
             }
 
+            if(field.compareToIgnoreCase(Patients.Contract.AMBULANCE_NEED) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_NEED+"'=" +val);
+                mPatient.setAMBULANCE_need(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.AMBULANCE_RESPONSE) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_RESPONSE +"'=" +val);
+                mPatient.setAMBULANCE_response(val);
+            }
 
             if(field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.EDD +"'=" +val);
@@ -301,6 +309,14 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.DOB_ESTIMATED + "'=" + val);
                 mPatient.setConfirmed(Boolean.valueOf(val));
             }
+            if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
+                mPatient.setLocation(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.VILLAGE) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.VILLAGE + "'=" + val);
+                mPatient.setVillage(val);
+            }
         }
         Log.d(TAG, "...Updated Patient: " + String.valueOf(mPatient));
         // Only save to database after we are finished
@@ -354,6 +370,8 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setContraceptive_use("");
                 mPatient.setANC_status("");
                // mPatient.setANC_visit(new Date());
+                mPatient.setAMBULANCE_need("");
+                mPatient.setAMBULANCE_response("");
                 mPatient.setEDD("");
                 mPatient.setreceive_sms("");
                 mPatient.setfollow_up("");
@@ -363,6 +381,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setSwollen_feet("");
                 mPatient.setFever("");
                 mPatient.setLocation("");
+                mPatient.setVillage("");
                 uSubject = writeObject(mPatient, 0);
 
             } else {
@@ -576,6 +595,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         map.put(Patients.Contract.DOB, Dates.toSQL(patient.getDob()));
         map.put(Patients.Contract.GENDER, patient.getGender());
         map.put(Patients.Contract.LOCATION, patient.getLocation());
+        map.put(Patients.Contract.VILLAGE, patient.getVillage());
         //map.put(Patients.Contract., patient.);
         return map;
     }
@@ -593,6 +613,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         //values.put(Patients.Contract.CONFIRMED, patient.getConfirmed());
         //values.put(Patients.Contract.DOB_ESTIMATED, patient.isDobEstimated());
         values.put(Patients.Contract.LOCATION, patient.getLocation());
+        values.put(Patients.Contract.VILLAGE, patient.getVillage());
         // Add the UUID if this is a temporary object-i.e we are creating
         if(state == 0) {
             values.put(Patients.Contract.UUID, patient.getUuid());
