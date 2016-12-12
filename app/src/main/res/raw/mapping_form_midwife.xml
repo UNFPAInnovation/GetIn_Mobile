@@ -95,6 +95,12 @@
             Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
             action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
         />
+            <Element id="9b" type="ENTRY"
+                concept="PATIENT VILLAGE"
+                question="Enter the gir's Village"
+                required="true"
+                answer=""
+                 />
     </Page>
     <Page>
         <Element
