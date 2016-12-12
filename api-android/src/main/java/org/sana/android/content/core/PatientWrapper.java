@@ -117,6 +117,13 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
     }
 
     @Override
+    public String getAMBULANCE_need() {return getStringField(Patients.Contract.AMBULANCE_NEED);}
+
+    @Override
+    public String getAMBULANCE_response() {
+        return getStringField(Patients.Contract.AMBULANCE_RESPONSE);
+    }
+    @Override
     public String getEDD() {
         return getStringField(Patients.Contract.EDD);
     }
@@ -205,6 +212,15 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         return getBooleanField(Patients.Contract.DOB_ESTIMATED);
     }
 
+    @Override
+    public String getLocation() {
+        return getStringField(Patients.Contract.LOCATION);
+    }
+    @Override
+    public String getVillage() {
+        return getStringField(Patients.Contract.VILLAGE);
+    }
+
 	/* (non-Javadoc)
 	 * @see org.sana.android.db.ModelWrapper#getObject()
 	 */
@@ -227,6 +243,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setANC_status(getANC_status());
 
         obj.setANC_visit(getANC_visit());
+        obj.setAMBULANCE_need(getAMBULANCE_need());
+        obj.setAMBULANCE_response(getAMBULANCE_response());
         obj.setEDD(getEDD());
         obj.setreceive_sms(getReceive_sms());
         obj.setfollow_up(getFollow_up());
@@ -238,6 +256,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setBlurred_vision(getBlurred_vision());
         obj.setImage(getImage());
         obj.setLocation(getLocation());
+        obj.setVillage(getVillage());
+        obj.setVillage(getVillage());
         obj.setSystemId(getSystemId());
         //obj.setDobEstimated(getDobEstimated());
         //obj.setConfirmed(getConfirmed());
@@ -247,10 +267,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 	/* (non-Javadoc)
 	 * @see org.sana.api.IPatient#getLocation()
 	 */
-	@Override
-	public String getLocation() {
-		return getStringField(Patients.Contract.LOCATION);
-	}
+
 
     /**
      * Gets the value of the system identifier stored in the
@@ -377,6 +394,9 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         if(mPatient.getANC_visit() != null) {
             cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(mPatient.getANC_visit()));
         }
+
+        cv.put(Patients.Contract.AMBULANCE_NEED, mPatient.getAMBULANCE_need());
+        cv.put(Patients.Contract.AMBULANCE_RESPONSE, mPatient.getAMBULANCE_response());
         cv.put(Patients.Contract.EDD, mPatient.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, mPatient.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, mPatient.getFollow_up());
@@ -391,6 +411,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         //cv.put(Patients.Contract.CONFIRMED, mPatient.getConfirmed());
         //cv.put(Patients.Contract.DOB_ESTIMATED, mPatient.isDobEstimated());
         cv.put(Patients.Contract.LOCATION, mPatient.getLocation());
+        cv.put(Patients.Contract.VILLAGE, mPatient.getVillage());
         if(exists){
             context.getContentResolver().update(uri,cv,null,null);
         } else {
@@ -455,6 +476,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 
         if(object.getANC_visit()!= null){
         form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
+        form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_need());
+        form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_response());
         form.put(Patients.Contract.EDD, object.getEDD());
         form.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         form.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
@@ -465,6 +488,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
         form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         form.put(Patients.Contract.LOCATION, object.getLocation());
+        form.put(Patients.Contract.VILLAGE,object.getVillage());
         return form;
     }
 }
