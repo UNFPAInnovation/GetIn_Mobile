@@ -1,26 +1,6 @@
 
 package org.sana.android.activity;
 
-import org.sana.R;
-import org.sana.android.Constants;
-import org.sana.android.app.Locales;
-import org.sana.android.app.Preferences;
-import org.sana.android.content.DispatchResponseReceiver;
-import org.sana.android.content.Intents;
-import org.sana.android.content.Uris;
-import org.sana.android.content.core.PatientWrapper;
-import org.sana.android.db.ModelWrapper;
-import org.sana.android.fragment.PatientListFragment;
-import org.sana.android.fragment.PatientListFragment.OnPatientSelectedListener;
-import org.sana.android.provider.Encounters;
-import org.sana.android.provider.Patients;
-import org.sana.android.provider.Procedures;
-import org.sana.android.provider.Subjects;
-import org.sana.android.service.impl.DispatchService;
-import org.sana.android.util.SanaUtil;
-import org.sana.android.widget.ScrollCompleteListener;
-import org.sana.net.Response;
-
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -32,17 +12,30 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.widget.SearchView;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
+
+import org.sana.R;
+import org.sana.android.Constants;
+import org.sana.android.app.Locales;
+import org.sana.android.app.Preferences;
+import org.sana.android.content.Intents;
+import org.sana.android.content.Uris;
+import org.sana.android.fragment.PatientListFragment;
+import org.sana.android.fragment.PatientListFragment.OnPatientSelectedListener;
+import org.sana.android.provider.Patients;
+import org.sana.android.provider.Procedures;
+import org.sana.android.provider.Subjects;
+import org.sana.android.util.SanaUtil;
+import org.sana.android.widget.ScrollCompleteListener;
+import org.sana.net.Response;
 
 /** Activity for creating new and display existing patients. The resulting
  * patient selected or created, will be returned to the calling Activity.
@@ -64,6 +57,8 @@ public class PatientsList extends FragmentActivity implements
 
     // Fragments
     private PatientListFragment mFragmentPatientList;
+    //adapter
+    private PatientListFragment.PatientCursorAdapter mPatientCursorAdapter;
     private boolean mAdmin = true;
     protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -75,6 +70,8 @@ public class PatientsList extends FragmentActivity implements
         }
     };
     protected ProgressDialog mProgressDialog = null;
+    //search view to filter the mapped girls
+    private SearchView searchView;
 
     /** {@inheritDoc} */
     @Override
@@ -85,6 +82,25 @@ public class PatientsList extends FragmentActivity implements
         setContentView(R.layout.patient_list_activity);
         // Set the registration disabled by default
         findViewById(R.id.register).setEnabled(false);
+
+        /**
+         * implementing the search using the searchView
+         */
+        searchView = (SearchView) findViewById(R.id.patient_searchView);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+//                mPatientCursorAdapter.getFilter().filter(newText);
+                mFragmentPatientList.mAdapter.getFilter().filter(newText);
+                return false;
+            }
+        });
+
     }
 
     /** {@inheritDoc} */
@@ -123,6 +139,7 @@ public class PatientsList extends FragmentActivity implements
     /** {@inheritDoc} */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+
         /*
     	if(mAdmin)
     		getMenuInflater().inflate(R.menu.patients_list_menu_admin, menu);
