@@ -31,6 +31,8 @@ public class Patient extends Subject implements IPatient{
     public URI image;
     @Expose
     public String location;
+	@Expose
+	public String village;
     @Expose
     public String system_id;
 	@Expose
@@ -53,6 +55,10 @@ public class Patient extends Subject implements IPatient{
 	public String ANC_status;
 	@Expose
 	public Date ANC_visit;
+	@Expose
+	public String AMBULANCE_need;
+	@Expose
+	public String AMBULANCE_response;
 	@Expose
 	public String EDD;
 	@Expose
@@ -160,6 +166,17 @@ public class Patient extends Subject implements IPatient{
 		return location;
 	}
 
+	public void setLocation(String location){
+		this.location = location;
+	}
+	@Override
+	public String getVillage() {
+		return village;
+	}
+
+	public void setVillage(String village){
+		this.village = village;
+	}
 	@Override
 	public String getSystemId() {
 		return system_id;
@@ -168,9 +185,7 @@ public class Patient extends Subject implements IPatient{
 		this.system_id = system_id;
 	}
 
-	public void setLocation(String location){
-		this.location = location;
-	}
+
 
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getHolder_pNumber()
@@ -260,7 +275,25 @@ public class Patient extends Subject implements IPatient{
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getEDD()
+	 *
 	 */
+	@Override
+	public String getAMBULANCE_need() {
+		return AMBULANCE_need;
+	}
+
+	public void setAMBULANCE_need(String AMBULANCE_need) {
+		this.AMBULANCE_need = AMBULANCE_need;
+	}
+
+	@Override
+	public String getAMBULANCE_response() {
+		return AMBULANCE_response;
+	}
+
+	public void setAMBULANCE_response(String AMBULANCE_response) {
+		this.AMBULANCE_response = AMBULANCE_response;
+	}
 	@Override
 	public String getEDD() {
 		return EDD;
