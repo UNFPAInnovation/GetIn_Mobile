@@ -89,6 +89,14 @@ public interface IPatient extends ISubject{
 	/**
 	 * @return the pNumber
 	 */
+	public abstract String getAMBULANCE_need();
+	/**
+	 * @return the pNumber
+	 */
+	public abstract String getAMBULANCE_response();
+	/**
+	 * @return the pNumber
+	 */
 	public abstract String getEDD();
 	/**
 	 * @return the receive_sms
@@ -133,6 +141,8 @@ public interface IPatient extends ISubject{
      * @return
      */
 	public abstract String getLocation();
+
+	public abstract String getVillage();
 
     public abstract String getSystemId();
 
