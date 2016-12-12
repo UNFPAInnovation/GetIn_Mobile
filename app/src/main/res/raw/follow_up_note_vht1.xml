@@ -9,7 +9,7 @@
     <Element
         id="1z"
         type="TEXT"
-        question="GIRLS FOLlOW UP NOTES"></Element>
+        question="GIRLS FOLlOW UP NOTES"/>
     <Element
         id="1"
         concept="VHT MISSED APPOINTMENT STATUS"
@@ -38,7 +38,7 @@
         <Element
             id="2"
             type="TEXT"
-            question="RISK ASSESMENT"></Element>
+            question="RISK ASSESMENT"/>
             <Element
                 id="3a"
                 concept="MENSTRUAL FLOW"
@@ -76,7 +76,7 @@
     </Page>
         <Page>
         <ShowIf>
-                <or>
+
                     <and>
                         <Criteria type="EQUALS" id="3a" value="YES" />
                     </and>
@@ -89,11 +89,19 @@
                     <and>
                         <Criteria type="EQUALS" id="3d" value="YES" />
                     </and>
-                </or>
+
             </ShowIf>
             <Element type="TEXT" concept="HIGHRISK" id="4"
                 question="High Risk Patient. Please refer to Doctor. Call Ambulance Immediately"
                  />
+            <Element
+                id="4b"
+                concept="CALL AMBULANCE"
+                type="ACTION"
+                required="false"
+                question="Call Ambulance"
+                action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.URI_INTENT_SCHEME;end"
+            />
         </Page>
     <Page>
         <Element
