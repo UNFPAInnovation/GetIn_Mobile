@@ -140,12 +140,9 @@ public class SubjectsHelper extends TableHelper<Subject>{
 		Log.i(TAG, "onUpgrade()");
 		String sql = null;
 		if (newVersion > oldVersion){
-			if (oldVersion <= 3) {
-				sql = "DROP TABLE " + getTable() + ";";
-				sql += onCreate();
-			} else {
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.CONFIRMED + " BOOLEAN";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DOB + " BOOLEAN";
+			if (oldVersion == 2 && newVersion == 3) {
+                sql = "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_NEED + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE 	+ " TEXT;";
             }
 	    }
 		return sql;
