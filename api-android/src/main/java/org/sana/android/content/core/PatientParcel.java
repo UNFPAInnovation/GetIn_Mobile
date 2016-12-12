@@ -88,6 +88,8 @@ public class PatientParcel extends Patient implements Parcelable {
 			e.printStackTrace();
 			throw new IllegalArgumentException(e);
 		}
+
+		setAMBULANCE_need(in.readString());
 		setEDD(in.readString());
 		setreceive_sms(in.readString());
 		setfollow_up(in.readString());
@@ -103,6 +105,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		setConfirmed((in.readInt() == 1));
 		setDobEstimated((in.readInt() == 1));
         setLocation(in.readString());
+		setVillage(in.readString());
 	}
 
 	/**
@@ -128,6 +131,9 @@ public class PatientParcel extends Patient implements Parcelable {
 		setContraceptive_use(patient.getContraceptive_use());
 		setANC_status(patient.getANC_status());
 		setANC_visit(patient.getANC_visit());
+
+		setAMBULANCE_need(patient.getAMBULANCE_need());
+		setAMBULANCE_response(patient.getAMBULANCE_response());
 		setEDD(patient.getEDD());
 		setreceive_sms(patient.getReceive_sms());
 		setfollow_up(patient.getFollow_up());
@@ -143,6 +149,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		setConfirmed(patient.getConfirmed());
 		setDobEstimated(patient.isDobEstimated());
         setLocation(patient.getLocation());
+		setVillage(patient.getVillage());
 	}
 
 	public PatientParcel(){}
@@ -175,6 +182,9 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeString(getContraceptive_use());
 		dest.writeString(getANC_status());
 		dest.writeString(DateUtil.format(getANC_visit()));
+		dest.writeString(getAMBULANCE_need());
+		dest.writeString(getAMBULANCE_response());
+
 		dest.writeString(getEDD());
 		dest.writeString(getReceive_sms());
 		dest.writeString(getFollow_up());
@@ -190,6 +200,7 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeInt((getConfirmed())? 1: 0);
 		dest.writeInt((isDobEstimated())? 1: 0);
         dest.writeString(getLocation());
+		dest.writeString(getVillage());
 	}
 
 	public static final Parcelable.Creator<PatientParcel> CREATOR =
