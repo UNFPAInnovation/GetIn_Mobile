@@ -132,6 +132,16 @@ public final class Patients{
 		public static final String ANC_VISIT = "anc_visit";
 
 		/**
+		 * The patient's ANC_visit.
+		 */
+		public static final String AMBULANCE_NEED = "ambulance_status";
+
+		/**
+		 * The patient's ANC_visit.
+		 */
+		public static final String AMBULANCE_RESPONSE = "ambulance_response";
+
+		/**
 		 * The patient's EDD.
 		 */
 		public static final String EDD = "edd";
@@ -195,6 +205,11 @@ public final class Patients{
 
 		/** A location code for the patient */
 		public static final String LOCATION = "location";
+
+		/**
+		 * The patient's Village.
+		 */
+		public static final String VILLAGE= "village";
 
 		public static final String CONFIRMED = "confirmed";
 
