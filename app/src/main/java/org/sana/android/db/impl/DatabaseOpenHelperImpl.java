@@ -115,8 +115,8 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 
 			
 			for(TableHelper<?> helper:helpers){
-				if(oldVersion <= 2){
-					db.execSQL("DROP TABLE " + helper.getTable() + " IF EXISTS;");
+				if(oldVersion < 2){
+					db.execSQL("DROP TABLE " + helper.getTable());
 					db.execSQL(helper.onCreate());
 				} else {
 					String sql = helper.onUpgrade(oldVersion, newVersion);
