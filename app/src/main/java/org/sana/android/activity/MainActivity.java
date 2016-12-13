@@ -641,6 +641,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 break;
             case R.id.btn_main_view_ambulance_drivers:
                 intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
                 break;
            /* case R.id.btn_main_procedures:
