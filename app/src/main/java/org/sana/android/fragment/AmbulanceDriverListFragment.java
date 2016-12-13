@@ -251,7 +251,7 @@ public class AmbulanceDriverListFragment extends ListFragment implements
             TextView nameTextView = (TextView) view.findViewById(R.id.ambulance_driver_name);
             nameTextView.setText(displayName);
 
-            data.add(" "+displayName+"\n "+phoneNumber);
+            data.add(" "+displayName+" "+phoneNumber);
 //            data.add(phoneNumber);
             //create the phone number textview and set its text to the string from the database
             TextView phoneNumberTextView = (TextView) view.findViewById(R.id.ambulance_driver_phone_number);
@@ -346,9 +346,9 @@ public class AmbulanceDriverListFragment extends ListFragment implements
         }
         public String formatName(Cursor cursor){
             String givenName = cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.FIRST_NAME
-            ));
+                    ));
             String familyName = cursor.getString(cursor.getColumnIndex(AmbulanceDrivers.Contract.LAST_NAME
-            ));
+                    ));
             String displayName = StringUtil.formatPatientDisplayName(givenName,
                     familyName);
             return displayName;

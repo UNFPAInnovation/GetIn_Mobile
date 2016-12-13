@@ -101,25 +101,35 @@
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
+        <Button
+            android:id="@+id/btn_main_procedures"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:drawableLeft="@drawable/ic_menu_notifications"
+            android:text="View ambulance drivers"
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
 
 
     </LinearLayout>
 
 
-    <!--
-    <Button
-        android:id="@+id/btn_main_procedures"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:onClick="submit"
-        android:text="@string/button_main_select_procedure"
-        style="@style/Widget.Button.Large.Dark" />
 
-    <Button
-        android:id="@+id/btn_main_tasks"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/button_main_view_scheduled_tasks" />
-    -->
+    <!--<Button-->
+        <!--android:id="@+id/btn_main_procedures"-->
+        <!--android:layout_width="fill_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:onClick="submit"-->
+        <!--android:text="@string/button_main_select_procedure"-->
+        <!--style="@style/Widget.Button.Large.Dark" />-->
+    <!--
+        <Button
+            android:id="@+id/btn_main_tasks"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/button_main_view_scheduled_tasks" />
+        -->
 
 </LinearLayout>

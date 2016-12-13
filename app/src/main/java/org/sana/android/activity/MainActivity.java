@@ -618,9 +618,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         switch(v.getId()){
             case R.id.btn_main_select_patient:
                 intent = new Intent(Intent.ACTION_PICK);
-               intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
-               startActivityForResult(intent, PICK_PATIENT);
+                intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
+                startActivityForResult(intent, PICK_PATIENT);
 
+//                startService(intent);
+//                String uuid = UUID.randomUUID().toString();
+//                Log.v(TAG, " "+uuid);
                 break;
             case R.id.btn_main_transfers:
                 intent = new Intent(Intent.ACTION_VIEW);
@@ -639,21 +642,19 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
                 break;
-            case R.id.btn_main_view_ambulance_drivers:
+            case R.id.btn_main_procedures:
+//                intent = new Intent(Intent.ACTION_PICK);
+//                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
+//                startActivityForResult(intent, PICK_PROCEDURE);
                 intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
                 startActivity(intent);
                 break;
-           /* case R.id.btn_main_procedures:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_PROCEDURE);
-                break;*/
             case R.id.btn_main_tasks:
                 intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
-//                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_training_mode:
 
@@ -665,12 +666,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         .putExtra(Intents.EXTRA_SUBJECT, Uris.withAppendedUuid(Subjects.CONTENT_URI, subj))
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, RUN_PROCEDURE);
-
-                break;
-            case R.id.button_call_ambulance:
-
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
-                startActivity(intent);
 
                 break;
 
@@ -829,7 +824,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         values.put(Tasks.Contract.COMPLETED, now);
         values.put(EncounterTasks.Contract.ENCOUNTER, uuid);
         values.put(Tasks.Contract.MODIFIED, now);
-        int updated = getContentResolver().update(task, values, null, null);
+
         Bundle form = new Bundle();
         form.putString(Tasks.Contract.STATUS, status.toString());
         form.putString(Tasks.Contract.MODIFIED,now);
@@ -866,34 +861,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         return (Patient)PatientWrapper.get(this, uri);
     }
 
-    public void setEdd(Patient patient){
-      Date lmd =  patient.getLMD();
-
-
-        Calendar c3= Calendar.getInstance();
-        c3.setTime(new Date());
-        Date x1 = c3.getTime();
-        long day = x1.getTime() - lmd.getTime();
-
-        long days1 = day / (1000 * 60 * 60 * 24);
-        int age1 = (int) (days1);
-
-        int gestation_days = 280;
-
-        c3.setTime(lmd);
-        c3.add(Calendar.DATE, gestation_days);
-        // age.setText((age1));
-        Date edd1 = c3.getTime();
-
-        ContentValues val = new ContentValues();
-        val.put(Patients.Contract.EDD,sdf.format(edd1));
-
-        String uuid1 = mSubject.getLastPathSegment();
-        Uri uri = Uris.withAppendedUuid(Patients.CONTENT_URI,uuid1);
-        getContentResolver().update(
-              uri, val,null,null);
-    }
-
 
     public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer observer) {
         EncounterTask task = new EncounterTask();
@@ -908,7 +875,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         //String uuid = this.get
         String uuid1 = mSubject.getLastPathSegment();
         String uuid3 = mObserver.getLastPathSegment();
-
 
 
 
@@ -1105,7 +1071,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
+            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
            values.put(Tasks.Contract.UUID,uuid);
@@ -1116,7 +1082,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
             form.putString(Tasks.Contract.UUID,uuid);

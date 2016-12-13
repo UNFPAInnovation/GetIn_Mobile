@@ -265,7 +265,7 @@ public class DispatchService extends Service{
                 vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
                 vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
                 vals.put(Patients.Contract.GENDER, p.getGender());
-                vals.put(Patients.Contract.LOCATION, p.getLocation());
+                vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
                 vals.put(Patients.Contract.UUID, p.getUuid());
                 vals.put(Patients.Contract.PATIENT_ID, p.system_id);
                 vals.put(Patients.Contract.DOB, p.getDob().toString());
@@ -753,15 +753,22 @@ public class DispatchService extends Service{
                                         // Handle response
                                         // See examples above.
                                         bcastCode = createOrUpdateAmbulanceDrivers(adResponse.getMessage(), startId);
-
                                     }
 
                                 }catch (Exception e){
                                     Log.e(TAG, "........"+e.getMessage());
+
+                                    Log.w(TAG, "GET failed: " + uri
+                                            .toASCIIString());
+                                    Log.w(TAG,"...." + e.getMessage());
+                                    e.printStackTrace();
+                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                    bcastMessage = e.getMessage();
+                                    bcastCode = 400;
+
                                 }
 
-                                // Handle response
-                                // See examples above.
+
                                 break;
                         case Uris.PACKAGE_DIR:
                             Logf.D(TAG, "handleMessage(Message)",
@@ -1312,53 +1319,52 @@ public class DispatchService extends Service{
         return result;
     }
 
-    public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, int startId){
-        int size = (t != null)?t.size():0;
-        //return 404 not found code if the size is zero
-        if(size == 0){
-            return Response.Code.NOT_FOUND.code;
-        }
-
-        //containers for the instances that should be inserted or updated
-        List<ContentValues> insert = new ArrayList<ContentValues>();
-        List<ModelEntity> update = new ArrayList<>();
-
-        //iterate over the returned list
-        Iterator<AmbulanceDriver> iterator = t.iterator();
-        while(iterator.hasNext()){
-            AmbulanceDriver ambulanceDriver = iterator.next();
-            ContentValues contentValues = new ContentValues();
-            contentValues.put(AmbulanceDrivers.Contract.FIRST_NAME, ambulanceDriver.getFirstName());
-            contentValues.put(AmbulanceDrivers.Contract.LAST_NAME, ambulanceDriver.getLastname());
-            contentValues.put(AmbulanceDrivers.Contract.PHONE_NUMBER, ambulanceDriver.getPhoneNumber());
-            contentValues.put(AmbulanceDrivers.Contract.LOCATION, ambulanceDriver.getLocation());
-
-            // Don't add uuid initially
-            if(!exists(AmbulanceDrivers.CONTENT_URI, ambulanceDriver)){
-                contentValues.put(AmbulanceDrivers.Contract.UUID, ambulanceDriver.uuid);
-                insert.add(contentValues);
-            } else {
-                update.add(
-                        new ModelEntity(
-                                Uris.withAppendedUuid(AmbulanceDrivers.CONTENT_URI, ambulanceDriver.uuid),
-                                contentValues));
-            }
-        }
-        // Handle the insert(s)
-        int inserted = getContentResolver().bulkInsert(AmbulanceDrivers.CONTENT_URI,
-                toArray(insert));
-        Log.d(TAG, "....inserted=" + inserted);
-        // Handle the update(s)
-        int updated = 0;
-        for(ModelEntity me:update){
-            updated += getContentResolver().update(me.getUri(),
-                    me.getEntityValues(),null,null);
-        }
-        Log.d(TAG, "....updates=" + updated);
-        // Successful return a 200 code
-        return Response.Code.OK.code;
+public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, int startId){
+    int size = (t != null)?t.size():0;
+    //return 404 not found code if the size is zero
+    if(size == 0){
+        return Response.Code.NOT_FOUND.code;
     }
 
+    //containers for the instances that should be inserted or updated
+    List<ContentValues> insert = new ArrayList<ContentValues>();
+    List<ModelEntity> update = new ArrayList<>();
+
+    //iterate over the returned list
+    Iterator<AmbulanceDriver> iterator = t.iterator();
+    while(iterator.hasNext()){
+        AmbulanceDriver ambulanceDriver = iterator.next();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(AmbulanceDrivers.Contract.FIRST_NAME, ambulanceDriver.getFirstName());
+        contentValues.put(AmbulanceDrivers.Contract.LAST_NAME, ambulanceDriver.getLastname());
+        contentValues.put(AmbulanceDrivers.Contract.PHONE_NUMBER, ambulanceDriver.getPhoneNumber());
+        contentValues.put(AmbulanceDrivers.Contract.LOCATION, ambulanceDriver.getLocation());
+
+        // Don't add uuid initially
+        if(!exists(AmbulanceDrivers.CONTENT_URI, ambulanceDriver)){
+            contentValues.put(AmbulanceDrivers.Contract.UUID, ambulanceDriver.uuid);
+            insert.add(contentValues);
+        } else {
+            update.add(
+                    new ModelEntity(
+                            Uris.withAppendedUuid(AmbulanceDrivers.CONTENT_URI, ambulanceDriver.uuid),
+                            contentValues));
+        }
+    }
+    // Handle the insert(s)
+    int inserted = getContentResolver().bulkInsert(AmbulanceDrivers.CONTENT_URI,
+            toArray(insert));
+    Log.d(TAG, "....inserted=" + inserted);
+    // Handle the update(s)
+    int updated = 0;
+    for(ModelEntity me:update){
+        updated += getContentResolver().update(me.getUri(),
+                me.getEntityValues(),null,null);
+    }
+    Log.d(TAG, "....updates=" + updated);
+    // Successful return a 200 code
+    return Response.Code.OK.code;
+}
     public final int createOrUpdateSubjects(Collection<Patient> t, int startId) {
         Log.i(TAG, "createOrUpdatePatients(Collection<Patient>,int)");
         int size = (t != null)?t.size():0;
@@ -1383,7 +1389,7 @@ public class DispatchService extends Service{
             vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
             vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
             vals.put(Patients.Contract.GENDER, p.getGender());
-            vals.put(Patients.Contract.LOCATION, p.getLocation());
+            vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
             vals.put(Patients.Contract.PATIENT_ID, p.system_id);
             vals.put(Patients.Contract.DOB, DateUtil.format(p.getDob()));
             ////////////////////////////////////////////////////////////
