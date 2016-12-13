@@ -1,7 +1,7 @@
 <Procedure
-    title="mapping_form:"
+    title="mapping_form"
     author="Martin"
-    uuid="ece3937b-a1ec-4ef1-ada7-c6dfd119ba6c"
+    uuid="9b4ca27f-83ea-4b23-884b-5dffa97eb429"
     version="1.0"
     locale="en"
     class="org.sana.core.Subject">
@@ -97,7 +97,7 @@
         />
             <Element id="9b" type="ENTRY"
                 concept="PATIENT VILLAGE"
-                question="Enter the gir's Village"
+                question="Enter the girl's Village"
                 required="true"
                 answer=""
                  />
@@ -170,17 +170,18 @@
         <Element
             id="17"
             type="ENTRY"
+            concept="MIDWIFE RISK IDENTIFIED"
+            question="Any RISK identified?"
+            answer=""
+        />
+        <Element
+            id="18"
+            type="ENTRY"
             concept=" MIDWIFE ACTION TAKEN"
             question="Action taken"
             answer=""
             />
-        <Element
-            id="18"
-            type="ENTRY"
-            concept="MIDWIFE RISK IDENTIFIED"
-            question="Any RISK identified?"
-            answer=""
-            />
+
        <!-- <Element
             id="21"
             type="DATE"
