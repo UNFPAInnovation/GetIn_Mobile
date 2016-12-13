@@ -8,16 +8,40 @@
    >
 <Page>
     <Element
-        id="1"
+        id="1a"
         concept="SUB HEADING"
         type="TEXT"
         question="GIRLS APPOINTMENT NOTES"
     />
     <Element
+    id="1"
+    concept="MIDWIFE MISSED APPOINTMENT STATUS"
+    type="RADIO"
+    required="true"
+    question="Has the Girl Missed ANC?"
+    answer="Yes"
+    choices="Yes;No"/>
+</Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="1" value="Yes" />
+        </ShowIf>
+
+        <Element
+            id="2"
+            concept="MIDWIFE MISSING REASON"
+            type="ENTRY"
+            required="true"
+            question="Reasons for missing ANC"
+            answer=""
+        />
+      </Page>
+    <Page>
+    <Element
         id="2"
         type="ENTRY"
-        concept="ACTION TAKEN"
-        question="Action taken"
+        concept="RISK IDENTIFIED"
+        question="Any Risk Identified?"
         answer=""
     />
     <Element
@@ -25,22 +49,30 @@
         concept="AMBULANCE NEED"
         type="RADIO"
         choices="Yes;No"
-        question="Have you ever needed an Ambulance before "
+        question="Have you ever needed an Ambulance before? "
         answer=""
     />
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="3" value="Yes"/>
+        </ShowIf>
     <Element
         id="4"
         type="RADIO"
         choices="Yes;No"
         concept="AMBULANCE RESPONSE"
-        question="Did you the Ambulance service"
+        question="Did you get the Ambulance service"
         answer=""
     />
+        </Page>
+    <Page>
     <Element
         id="5"
         type="ENTRY"
-        concept="RISK IDENTIFIED"
-        question="Any RISK identified?"
+        concept="ACTION TAKEN"
+        question="Action Taken"
         answer=""
     />
     <Element
