@@ -667,13 +667,13 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, RUN_PROCEDURE);
 
                 break;
-            case R.id.button_call_ambulance:
+           /* case R.id.button_call_ambulance:
 
                 intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
                 startActivity(intent);
 
                 break;
-
+*/
 
             /*case R.id.btn_main_unregistered_subject:
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
