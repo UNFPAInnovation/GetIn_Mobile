@@ -25,7 +25,7 @@
         </ShowIf>
 
         <Element
-            id="3"
+            id="2"
             concept="VHT MISSING REASON"
             type="ENTRY"
             required="true"
@@ -36,7 +36,7 @@
    </Page>
     <Page>
         <Element
-            id="2"
+            id="3"
             type="TEXT"
             question="RISK ASSESMENT"/>
             <Element
@@ -79,28 +79,24 @@
 
                     <and>
                         <Criteria type="EQUALS" id="3a" value="YES" />
-                    </and>
-                    <and>
-                        <Criteria type="EQUALS" id="3b" value="YES" />
-                    </and>
-                    <and>
-                        <Criteria type="EQUALS" id="3c" value="YES" />
-                    </and>
-                    <and>
-                        <Criteria type="EQUALS" id="3d" value="YES" />
-                    </and>
 
+                        <Criteria type="EQUALS" id="3b" value="YES" />
+
+                        <Criteria type="EQUALS" id="3c" value="YES" />
+
+                        <Criteria type="EQUALS" id="3d" value="YES" />
+                 </and>
             </ShowIf>
             <Element type="TEXT" concept="HIGHRISK" id="4"
-                question="High Risk Patient. Please refer to Doctor. Call Ambulance Immediately"
+                question="High Risk Patient. Please refer to Midwife. Call Ambulance Immediately"
                  />
+
             <Element
                 id="4b"
                 concept="CALL AMBULANCE"
-                type="ACTION"
-                required="false"
-                question="Call Ambulance"
-                action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.URI_INTENT_SCHEME;end"
+                type="TEXT"
+                question="Call Ambulance?"
+                action="intent:// org.sana.android/.activity.AmbulanceDriverListActivity;action=org.sana.net.RESPONSE"
             />
         </Page>
     <Page>
@@ -123,7 +119,7 @@
             type="RADIO"
             concept="VHT FOLLOW UP MEANS"
             required="true"
-            question="FollowUp as a result of?"
+            question="How was this FollowUp done ?"
             choices="Call; Personal Visit"
             answer="Personal Visit"/>
     </Page>
