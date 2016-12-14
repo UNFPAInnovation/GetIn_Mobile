@@ -160,25 +160,17 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         startActivity(intent);
                         break;
                     case PICK_ENCOUNTER_TASK:
-                        //Uri task = data.getParcelableExtra(Intents.EXTRA_TASK);
-                        int flags = data.getFlags();
-                        uri = Uri.EMPTY;
-                        if(data.hasCategory(Intents.CATEGORY_TASK_COMPLETE)){
-                            Log.i(TAG, "....Task complete: "+ mTask);
-                            uri = intent.getParcelableExtra(Intents.EXTRA_ENCOUNTER);
-                            intent.setClass(this, ObservationList.class)
-                                    .setData(uri)
-                                    .putExtras(data);
-                            startActivity(intent);
-                        } else {
-                            Log.i(TAG, "....Task in progress: "+ mTask);
-                            //markTaskStatusInProgress(mTask);
-                            uri = intent.getParcelableExtra(Intents.EXTRA_PROCEDURE);
-                            intent.setAction(Intent.ACTION_VIEW)
-                                    .setData(uri)
-                                    .putExtras(data);
-                            startActivityForResult(intent, EXECUTE_TASK);
-                        }
+                        // Implement new behavior here
+
+                        // Patient(subject) is stored in the task
+                        Uri taskUri = data.getData();
+                        // Get patient Uri - Task subject column = patient uuid
+
+                        // Create new Intent to launch PatientView
+
+                        // Set new Intent data Uri to the Patient uri
+
+                        // Start Activity
                         break;
                     case EXECUTE_TASK:
                         dump();

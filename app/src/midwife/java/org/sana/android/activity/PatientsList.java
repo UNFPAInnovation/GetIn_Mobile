@@ -170,14 +170,19 @@ public class PatientsList extends FragmentActivity implements
     public void onPatientSelected(Uri uri) {
         Log.i(TAG, "onPatientSelected(long)");
         // A patient was selected so return to caller activity.
-        //Intent data = getIntent();
+
         Log.d(TAG,"...patient selected: " + uri);
+        // Show dialog, etc
+
+        // Have dialog buttons call default behavior or edit behavior
+        // Default behavior - follow up note, set
         Intent data = new Intent();
         data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
         //data.putExtra(EXTRA_PATIENT_ID, patientId);
         data.putExtra(Intents.EXTRA_SUBJECT, uri);
         setResult(RESULT_OK, data);
         finish();
+        // Implement edit beavior - set flag, etc.
     }
     @Override
     public void onStart(){

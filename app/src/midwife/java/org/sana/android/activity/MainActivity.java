@@ -140,10 +140,16 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         mEncounter = Uri.EMPTY;
                         break;
                     case PICK_PATIENT:
+                        // Fork behavior here depending on whether edting patient
+                        // or executing Procedure for Encounter
+
+                        // Add conditional
+                        // Default behavior
                         intent.setAction(Intent.ACTION_PICK)
                                 .setData(Procedures.CONTENT_URI)
                                 .putExtras(data);
                         startActivityForResult(intent, PICK_PROCEDURE);
+                        // new behavior - start PatientRunner
                         break;
                     case PICK_PROCEDURE:
                         intent.setAction(Intents.ACTION_RUN_PROCEDURE)
