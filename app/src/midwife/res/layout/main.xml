@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/scrollView"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
@@ -81,7 +86,7 @@
 
 
         <Button
-            android:id="@+id/button_call_ambulance"
+            android:id="@+id/btn_main_view_ambulance_drivers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
@@ -112,3 +117,4 @@
     -->
 
 </LinearLayout>
+</ScrollView>
