@@ -96,7 +96,7 @@
                 concept="CALL AMBULANCE"
                 type="TEXT"
                 question="Call Ambulance?"
-                action="intent:// org.sana.android/.activity.AmbulanceDriverListActivity;action=org.sana.net.RESPONSE"
+                action="intent:#Intent;component=org.sana.android/.activity.AmbulanceDriverListActivity;action=org.sana.net.RESPONSE;end"
             />
         </Page>
     <Page>
