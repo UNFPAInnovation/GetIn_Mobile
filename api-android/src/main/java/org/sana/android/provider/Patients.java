@@ -206,6 +206,14 @@ public final class Patients{
 		/** A location code for the patient */
 		public static final String LOCATION = "location";
 
+		public static final String DISTRICT= "district";
+
+		public static final String COUNTY= "county";
+
+		public static final String SUBCOUNTY= "subcounty";
+
+		public static final String PARISH= "parish";
+
 		/**
 		 * The patient's Village.
 		 */
