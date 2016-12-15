@@ -32,6 +32,14 @@ public class Patient extends Subject implements IPatient{
     @Expose
     public String location;
 	@Expose
+	public String district;
+	@Expose
+	public String county;
+	@Expose
+	public String subcounty;
+	@Expose
+	public String parish;
+	@Expose
 	public String village;
     @Expose
     public String system_id;
@@ -168,6 +176,38 @@ public class Patient extends Subject implements IPatient{
 
 	public void setLocation(String location){
 		this.location = location;
+	}
+	@Override
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district){
+		this.district = district;
+	}
+	@Override
+	public String getCounty() {
+		return county;
+	}
+
+	public void setCounty(String county){
+		this.county = county;
+	}
+	@Override
+	public String getSubCounty() {
+		return subcounty;
+	}
+
+	public void setSubCounty(String subcounty){
+		this.subcounty = subcounty;
+	}
+	@Override
+	public String getParish() {
+		return parish;
+	}
+
+	public void setParish(String parish){
+		this.parish = parish;
 	}
 	@Override
 	public String getVillage() {

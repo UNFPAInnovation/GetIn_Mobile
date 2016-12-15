@@ -40,6 +40,7 @@ public class Observer extends Model implements IObserver{
 	private String username;
 	private String password;
 	private String role;
+	private String phone_number;
 	
 	/** Default Constructor */
 	public Observer(){}
@@ -103,6 +104,19 @@ public class Observer extends Model implements IObserver{
 	 */
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	public String getPhoneNumber() {
+		return phone_number;
+	}
+
+	/**
+	 * Sets the role for an instance of this class.
+	 *
+	 * @param phone_number the role to set
+	 */
+	public void setPhoneNumber(String phone_number) {
+		this.phone_number = phone_number;
 	}
 	
 }
