@@ -114,6 +114,10 @@ public class SubjectsHelper extends TableHelper<Subject>{
                 + Contract.STATE 			+ " INTEGER DEFAULT '-1',"
                 + Contract.DOB 				+ " DATE, "
                 + Contract.LOCATION			+ " TEXT,"
+				+ Contract.DISTRICT			+ " TEXT,"
+				+ Contract.COUNTY			+ " TEXT,"
+				+ Contract.SUBCOUNTY		+ " TEXT,"
+				+ Contract.PARISH			+ " TEXT,"
 				+ Contract.VILLAGE			+ " TEXT,"
                 + Contract.ADDRESS_ONE 		+ " TEXT,"
                 + Contract.ADDRESS_TWO 		+ " TEXT,"
@@ -145,6 +149,10 @@ public class SubjectsHelper extends TableHelper<Subject>{
                 sql = "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_NEED + " TEXT;";
                 sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE 	+ " TEXT;";
 				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.VILLAGE 	+ " TEXT;";
+				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DISTRICT 	+ " TEXT;";
+				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.COUNTY 	+ " TEXT;";
+				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY 	+ " TEXT;";
+				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH 	+ " TEXT;";
             }
 	    }
 		return sql;

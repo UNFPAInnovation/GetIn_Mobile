@@ -90,6 +90,7 @@ public class ObserversHelper extends TableHelper<Observer>{
 		+ Contract.PASSWORD + " TEXT,"
 		+ Contract.CONTACT1 + " TEXT,"
 		+ Contract.CONTACT2 + " TEXT,"
+				+ Contract.PHONE_NUMBER + " TEXT,"
 		+ Contract.ROLE + " TEXT"
         + ");";
 		
