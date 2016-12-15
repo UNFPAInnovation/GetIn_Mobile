@@ -217,6 +217,23 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         return getStringField(Patients.Contract.LOCATION);
     }
     @Override
+    public String getDistrict() {
+        return getStringField(Patients.Contract.DISTRICT);
+    }
+    @Override
+    public String getCounty() {
+        return getStringField(Patients.Contract.COUNTY);
+    }
+
+    @Override
+    public String getSubCounty() {
+        return getStringField(Patients.Contract.SUBCOUNTY);
+    }
+    @Override
+    public String getParish() {
+        return getStringField(Patients.Contract.PARISH);
+    }
+    @Override
     public String getVillage() {
         return getStringField(Patients.Contract.VILLAGE);
     }
@@ -256,7 +273,10 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         obj.setBlurred_vision(getBlurred_vision());
         obj.setImage(getImage());
         obj.setLocation(getLocation());
-        obj.setVillage(getVillage());
+        obj.setDistrict(getDistrict());
+        obj.setCounty(getCounty());
+        obj.setSubCounty(getSubCounty());
+        obj.setParish(getParish());
         obj.setVillage(getVillage());
         obj.setSystemId(getSystemId());
         //obj.setDobEstimated(getDobEstimated());
@@ -411,6 +431,10 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         //cv.put(Patients.Contract.CONFIRMED, mPatient.getConfirmed());
         //cv.put(Patients.Contract.DOB_ESTIMATED, mPatient.isDobEstimated());
         cv.put(Patients.Contract.LOCATION, mPatient.getLocation());
+        cv.put(Patients.Contract.DISTRICT, mPatient.getDistrict());
+        cv.put(Patients.Contract.COUNTY, mPatient.getCounty());
+        cv.put(Patients.Contract.SUBCOUNTY, mPatient.getSubCounty());
+        cv.put(Patients.Contract.PARISH, mPatient.getParish());
         cv.put(Patients.Contract.VILLAGE, mPatient.getVillage());
         if(exists){
             context.getContentResolver().update(uri,cv,null,null);
@@ -442,6 +466,8 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 
         if (object.getANC_visit()!=null){
         cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
+        cv.put(Patients.Contract.AMBULANCE_NEED, object.getAMBULANCE_need());
+        cv.put(Patients.Contract.AMBULANCE_RESPONSE, object.getAMBULANCE_response());
         cv.put(Patients.Contract.EDD, object.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
@@ -453,6 +479,11 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         cv.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         if(object.getLocation() != null)
             cv.put(Patients.Contract.LOCATION, object.getLocation());
+        cv.put(Patients.Contract.DISTRICT, object.getDistrict());
+        cv.put(Patients.Contract.COUNTY, object.getCounty());
+        cv.put(Patients.Contract.SUBCOUNTY, object.getSubCounty());
+        cv.put(Patients.Contract.PARISH, object.getParish());
+        cv.put(Patients.Contract.VILLAGE, object.getVillage());
         return cv;
     }
 
@@ -488,6 +519,10 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
         form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         form.put(Patients.Contract.LOCATION, object.getLocation());
+        form.put(Patients.Contract.DISTRICT, object.getDistrict());
+        form.put(Patients.Contract.COUNTY, object.getCounty());
+        form.put(Patients.Contract.SUBCOUNTY, object.getSubCounty());
+        form.put(Patients.Contract.PARISH, object.getParish());
         form.put(Patients.Contract.VILLAGE,object.getVillage());
         return form;
     }

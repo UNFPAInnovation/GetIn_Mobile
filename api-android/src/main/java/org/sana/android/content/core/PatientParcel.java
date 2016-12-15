@@ -105,6 +105,10 @@ public class PatientParcel extends Patient implements Parcelable {
 		setConfirmed((in.readInt() == 1));
 		setDobEstimated((in.readInt() == 1));
         setLocation(in.readString());
+		setDistrict(in.readString());
+		setCounty(in.readString());
+		setSubCounty(in.readString());
+		setParish(in.readString());
 		setVillage(in.readString());
 	}
 
@@ -149,6 +153,10 @@ public class PatientParcel extends Patient implements Parcelable {
 		setConfirmed(patient.getConfirmed());
 		setDobEstimated(patient.isDobEstimated());
         setLocation(patient.getLocation());
+		setDistrict(patient.getDistrict());
+		setCounty(patient.getCounty());
+		setSubCounty(patient.getSubCounty());
+		setParish(patient.getParish());
 		setVillage(patient.getVillage());
 	}
 
@@ -200,6 +208,11 @@ public class PatientParcel extends Patient implements Parcelable {
 		dest.writeInt((getConfirmed())? 1: 0);
 		dest.writeInt((isDobEstimated())? 1: 0);
         dest.writeString(getLocation());
+		dest.writeString(getLocation());
+		dest.writeString(getDistrict());
+		dest.writeString(getCounty());
+		dest.writeString(getSubCounty());
+		dest.writeString(getParish());
 		dest.writeString(getVillage());
 	}
 

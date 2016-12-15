@@ -74,6 +74,11 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		return getStringField(Observers.Contract.ROLE);
 	}
 
+	@Override
+	public String getPhoneNumber() {
+		return getStringField(Observers.Contract.PHONE_NUMBER);
+	}
+
 	/* (non-Javadoc)
 	 * @see org.sana.android.db.ModelWrapper#getObject()
 	 */
@@ -85,6 +90,7 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		object.setUsername(getUsername());
 		object.setPassword(getPassword());
 		object.setRole(getRole());
+		object.setPhoneNumber(getPhoneNumber());
 		object.setUuid(getUuid());
 		object.setCreated(getCreated());
 		object.setModified(getModified());
