@@ -1,6 +1,7 @@
 package org.sana.android.activity;
 
 import android.content.ComponentName;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -165,12 +166,17 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         // Patient(subject) is stored in the task
                         Uri taskUri = data.getData();
                         // Get patient Uri - Task subject column = patient uuid
-
+                      //  mTask = taskUri;
+                        Uri Patient_uri = Uris.withAppendedUuid(taskUri,Tasks.Contract.SUBJECT);
                         // Create new Intent to launch PatientView
+                        Intent intent1 = new Intent(this, PatientViewActivity.class);
+
 
                         // Set new Intent data Uri to the Patient uri
-
+                        intent1.setData(Patient_uri);
                         // Start Activity
+                     //   startActivityForResult(intent1);
+                        startActivity(intent1);
                         break;
                     case EXECUTE_TASK:
                         dump();
