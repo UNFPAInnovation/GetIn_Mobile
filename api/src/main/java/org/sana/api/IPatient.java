@@ -142,6 +142,14 @@ public interface IPatient extends ISubject{
      */
 	public abstract String getLocation();
 
+	public abstract String getDistrict();
+
+	public abstract String getCounty();
+
+	public abstract String getSubCounty();
+
+	public abstract String getParish();
+
 	public abstract String getVillage();
 
     public abstract String getSystemId();

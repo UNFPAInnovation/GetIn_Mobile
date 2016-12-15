@@ -55,4 +55,6 @@ public interface IObserver extends IModel{
 	 * @return the role
 	 */
 	public String getRole();
+
+	public String getPhoneNumber();
 }
