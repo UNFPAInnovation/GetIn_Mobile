@@ -21,6 +21,7 @@ public class PatientInfo implements Parcelable {
 	private String patientLastName = "";
 	private String patientGender = "";
 	private Date patientBirthdate = new Date();
+	private String patientVillage = "";
 	
 	/**
 	 * Default Constructor
@@ -56,6 +57,8 @@ public class PatientInfo implements Parcelable {
 			return Integer.toString(patientBirthdate.getMonth());
 		else if ("patientBirthdateDay".equals(id) && patientBirthdate != null)
 			return Integer.toString(patientBirthdate.getDay());
+		else if ("patientVillage".equals(id) && patientVillage != null)
+			return patientVillage;
 		return "";
 	}
 	
@@ -138,6 +141,13 @@ public class PatientInfo implements Parcelable {
 	public void setPatientLastName(String patientLastName) {
 		this.patientLastName = patientLastName;
 	}
+	/**
+	 * Updates the family name.
+	 * @param patientVillage the new value.
+	 */
+	public void setPatientVillage(String patientVillage) {
+		this.patientVillage = patientVillage;
+	}
 	
 	/**
 	 * Gets the birthdate.
@@ -189,6 +199,7 @@ public class PatientInfo implements Parcelable {
 			patientLastName = p.readString();
 			patientGender = p.readString();
 			patientBirthdate = new Date(p.readString());
+			patientVillage = p.readString();
 		} catch (Exception e) {
 			Log.e(TAG, "While reading PatientInfo from Parcel, got exception: " 
 					+ e.toString());
@@ -206,6 +217,7 @@ public class PatientInfo implements Parcelable {
 		dest.writeString(patientLastName);
 		dest.writeString(patientGender);
 		dest.writeString(patientBirthdate.toString());
+		dest.writeString(patientVillage);
 	}
 	
 }
