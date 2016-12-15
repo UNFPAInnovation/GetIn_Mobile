@@ -313,6 +313,22 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
                 mPatient.setLocation(val);
             }
+            if(field.compareToIgnoreCase(Patients.Contract.DISTRICT) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.DISTRICT + "'=" + val);
+                mPatient.setLocation(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.COUNTY) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.COUNTY + "'=" + val);
+                mPatient.setLocation(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.SUBCOUNTY) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.SUBCOUNTY + "'=" + val);
+                mPatient.setLocation(val);
+            }
+            if(field.compareToIgnoreCase(Patients.Contract.PARISH) == 0) {
+                Log.d(TAG, "\tsetting '" + Patients.Contract.PARISH + "'=" + val);
+                mPatient.setLocation(val);
+            }
             if(field.compareToIgnoreCase(Patients.Contract.VILLAGE) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.VILLAGE + "'=" + val);
                 mPatient.setVillage(val);
@@ -381,6 +397,10 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 mPatient.setSwollen_feet("");
                 mPatient.setFever("");
                 mPatient.setLocation("");
+                mPatient.setDistrict("");
+                mPatient.setCounty("");
+                mPatient.setSubCounty("");
+                mPatient.setParish("");
                 mPatient.setVillage("");
                 uSubject = writeObject(mPatient, 0);
 
@@ -583,6 +603,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
             pi.setPatientIdentifier(patient.getSystemId());
             pi.setPatientGender(patient.getGender());
             pi.setPatientLastName(patient.getFamily_name());
+            pi.setPatientVillage(patient.getVillage());
         }
         mProcedure.setPatientInfo(pi);
     }
