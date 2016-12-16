@@ -82,11 +82,8 @@ public class PatientViewActivity extends MainActivity {
 
         c2.setTime(lmd);
         c2.add(Calendar.DATE, gestation_days);
-        age.setText((age1));
+        age.setText(String.valueOf(age1));
         Date edd1 = c2.getTime();
-
-
-        age.setText(age1);
         edd.setText(sdf.format(edd1));
     }
 
