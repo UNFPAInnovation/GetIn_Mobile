@@ -113,7 +113,7 @@
                 </ShowIf>
                 <Element
                     id="10b"
-                    concept="KANUNGU TC"
+                    concept="PARISH"
                     type="SELECT"
                     question="Pick Girl's Parish"
                     choices="Eastern_Ward;Northern_Ward;Southern_Ward;Western_Ward"
