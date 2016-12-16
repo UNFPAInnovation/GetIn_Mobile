@@ -93,6 +93,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     public static final int VIEW_ENCOUNTER = 7;
     public static final int SETTINGS = 8;
     public static final int EXECUTE_TASK = 9;
+    public static final int VIEW_PATIENT = 10;
 //    public static final int VIEW_ASSIGNED_TASK = 10;
     private Runner<Intent,Intent> runner;
 
@@ -148,10 +149,26 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         startActivityForResult(intent, PICK_PROCEDURE);
                         break;
                     case PICK_PROCEDURE:
-                        intent.setAction(Intents.ACTION_RUN_PROCEDURE)
-                                .setData(data.getData())
-                                .putExtras(data);
-                        startActivityForResult(intent, RUN_PROCEDURE);
+                        Uri procedureUri = data.getData();
+                        String uuid = ModelWrapper.getUuid(procedureUri, getContentResolver());
+                        String mappingUuid = getString(R.string.cfg_mapping_form);
+                        if(uuid.compareToIgnoreCase(mappingUuid) == 0){
+                            intent = new Intent(Intent.ACTION_EDIT, mSubject);
+                            //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                            //intent.setDataAndType(mSubject, Subjects.CONTENT_TYPE)
+                            intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                            getString(R.string.procs_subject_short_form1)))
+                                    .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
+                                            .mapping_form_midwife)
+                                    .putExtra(Intents.EXTRA_SUBJECT, mSubject)
+                                    .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                            startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                        } else {
+                            intent.setAction(Intents.ACTION_RUN_PROCEDURE)
+                                    .setData(data.getData())
+                                    .putExtras(data);
+                            startActivityForResult(intent, RUN_PROCEDURE);
+                        }
                         break;
                     case PICK_ENCOUNTER:
                         //intent.setAction(Intent.ACTION_VIEW)
@@ -167,7 +184,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         // Patient(subject) is stored in the task
                         Uri taskUri = data.getData();
                         // Get patient Uri - Task subject column = patient uuid
-                      //  mTask = taskUri;
+                        mTask = Uri.EMPTY;
                         final String[] projection = new String[]{
                             Tasks.Contract.SUBJECT
                         };
@@ -184,13 +201,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
                             // Create new Intent to launch PatientView
                             Intent intent1 = new Intent(this, PatientViewActivity.class);
-
+                            onSaveAppState(intent1);
 
                             // Set new Intent data Uri to the Patient uri
                             intent1.setData(Patient_uri);
                             // Start Activity
-                            //   startActivityForResult(intent1);
-                            startActivity(intent1);
+                            startActivityForResult(intent1, VIEW_PATIENT);
                         } catch (Exception e){
 
                         } finally {
@@ -254,7 +270,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             }
                         }
                         break;
-
+                    case VIEW_PATIENT:
+                        onPickEncounterTask();
+                        break;
 //                    case VIEW_ASSIGNED_TASK:
 //                        //Uri task = data.getParcelableExtra(Intents.EXTRA_TASK);
 //                        int flags1 = data.getFlags();
@@ -671,7 +689,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
                 onSaveAppState(intent);
                 startActivityForResult(intent, PICK_ENCOUNTER_TASK);
-//                Toast.makeText(MainActivity.this, "testing", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btn_training_mode:
 
@@ -1122,8 +1139,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
-           values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
+           values.put(Tasks.Contract.SUBJECT, uuid3.toString());
+            values.put(Tasks.Contract.PROCEDURE, getString(R.string.cfg_midwife_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
            values.put(Tasks.Contract.UUID,uuid);
@@ -1182,5 +1199,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                     default:
                 }
         }
+    }
+
+    public void onPickEncounterTask(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
+        onSaveAppState(intent);
+        startActivityForResult(intent, PICK_ENCOUNTER_TASK);
     }
 }
