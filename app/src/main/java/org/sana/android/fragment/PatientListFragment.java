@@ -524,4 +524,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         if(mScrollListener != null)
             mScrollListener.onScrollComplete();
     }
+
+    public void filter(String constraint){
+        mAdapter.getFilter().filter(constraint);
+    }
 }
