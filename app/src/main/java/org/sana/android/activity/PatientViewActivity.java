@@ -34,7 +34,7 @@ import java.util.UUID;
  * Created by MainBoardroom on 11/17/2016.
  */
 public class PatientViewActivity extends MainActivity {
-    TextView age, trimester, mapdate, edd;
+    TextView age, trimester5, mapdate, edd,village, family_name, last_name;
     Button back;
     // Replace with date only format - do not include time.
     static final SimpleDateFormat sdf = new SimpleDateFormat(IModel.DATE_FORMAT,
@@ -59,9 +59,12 @@ public class PatientViewActivity extends MainActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.girl_details);
         age = (TextView) findViewById(R.id.girlDetail_age);
-        trimester = (TextView) findViewById(R.id.girlDetail_trimester);
+        trimester5 = (TextView) findViewById(R.id.girlDetail_trimester);
         mapdate = (TextView) findViewById(R.id.girlDetail_mapping_date);
         edd = (TextView) findViewById(R.id.girlDetail_edd);
+        last_name = (TextView) findViewById(R.id.girlDetail_last_name);
+        family_name = (TextView) findViewById(R.id.girlDetail_family_name);
+        village = (TextView) findViewById(R.id.girlDetail_village);
         back = (Button) findViewById(R.id.btn_exit1);
         // Initialize other Views
         // Exit button
@@ -70,26 +73,59 @@ public class PatientViewActivity extends MainActivity {
         String uuid = mSubject.getLastPathSegment();
         Patient patient=  getPatient(mSubject);
 
-        patient.getDob();
+       Date dob =  patient.getDob();
         Date lmd = patient.getLMD();
-        String p3 = patient.getUuid();
+        String familyName = patient.getFamily_name();
+        String lastName = patient.getGiven_name();
+        String Village = patient.getVillage();
+       // String p3 = patient.getUuid();
         Date p4 = patient.getCreated();
 
+
+//calculate the age
         Calendar c2 = Calendar.getInstance();
         c2.setTime(new Date());
         Date x = c2.getTime();
-        long days = x.getTime() - lmd.getTime();
+        long days = x.getTime() - dob.getTime();
 
         long days1 = days / (1000 * 60 * 60 * 24);
         int age1 = (int) (days1);
+
+        // Calculate trimester
+        Calendar c3 = Calendar.getInstance();
+        c3.setTime(new Date());
+        Date x1 = c3.getTime();
+        long trimester2 = x1.getTime() - lmd.getTime();
+
+        long trimester1 = trimester2 / (1000 * 60 * 60 * 24);
+        int trimester = (int) (trimester2);
+        int trim ;
+        if (trimester <84){
+             trim = 1;
+        }
+        else if (84<trimester &&trimester<= 168){
+             trim = 2;
+        }
+     else {
+            trim =3;
+        }
+
+        // calculate EDD
 
         int gestation_days = 280;
 
         c2.setTime(lmd);
         c2.add(Calendar.DATE, gestation_days);
-        age.setText(String.valueOf(age1));
         Date edd1 = c2.getTime();
         // Show date only - do not include time
+
+        //setTextFields
+        age.setText(String.valueOf(age1));
+        last_name.setText(lastName);
+        family_name.setText(familyName);
+       village.setText(Village);
+        trimester5.setText(String.valueOf(trim));
+        mapdate.setText(sdf.format(p4));
         edd.setText(sdf.format(edd1));
 
         // Are there any other mapping details to load?
