@@ -79,15 +79,17 @@
                 <category android:name="android.intent.category.DEFAULT"/>
 
                 <data android:mimeType="vnd.android.cursor.dir/org.sana.patient"/>
+                <data android:mimeType="vnd.android.cursor.dir/org.sana.subject"/>
             </intent-filter>
             <intent-filter>
                 <action android:name="org.sana.android.intent.action.RUN_PROCEDURE"/>
-                <action android:name="android.intent.action.INSERT"/>
+                <action android:name="android.intent.action.EDIT"/>
                 <action android:name="android.intent.action.INSERT_OR_EDIT"/>
 
                 <category android:name="android.intent.category.DEFAULT"/>
 
-                <data android:mimeType="vnd.android.cursor.dir/org.sana.subject"/>
+                <data android:mimeType="vnd.android.cursor.item/org.sana.subject"/>
+                <data android:mimeType="vnd.android.cursor.item/org.sana.patient"/>
             </intent-filter>
         </activity>
         <activity
