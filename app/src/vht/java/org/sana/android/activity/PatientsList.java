@@ -86,6 +86,7 @@ public class PatientsList extends FragmentActivity implements
         /**
          * implementing the search using the searchView
          */
+        /*
         searchView = (SearchView) findViewById(R.id.patient_searchView);
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
@@ -100,7 +101,7 @@ public class PatientsList extends FragmentActivity implements
                 return false;
             }
         });
-
+        */
     }
 
     /** {@inheritDoc} */
