@@ -1567,21 +1567,26 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
 
     public final void addFailedToQueue(int what, int arg1, int arg2, Object object, Bundle data, Uri uri){
         Log.i(TAG, "addFailedToQueue(...Uri) " + what);
-        MessageHolder holder = new MessageHolder();
-        holder.what = what;
-        holder.arg1 = arg1;
-        holder.arg2 = arg2;
-        holder.object = object;
-        if(data != null) {
-            holder.data = new Bundle(data);
+        if(!getResources().getBoolean(R.bool.block_resend)) {
+            MessageHolder holder = new MessageHolder();
+            holder.what = what;
+            holder.arg1 = arg1;
+            holder.arg2 = arg2;
+            holder.object = object;
+            if (data != null) {
+                holder.data = new Bundle(data);
+            }
+            holder.uri = uri;
+            Log.d(TAG, "....Queue size: " + failQueue.size());
+            Log.d(TAG, "....adding 1 item");
+            failQueue.add(holder);
+            Log.d(TAG, "....Queue size: " + failQueue.size());
+            failQueue.start();
+            failQueue.resend();
+        } else {
+            // fail silently
+            Log.d(TAG, "...resend blocked");
         }
-        holder.uri = uri;
-        Log.d(TAG,"....Queue size: "  + failQueue.size());
-        Log.d(TAG,"....adding 1 item");
-        failQueue.add(holder);
-        Log.d(TAG,"....Queue size: "  + failQueue.size());
-        failQueue.start();
-        failQueue.resend();
     }
 
     public final void handleRequestStart(int id, int code){
