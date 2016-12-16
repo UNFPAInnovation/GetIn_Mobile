@@ -27,7 +27,9 @@
         android:maxHeight="32dip"
         android:layout_gravity="center|left"
         android:layout_margin="10dp"/>
-
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -103,7 +105,8 @@
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-
+        <!-- This is redundant -->
+        <!--
         <Button
             android:id="@+id/button_call_ambulance"
             android:layout_width="fill_parent"
@@ -115,9 +118,9 @@
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-
+        -->
     </LinearLayout>
-
+    </ScrollView>
 
     <!--
     <Button
