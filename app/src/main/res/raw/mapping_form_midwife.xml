@@ -82,10 +82,11 @@
             answer="Yes"
             choices="Yes;No" />
         </Page>
+
         <Page>
-        <showif>
-            <criteria type="EQUALS" id="9" value="yes"/>
-        </showif>
+             <ShowIf>
+            <Criteria type="EQUALS" id="9" value="yes"/>
+               </ShowIf>
         <Element
             id="10"
             concept="LOCATION"
@@ -95,87 +96,100 @@
             Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
             action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
         />
+            </Page>
             <Page>
-
                 <Element
                     id="10a"
-                    concept="SUB COUNTY"
+                    concept="SUBCOUNTY"
                     type="SELECT"
                     required="true"
                     question="Pick Girls Sub County"
                     choices="Kambuga;Kanungu_Tc;Kanyantorogo;Kayonza;Kihiihi;Kirima;Mpungu;Nyamirama;Rugyeyo;Rutenga"
-                    answer=""/>
+                    answer="Kanungu_Tc"/>
             </Page>
-
-            <Page>
-                <showif>
-                    <criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
-                </showif>
+                 <Page>
+                <ShowIf>
+                    <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+                </ShowIf>
                 <Element
                     id="10b"
-                    concept="Kanungu TC Parish"
+                    concept="KANUNGU TC"
                     type="SELECT"
-                    required="true"
                     question="Pick Girl's Parish"
                     choices="Eastern_Ward;Northern_Ward;Southern_Ward;Western_Ward"
                     answer=""/>
             </Page>
 
             <Page>
-                <showif>
-                    <criteria type="EQUALS" id="10b" value="Eastern_Ward"/>
-                </showif>
+                <ShowIf>
+                    <and>
+                        <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
 
+                         <Criteria type="EQUALS" id="10b" value="Eastern_Ward"/>
+                    </and>
+                </ShowIf>
                 <Element
                     id="10c"
-                    concept="Eastern_Ward"
+                    concept="VILLAGE"
                     type="SELECT"
-                    required="true"
                     question="Pick Girl's Village in Eastern Ward Parish"
                     choices="Burondo;Katate;Kifunjo;Kirengye;Kyamunjuri;Marumba;Murengyeza;Mushasha;Rugoma"
                     answer=""/>
             </Page>
 
             <Page>
-                <showif>
-                    <criteria type="EQUALS" id="10b" value="Nothern_Ward"/>
-                </showif>
+                <ShowIf>
+                    <and>
+                        <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                        <Criteria type="EQUALS" id="10b" value="Northern_Ward"/>
+                    </and>
+
+                </ShowIf>
                 <Element
                     id="10d"
-                    concept="Nothern_Ward"
+                    concept="VILLAGE"
                     type="SELECT"
-                    required="true"
-                    question="Pick Girl's Village in Nothern Ward Parish"
+                    question="Pick Girl's Village in Northern Ward Parish"
                     choices="Bukora;Bushanja;Karuhinda;Kazirankyende;Kicwamba;Kishojwa;Nyakibuga/Kyambogo;Nyakihira;Nyamihungye;Rushebeya;Rwabushunju"
                     answer=""/>
             </Page>
             <Page>
-                <showif>
-                    <criteria type="EQUALS" id="10b" value="Southern_Ward"/>
-                </showif>
+                <ShowIf>
+
+                    <and>
+                        <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                        <Criteria type="EQUALS" id="10b" value="Southern_Ward"/>
+                    </and>
+
+                </ShowIf>
                 <Element
                     id="10e"
-                    concept="Southern_Ward"
+                    concept="VILLAGE"
                     type="SELECT"
-                    required="true"
                     question="Pick Girl's Village in Southern Ward Parish"
                     choices="Burandami;Butare;Kanjara;Kanyarutama;Karama;Kashenyi;Kishamba;Kyabworo;Kyandago;Muhororo;Omumbuga"
                     answer=""/>
             </Page>
             <Page>
-                <showif>
-                    <criteria type="EQUALS" id="10b" value="Western_Ward"/>
-                </showif>
+                <ShowIf>
+                    <and>
+                        <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                        <Criteria type="EQUALS" id="10b" value="Western_Ward"/>
+                    </and>
+
+                </ShowIf>
                 <Element
                     id="10f"
-                    concept="Western_Ward"
+                    concept="VILLAGE"
                     type="SELECT"
-                    required="true"
                     question="Pick Girl's Village in Western Ward Parish"
                     choices="Burebane;Bwoma;Ifubura;Irumba;Kanungu;Kyamogote;Mashenga;Nyakatare"
                     answer=""/>
             </Page>
-    </Page>
+
     <Page>
         <Element
             id="11"
