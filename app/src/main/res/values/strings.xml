@@ -32,7 +32,7 @@
     <string name="button_main_view_scheduled_tasks">Assigned tasks</string>
     <string name="button_main_register_patients">View All Mapped Girls</string>
     <string name="button_main_select_procedure">Select Procedure</string>
-    <string name="button_main_select_patient">View Mapped Girls</string>
+    <string name="button_main_select_patient">View/Edit Girls Assigned to you</string>
     <string name="button_main_training_mode">Map Girl</string>
     <string name="btn_map_girl">Map Girl</string>
     <string name="button_configure">Configure</string>
