@@ -58,12 +58,12 @@ public class PatientViewActivity extends MainActivity {
         back = (Button) findViewById(R.id.btn_exit1);
 
 
+        mSubject = getIntent().getData();
+        String uuid = mSubject.getLastPathSegment();
 
-  String uuid = mSubject.getLastPathSegment();
+        Uri ur=  withAppendedUuid(Patients.CONTENT_URI,uuid);
 
-  Uri ur=  withAppendedUuid(Patients.CONTENT_URI,uuid);
-
-      Patient patient=  getPatient(ur);
+        Patient patient=  getPatient(mSubject);
 
         patient.getDob();
        Date lmd = patient.getLMD();
