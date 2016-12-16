@@ -36,12 +36,13 @@ public class PatientViewActivity extends MainActivity {
     static final SimpleDateFormat sdf = new SimpleDateFormat(IModel.DATE_FORMAT,
             Locale.US);
 
- public Patient getPatient(Uri uri) {
-       return (Patient) PatientWrapper.get(this, uri);
-  }
+// public Patient getPatient(Uri uri) {
+      // return (Patient) PatientWrapper.get(this, uri);
+  //}
     public static Uri withAppendedUuid(Uri uri, String uuid) {
 
-//uuid = mSubject.getLastPathSegment();
+  // uuid = mSubject.getLastPathSegment();
+
       uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
 
         return uri;
@@ -57,11 +58,12 @@ public class PatientViewActivity extends MainActivity {
         back = (Button) findViewById(R.id.btn_exit1);
 
 
-String uuid = mSubject.getLastPathSegment();
 
- Uri ur = withAppendedUuid(Patients.CONTENT_URI,uuid);
+  String uuid = mSubject.getLastPathSegment();
 
- Patient patient = getPatient(ur);
+  Uri ur=  withAppendedUuid(Patients.CONTENT_URI,uuid);
+
+      Patient patient=  getPatient(ur);
 
         patient.getDob();
        Date lmd = patient.getLMD();
