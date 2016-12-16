@@ -1,0 +1,87 @@
+<Procedure
+    title="Appointment_Note"
+    author="Donald"
+    uuid="ae0775ec-5a8c-4f2c-8c78-13325e26f03f"
+    version="1.0"
+    locale="en"
+    class= "org.sana.core.Subject"
+    >
+    <!-- copy midwife_appointment_note here -->
+    <Page>
+        <Element
+            id="1a"
+            concept="SUB HEADING"
+            type="TEXT"
+            question="GIRLS APPOINTMENT NOTES"
+        />
+        <Element
+            id="1"
+            concept="MIDWIFE MISSED APPOINTMENT STATUS"
+            type="RADIO"
+            required="true"
+            question="Has the Girl Missed ANC?"
+            answer="Yes"
+            choices="Yes;No"/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="1" value="Yes" />
+        </ShowIf>
+
+        <Element
+            id="2"
+            concept="MIDWIFE MISSING REASON"
+            type="ENTRY"
+            required="true"
+            question="Reasons for missing ANC"
+            answer=""
+        />
+    </Page>
+    <Page>
+        <Element
+            id="2"
+            type="ENTRY"
+            concept="RISK IDENTIFIED"
+            question="Any Risk Identified?"
+            answer=""
+        />
+        <Element
+            id="3"
+            concept="AMBULANCE NEED"
+            type="RADIO"
+            choices="Yes;No"
+            question="Have you ever needed an Ambulance before? "
+            answer=""
+        />
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="3" value="Yes"/>
+        </ShowIf>
+        <Element
+            id="4"
+            type="RADIO"
+            choices="Yes;No"
+            concept="AMBULANCE RESPONSE"
+            question="Did you get the Ambulance service"
+            answer=""
+        />
+    </Page>
+    <Page>
+        <Element
+            id="5"
+            type="ENTRY"
+            concept="ACTION TAKEN"
+            question="Action Taken"
+            answer=""
+        />
+        <Element
+            id="6"
+            type="DATE"
+            concept="NEXT APPOINTMENT"
+            question="Next Appointment Date"
+            answer=""
+        />
+    </Page>
+</Procedure>
