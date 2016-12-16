@@ -408,6 +408,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 // Exists we reload into the Parcelable as below
                 mPatient = new PatientParcel(PatientWrapper.get(getActivity(),
                         uSubject));
+                setObjectFlag(FLAG_OBJECT_UPDATED);
             }
             Log.d(TAG, "...using subject:" + uSubject);
             Log.d(TAG, "...   data: " + mPatient);
@@ -464,6 +465,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                     Log.d(TAG, "...Setting page display id=" + useId);
                     mProcedure.setShowQuestionIds(useId);
                     createView();
+                    onViewChanged(mProcedure.current());
                 }
                 else
                     logEvent(EventType.ENCOUNTER_LOAD_FAILED, "Null procedure");
@@ -655,7 +657,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         return objectFlag;
     }
 
-    public void setObjectFlag(int flag){
+    public final void setObjectFlag(int flag){
         objectFlag = flag;
     }
 
@@ -715,5 +717,24 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
             Log.d(TAG, "\tdeleted n=" + deleted);
         }
         super.onExitNoSave();
+    }
+
+    @Override
+    public void onViewChanged(ProcedurePage page){
+        onViewChanged(page, mPatient);
+    }
+
+    public final void onViewChanged(ProcedurePage page, Patient data) {
+        Log.i(TAG, "onViewChanged(Page,Patient");
+        if (data != null) {
+
+            // Set any patient fields from current page elements
+            for (ProcedureElement element : page.getElements()) {
+                String field = element.getConcept().replace(" ", "_").toLowerCase();
+                String val = data.getField(field);
+                if (!TextUtils.isEmpty(val))
+                    element.setAnswer(val);
+            }
+        }
     }
 }

@@ -295,7 +295,7 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
             //mProcedure.advance();
             ProcedurePage cp = mProcedure.advanceNext();
             while (cp != null){
-            	
+            	onViewChanged(cp);
             	if(cp.displayForeground()) {
             		break;
             	} else {
@@ -1311,4 +1311,11 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
         logEvent(EventType.ENCOUNTER_EXIT_NO_SAVE, "");
         getActivity().finish();
     }
+
+    /**
+     * Does something to the current Page View.
+     * Default implementation does noting.
+     * @param page
+     */
+    public void onViewChanged(ProcedurePage page){}
 }
