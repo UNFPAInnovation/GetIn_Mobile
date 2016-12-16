@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -167,16 +168,34 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         Uri taskUri = data.getData();
                         // Get patient Uri - Task subject column = patient uuid
                       //  mTask = taskUri;
-                        Uri Patient_uri = Uris.withAppendedUuid(taskUri,Tasks.Contract.SUBJECT);
-                        // Create new Intent to launch PatientView
-                        Intent intent1 = new Intent(this, PatientViewActivity.class);
+                        final String[] projection = new String[]{
+                            Tasks.Contract.SUBJECT
+                        };
+                        String patientUUID = null;
+                        Cursor cursor = null;
+                        try {
+                            cursor = getContentResolver().query(taskUri, projection, null, null, null);
+                            if (cursor.getCount() == 1 && cursor.moveToFirst()) {
+                                patientUUID = cursor.getString(0);
+                            }
+                            // Uri Patient_uri = Uris.withAppendedUuid(taskUri, Tasks.Contract.SUBJECT);
+                            Uri Patient_uri = Uris.withAppendedUuid(
+                                    Patients.CONTENT_URI, patientUUID);
+
+                            // Create new Intent to launch PatientView
+                            Intent intent1 = new Intent(this, PatientViewActivity.class);
 
 
-                        // Set new Intent data Uri to the Patient uri
-                        intent1.setData(Patient_uri);
-                        // Start Activity
-                     //   startActivityForResult(intent1);
-                        startActivity(intent1);
+                            // Set new Intent data Uri to the Patient uri
+                            intent1.setData(Patient_uri);
+                            // Start Activity
+                            //   startActivityForResult(intent1);
+                            startActivity(intent1);
+                        } catch (Exception e){
+
+                        } finally {
+                            if(cursor != null) cursor.close();
+                        }
                         break;
                     case EXECUTE_TASK:
                         dump();
