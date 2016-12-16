@@ -7,6 +7,7 @@ import java.net.URI;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.joda.time.Days;
 import org.joda.time.Years;
 import org.sana.api.IPatient;
 
@@ -475,5 +476,14 @@ public class Patient extends Subject implements IPatient{
         } else {
             return 0;
         }
+    }
+
+    public int getGestationDays() {
+        int days = 0;
+        DateTime now = DateTime.now();
+        if (lmd != null) {
+            days = Days.daysBetween(new DateTime(lmd), now).getDays();
+        }
+        return days;
     }
 }
