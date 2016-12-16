@@ -42,6 +42,16 @@
     <string name="btn_main_view_ambulance_drivers">View/Call Ambulance</string>
     <string name="button_girls_mapped_by_you">Girls mapped by You</string>
 
+    <string name="view_family_name">Family name</string>
+    <string name="view_last_name">Last Name</string>
+    <string name="view_age">AGE</string>
+    <string name="view_expected_date_of_delivery">Expected Delivery Date</string>
+    <string name="view_village">Village</string>
+    <string name="view_Missed_ANC">Missed ANC status</string>
+    <string name="view_mapping_date">Mapped On</string>
+    <string name="view_trimester">Trimester</string>
+
+
     <!--  General Phrases -->
     <string name="general_ok">Okay</string>
     <string name="general_cancel">Cancel</string>
