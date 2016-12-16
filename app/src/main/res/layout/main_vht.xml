@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_archive"
-            android:text="@string/button_girls_mapped_by_you"
+            android:text="@string/button_main_select_patient"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
@@ -80,7 +80,7 @@
             android:layout_margin="10dp"/>
 
 
-        <Button
+       <!-- <Button
             android:id="@+id/btn_main_view_completed_tasks"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -90,9 +90,9 @@
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
-
+-->
         <Button
-            android:id="@+id/button_call_ambulance"
+            android:id="@+id/btn_main_view_ambulance_drivers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
