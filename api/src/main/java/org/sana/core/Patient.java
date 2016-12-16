@@ -46,13 +46,13 @@ public class Patient extends Subject implements IPatient{
 	@Expose
 	boolean confirmed = true;
     @Expose
-    boolean dobEstimated = false;
+    boolean dobestimated = false;
 	@Expose
 	public String pNumber;
 	@Expose
-	public String holder_pNumber;
+	public String holder_pnumber;
 	@Expose
-	public Date LMD;
+	public Date lmd;
 	@Expose
 	public String marital_status;
 	@Expose
@@ -60,21 +60,21 @@ public class Patient extends Subject implements IPatient{
 	@Expose
 	public String contraceptive_use;
 	@Expose
-	public String ANC_status;
+	public String anc_status;
 	@Expose
-	public Date ANC_visit;
+	public Date anc_visit;
 	@Expose
-	public String AMBULANCE_need;
+	public String ambulance_need;
 	@Expose
-	public String AMBULANCE_response;
+	public String ambulance_response;
 	@Expose
-	public String EDD;
+	public String edd;
 	@Expose
 	public String receive_sms;
 	@Expose
 	public String follow_up;
 	@Expose
-	public String CUG_status;
+	public String cug_status;
 	@Expose
 	public String comment;
 	@Expose
@@ -232,13 +232,13 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public String getHolder_pNumber() {
-		return holder_pNumber;
+		return holder_pnumber;
 	}
 	/**
 	 * @param holder_pNumber the holder_pNumber to set
 	 */
 	public void setHolder_pNumber(String holder_pNumber) {
-		this.holder_pNumber = holder_pNumber;
+		this.holder_pnumber = holder_pNumber;
 	}
 
 	/* (non-Javadoc)
@@ -246,13 +246,13 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public Date getLMD() {
-		return LMD;
+		return lmd;
 	}
 	/**
 	 * @param LMD the LMD to set
 	 */
 	public void setLMD(Date LMD) {
-		this.LMD = LMD;
+		this.lmd = LMD;
 	}
 
 	@Override
@@ -292,26 +292,26 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public String getANC_status() {
-		return ANC_status;
+		return anc_status;
 	}
 	/**
 	 * @param ANC_status the ANC_status to set
 	 */
 	public void setANC_status(String ANC_status) {
-		this.ANC_status = ANC_status;
+		this.anc_status = ANC_status;
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getANC_visit()
 	 */
 	@Override
 	public Date getANC_visit() {
-		return ANC_visit;
+		return anc_visit;
 	}
 	/**
 	 * @param ANC_visit the ANC_visit to set
 	 */
 	public void setANC_visit(Date ANC_visit) {
-		this.ANC_visit = ANC_visit;
+		this.anc_visit = ANC_visit;
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getEDD()
@@ -319,30 +319,30 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public String getAMBULANCE_need() {
-		return AMBULANCE_need;
+		return ambulance_need;
 	}
 
 	public void setAMBULANCE_need(String AMBULANCE_need) {
-		this.AMBULANCE_need = AMBULANCE_need;
+		this.ambulance_need = AMBULANCE_need;
 	}
 
 	@Override
 	public String getAMBULANCE_response() {
-		return AMBULANCE_response;
+		return ambulance_response;
 	}
 
 	public void setAMBULANCE_response(String AMBULANCE_response) {
-		this.AMBULANCE_response = AMBULANCE_response;
+		this.ambulance_response = AMBULANCE_response;
 	}
 	@Override
 	public String getEDD() {
-		return EDD;
+		return edd;
 	}
 	/**
 	 * @param EDD the EDD to set
 	 */
 	public void setEDD(String EDD) {
-		this.EDD = EDD;
+		this.edd = EDD;
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getReceive_sms()
@@ -375,13 +375,13 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public String getCUG_status() {
-		return CUG_status;
+		return cug_status;
 	}
 	/**
 	 * @param CUG_status the CUG_status to set
 	 */
 	public void setCUG_status(String CUG_status) {
-		this.CUG_status = CUG_status;
+		this.cug_status = CUG_status;
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getComment()
@@ -458,10 +458,10 @@ public class Patient extends Subject implements IPatient{
 	}
 
     public boolean isDobEstimated() {
-        return dobEstimated;
+        return dobestimated;
     }
 
     public void setDobEstimated(boolean dobEstimated) {
-        this.dobEstimated = dobEstimated;
+        this.dobestimated = dobEstimated;
     }
 }
