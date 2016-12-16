@@ -261,14 +261,8 @@ public class DispatchService extends Service{
             List<ContentValues> list = new ArrayList<ContentValues>();
             for(Patient p: response.getMessage()){
                 Log.d(TAG, p.system_id);
-                ContentValues vals = new ContentValues();
-                vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
-                vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
-                vals.put(Patients.Contract.GENDER, p.getGender());
-                vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
-                vals.put(Patients.Contract.UUID, p.getUuid());
-                vals.put(Patients.Contract.PATIENT_ID, p.system_id);
-                vals.put(Patients.Contract.DOB, p.getDob().toString());
+                ContentValues vals = PatientWrapper.toValues(p);
+                /*
                 if(p.getImage() != null && (p.getImage().getPath().endsWith("jpg") || p.getImage().getPath().endsWith("png"))){
                     try{
                         File dir = ModelContext.getExternalFilesDir(Subjects.CONTENT_URI);
@@ -313,6 +307,7 @@ public class DispatchService extends Service{
                         e.printStackTrace();
                     }
                 }
+                */
                 list.add(vals);
             }
             return list;
@@ -1385,13 +1380,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         Iterator<Patient> iterator =  t.iterator();
         while(iterator.hasNext()){
             Patient p = iterator.next();
-            ContentValues vals = new ContentValues();
-            vals.put(Patients.Contract.GIVEN_NAME, p.getGiven_name());
-            vals.put(Patients.Contract.FAMILY_NAME, p.getFamily_name());
-            vals.put(Patients.Contract.GENDER, p.getGender());
-            vals.put(Patients.Contract.LOCATION, p.getLocation().getUuid());
-            vals.put(Patients.Contract.PATIENT_ID, p.system_id);
-            vals.put(Patients.Contract.DOB, DateUtil.format(p.getDob()));
+            ContentValues vals = PatientWrapper.toValues(p);
             ////////////////////////////////////////////////////////////
             // Handle images
             ////////////////////////////////////////////////////////////
@@ -1402,7 +1391,6 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             {
                 getFileIfNotExistsOrNotModified(p.getImage(), dir, vals, startId);
             }
-
             // Don't add uuid initially
             if(!exists(Subjects.CONTENT_URI, p)){
                 vals.put(Patients.Contract.UUID, p.uuid);
