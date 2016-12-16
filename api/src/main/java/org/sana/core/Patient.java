@@ -6,6 +6,8 @@ package org.sana.core;
 import java.net.URI;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+import org.joda.time.Years;
 import org.sana.api.IPatient;
 
 import com.google.gson.annotations.Expose;
@@ -463,5 +465,15 @@ public class Patient extends Subject implements IPatient{
 
     public void setDobEstimated(boolean dobEstimated) {
         this.dobestimated = dobEstimated;
+    }
+
+    public int getAge() {
+        DateTime now = DateTime.now();
+        if (dob != null) {
+            int years = Years.yearsBetween(new DateTime(dob), now).getYears();
+            return years;
+        } else {
+            return 0;
+        }
     }
 }
