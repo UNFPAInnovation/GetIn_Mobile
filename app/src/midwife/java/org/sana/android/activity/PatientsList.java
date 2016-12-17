@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -16,10 +17,12 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.Constants;
@@ -153,18 +156,56 @@ public class PatientsList extends FragmentActivity implements
 
     /** {@inheritDoc} */
     @Override
-    public void onPatientSelected(long patientId) {
+    public void onPatientSelected(final long patientId) {
         Log.i(TAG, "onPatientSelected(long)");
-        // A patient was selected so return to caller activity.
-        //Intent data = getIntent();
-    	Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
-        Log.d(TAG,"...patient selected: " + uri);
-        Intent data = new Intent();
-        data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
-        data.putExtra(EXTRA_PATIENT_ID, patientId);
-        data.putExtra(Intents.EXTRA_SUBJECT, uri);
-        setResult(RESULT_OK, data);
-        finish();
+
+        final String [] items = new String[]{
+                "Follow up",
+                "Edit"
+        };
+
+        //an alert dialog to display edit and follow up note
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("choose action")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(PatientsList.this, "clicked "+items[which], Toast.LENGTH_SHORT).show();
+
+                        switch (which){
+                            case 0:
+                                // A patient was selected so return to caller activity.
+                                //Intent data = getIntent();
+                                Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
+                                Log.d(TAG,"...patient selected: " + uri);
+                                Intent data = new Intent();
+                                data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
+                                data.putExtra(EXTRA_PATIENT_ID, patientId);
+                                data.putExtra(Intents.EXTRA_SUBJECT, uri);
+                                setResult(RESULT_OK, data);
+                                finish();
+                                break;
+
+                            case 1:
+                                Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
+                                //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                                intent.setDataAndType(ContentUris.withAppendedId(Patients.CONTENT_URI,patientId), Subjects.CONTENT_TYPE)
+                                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                                getString(R.string.procs_subject_short_form1)))
+                                        .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
+                                                .mapping_form_midwife);
+//                                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+//                                setResult(RESULT_OK, intent);
+//                                finish();
+
+                                startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                                break;
+                        }
+
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     public void onPatientSelected(Uri uri) {
