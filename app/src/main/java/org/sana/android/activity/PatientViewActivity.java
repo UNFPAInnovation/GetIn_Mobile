@@ -40,7 +40,6 @@ import java.util.UUID;
  */
 public class PatientViewActivity extends MainActivity {
     TextView age, trimester, mapdate, edd, givenName, familyName;
-    TextView age, trimester5, mapdate, edd,village, family_name, last_name;
     Button back;
     // Replace with date only format - do not include time.
     static final SimpleDateFormat sdf = new SimpleDateFormat(IModel.DATE_FORMAT,
