@@ -114,8 +114,16 @@ public class AmbulanceDriverListFragment extends ListFragment implements
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // Implement click to call functionality
-        if(mListener != null)
-            mListener.onDriverSelected(id);
+        Object number = view.getTag();
+        if(number != null){
+            // TODO Should probably check that number is valid pattern
+            Intent intent = new Intent(Intent.ACTION_DIAL,
+                    Uri.parse("tel:" + String.valueOf(number)));
+            startActivity(intent);
+        } else {
+            if (mListener != null)
+                mListener.onDriverSelected(id);
+        }
     }
     /**
      * Events specific to this AmbulanceDriverListFragment
@@ -257,6 +265,8 @@ public class AmbulanceDriverListFragment extends ListFragment implements
             TextView phoneNumberTextView = (TextView) view.findViewById(R.id.ambulance_driver_phone_number);
             phoneNumberTextView.setText(phoneNumber);
 
+            // Set view tag to the phone number
+            view.setTag(phoneNumber);
             //create the location textView and set its text to the string from the database
 //            TextView locationTextView = (TextView) view.findViewById(R.id.ambulance_driver_location);
 //            locationTextView.setText(location);
