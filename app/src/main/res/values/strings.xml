@@ -275,5 +275,8 @@
     <string name="title_activity_ambulance_driver_list">Ambulance Drivers
     </string>
     <string name="action_settings">Settings</string>
+    <string name="title_activity_encounter_list_detail">
+        EncounterListDetailActivity
+    </string>
 
 </resources>
