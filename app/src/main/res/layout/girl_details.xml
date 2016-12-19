@@ -209,7 +209,7 @@
     </RelativeLayout>
 
     <Button
-        android:id="@+id/btn_call_powerholder"
+        android:id="@+id/btn_view_encounters"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         app:srcCompat="@android:drawable/ic_menu_call"
