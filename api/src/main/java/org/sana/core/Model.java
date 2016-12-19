@@ -59,7 +59,7 @@ public abstract class Model implements IModel{
 	 * @see org.sana.api.IModel#getCreated()
 	 */
 	public Date getCreated() {
-		return null;
+		return created;
 	}
 
 	/**
