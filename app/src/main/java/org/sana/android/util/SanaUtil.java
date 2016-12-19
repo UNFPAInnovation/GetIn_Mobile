@@ -338,7 +338,7 @@ public class SanaUtil {
      * files can be added or removed here. */
     public static void loadDefaultDatabase(Context ctx) {
         insertProcedure(ctx, R.raw.mapping_form_midwife);
-        //insertProcedure(ctx, R.raw.midwife_appointment_note);
+        insertProcedure(ctx, R.raw.midwife_appointment_note);
         insertProcedure(ctx, R.raw.appointment_note);
 
     }
