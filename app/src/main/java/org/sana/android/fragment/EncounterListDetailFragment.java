@@ -1,4 +1,4 @@
-package org.sana.android.activity;
+package org.sana.android.fragment;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import java.util.List;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class EncounterListDetailFragment extends ListFragment {
+public class EncounterListDetailFragment extends BaseFragment {
 
     ViewGroup mContainer = null;
     Uri mUri = null;

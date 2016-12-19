@@ -22,7 +22,8 @@
             android:layout_gravity="center"
             android:padding="16dp"
             android:minWidth="48dip"
-            android:layout_alignParentStart="false" android:layout_alignParentLeft="true"/>
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="true"/>
 
         <TextView
             android:id="@+id/txt_title"
@@ -41,7 +42,7 @@
     </RelativeLayout>
 
     <fragment android:id="@+id/fragment"
-              android:name="org.sana.android.activity.EncounterListDetailFragment"
+              android:name="org.sana.android.fragment.EncounterListDetailFragment"
               xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:tools="http://schemas.android.com/tools"
               android:layout_width="match_parent"

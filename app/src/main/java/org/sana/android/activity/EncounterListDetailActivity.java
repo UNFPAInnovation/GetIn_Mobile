@@ -6,6 +6,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.view.View;
 
 import org.sana.R;
+import org.sana.android.fragment.EncounterListDetailFragment;
 
 public class EncounterListDetailActivity extends BaseActivity {
 
