@@ -30,7 +30,7 @@
     <string name="button_main_view_notifications">Notifications</string>
     <string name="button_main_view_patients">Patients</string>
     <string name="button_main_view_scheduled_tasks">Assigned tasks</string>
-    <string name="button_main_register_patients">View All Mapped Girls</string>
+    <string name="button_main_register_patients">View/Edit All Mapped Girls</string>
     <string name="button_main_select_procedure">Select Procedure</string>
     <string name="button_main_select_patient">View/Edit Girls Assigned to you</string>
     <string name="button_main_training_mode">Map Girl</string>
@@ -41,6 +41,8 @@
     <string name="button_view_girl_details">View Girl Details</string>
     <string name="btn_main_view_ambulance_drivers">View/Call Ambulance</string>
     <string name="button_girls_mapped_by_you">Girls mapped by You</string>
+    <string name="btn_main_view_VHTs">View/Call VHTs</string>
+
 
     <string name="view_family_name">Family name</string>
     <string name="view_last_name">Last Name</string>
