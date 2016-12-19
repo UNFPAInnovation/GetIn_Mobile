@@ -57,7 +57,7 @@
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
 
-        <Button
+     <!--   <Button
             android:id="@+id/btn_main_transfers"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -67,6 +67,7 @@
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
+            -->
 
         <Button
             android:id="@+id/btn_main_register_patient"
@@ -100,6 +101,17 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_refresh"
             android:text="@string/button_call_ambulance"
+            style="@style/Widget.Button.Large.Dark"
+            android:background="#9E9D24"
+            android:layout_margin="10dp"/>
+
+        <Button
+            android:id="@+id/btn_main_view_call_VHT"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:onClick="submit"
+            android:drawableLeft="@drawable/ic_menu_refresh"
+            android:text="@string/btn_main_view_VHTs"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
