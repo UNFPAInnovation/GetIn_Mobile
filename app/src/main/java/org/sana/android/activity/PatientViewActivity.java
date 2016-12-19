@@ -219,6 +219,11 @@ public class PatientViewActivity extends MainActivity {
                     startActivity(callIntent);
                 }
                 break;
+            case R.id.btn_view_encounters:
+                Intent viewIntent = new Intent(this, EncounterListDetailActivity.class);
+                viewIntent.setData(getIntent().getData());
+                startActivity(viewIntent);
+                break;
         }
     }
 
