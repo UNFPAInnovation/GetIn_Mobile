@@ -161,7 +161,7 @@ public class PatientsList extends FragmentActivity implements
 
         final String [] items = new String[]{
                 "Follow up",
-                "Edit"
+                "Edit","View"
         };
 
         //an alert dialog to display edit and follow up note
@@ -199,6 +199,26 @@ public class PatientsList extends FragmentActivity implements
 //                                finish();
 
                                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                                break;
+                            case 2:
+                                Uri uri1 = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
+                                Log.d(TAG,"...patient selected: " + uri1);
+                                Intent data1 = new Intent(PatientsList.this,PatientViewActivity.class);
+
+                                data1.setDataAndType(uri1,Patients.CONTENT_ITEM_TYPE);
+                                data1.putExtra(EXTRA_PATIENT_ID, patientId);
+                                data1.putExtra(Intents.EXTRA_SUBJECT, uri1);
+                                setResult(RESULT_OK, data1);
+                                finish();
+                                // Create new Intent to launch PatientView
+                                //Intent intent1 = new Intent(this, PatientViewActivity.class);
+
+                             startActivity(data1);
+                                // Set new Intent data Uri to the Patient uri
+
+
+
+
                                 break;
                         }
 
