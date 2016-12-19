@@ -104,7 +104,7 @@
                     type="SELECT"
                     required="true"
                     question="Pick Girls Sub County"
-                    choices="Kambuga;Kanungu_Tc;Kanyantorogo;Kayonza;Kihiihi;Kirima;Mpungu;Nyamirama;Rugyeyo;Rutenga"
+                    choices="Kanungu_Tc"
                     answer="Kanungu_Tc"/>
             </Page>
                  <Page>
