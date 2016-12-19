@@ -61,10 +61,11 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
 		Contract._ID, 
 		Contract.GIVEN_NAME, 
 		Contract.FAMILY_NAME, 
-		Contract.PATIENT_ID,
-		Contract.LOCATION,
+		//Contract.PATIENT_ID,
+		//Contract.LOCATION,
 		Contract.IMAGE,
-            Contract.EDD,
+            Contract.VILLAGE,
+            Contract.PNUMBER,
         Contract.DOB
 		};
     
@@ -317,10 +318,14 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             TextView name = (TextView) view.findViewById(R.id.name);
             name.setText(displayName);
 
-            TextView systemId = (TextView)view.findViewById(R.id.system_id);
-            String id = ((Cursor) this.getItem(position)).getString(3);
+           // TextView systemId = (TextView)view.findViewById(R.id.system_id);
+          //  String id = ((Cursor) this.getItem(position)).getString(3);
             //String id = mWrapper.getStringField(Contract.PATIENT_ID);
-            systemId.setText((TextUtils.isEmpty(id)? "000000":id));
+           // systemId.setText((TextUtils.isEmpty(id)? "000000":id));
+
+            TextView phoneNumber =  (TextView)view.findViewById(R.id.phoneNumber1);
+            String phoneNumberVal = ((Cursor) this.getItem(position)).getString(5);
+            phoneNumber.setText(phoneNumberVal);
 
             TextView dobView = (TextView)view.findViewById(R.id.dob);
             String dobStr = ((Cursor) this.getItem(position)).getString(6);
@@ -335,24 +340,13 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             dobView.setText((TextUtils.isEmpty(localDobStr)? dobStr:
                     localDobStr));
 
-            TextView eddView = (TextView)view.findViewById(R.id.EDD);
-            String eddStr = ((Cursor) this.getItem(position)).getString(5);
-            String localEddStr = null;
-            Date edd1 = null;
-            try {
-                localEddStr = this.getDateStringFromSQL(eddStr);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //String id = mWrapper.getStringField(Contract.PATIENT_ID);
-            eddView.setText((TextUtils.isEmpty(localEddStr)? eddStr:
-                    localEddStr));
+
             
-            TextView location = (TextView)view.findViewById(R.id.location);
-            String locationVal = ((Cursor) this.getItem(position)).getString(4);
-            location.setText(locationVal);
+            TextView village = (TextView)view.findViewById(R.id.village);
+            String villageVal = ((Cursor) this.getItem(position)).getString(4);
+            village.setText(villageVal);
             
-            
+
             // Alphabet divider
             boolean needsSeparator = false;
             // pos is 0 based array index,
