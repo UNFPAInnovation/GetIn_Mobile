@@ -92,7 +92,7 @@ public class PatientViewActivity extends MainActivity {
         setText(R.id.girlDetail_last_name, patient.getFamily_name());
         setText(R.id.girlDetail_village, patient.getVillage());
         setText(R.id.girlDetail_trimester, calculateTrimester(patient.getGestationDays()));
-        setText(R.id.girlDetail_age, String.valueOf(patient.getAge()) + " yo");
+        setText(R.id.girlDetail_age, String.valueOf(patient.getAge()) + " yrs");
 
         // Calculate edd
         Date lmd = patient.getLMD();
@@ -209,12 +209,14 @@ public class PatientViewActivity extends MainActivity {
                 if(!TextUtils.isEmpty(patient.getpNumber())) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL,
                             Uri.parse("tel:" + patient.getpNumber()));
+                    startActivity(callIntent);
                 }
                 break;
             case R.id.btn_call_powerholder:
                 if(!TextUtils.isEmpty(patient.getHolder_pNumber())) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL,
                             Uri.parse("tel:" + patient.getHolder_pNumber()));
+                    startActivity(callIntent);
                 }
                 break;
         }
