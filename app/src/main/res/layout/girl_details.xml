@@ -48,7 +48,7 @@
                 android:id="@+id/girlDetail_family_name"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:gravity="left"
+                android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:text="@string/view_family_name"
                 android:textColor="@color/light_gray" android:textStyle="bold"/>
@@ -72,7 +72,7 @@
                 android:id="@+id/girlDetail_age2"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
-                android:gravity="left"
+                android:gravity="center"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
                 android:text="@string/view_age"
                 android:textColor="@color/light_gray" android:textStyle="bold"/>
@@ -94,7 +94,7 @@
 
                 <TextView
                     android:id="@+id/girlDetail_edd1"
-                    android:layout_width="150dp"
+                    android:layout_width="200dp"
                     android:layout_height="50dp"
                     android:gravity="left"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
@@ -208,6 +208,16 @@
         android:text="Call Power Holder"/>
     </RelativeLayout>
 
+    <Button
+        android:id="@+id/btn_call_powerholder"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_call"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:drawableLeft="@android:drawable/ic_menu_edit"
+        android:text="View Previous records"/>
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
