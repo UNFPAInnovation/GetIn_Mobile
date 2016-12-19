@@ -1,165 +1,218 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/copper_cayon"
-    android:gravity="left"
-    android:orientation="vertical" >
+              xmlns:app="http://schemas.android.com/apk/res-auto" android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/copper_cayon"
+              android:gravity="left"
+              android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/girlDetail_age1"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:gravity="center_horizontal"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="PREGNANCY SUMMARY"
-        android:textColor="@color/light_gray"/>
+        android:layout_height="wrap_content" android:background="@color/alt_bg_color">
+
+
+        <Button
+            android:id="@+id/btn_exit1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_exit"
+            android:onClick="submit"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:minWidth="48dip"
+            android:layout_alignParentStart="false" android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/girlDetail_age1"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="PREGNANCY SUMMARY"
+            android:textColor="@color/light_gray" android:layout_alignParentTop="false" android:layout_alignParentLeft="false" android:layout_alignParentStart="false" android:layout_toRightOf="@+id/btn_exit1"/>
+
+    </RelativeLayout>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/girlDetail_family_name"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:gravity="left"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="@string/view_family_name"
-            android:textColor="@color/light_gray" android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/girlDetail_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="@string/view_last_name"
-            android:textColor="@color/light_gray" android:textStyle="bold"/>
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="1">
-
-        <TextView
-            android:id="@+id/girlDetail_age2"
-            android:layout_width="150dp"
-            android:layout_height="50dp"
-            android:gravity="left"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="@string/view_age"
-            android:textColor="@color/light_gray" android:textStyle="bold"/>
-
-        <TextView
-            android:id="@+id/girlDetail_age"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-            android:text="@string/view_age"
-            android:textColor="@color/light_gray"/>
-        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="horizontal"
             >
 
             <TextView
-                android:id="@+id/girlDetail_edd1"
+                android:id="@+id/girlDetail_family_name"
                 android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:gravity="left"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="@string/view_expected_date_of_delivery"
-                android:textColor="@color/light_gray" android:textStyle="normal|bold"/>
+                android:text="@string/view_family_name"
+                android:textColor="@color/light_gray" android:textStyle="bold"/>
 
             <TextView
-                android:id="@+id/girlDetail_edd"
+                android:id="@+id/girlDetail_last_name"
                 android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:text="@string/view_last_name"
+                android:textColor="@color/light_gray" android:textStyle="bold"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:weightSum="1">
+
+            <TextView
+                android:id="@+id/girlDetail_age2"
+                android:layout_width="150dp"
                 android:layout_height="50dp"
                 android:gravity="left"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                android:text="EDD"
+                android:text="@string/view_age"
+                android:textColor="@color/light_gray" android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/girlDetail_age"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                android:text="@string/view_age"
                 android:textColor="@color/light_gray"/>
             </LinearLayout>
-            <LinearLayout
+
+        <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal"
                 >
-    <TextView
-        android:id="@+id/girlDetail_mapping_date1"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:gravity="left"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="@string/view_mapping_date"
-        android:textColor="@color/light_gray" android:textStyle="normal|bold"/>
+
                 <TextView
-                    android:id="@+id/girlDetail_mapping_date"
+                    android:id="@+id/girlDetail_edd1"
+                    android:layout_width="150dp"
+                    android:layout_height="50dp"
+                    android:gravity="left"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                    android:text="@string/view_expected_date_of_delivery"
+                    android:textColor="@color/light_gray" android:textStyle="normal|bold"/>
+
+                <TextView
+                    android:id="@+id/girlDetail_edd"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
+                    android:gravity="left"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                    android:text="mapped on"
+                    android:text="EDD"
                     android:textColor="@color/light_gray"/>
                 </LinearLayout>
-                <LinearLayout
+
+        <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:orientation="horizontal"
                     >
-    <TextView
-        android:id="@+id/girlDetail_trimester1"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:gravity="left"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="@string/view_trimester"
-        android:textColor="@color/light_gray" android:textStyle="bold"/>
+        <TextView
+            android:id="@+id/girlDetail_mapping_date1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:gravity="left"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="@string/view_mapping_date"
+            android:textColor="@color/light_gray" android:textStyle="normal|bold"/>
                     <TextView
-                        android:id="@+id/girlDetail_trimester"
+                        android:id="@+id/girlDetail_mapping_date"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                        android:text="@string/view_trimester"
+                        android:text="mapped on"
                         android:textColor="@color/light_gray"/>
 
-                    </LinearLayout>
-                    <LinearLayout
+        </LinearLayout>
+
+        <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="horizontal"
                         >
-    <TextView
-        android:id="@+id/girlDetail_village1"
-        android:layout_width="150dp"
-        android:layout_height="50dp"
-        android:gravity="left"
-        android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-        android:text="@string/view_village"
-        android:textColor="@color/light_gray" android:textStyle="bold"/>
-
+        <TextView
+            android:id="@+id/girlDetail_trimester1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:gravity="left"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="@string/view_trimester"
+            android:textColor="@color/light_gray" android:textStyle="bold"/>
                         <TextView
-                            android:id="@+id/girlDetail_village"
+                            android:id="@+id/girlDetail_trimester"
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
-                            android:text="@string/view_village"
+                            android:text="@string/view_trimester"
                             android:textColor="@color/light_gray"/>
-                    </LinearLayout>
+
+                        </LinearLayout>
+
+        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            >
+        <TextView
+            android:id="@+id/girlDetail_village1"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:gravity="left"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="@string/view_village"
+            android:textColor="@color/light_gray" android:textStyle="bold"/>
+
+                            <TextView
+                                android:id="@+id/girlDetail_village"
+                                android:layout_width="match_parent"
+                                android:layout_height="50dp"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+                                android:text="@string/view_village"
+                                android:textColor="@color/light_gray"/>
+
+                        </LinearLayout>
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
     <Button
-        android:id="@+id/btn_exit1"
-        android:layout_width="fill_parent"
+        android:id="@+id/btn_call_pnumber"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/general_exit"
-        android:onClick="submit"
-        android:layout_margin="5dp"
-        android:layout_gravity="center"
-        android:minWidth="128dp"
-        android:padding="16dp"/>
+        app:srcCompat="@android:drawable/ic_menu_call"
+        android:layout_alignParentTop="false"
+        android:drawableLeft="@android:drawable/ic_menu_call"
+        android:layout_alignParentLeft="true"
+        android:text="Call Girl"/>
 
+    <Button
+        android:id="@+id/btn_call_powerholder"
+        android:layout_width="148dp"
+        android:layout_height="wrap_content"
+        app:srcCompat="@android:drawable/ic_menu_call"
+        android:layout_alignParentTop="false"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="false"
+        android:drawableLeft="@android:drawable/ic_menu_call"
+        android:text="Call Power Holder"/>
+    </RelativeLayout>
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent" android:layout_height="wrap_content" android:orientation="vertical"/>
+    </ScrollView>
 </LinearLayout>
