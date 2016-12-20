@@ -58,16 +58,15 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
 
     private static final int PATIENTS_LOADER = 0;
     static final String[] mProjection = new String[] {
-		    Contract._ID,
-		    Contract.GIVEN_NAME,
-		    Contract.FAMILY_NAME,
-            // TODO Remove or replace system_id
-		    Contract.PATIENT_ID,
-		    Contract.VILLAGE,
-		    Contract.IMAGE,
-            // Replace with phone number?
-            Contract.EDD,
-            Contract.DOB
+		Contract._ID, 
+		Contract.GIVEN_NAME, 
+		Contract.FAMILY_NAME, 
+		//Contract.PATIENT_ID,
+		//Contract.LOCATION,
+		Contract.IMAGE,
+            Contract.VILLAGE,
+            Contract.PNUMBER,
+        Contract.DOB
 		};
     
     private Uri mUri;
@@ -312,25 +311,21 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                     image.setImageResource(R.drawable.ic_contact_picture);
             	}
             } 
-            // int Column from mProjection used to get field
-            // Should be the same as what get returned by looking up the
-            // column index using:
-            //      cursor.getColumnIndex(Contract.FAMILY_NAME);
-            // etc.
-            String familyName = ((Cursor) getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.FAMILY_NAME));
-            String givenName = ((Cursor) getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.GIVEN_NAME));
+            
+            String familyName = ((Cursor) getItem(position)).getString(2);
+            String givenName = ((Cursor) getItem(position)).getString(1);
             String displayName = StringUtil.formatPatientDisplayName(givenName, familyName);
             TextView name = (TextView) view.findViewById(R.id.name);
             name.setText(displayName);
 
-            // TODO Replace or remove system_id in the layout
-            TextView systemId = (TextView)view.findViewById(R.id.system_id);
-            String id = ((Cursor) this.getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.PATIENT_ID));
+           // TextView systemId = (TextView)view.findViewById(R.id.system_id);
+          //  String id = ((Cursor) this.getItem(position)).getString(3);
             //String id = mWrapper.getStringField(Contract.PATIENT_ID);
-            systemId.setText((TextUtils.isEmpty(id)? "000000":id));
+           // systemId.setText((TextUtils.isEmpty(id)? "000000":id));
+
+            TextView phoneNumber =  (TextView)view.findViewById(R.id.phoneNumber1);
+            String phoneNumberVal = ((Cursor) this.getItem(position)).getString(5);
+            phoneNumber.setText(phoneNumberVal);
 
             TextView dobView = (TextView)view.findViewById(R.id.dob);
             String dobStr = ((Cursor) this.getItem(position)).getString(
@@ -346,26 +341,13 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             dobView.setText((TextUtils.isEmpty(localDobStr)? dobStr:
                     localDobStr));
 
-            TextView eddView = (TextView)view.findViewById(R.id.EDD);
-            String eddStr = ((Cursor) this.getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.EDD));
-            String localEddStr = null;
-            Date edd1 = null;
-            try {
-                localEddStr = this.getDateStringFromSQL(eddStr);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //String id = mWrapper.getStringField(Contract.PATIENT_ID);
-            eddView.setText((TextUtils.isEmpty(localEddStr)? eddStr:
-                    localEddStr));
+
             
-            TextView location = (TextView)view.findViewById(R.id.location);
-            String locationVal = ((Cursor) this.getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.VILLAGE));
-            location.setText(locationVal);
-            
-            
+            TextView village = (TextView)view.findViewById(R.id.village);
+            String villageVal = ((Cursor) this.getItem(position)).getString(4);
+            village.setText(villageVal);
+
+
             // Alphabet divider
             boolean needsSeparator = false;
             // pos is 0 based array index,
