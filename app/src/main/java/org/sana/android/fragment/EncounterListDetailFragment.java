@@ -17,6 +17,7 @@ import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Observations;
+import org.sana.api.IObservation;
 import org.sana.core.Encounter;
 import org.sana.core.Observation;
 
@@ -100,11 +101,11 @@ public class EncounterListDetailFragment extends BaseFragment {
                     selection, null, BaseContract.CREATED+" ASC"));
             while(wrapper.moveToNext()){
                 View details = inflateObservations(inflater, child, subResId,
-                        (Observation) wrapper.getObject());
+                        wrapper.getObject());
                 child.addView(details);
             }
         } catch(Exception e){
-
+            e.printStackTrace();
         } finally {
             if(wrapper !=null) wrapper.close();
         }
@@ -113,17 +114,20 @@ public class EncounterListDetailFragment extends BaseFragment {
 
     // TODO
     public View inflateObservations(LayoutInflater inflater, ViewGroup root,
-                                    int resId, Observation object){
+                                    int resId, IObservation object){
         // inflate view
         View view = inflater.inflate(resId, root, false);
 
         // load concept
         TextView concept = (TextView) view.findViewById(R.id.txt_concept);
-        concept.setText(object.getConcept());
+        String conceptName = object.getConcept().toLowerCase();
+        String first = conceptName.substring(0,1).toUpperCase();
+        String remainder = conceptName.substring(1);
+        concept.setText(first.concat(remainder));
 
         // load value
-        TextView value = (TextView) view.findViewById(R.id.txt_concept);
-        value.setText(object.getConcept());
+        TextView value = (TextView) view.findViewById(R.id.txt_value);
+        value.setText(object.getValue_text());
 
         return view;
     }
