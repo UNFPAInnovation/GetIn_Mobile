@@ -119,7 +119,7 @@ public class AmbulanceDriverListFragment extends ListFragment implements
             // TODO Should probably check that number is valid pattern
             Intent intent = new Intent(Intent.ACTION_DIAL,
                     Uri.parse("tel:" + String.valueOf(number)));
-            startActivity(intent);
+            startActivityForResult(intent,0);
         } else {
             if (mListener != null)
                 mListener.onDriverSelected(id);
