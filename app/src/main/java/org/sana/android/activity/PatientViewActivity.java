@@ -106,15 +106,6 @@ public class PatientViewActivity extends MainActivity {
         Date edd1 = c2.getTime();
         // Show date only - do not include time
         setText(R.id.girlDetail_edd, shortDateFormat.format(edd1));
-        //edd.setText(shortDateFormat.format(edd1));
-
-        // Are there any other mapping details to load?
-
-        // Fill in appointment notes
-        // Need a ListView for appointment notes
-        // Something like the following
-        // mListView = (ListView)findViewById();
-        // loadAppointments(mListView, uuid);
     }
 
     public void setText(int id, String val) {
@@ -134,58 +125,6 @@ public class PatientViewActivity extends MainActivity {
             return "3rd";
         }
 
-    }
-
-    // TODO finish this - these could be moved to a discrete component
-    public void loadAppointmentNotes(ViewGroup root, String uuid) {
-        // query encounter table
-        String selection = Encounters.Contract.SUBJECT + "= '" + patient.getUuid() + "'";
-        Cursor cursor = null;
-        EncounterWrapper wrapper = null;
-        List<Encounter> encounters = new ArrayList<>();
-        try {
-            cursor = getContentResolver().query(Encounters.CONTENT_URI, null,
-                    selection, null, BaseContract.CREATED +" ASC");
-            wrapper = new EncounterWrapper(cursor);
-            while (wrapper.moveToNext()) {
-                encounters.add((Encounter)wrapper.getObject());
-            }
-        } catch (Exception e) {
-
-        } finally {
-            if (wrapper != null) wrapper.close();
-        }
-        cursor = null;
-        // Replace this with ListView etc. that holds each follow up child View
-        LayoutInflater inflater = LayoutInflater.from(this);
-        for (Encounter e: encounters) {
-            // For each encounter in query
-            // Replace 0 with resourceId for follow up note view
-            View child = inflateEncounter(inflater, root, 0,0, e);
-            root.addView(child);
-        }
-        // This is going to require downsync to get any appointment
-        // notes from other VHTs and midwives
-    }
-
-    // TODO
-    public View inflateEncounter(LayoutInflater inflater, ViewGroup root,
-                                 int resId, int subResId, Encounter encounter){
-        // Inflate root view of follow up note child
-        ViewGroup child = null;
-
-        // query observation table by UUID of Encounter
-        // selection = Observations.Contract.ENCOUNTER +" = '" +
-        // Return only columns we need
-        // projection = ???
-        Cursor cursor = null;
-        // cursor = getContentResolver().query(Observations.CONTENT_URI,null, selection, null, null);
-        //
-        // While cursor.moveToNext
-        View notes = inflateObservations(inflater, child, subResId, cursor);
-        // add as child to root - which is the Encounter meta data
-        child.addView(notes);
-        return child;
     }
 
     // TODO
