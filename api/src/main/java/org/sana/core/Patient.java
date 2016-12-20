@@ -51,7 +51,7 @@ public class Patient extends Subject implements IPatient{
     @Expose
     boolean dobestimated = false;
 	@Expose
-	public String pNumber;
+	public String pnumber;
 	@Expose
 	public String holder_pnumber;
 	@Expose
@@ -108,13 +108,13 @@ public class Patient extends Subject implements IPatient{
 	 */
 	@Override
 	public String getpNumber() {
-		return pNumber;
+		return pnumber;
 	}
 	/**
 	 * @param pNumber the pNumber to set
 	 */
 	public void setpNumber(String pNumber) {
-		this.pNumber = pNumber;
+		this.pnumber = pNumber;
 	}
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getFamily_name()
