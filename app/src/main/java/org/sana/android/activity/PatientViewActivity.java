@@ -209,20 +209,20 @@ public class PatientViewActivity extends MainActivity {
                 if(!TextUtils.isEmpty(patient.getpNumber())) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL,
                             Uri.parse("tel:" + patient.getpNumber()));
-                    startActivity(callIntent);
+                    startActivityForResult(callIntent,0);
                 }
                 break;
             case R.id.btn_call_powerholder:
                 if(!TextUtils.isEmpty(patient.getHolder_pNumber())) {
                     Intent callIntent = new Intent(Intent.ACTION_CALL,
                             Uri.parse("tel:" + patient.getHolder_pNumber()));
-                    startActivity(callIntent);
+                    startActivityForResult(callIntent, 1);
                 }
                 break;
             case R.id.btn_view_encounters:
                 Intent viewIntent = new Intent(this, EncounterListDetailActivity.class);
                 viewIntent.setData(getIntent().getData());
-                startActivity(viewIntent);
+                startActivityForResult(viewIntent,2);
                 break;
         }
     }
