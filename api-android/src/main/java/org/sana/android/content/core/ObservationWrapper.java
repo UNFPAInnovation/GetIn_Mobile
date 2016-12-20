@@ -32,6 +32,8 @@ import java.io.File;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.Observations;
 import org.sana.api.IObservation;
+import org.sana.core.Encounter;
+import org.sana.core.Observation;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
@@ -82,7 +84,7 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 	 */
 	@Override
 	public String getValue_complex() {
-		return getStringField(Observations.Contract.VALUE_COMPLEX);
+		return getStringField(Observations.Contract.VALUE);
 	}
 
 	/* (non-Javadoc)
@@ -90,7 +92,7 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 	 */
 	@Override
 	public String getValue_text() {
-		return getStringField(Observations.Contract.VALUE_TEXT);
+		return getStringField(Observations.Contract.VALUE);
 	}
 
 	/* (non-Javadoc)
@@ -98,7 +100,16 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 	 */
 	@Override
 	public IObservation getObject() {
-		return this;
+		Observation obj = new Observation();
+        obj.setUuid(getUuid());
+        obj.setCreated(getCreated());
+        obj.setModified(getModified());
+        obj.setConcept(getConcept());
+        obj.setValue(getValue_text());
+        Encounter encounter = new Encounter();
+        encounter.setUuid(getEncounter());
+        obj.setEncounter(encounter);
+        return obj;
 	}
 	
 	public static Uri getReferenceByEncounterAndId(ContentResolver resolver, 
