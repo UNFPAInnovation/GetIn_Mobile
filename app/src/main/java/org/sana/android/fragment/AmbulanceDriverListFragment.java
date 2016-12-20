@@ -21,6 +21,7 @@ import android.widget.AdapterView;
 import android.widget.AlphabetIndexer;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.Constants;
@@ -117,9 +118,15 @@ public class AmbulanceDriverListFragment extends ListFragment implements
         Object number = view.getTag();
         if(number != null){
             // TODO Should probably check that number is valid pattern
-            Intent intent = new Intent(Intent.ACTION_DIAL,
+            Intent intent = new Intent(Intent.ACTION_CALL,
                     Uri.parse("tel:" + String.valueOf(number)));
-            startActivityForResult(intent,0);
+//            Log.v(TAG, "the telephone number is" +String.valueOf(number));
+            if(number.toString().length() == 10){
+                startActivity(intent);
+            }else {
+                Toast.makeText(AmbulanceDriverListFragment.this.getContext(), "invalid phone number", Toast.LENGTH_SHORT).show();
+            }
+
         } else {
             if (mListener != null)
                 mListener.onDriverSelected(id);
