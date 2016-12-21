@@ -4,7 +4,8 @@
     uuid="18785afb-6160-45a0-ac8c-1f5cbfaa6d92"
     version="1.0"
     locale="en"
-    class="org.sana.core.Subject">
+    class="org.sana.core.Subject"
+    on_complete="intent://org.sana.provider/core/procedure/a6bae73a-d07a-4df0-9830-f243383d9778#Intent;scheme=content;action=org.sana.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end">
     <!-- This uuid was picked from registration xml file  !-->
     <Page>
         <Element
@@ -142,6 +143,7 @@
             answer=""
         />
     </Page>
+    <!-- Shouldn't this be encounter data? -->
     <Page>
         <Element
             id="18"
