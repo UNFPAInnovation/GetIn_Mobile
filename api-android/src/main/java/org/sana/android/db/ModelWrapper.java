@@ -637,7 +637,9 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
         }
         return result;
     }
-
+    public static synchronized String getUuid(Uri uri, Context context) {
+        return getUuid(uri, context.getContentResolver());
+    }
     /**
      * Retrieves the object uuid either from the last path segment, the 'uuid' column
      * of the table, or throws an exception if a directory type Uri.

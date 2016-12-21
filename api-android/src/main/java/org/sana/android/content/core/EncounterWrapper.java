@@ -48,6 +48,7 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 	@Override
 	public IEncounter getObject() {
 		Encounter e = new Encounter();
+        e.setUuid(getUuid());
 		e.created = getCreated();
 		e.modified = getModified();
 		e.subject = (Subject) getSubject();
@@ -68,5 +69,5 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 		}
 		return object;
 	}
-	
+
 }

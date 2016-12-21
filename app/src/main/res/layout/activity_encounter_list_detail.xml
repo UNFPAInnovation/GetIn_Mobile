@@ -1,0 +1,53 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:id="@+id/main_root"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent"
+              android:background="@color/background_color"
+              android:gravity="fill_vertical"
+              android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/alt_bg_color">
+
+
+        <Button
+            android:id="@+id/btn_exit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/general_exit"
+            android:onClick="onExit"
+            android:layout_gravity="center"
+            android:padding="16dp"
+            android:minWidth="48dip"
+            android:layout_alignParentStart="false"
+            android:layout_alignParentLeft="true"/>
+
+        <TextView
+            android:id="@+id/txt_title"
+            android:layout_height="50dp"
+            android:layout_width="wrap_content"
+            android:gravity="center_vertical|center_horizontal"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Title"
+            android:text="Visit Summary"
+            android:textColor="@color/light_gray"
+            android:layout_alignParentTop="false"
+            android:layout_alignParentLeft="false"
+            android:layout_alignParentStart="false"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/btn_exit"/>
+
+    </RelativeLayout>
+
+    <fragment android:id="@+id/fragment"
+              android:name="org.sana.android.fragment.EncounterListDetailFragment"
+              xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:layout_below="@id/header"
+              android:layout_alignParentBottom="true"
+              tools:layout="@layout/fragment_encounter_list_detail"/>
+</RelativeLayout>

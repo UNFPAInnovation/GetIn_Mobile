@@ -328,7 +328,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             phoneNumber.setText(phoneNumberVal);
 
             TextView dobView = (TextView)view.findViewById(R.id.dob);
-            String dobStr = ((Cursor) this.getItem(position)).getString(6);
+            String dobStr = ((Cursor) this.getItem(position)).getString(
+                    cursor.getColumnIndex(Contract.DOB));
             String localDobStr = null;
             Date dob = null;
             try {
@@ -345,7 +346,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             TextView village = (TextView)view.findViewById(R.id.village);
             String villageVal = ((Cursor) this.getItem(position)).getString(4);
             village.setText(villageVal);
-            
+
 
             // Alphabet divider
             boolean needsSeparator = false;

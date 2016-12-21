@@ -25,7 +25,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
 
-    <android:uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:icon="@drawable/ic_app_logo"
@@ -442,6 +442,7 @@
         <service android:name=".android.service.impl.InstrumentationService">
             <intent-filter>
                 <action android:name="org.sana.android.intent.ACTION_RECORD_GPS"/>
+
                 <data
                     android:host="org.sana.provider"
                     android:mimeType="vnd.android.cursor.item/*"
@@ -477,6 +478,10 @@
         <activity
             android:name=".android.activity.AmbulanceDriverListActivity"
             android:label="@string/title_activity_ambulance_driver_list">
+        </activity>
+        <activity
+            android:name=".android.activity.EncounterListDetailActivity"
+            android:label="@string/title_activity_encounter_list_detail">
         </activity>
     </application>
 

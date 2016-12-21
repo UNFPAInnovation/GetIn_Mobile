@@ -48,7 +48,7 @@
     
     <bool name="cfg_notify_task_status">true</bool>    
     <bool name="cfg_upload_foreground">true</bool>
-    <string name="cfg_default_location">29da1cb1-a8da-486d-80c8-0fbd4ee3f9ca</string>
+    <string name="cfg_default_location">b9933a1b-6d58-4ba8-bffa-72ff79584a62</string>
     <string name="cfg_midwife_procedure">9b4ca27f-83ea-4b23-884b-5dffa97eb429</string>
     <!-- <string name="cfg_midwife_appointment_note">cae406f2-faff-45ca-b2f0-6f7d361675c0</string>-->
    <string name="cfg_midwife_appointment_note">ae0775ec-5a8c-4f2c-8c78-13325e26f03f</string>

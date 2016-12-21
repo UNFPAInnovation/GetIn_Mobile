@@ -16,6 +16,7 @@ import java.util.Random;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.sana.R;
+import org.sana.android.app.Defaults;
 import org.sana.android.app.Locales;
 import org.sana.android.procedure.Procedure;
 import org.sana.android.procedure.ProcedureParseException;
@@ -337,9 +338,14 @@ public class SanaUtil {
     /** Loading Sana with XML-described procedures is currently hard-coded. New
      * files can be added or removed here. */
     public static void loadDefaultDatabase(Context ctx) {
+        /*
         insertProcedure(ctx, R.raw.mapping_form_midwife);
         insertProcedure(ctx, R.raw.midwife_appointment_note);
         insertProcedure(ctx, R.raw.appointment_note);
+        */
+        for(int resId: Defaults.procedures()){
+            insertProcedure(ctx, resId);
+        }
 
     }
 

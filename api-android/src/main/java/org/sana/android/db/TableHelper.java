@@ -78,9 +78,8 @@ public abstract class TableHelper<T extends IModel> implements  CreateHelper,
 	}
 	
 	/**
-	 * Returns the name of the table for based on the {@link android.netUri Uri}.
-	 * 
-	 * @param uri The uri to match against.
+	 * Returns the name of the table.
+	 *
 	 * @return A table name.
 	 */
 	public String getTable(){

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content" android:padding="3dp" android:background="@color/alt_fg_color">
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Name"
+        android:ems="10"
+        android:id="@+id/txt_concept" android:layout_weight="3" android:textColor="@color/grey_dark"/>
+
+    <EditText
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:text="Value"
+        android:ems="10"
+        android:id="@+id/txt_value" android:layout_weight="4" android:maxLines="5" android:textColor="@color/grey_dark"/>
+</LinearLayout>
