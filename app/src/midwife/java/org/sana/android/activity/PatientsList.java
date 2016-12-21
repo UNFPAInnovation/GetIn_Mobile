@@ -213,7 +213,7 @@ public class PatientsList extends FragmentActivity implements
                                 // Create new Intent to launch PatientView
                                 //Intent intent1 = new Intent(this, PatientViewActivity.class);
 
-                             startActivity(data1);
+                             startActivityForResult(data1, Intents.VIEW);
                                 // Set new Intent data Uri to the Patient uri
 
 
