@@ -152,10 +152,26 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         // new behavior - start PatientRunner
                         break;
                     case PICK_PROCEDURE:
-                        intent.setAction(Intents.ACTION_RUN_PROCEDURE)
-                                .setData(data.getData())
-                                .putExtras(data);
-                        startActivityForResult(intent, RUN_PROCEDURE);
+                        Uri procedureUri = data.getData();
+                        String uuid = ModelWrapper.getUuid(procedureUri, getContentResolver());
+                        String mappingUuid = getString(R.string.cfg_mapping_form);
+                        if(uuid.compareToIgnoreCase(mappingUuid) == 0){
+                            intent = new Intent(Intent.ACTION_EDIT, mSubject);
+                            //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                            //intent.setDataAndType(mSubject, Subjects.CONTENT_TYPE)
+                            intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                    getString(R.string.procs_subject_short_form1)))
+                                    .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
+                                            .mapping_form_midwife)
+                                    .putExtra(Intents.EXTRA_SUBJECT, mSubject)
+                                    .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                            startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                        } else {
+                            intent.setAction(Intents.ACTION_RUN_PROCEDURE)
+                                    .setData(data.getData())
+                                    .putExtras(data);
+                            startActivityForResult(intent, RUN_PROCEDURE);
+                        }
                         break;
                     case PICK_ENCOUNTER:
                         //intent.setAction(Intent.ACTION_VIEW)
