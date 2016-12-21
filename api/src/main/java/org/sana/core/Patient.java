@@ -63,31 +63,31 @@ public class Patient extends Subject implements IPatient{
 	@Expose
 	public String contraceptive_use;
 	@Expose
-	public String anc_status;
+	public String anc_status = "No";
 	@Expose
 	public Date anc_visit;
 	@Expose
-	public String ambulance_need;
+	public String ambulance_need  = "No";
 	@Expose
-	public String ambulance_response;
+	public String ambulance_response = "No";
 	@Expose
-	public String edd;
+	public String edd = null;
 	@Expose
-	public String receive_sms;
+	public String receive_sms = "No";
 	@Expose
-	public String follow_up;
+	public String follow_up = "No";
 	@Expose
-	public String cug_status;
+	public String cug_status = "No";
 	@Expose
-	public String comment;
+	public String comment = "Not Specified";
 	@Expose
-	public String bleeding;
+	public String bleeding = "No";
 	@Expose
-	public String fever;
+	public String fever = "No";
 	@Expose
-	public String swollen_feet;
+	public String swollen_feet = "No";
 	@Expose
-	public String blurred_vision;
+	public String blurred_vision = "No";
 
 	/* (non-Javadoc)
 	 * @see org.sana.core.IPatient#getGiven_name()
