@@ -1264,7 +1264,7 @@ public class DispatchService extends Service{
         boolean exists = false;
         Cursor c = null;
         try{
-            Uri target = Uri.parse(uri + "/" + obj.uuid);
+            Uri target = Uris.withAppendedUuid(uri,obj.uuid);
             c = getContentResolver().query(target,null,null,null,null);
             if(c!= null && c.getCount() == 1){
                 exists = true;
@@ -1384,6 +1384,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             ////////////////////////////////////////////////////////////
             // Handle images
             ////////////////////////////////////////////////////////////
+            /*
             File file = new File(dir, p.getImage().toASCIIString());
             // check that file is valid
             if(file != null
@@ -1391,11 +1392,13 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             {
                 getFileIfNotExistsOrNotModified(p.getImage(), dir, vals, startId);
             }
+            */
             // Don't add uuid initially
             if(!exists(Subjects.CONTENT_URI, p)){
                 vals.put(Patients.Contract.UUID, p.uuid);
                 insert.add(vals);
             } else {
+                //vals.remove(Patients.Contract.UUID);
                 update.add(
                         new ModelEntity(
                             Uris.withAppendedUuid(Subjects.CONTENT_URI, p.uuid),
