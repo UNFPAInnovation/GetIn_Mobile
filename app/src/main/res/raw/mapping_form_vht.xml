@@ -1,20 +1,20 @@
 <Procedure
     title="mapping_form: Short Form"
-    author="Marting"
-    uuid="18785afb-6160-45a0-ac8c-1f5cbfaa6d92"
+    author="Martin"
+    uuid="ba424ab9-8f8a-4fe5-b72e-ae5cf262e1dd"
     version="1.0"
     locale="en"
     class="org.sana.core.Subject">
     <!-- This uuid was picked from registration xml file  !-->
     <Page>
         <Element
-            id="demo"
+            id="1"
             type="TEXT"
             concept="demographics text"
             question="GIRLS DEMOGRAPHICS DETAILS"
         />
         <Element
-            id="1"
+            id="2"
             concept="GIVEN NAME"
             type="ENTRY"
             required="true"
@@ -23,7 +23,7 @@
             helpText="Please enter the given name"
         />
         <Element
-            id="2"
+            id="3"
             concept="FAMILY NAME"
             type="ENTRY"
             required="true"
@@ -31,7 +31,7 @@
             answer=""
         />
         <Element
-            id="3"
+            id="4"
             concept="DOB"
             type="DATE"
             required="true"
@@ -40,43 +40,55 @@
         />
 
         <Element
-            id="4"
+            id="5"
             concept="AGE"
             type="HIDDEN"
             required="false"
-            question=""
+            question="What is your age"
             answer=""/>
     </Page>
     <Page>
         <Element
-            id="5"
+            id="6"
             concept="PNUMBER"
             type="ENTRY"
+            numeric="DIALPAD"
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
         />
         <Element
-            id="6"
-            concept="holder_pnumber"
+            id="7"
+            concept="HOLDER PNUMBER"
             type="ENTRY"
+            numeric="DIALPAD"
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
         />
-        <Element id="7" type="RADIO"
-            concept="LOCATION PATIENT HOUSE"
-            question="Are you at the girl's home?"
-            choices="Yes;No"
-            required="true"
-            answer=""/>
-    </Page>
-    <Page>
-        <showif>
-            <criteria type="EQUALS" id="7" value="yes"/>
-        </showif>
         <Element
             id="8"
+            type="DATE"
+            question="When was your last Menstruation Date"
+            concept="LMD"
+            required="true"
+            answer=""
+        />
+    </Page>
+    <Page>
+        <Element id="9" type="RADIO"
+            concept="LOCATION PATIENT HOUSE"
+            question="Are you at the girl's home?"
+            answer="Yes"
+            choices="Yes;No" />
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="9" value="yes"/>
+        </ShowIf>
+        <Element
+            id="10"
             concept="LOCATION"
             type="HIDDEN"
             required="false"
@@ -87,7 +99,100 @@
     </Page>
     <Page>
         <Element
-            id="9"
+            id="10a"
+            concept="SUBCOUNTY"
+            type="SELECT"
+            required="true"
+            question="Pick Girls Sub County"
+            choices="Kambuga;Kanungu_Tc;Kanyantorogo;Kayonza;Kihiihi;Kirima;Mpungu;Nyamirama;Rugyeyo;Rutenga"
+            answer="Kanungu_Tc"/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+        </ShowIf>
+        <Element
+            id="10b"
+            concept="PARISH"
+            type="SELECT"
+            question="Pick Girl's Parish"
+            choices="Eastern_Ward;Northern_Ward;Southern_Ward;Western_Ward"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Eastern_Ward"/>
+            </and>
+        </ShowIf>
+        <Element
+            id="10c"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Eastern Ward Parish"
+            choices="Burondo;Katate;Kifunjo;Kirengye;Kyamunjuri;Marumba;Murengyeza;Mushasha;Rugoma"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Northern_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10d"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Northern Ward Parish"
+            choices="Bukora;Bushanja;Karuhinda;Kazirankyende;Kicwamba;Kishojwa;Nyakibuga/Kyambogo;Nyakihira;Nyamihungye;Rushebeya;Rwabushunju"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Southern_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10e"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Southern Ward Parish"
+            choices="Burandami;Butare;Kanjara;Kanyarutama;Karama;Kashenyi;Kishamba;Kyabworo;Kyandago;Muhororo;Omumbuga"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Western_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10f"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Western Ward Parish"
+            choices="Burebane;Bwoma;Ifubura;Irumba;Kanungu;Kyamogote;Mashenga;Nyakatare"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <Element
+            id="11"
             concept="MARITAL STATUS"
             type="SELECT"
             required="true"
@@ -96,7 +201,7 @@
             answer=""
         />
         <Element
-            id="10"
+            id="12"
             concept="EDUCATION LEVEL"
             type="SELECT"
             required="true"
@@ -104,7 +209,7 @@
             choices="Primary_level;OLevel;Alevel;Tertiary"
             answer=""/>
         <Element
-            id="11"
+            id="13"
             concept="CONTRACEPTIVE USE"
             type="RADIO"
             choices="Yes;No"
@@ -113,61 +218,65 @@
     </Page>
     <Page>
         <Element
-            id="12"
+            id="14"
             type="RADIO" choices="Yes;No"
             question="Have you attended ANC during this pregnancy?"
-            concept="ANC visit"
+            concept="ANC Status"
             required="true"
             answer=""
         />
+
     </Page>
     <Page>
         <ShowIf>
-            <Criteria type="EQUALS" id="12" value="Yes"/>
+            <Criteria type="EQUALS" id="14" value="Yes"/>
         </ShowIf>
-        <Element id="12a" type="DATE"
-            concept="ANC CARD DATE"
+        <Element id="15a" type="DATE"
+            concept="ANC VISIT"
             question="Enter Next ANC visit from Card"
             required="true"
             answer=""
         />
     </Page>
-    <Page>
-        <ShowIf>
-            <Criteria type="EQUALS" id="12" value="No"/>
-        </ShowIf>
-        <Element id="12b" type="TEXT"
-            concept="GENERATED ANC CARD DATE"
-            question="Your next ANC visit is on "
-            answer=""
-        />
-    </Page>
+    <!-- <Page>
+         <ShowIf>
+             <Criteria type="EQUALS" id="14" value="No"/>
+         </ShowIf>
+         <Element id="15b" type="DATE"
+             concept="GENERATED ANC CARD DATE"
+             question="Your next ANC visit is on "
+             answer=""
+         />
+     </Page>
+     -->
     <Page>
         <Element
-            id="18"
+            id="16"
             type="TEXT"
             question="GIRLS APPOINTMENT NOTES"
         />
         <Element
-            id="19"
+            id="17"
             type="ENTRY"
-            concept="ACTION TAKEN"
-            question="Action taken"
-            answer=""
-        />
-        <Element
-            id="20"
-            type="ENTRY"
-            concept="RISK IDENTIFIED"
+            concept="MIDWIFE RISK IDENTIFIED"
             question="Any RISK identified?"
             answer=""
         />
         <Element
-            id="21"
-            type="DATE"
-            concept="NEXT APPOINTMENT"
-            question="Next Appointment Date"
+            id="18"
+            type="ENTRY"
+            concept=" MIDWIFE ACTION TAKEN"
+            question="Action taken"
             answer=""
         />
+
+        <!-- <Element
+             id="21"
+             type="DATE"
+             concept="NEXT APPOINTMENT"
+             question="Next Appointment Date"
+             answer=""
+             />
+             -->
     </Page>
 </Procedure>
