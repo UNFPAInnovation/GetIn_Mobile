@@ -1,0 +1,271 @@
+<Procedure
+    title="mapping_form"
+    author="Martin"
+    uuid="9b4ca27f-83ea-4b23-884b-5dffa97eb429"
+    version="1.0"
+    locale="en"
+    class="org.sana.core.Subject"
+    on_complete="intent://org.sana.provider/core/procedure/ae0775ec-5a8c-4f2c-8c78-13325e26f03f#Intent;scheme=content;action=org.sana.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end">
+    <!-- This uuid was picked from registration xml file  !-->
+    <Page>
+        <Element
+            id="1"
+            type="TEXT"
+            concept="demographics text"
+            question="GIRLS DEMOGRAPHICS DETAILS"
+            />
+        <Element
+            id="2"
+            concept="GIVEN NAME"
+            type="ENTRY"
+            required="true"
+            question="Enter First Name"
+            answer=""
+            helpText="Please enter the given name"
+            />
+        <Element
+            id="3"
+            concept="FAMILY NAME"
+            type="ENTRY"
+            required="true"
+            question="Enter Last Name"
+            answer=""
+            />
+        <Element
+            id="4"
+            concept="DOB"
+            type="DATE"
+            required="true"
+            question="Enter Date of Birth"
+            answer=""
+            />
+
+        <Element
+            id="5"
+            concept="AGE"
+            type="HIDDEN"
+            required="false"
+            question="What is your age"
+            answer=""/>
+    </Page>
+    <Page>
+        <Element
+            id="6"
+            concept="PNUMBER"
+            type="ENTRY"
+            numeric="DIALPAD"
+            required="true"
+            question="Enter Girl's Phone Number"
+            answer=""
+            />
+        <Element
+            id="7"
+            concept="HOLDER PNUMBER"
+            type="ENTRY"
+            numeric="DIALPAD"
+            required="true"
+            question="Enter PowerHolder's Number"
+            answer=""
+            />
+        <Element
+            id="8"
+            type="DATE"
+            question="When was your last Menstruation Date"
+            concept="LMD"
+            required="true"
+            answer=""
+            />
+    </Page>
+    <Page>
+        <Element id="9" type="RADIO"
+                 concept="LOCATION PATIENT HOUSE"
+                 question="Are you at the girl's home?"
+                 answer="Yes"
+                 choices="Yes;No" />
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="9" value="yes"/>
+        </ShowIf>
+        <Element
+            id="10"
+            concept="LOCATION"
+            type="HIDDEN"
+            required="false"
+            question="Girl's Address/Location"
+            Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
+            action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
+            />
+    </Page>
+    <Page>
+        <Element
+            id="10a"
+            concept="SUBCOUNTY"
+            type="SELECT"
+            required="true"
+            question="Pick Girls Sub County"
+            choices="Kanungu_Tc"
+            answer="Kanungu_Tc"/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+        </ShowIf>
+        <Element
+            id="10b"
+            concept="PARISH"
+            type="SELECT"
+            question="Pick Girl's Parish"
+            choices="Eastern_Ward;Northern_Ward;Southern_Ward;Western_Ward"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Eastern_Ward"/>
+            </and>
+        </ShowIf>
+        <Element
+            id="10c"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Eastern Ward Parish"
+            choices="Burondo;Katate;Kifunjo;Kirengye;Kyamunjuri;Marumba;Murengyeza;Mushasha;Rugoma"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Northern_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10d"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Northern Ward Parish"
+            choices="Bukora;Bushanja;Karuhinda;Kazirankyende;Kicwamba;Kishojwa;Nyakibuga/Kyambogo;Nyakihira;Nyamihungye;Rushebeya;Rwabushunju"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Southern_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10e"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Southern Ward Parish"
+            choices="Burandami;Butare;Kanjara;Kanyarutama;Karama;Kashenyi;Kishamba;Kyabworo;Kyandago;Muhororo;Omumbuga"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+
+                <Criteria type="EQUALS" id="10b" value="Western_Ward"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="10f"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Western Ward Parish"
+            choices="Burebane;Bwoma;Ifubura;Irumba;Kanungu;Kyamogote;Mashenga;Nyakatare"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <Element
+            id="11"
+            concept="MARITAL STATUS"
+            type="SELECT"
+            required="true"
+            question="Martial Status"
+            choices="SINGLE;MARRIED;DIVORCED"
+            answer=""
+            />
+        <Element
+            id="12"
+            concept="EDUCATION LEVEL"
+            type="SELECT"
+            required="true"
+            question="Highest Education Level"
+            choices="Primary_level;OLevel;Alevel;Tertiary"
+            answer=""/>
+        <Element
+            id="13"
+            concept="CONTRACEPTIVE USE"
+            type="RADIO"
+            choices="Yes;No"
+            question="Have you used Contraceptives before?"
+            answer=""/>
+    </Page>
+    <Page>
+        <Element
+            id="14"
+            type="RADIO" choices="Yes;No"
+            question="Have you attended ANC during this pregnancy?"
+            concept="ANC Status"
+            required="true"
+            answer=""
+            />
+
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="14" value="Yes"/>
+        </ShowIf>
+        <Element id="15a" type="DATE"
+                 concept="ANC VISIT"
+                 question="Enter Next ANC visit from Card"
+                 required="true"
+                 answer=""
+            />
+    </Page>
+    <!-- Are these supposed to be patient fields -->
+    <!--
+        They are not included in the Patient Model if they are
+        and seem more likely transactional data that is associated
+        with a Midwife appointment note.
+    -->
+    <!--
+    <Page>
+        <Element
+            id="16"
+            type="TEXT"
+            question="GIRLS APPOINTMENT NOTES"
+            />
+        <Element
+            id="17"
+            type="ENTRY"
+            concept="MIDWIFE RISK IDENTIFIED"
+            question="Any RISK identified?"
+            answer=""
+            />
+        <Element
+            id="18"
+            type="ENTRY"
+            concept=" MIDWIFE ACTION TAKEN"
+            question="Action taken"
+            answer=""
+            />
+    </Page>
+    -->
+</Procedure>
