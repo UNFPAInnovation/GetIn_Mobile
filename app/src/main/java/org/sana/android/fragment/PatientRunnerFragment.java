@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -155,7 +156,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                                     reply, 0);
                             intent = Intent.parseUri(element.getAction(),
                                     Intent.URI_INTENT_SCHEME);
-                            intent.setData(uSubject);
+                            intent.setDataAndType(uSubject, Patients.CONTENT_ITEM_TYPE);
                             intent.putExtra(Intent.EXTRA_INTENT, replyTo);
                             intent.putExtra("extra_data", reply.getExtras());
                             getActivity().startService(intent);
@@ -210,6 +211,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LMD + "'=" + val);
                 try {
                     mPatient.setLMD(DateUtil.parseDate(val));
+                    setEdd(mPatient);
                 } catch (ParseException e) {
                     Log.e(TAG, e.getMessage());
                     e.printStackTrace();
@@ -736,5 +738,25 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                     element.setAnswer(val);
             }
         }
+    }
+
+    public void setEdd(Patient patient){
+        Date lmd =  patient.getLMD();
+        Calendar c3= Calendar.getInstance();
+        c3.setTime(new Date());
+        Date x1 = c3.getTime();
+        long day = x1.getTime() - lmd.getTime();
+
+        long days1 = day / (1000 * 60 * 60 * 24);
+        int age1 = (int) (days1);
+
+        int gestation_days = 280;
+
+        c3.setTime(lmd);
+        c3.add(Calendar.DATE, gestation_days);
+        // age.setText((age1));
+        Date edd1 = c3.getTime();
+        patient.setEDD(Dates.toSQL(edd1));
+
     }
 }
