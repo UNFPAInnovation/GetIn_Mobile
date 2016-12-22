@@ -47,7 +47,7 @@ import java.util.UUID;
 /**
  * Created by MainBoardroom on 11/17/2016.
  */
-public class PatientViewActivity extends MainActivity {
+public class PatientViewActivity extends BaseActivity {
     TextView age, trimester, mapdate, edd, givenName, familyName;
     Button back;
     // Replace with date only format - do not include time.
@@ -55,18 +55,6 @@ public class PatientViewActivity extends MainActivity {
             Locale.US);
     static java.text.DateFormat shortDateFormat = null;
     Patient patient = null;
-
-    // public Patient getPatient(Uri uri) {
-    // return (Patient) PatientWrapper.get(this, uri);
-    //}
-    public static Uri withAppendedUuid(Uri uri, String uuid) {
-
-        // uuid = mSubject.getLastPathSegment();
-
-        uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
-
-        return uri;
-    }
 
     protected ListView mListView = null;
 
@@ -78,7 +66,7 @@ public class PatientViewActivity extends MainActivity {
 
         mSubject = getIntent().getData();
         String uuid = mSubject.getLastPathSegment();
-        patient = getPatient(mSubject);
+        patient = PatientWrapper.get(this, mSubject);
 
         age = (TextView) findViewById(R.id.girlDetail_age);
         trimester = (TextView) findViewById(R.id.girlDetail_trimester);
