@@ -58,15 +58,16 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
 
     private static final int PATIENTS_LOADER = 0;
     static final String[] mProjection = new String[] {
-		Contract._ID, 
-		Contract.GIVEN_NAME, 
-		Contract.FAMILY_NAME, 
+		    Contract._ID,
+            Contract.UUID,
+		    Contract.GIVEN_NAME,
+		    Contract.FAMILY_NAME,
 		//Contract.PATIENT_ID,
 		//Contract.LOCATION,
-		Contract.IMAGE,
+		    Contract.IMAGE,
             Contract.VILLAGE,
             Contract.PNUMBER,
-        Contract.DOB
+            Contract.DOB
 		};
     
     private Uri mUri;
@@ -115,6 +116,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     /** {@inheritDoc} */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
+        Object tag = v.getTag();
         if (mListener != null) {
             mListener.onPatientSelected(id);
         }
@@ -171,6 +173,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
          * @param patientId The selected patient's ID.
          */
         public void onPatientSelected(long patientId);
+
+        //public void onPatientViewSelected(View view, long id);
     }
 
     /**
@@ -216,6 +220,14 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         private ScrollCompleteListener mScrollListener = null;
         private String[] months;
 
+        int given_nameCol = 0;
+        int family_nameCol = 0;
+        int dobCol = 0;
+        int pnumberCol = 0;
+        int villageCol = 0;
+        int imageCol = 0;
+        int uuidCol = 0;
+
         public PatientCursorAdapter(Context context, Cursor c) {
         	super(context.getApplicationContext(),c,false);
             mInflater = LayoutInflater.from(context);
@@ -257,8 +269,22 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                     1, 
                     mAlphabet);
             mAlphaIndexer.setCursor(c);
+            setColumnIndexes(c);
         }
-        
+
+        public void setColumnIndexes(Cursor cursor){
+            if(cursor == null) return;
+
+            given_nameCol = cursor.getColumnIndex(Contract.GIVEN_NAME);
+            family_nameCol = cursor.getColumnIndex(Contract.FAMILY_NAME);
+            dobCol = cursor.getColumnIndex(Contract.DOB);
+            pnumberCol = cursor.getColumnIndex(Contract.PNUMBER);
+            imageCol = cursor.getColumnIndex(Contract.IMAGE);
+            villageCol = cursor.getColumnIndex(Contract.VILLAGE);
+            uuidCol= cursor.getColumnIndex(Contract.UUID);
+
+        }
+
         public Cursor index(Cursor cursor){
         	if(cursor != null){
         		mRowStates = new int[cursor.getCount()];
@@ -280,6 +306,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         public void changeCursor (Cursor cursor){
         	Log.d(TAG+".mAdapter", "changeCursor(Cursor)");
         	index(cursor);
+            setColumnIndexes(cursor);
         	super.changeCursor(cursor);
         }
         
@@ -287,6 +314,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         public Cursor swapCursor(Cursor newCursor) {
         	Log.i(TAG + ".mAdapter", "swapCursor(Cursor)");
         	index(newCursor);
+            setColumnIndexes(newCursor);
             return super.swapCursor(newCursor);
         }
         
@@ -294,9 +322,11 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         public void bindView(View view, Context context, Cursor cursor) {
         	Log.d(TAG+".mAdapter", "bindView(): cursor position: " + ((cursor != null)? cursor.getPosition(): 0));
         	int position = this.getCursor().getPosition();
+            String uuid = cursor.getString(uuidCol);
+            view.setTag(uuid);
             // Set patient name and image
             ImageView image = (ImageView)view.findViewById(R.id.image);
-            String imagePath = ((Cursor) this.getItem(position)).getString(5);
+            String imagePath = cursor.getString(imageCol);
             
         	//image.setImageResource(R.drawable.unknown);
             if(imagePath != null){
@@ -312,8 +342,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             	}
             } 
             
-            String familyName = ((Cursor) getItem(position)).getString(2);
-            String givenName = ((Cursor) getItem(position)).getString(1);
+            String familyName = cursor.getString(family_nameCol);
+            String givenName = cursor.getString(given_nameCol);
             String displayName = StringUtil.formatPatientDisplayName(givenName, familyName);
             TextView name = (TextView) view.findViewById(R.id.name);
             name.setText(displayName);
@@ -324,12 +354,11 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
            // systemId.setText((TextUtils.isEmpty(id)? "000000":id));
 
             TextView phoneNumber =  (TextView)view.findViewById(R.id.phoneNumber1);
-            String phoneNumberVal = ((Cursor) this.getItem(position)).getString(5);
+            String phoneNumberVal = cursor.getString(pnumberCol);
             phoneNumber.setText(phoneNumberVal);
 
             TextView dobView = (TextView)view.findViewById(R.id.dob);
-            String dobStr = ((Cursor) this.getItem(position)).getString(
-                    cursor.getColumnIndex(Contract.DOB));
+            String dobStr = cursor.getString(dobCol);
             String localDobStr = null;
             Date dob = null;
             try {
@@ -341,10 +370,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             dobView.setText((TextUtils.isEmpty(localDobStr)? dobStr:
                     localDobStr));
 
-
-            
             TextView village = (TextView)view.findViewById(R.id.village);
-            String villageVal = ((Cursor) this.getItem(position)).getString(4);
+            String villageVal = cursor.getString(villageCol);
             village.setText(villageVal);
 
 
