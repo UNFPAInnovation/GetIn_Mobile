@@ -30,6 +30,7 @@ import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.db.ModelWrapper;
 import org.sana.android.fragment.PatientListFragment;
 import org.sana.android.fragment.PatientListFragment.OnPatientSelectedListener;
 import org.sana.android.provider.Patients;
@@ -158,12 +159,37 @@ public class PatientsList extends FragmentActivity implements
     @Override
     public void onPatientSelected(final long patientId) {
         Log.i(TAG, "onPatientSelected(long)");
-
+        /*
         final String [] items = new String[]{
                 "Follow up",
                 "Edit","View"
         };
+        */
+        // Replacing this with Update/View flow
+        // Update
+        // 1. sets the result and returns
+        // 2. Main will invoke the procedure runner which will show
+        //      mapping form and appointment note
+        // 3. mapping form is equivalent to edit
+        // 4. appointment note is equivalent to Follow up
+        // View
+        // 1. Behaves similar to how the EncounterTaskList flow works in VHT version
+        final String [] items = new String[]{
+                "Update","View"
+        };
 
+        // Use uuid based for consistency
+        Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
+        String uuid = ModelWrapper.getUuid(uri,this);
+        uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
+
+        final Intent data = new Intent();
+        data.setData(uri);
+        //data.putExtras(getIntent().getExtras());
+        data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
+        //data.putExtra(EXTRA_PATIENT_ID, patientId);
+        data.putExtra(Intents.EXTRA_SUBJECT, uri);
+        setResult(RESULT_OK, data);
         //an alert dialog to display edit and follow up note
         final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("choose action")
@@ -171,57 +197,15 @@ public class PatientsList extends FragmentActivity implements
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         Toast.makeText(PatientsList.this, "clicked "+items[which], Toast.LENGTH_SHORT).show();
-
-                        switch (which){
+                        switch(which){
                             case 0:
-                                // A patient was selected so return to caller activity.
-                                //Intent data = getIntent();
-                                Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
-                                Log.d(TAG,"...patient selected: " + uri);
-                                Intent data = new Intent();
-                                data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
-                                data.putExtra(EXTRA_PATIENT_ID, patientId);
-                                data.putExtra(Intents.EXTRA_SUBJECT, uri);
-                                setResult(RESULT_OK, data);
-                                finish();
                                 break;
-
                             case 1:
-                                Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-                                //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
-                                intent.setDataAndType(ContentUris.withAppendedId(Patients.CONTENT_URI,patientId), Subjects.CONTENT_TYPE)
-                                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                                getString(R.string.procs_subject_short_form1)))
-                                        .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                                .mapping_form_midwife);
-//                                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-//                                setResult(RESULT_OK, intent);
-//                                finish();
-
-                                startActivityForResult(intent, Intents.RUN_PROCEDURE);
-                                break;
-                            case 2:
-                                Uri uri1 = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
-                                Log.d(TAG,"...patient selected: " + uri1);
-                                Intent data1 = new Intent(PatientsList.this,PatientViewActivity.class);
-
-                                data1.setDataAndType(uri1,Patients.CONTENT_ITEM_TYPE);
-                                data1.putExtra(EXTRA_PATIENT_ID, patientId);
-                                data1.putExtra(Intents.EXTRA_SUBJECT, uri1);
-                                setResult(RESULT_OK, data1);
-                                finish();
-                                // Create new Intent to launch PatientView
-                                //Intent intent1 = new Intent(this, PatientViewActivity.class);
-
-                             startActivityForResult(data1, Intents.VIEW);
-                                // Set new Intent data Uri to the Patient uri
-
-
-
-
+                                data.addFlags(Intents.FLAG_VIEW);
                                 break;
                         }
-
+                        setResult(RESULT_OK, data);
+                        finish();
                     }
                 })
                 .create();
@@ -243,7 +227,6 @@ public class PatientsList extends FragmentActivity implements
         data.putExtra(Intents.EXTRA_SUBJECT, uri);
         setResult(RESULT_OK, data);
         finish();
-        // Implement edit beavior - set flag, etc.
     }
     @Override
     public void onStart(){
