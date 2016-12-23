@@ -676,7 +676,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_PROCEDURE);
                 break;*/
             case R.id.btn_main_view_call_VHT:
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                intent = new Intent(MainActivity.this, ObserverList.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
                 break;
@@ -941,12 +941,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         //String uuid = this.get
         String uuid1 = mSubject.getLastPathSegment();
         String uuid3 = mObserver.getLastPathSegment();
-
-
-
-
-
-
 
         /**
          * TODO
