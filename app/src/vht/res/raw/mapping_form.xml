@@ -5,7 +5,7 @@
     version="1.0"
     locale="en"
     class="org.sana.core.Subject"
-    on_complete="intent://org.sana.provider/core/procedure/a6bae73a-d07a-4df0-9830-f243383d9778#Intent;scheme=content;action=org.sana.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end"
+    on_complete="intent://org.sana.provider/core/procedure/a6bae73a-d07a-4df0-9830-f243383d9778#Intent;scheme=content;action=org.sana.android.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end"
 >
     <!-- This uuid was picked from registration xml file  !-->
     <Page>
