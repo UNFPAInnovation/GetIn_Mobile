@@ -29,11 +29,17 @@ package org.sana.android.content.core;
 
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.Observers;
+import org.sana.android.util.Dates;
 import org.sana.api.IObserver;
+import org.sana.core.Location;
 import org.sana.core.Observer;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
+
+import java.util.Collections;
+import java.util.List;
 
 /**
  * @author Sana Development
@@ -79,6 +85,23 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		return getStringField(Observers.Contract.PHONE_NUMBER);
 	}
 
+    @Override
+    public String getFirstName() {
+        return getStringField(Observers.Contract.FIRST_NAME);
+    }
+
+    @Override
+    public String getLastName() {
+        return getStringField(Observers.Contract.LAST_NAME);
+    }
+
+    @Override
+    public List<Location> getLocations() {
+        //String[] names = getListField(Observers.Contract.LOCATIONS);
+        // TODO
+        return Collections.EMPTY_LIST;
+    }
+
 	/* (non-Javadoc)
 	 * @see org.sana.android.db.ModelWrapper#getObject()
 	 */
@@ -94,6 +117,9 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		object.setUuid(getUuid());
 		object.setCreated(getCreated());
 		object.setModified(getModified());
+        object.setFirstName(getFirstName());
+        object.setLastName(getLastName());
+        object.setLocations(getLocations());
 		return object;
 	}
 	
@@ -158,4 +184,28 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		}
 		return object;
 	}
+
+    public static ContentValues toValues(Observer object){
+        ContentValues values = new ContentValues();
+        values.put(Observers.Contract.UUID, object.getUuid());
+        values.put(Observers.Contract.CREATED, Dates.toSQL(object.getCreated()));
+        values.put(Observers.Contract.MODIFIED, Dates.toSQL(object.getModified()));
+        values.put(Observers.Contract.USERNAME, object.getUsername());
+        values.put(Observers.Contract.PASSWORD, object.getPassword());
+        values.put(Observers.Contract.PHONE_NUMBER, object.getPhoneNumber());
+        values.put(Observers.Contract.ROLE, object.getRole());
+        values.put(Observers.Contract.FIRST_NAME, object.getFirstName());
+        values.put(Observers.Contract.LAST_NAME, object.getLastName());
+        // TODO
+        // values.put(Observers.Contract.LOCATIONS, object.getLocations());
+        return values;
+    }
+
+    public static ContentValues toValues(Observer object, String[] excludes){
+        ContentValues values = toValues(object);
+        for(String exclude: excludes){
+            values.remove(exclude);
+        }
+        return values;
+    }
 }
