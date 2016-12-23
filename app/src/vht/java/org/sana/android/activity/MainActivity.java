@@ -159,7 +159,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
                                             getString(R.string.procs_subject_short_form1)))
                                     .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                            .mapping_form_midwife)
+                                            .mapping_form)
                                     .putExtra(Intents.EXTRA_SUBJECT, mSubject)
                                     .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                             startActivityForResult(intent, Intents.RUN_PROCEDURE);
