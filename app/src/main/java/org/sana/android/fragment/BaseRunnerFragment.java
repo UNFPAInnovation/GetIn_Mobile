@@ -275,6 +275,9 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
                     uploadProcedureInBackground2();
                 } else {
                     baseViews.showNext();
+                    try {
+                        hideKeyboard(getActivity(), baseViews.getCurrentView());
+                    } catch (Exception e) {}
                 }
                 getActivity().setProgress(10000);
                 updateNextPrev();
@@ -1318,4 +1321,9 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
      * @param page
      */
     public void onViewChanged(ProcedurePage page){}
+
+    public void hideKeyboard(Context context, View view) {
+        InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    }
 }
