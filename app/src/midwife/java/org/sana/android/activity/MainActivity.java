@@ -1151,7 +1151,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             // send to sync
             Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, uuid));
+                    Intent(Intents.ACTION_CREATE, EncounterTasks.CONTENT_URI);
             intent.putExtra("form", form);
             startService(intent);
         }

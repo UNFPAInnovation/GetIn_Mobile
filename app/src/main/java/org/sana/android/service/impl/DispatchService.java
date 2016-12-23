@@ -615,7 +615,6 @@ public class DispatchService extends Service{
                         case Uris.SUBJECT_DIR:
 
                             try {
-                                //List<ContentValues> content = new ArrayList<ContentValues>();
                                 PatientResponseHandler pHandler = new PatientResponseHandler();
                                 Response<Collection<Patient>> patientListResponse = MDSInterface2.apiGet(uri,username,password,
                                     pHandler);
@@ -625,7 +624,6 @@ public class DispatchService extends Service{
                             } catch (Exception e) {
                                     Log.e(TAG,"...." + e.getMessage());
                                     Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    //bcastMessage = e.getMessage();
                                     bcastCode = 400;
                             }
                             break;
@@ -694,22 +692,36 @@ public class DispatchService extends Service{
                         case Uris.ENCOUNTER_TASK_DIR:
                             if (method.equals("GET")){
                                 EncounterTaskResponseHandler handler = new EncounterTaskResponseHandler();
-                                Collection<EncounterTask> objs = Collections.emptyList();
-                                try {
-                                    Response<Collection<EncounterTask>> response = MDSInterface2.apiGet(uri,username,password,handler);
-                                    objs = response.message;
-                                    Log.i(TAG, "GET EncounterTask: Returned " +
-                                            "n=" + objs.size());
-                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                Response<Collection<EncounterTask>> response= null;
 
-                                } catch (Exception e) {
-                                    Log.w(TAG, "GET failed: " + uri
-                                            .toASCIIString());
-                                    Log.w(TAG,"...." + e.getMessage());
-                                    e.printStackTrace();
-                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    bcastMessage = e.getMessage();//getString(R.string.upload_fail);
-                                    bcastCode = 400;
+                                if(method.equals("GET")) {
+                                    try {
+                                        response = MDSInterface2.apiGet(uri, username, password, handler);
+                                        bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                    } catch (Exception e) {
+                                        Log.w(TAG, "GET failed: " + uri
+                                                .toASCIIString());
+                                        Log.w(TAG, "...." + e.getMessage());
+                                        e.printStackTrace();
+                                        Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                        bcastMessage = e.getMessage();//getString(R.string.upload_fail);
+                                        bcastCode = 400;
+                                    }
+                                } else if(method.equals("POST")){
+                                    try {
+                                        Bundle form = data.getBundle("form");
+                                        Map<String, String> formData = ModelEntity.toMap(form);
+                                        response = MDSInterface2.apiPost(uri, username, password, formData, eTaskHandler);
+                                        bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                    }   catch(Exception e){
+                                        e.printStackTrace();
+                                        addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
+                                        Log.e(TAG, "PUT failed: " + msgUri);
+                                        Log.e(TAG,"...." + e.getMessage());
+                                        Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                        bcastMessage = e.getMessage();
+                                        bcastCode = 400;
+                                    }
                                 }
                             }
                             break;
@@ -725,9 +737,6 @@ public class DispatchService extends Service{
                                             msgUri, username, password, form, null, eTaskHandler);
                                     Log.d(TAG, "....UPDATE " + e.status +" --> " + e.message);
 
-                                } else if(method.equals("POST")){
-                                    Map<String, String> formData = ModelEntity.toMap(form);
-                                    e = MDSInterface2.apiPost(uri, username, password, formData, eTaskHandler);
                                 }
 
                                 if(e != null && e.code != 200)
