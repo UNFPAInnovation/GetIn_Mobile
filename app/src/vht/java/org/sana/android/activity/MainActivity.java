@@ -143,10 +143,16 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         mEncounter = Uri.EMPTY;
                         break;
                     case PICK_PATIENT:
+                        if((flags & Intents.FLAG_VIEW) == Intents.FLAG_VIEW){
+                            intent = new Intent(this, PatientViewActivity.class);
+                            intent.setData(data.getData());
+                            startActivityForResult(intent, VIEW_PATIENT);
+                        } else {
                         intent.setAction(Intent.ACTION_PICK)
                                 .setData(Procedures.CONTENT_URI)
                                 .putExtras(data);
                         startActivityForResult(intent, PICK_PROCEDURE);
+                        }
                         break;
                     case PICK_PROCEDURE:
                         Uri procedureUri = data.getData();
