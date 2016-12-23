@@ -304,6 +304,8 @@ public final class Intents{
     /** Set to  indicate notifications should be sent after the action of the intent has completed  */
     public static final int FLAG_NOTIFY_TASK_COMPLETE = 16;
 
+    public static final int FLAG_VIEW = 32;
+
 	/**
 	 * Copies an intent into a new one including all data, type, extras, and 
 	 * categories.
