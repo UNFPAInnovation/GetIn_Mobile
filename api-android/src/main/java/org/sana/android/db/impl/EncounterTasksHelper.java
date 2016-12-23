@@ -168,9 +168,6 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 	 */
 	@Override
 	public String onUpgrade(int oldVersion, int newVersion) {
-		if(oldVersion < newVersion){
-			return "DROP TABLE " + getTable() +"; " + onCreate();
-		}
 		return null;
 	}
 	
