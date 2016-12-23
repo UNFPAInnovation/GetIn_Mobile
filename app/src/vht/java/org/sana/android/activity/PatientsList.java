@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
@@ -16,11 +17,12 @@ import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
-import android.support.v7.widget.SearchView;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.Constants;
@@ -28,6 +30,7 @@ import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.db.ModelWrapper;
 import org.sana.android.fragment.PatientListFragment;
 import org.sana.android.fragment.PatientListFragment.OnPatientSelectedListener;
 import org.sana.android.provider.Patients;
@@ -39,7 +42,7 @@ import org.sana.net.Response;
 
 /** Activity for creating new and display existing patients. The resulting
  * patient selected or created, will be returned to the calling Activity.
- * 
+ *
  * @author Sana Development Team */
 public class PatientsList extends FragmentActivity implements
         OnPatientSelectedListener, ScrollCompleteListener {
@@ -57,8 +60,6 @@ public class PatientsList extends FragmentActivity implements
 
     // Fragments
     private PatientListFragment mFragmentPatientList;
-    //adapter
-    private PatientListFragment.PatientCursorAdapter mPatientCursorAdapter;
     private boolean mAdmin = true;
     protected BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -70,46 +71,24 @@ public class PatientsList extends FragmentActivity implements
         }
     };
     protected ProgressDialog mProgressDialog = null;
-    //search view to filter the mapped girls
-    private SearchView searchView;
 
     /** {@inheritDoc} */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-    	Log.d(TAG, "onStart()");
+        Log.d(TAG, "onStart()");
         super.onCreate(savedInstanceState);
-    	Locales.updateLocale(this, getString(R.string.force_locale));
+        Locales.updateLocale(this, getString(R.string.force_locale));
         setContentView(R.layout.patient_list_activity);
         // Set the registration disabled by default
         findViewById(R.id.register).setEnabled(false);
-
-        /**
-         * implementing the search using the searchView
-         */
-        /*
-        searchView = (SearchView) findViewById(R.id.patient_searchView);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-//                mPatientCursorAdapter.getFilter().filter(newText);
-                mFragmentPatientList.mAdapter.getFilter().filter(newText);
-                return false;
-            }
-        });
-        */
     }
 
     /** {@inheritDoc} */
     @Override
     public void onAttachFragment(Fragment fragment) {
-    	Log.d(TAG, "onStart()");
+        Log.d(TAG, "onStart()");
         super.onAttachFragment(fragment);
-    	Locales.updateLocale(this, getString(R.string.force_locale));
+        Locales.updateLocale(this, getString(R.string.force_locale));
         if (fragment.getClass() == PatientListFragment.class) {
             mFragmentPatientList = (PatientListFragment) fragment;
             mFragmentPatientList.setOnPatientSelectedListener(this);
@@ -124,7 +103,7 @@ public class PatientsList extends FragmentActivity implements
     /** {@inheritDoc} */
     @Override
     protected void onActivityResult(int requestCode, int resultCode,
-            Intent data) {
+                                    Intent data) {
         SanaUtil.logActivityResult(TAG, requestCode, resultCode);
         switch (requestCode) {
             case CREATE_PATIENT:
@@ -140,7 +119,6 @@ public class PatientsList extends FragmentActivity implements
     /** {@inheritDoc} */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         /*
     	if(mAdmin)
     		getMenuInflater().inflate(R.menu.patients_list_menu_admin, menu);
@@ -159,10 +137,10 @@ public class PatientsList extends FragmentActivity implements
                 return true;
             case R.id.menu_sync_patients:
                 getContentResolver().delete(Subjects.CONTENT_URI, null,null);
-            	mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
+                mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
                 return true;
             case R.id.menu_delete_patients:
-            	getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+                getContentResolver().delete(Subjects.CONTENT_URI, null,null);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -179,25 +157,70 @@ public class PatientsList extends FragmentActivity implements
 
     /** {@inheritDoc} */
     @Override
-    public void onPatientSelected(long patientId) {
+    public void onPatientSelected(final long patientId) {
         Log.i(TAG, "onPatientSelected(long)");
-        // A patient was selected so return to caller activity.
-        //Intent data = getIntent();
-    	Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
-        Log.d(TAG,"...patient selected: " + uri);
-        Intent data = new Intent();
+        /*
+        final String [] items = new String[]{
+                "Follow up",
+                "Edit","View"
+        };
+        */
+        // Replacing this with Update/View flow
+        // Update
+        // 1. sets the result and returns
+        // 2. Main will invoke the procedure runner which will show
+        //      mapping form and appointment note
+        // 3. mapping form is equivalent to edit
+        // 4. appointment note is equivalent to Follow up
+        // View
+        // 1. Behaves similar to how the EncounterTaskList flow works in VHT version
+        final String [] items = new String[]{
+                "Update","View"
+        };
+
+        // Use uuid based for consistency
+        Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
+        String uuid = ModelWrapper.getUuid(uri,this);
+        uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
+
+        final Intent data = new Intent();
+        data.setData(uri);
+        //data.putExtras(getIntent().getExtras());
         data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
-        data.putExtra(EXTRA_PATIENT_ID, patientId);
+        //data.putExtra(EXTRA_PATIENT_ID, patientId);
         data.putExtra(Intents.EXTRA_SUBJECT, uri);
         setResult(RESULT_OK, data);
-        finish();
+        //an alert dialog to display edit and follow up note
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("choose action")
+                .setItems(items, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Toast.makeText(PatientsList.this, "clicked "+items[which], Toast.LENGTH_SHORT).show();
+                        switch(which){
+                            case 0:
+                                break;
+                            case 1:
+                                data.addFlags(Intents.FLAG_VIEW);
+                                break;
+                        }
+                        setResult(RESULT_OK, data);
+                        finish();
+                    }
+                })
+                .create();
+        alertDialog.show();
     }
 
     public void onPatientSelected(Uri uri) {
         Log.i(TAG, "onPatientSelected(long)");
         // A patient was selected so return to caller activity.
-        //Intent data = getIntent();
+
         Log.d(TAG,"...patient selected: " + uri);
+        // Show dialog, etc
+
+        // Have dialog buttons call default behavior or edit behavior
+        // Default behavior - follow up note, set
         Intent data = new Intent();
         data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
         //data.putExtra(EXTRA_PATIENT_ID, patientId);
@@ -207,9 +230,9 @@ public class PatientsList extends FragmentActivity implements
     }
     @Override
     public void onStart(){
-    	super.onStart();
-    	Log.d(TAG, "onStart()");
-    	//bindService(new Intent(Intent.ACTION_SYNC, Subjects.CONTENT_URI), null, 0);
+        super.onStart();
+        Log.d(TAG, "onStart()");
+        //bindService(new Intent(Intent.ACTION_SYNC, Subjects.CONTENT_URI), null, 0);
     }
 
     @Override
@@ -228,21 +251,21 @@ public class PatientsList extends FragmentActivity implements
 
     Binder mBinder = null;
     boolean mBound = false;
- 	protected ServiceConnection mConnection = new ServiceConnection(){
+    protected ServiceConnection mConnection = new ServiceConnection(){
 
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			mBinder = (Binder) service;
-			mBound = true;
-		}
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mBinder = (Binder) service;
+            mBound = true;
+        }
 
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-			mBinder = null;
-			mBound = false;
-		}
- 		
- 	};
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mBinder = null;
+            mBound = false;
+        }
+
+    };
 
     protected void handleBroadcast(Intent intent){
         Log.i(TAG,"handleBroadcast(Intent)");
@@ -320,7 +343,7 @@ public class PatientsList extends FragmentActivity implements
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                               // getString(R.string.procs_subject_short_form)))
+                                // getString(R.string.procs_subject_short_form)))
                                 getString(R.string.cfg_midwife_procedure)))
                         .putExtra(Intents.EXTRA_PROCEDURE_ID, resId);
                 startActivityForResult(intent, CREATE_PATIENT);
@@ -339,10 +362,10 @@ public class PatientsList extends FragmentActivity implements
         v.setEnabled(true);
     }
 
-   public int getProcedureResourceId(String name){
-       String localeStr = Preferences.getString(this, Constants.PREFERENCE_LOCALE);
-       String localizedName = String.format("%s_%s", name, localeStr);
-       int resId = getResources().getIdentifier(localizedName, "raw", getPackageName());
-       return resId;
-   }
+    public int getProcedureResourceId(String name){
+        String localeStr = Preferences.getString(this, Constants.PREFERENCE_LOCALE);
+        String localizedName = String.format("%s_%s", name, localeStr);
+        int resId = getResources().getIdentifier(localizedName, "raw", getPackageName());
+        return resId;
+    }
 }
