@@ -91,6 +91,9 @@ public class ObserversHelper extends TableHelper<Observer>{
 		+ Contract.CONTACT1 + " TEXT,"
 		+ Contract.CONTACT2 + " TEXT,"
 				+ Contract.PHONE_NUMBER + " TEXT,"
+                + Contract.FIRST_NAME + " TEXT,"
+                + Contract.LAST_NAME + " TEXT,"
+                + Contract.LOCATIONS + " TEXT,"
 		+ Contract.ROLE + " TEXT"
         + ");";
 		
@@ -102,7 +105,16 @@ public class ObserversHelper extends TableHelper<Observer>{
 	@Override
 	public String onUpgrade(int oldVersion, int newVersion) {
 		// TODO Auto-generated method stub
-		return null;
+        StringBuilder builder = new StringBuilder();
+        if(oldVersion < newVersion && newVersion == 6){
+            builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.FIRST_NAME + " TEXT;");
+            builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.LAST_NAME + " TEXT;");
+            builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.LOCATIONS + " TEXT;");
+        }
+        if(builder.length() > 0)
+            return builder.toString();
+        else
+            return null;
 	}
 	
 }
