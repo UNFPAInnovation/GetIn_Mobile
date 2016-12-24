@@ -3,7 +3,6 @@ package org.sana.android.fragment;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
@@ -24,7 +23,7 @@ import java.util.Map;
  * Activities containing this fragment MUST implement the {@link ModelSelectedListener}
  * interface.
  */
-public class ObserverFragment extends ListFragment {
+public class ObserverListFragment extends ListFragment {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
@@ -36,13 +35,13 @@ public class ObserverFragment extends ListFragment {
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
      */
-    public ObserverFragment() {
+    public ObserverListFragment() {
     }
 
     // TODO: Customize parameter initialization
     @SuppressWarnings("unused")
-    public static ObserverFragment newInstance(int columnCount) {
-        ObserverFragment fragment = new ObserverFragment();
+    public static ObserverListFragment newInstance(int columnCount) {
+        ObserverListFragment fragment = new ObserverListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
         fragment.setArguments(args);
