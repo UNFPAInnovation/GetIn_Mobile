@@ -158,8 +158,10 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             sync(getActivity(), Subjects.CONTENT_URI);
             String observerUuid = ModelWrapper.getUuid(
                 observer, getActivity().getContentResolver());
-            Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter(
-                "assigned_to__uuid",observerUuid).build();
+            //Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter(
+            //    "assigned_to__uuid",observerUuid).build();
+
+            Uri u = EncounterTasks.CONTENT_URI;
             sync(getActivity(), u);
         } else {
             Log.i(TAG, "sync: all ");
@@ -325,7 +327,6 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             Status stat = Status.fromString(status);
             switch(stat){
                 case COMPLETED:
-                case REVIEWED:
                     complete = true;
                     break;
                 default:
