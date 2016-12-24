@@ -1115,16 +1115,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         //String uuid = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
         String uuid1 = mObserver.getLastPathSegment();
-       String uuid3 = mSubject.getLastPathSegment();
-        //EncounterTask task= new EncounterTask();
-    String uuid = UUID.randomUUID().toString();
-        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_notexml);
-          //tasks.
-
-        //UUID  uui= UUID.randomUUID();
-       //String uuid2 = uuid.toString();
-        //String uuid1 = uui.toString();
-        //String uuid2 = uui.toString();
+        String uuid3 = mSubject.getLastPathSegment();
+        String uuid = UUID.randomUUID().toString();
 
         for ( EncounterTask task : tasks) {
 
@@ -1135,24 +1127,31 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             values.put(Tasks.Contract.PROCEDURE, getString(R.string.cfg_midwife_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
-           values.put(Tasks.Contract.UUID,uuid);
+            values.put(Tasks.Contract.UUID,uuid);
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
 
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
+            form.putString("assigned_to", uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
             form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
             form.putString(Tasks.Contract.UUID,uuid);
+            // Server tweaks
+            // Server uses an int mapping so ASSIGNED = 3
+            form.putInt(Tasks.Contract.STATUS, status.code);
+            // Need to associate concept here for visit categorization
+            form.putString("concept", getString(R.string.cfg_task_concept));
 
 
             // send to sync
-            Intent intent = new
-                    Intent(Intents.ACTION_CREATE, EncounterTasks.CONTENT_URI);
-            intent.putExtra("form", form);
+            Intent intent = new Intent(this, DispatchService.class);
+            intent.setAction(Intents.ACTION_CREATE)
+                .setData(EncounterTasks.CONTENT_URI)
+                .putExtra("form", form);
             startService(intent);
         }
     }
