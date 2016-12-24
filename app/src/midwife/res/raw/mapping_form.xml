@@ -190,6 +190,90 @@
             choices="Burebane;Bwoma;Ifubura;Irumba;Kanungu;Kyamogote;Mashenga;Nyakatare"
             answer=""/>
     </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+        </ShowIf>
+        <Element
+            id="11b"
+            concept="PARISH"
+            type="SELECT"
+            question="Pick Girl's Parish"
+            choices=" Bugongi;Katete;Kiringa;Nyarugunda;Nyarutojo;Ruhandagazi"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+
+                <Criteria type="EQUALS" id="11b" value="Bugongi"/>
+            </and>
+        </ShowIf>
+        <Element
+            id="11c"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Bugongi Parish"
+            choices="Ihembe;Ihunga;Kakinga;Kakinga Cell;Kayenje;Kigarama;Kitoha;Mukorogyero;Murehe A;Murehe B;Nyakatunguru;Rukiri;Rushebeya A;Rushebeya B;Rwamanyony;Rweyerezo"
+            answer=""/>
+    </Page>
+
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+
+                <Criteria type="EQUALS" id="11b" value="Kiringa"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="11d"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Kiringa Parish"
+            choices="Bushombe;Katembe;Kigando;Kigando;Kigando;Mushunga;Nyambizi;Rwembogo;Rwentondo;Zorooma"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+
+                <Criteria type="EQUALS" id="11b" value="Nyarugunda"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="11e"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Nyarugunda Parish"
+            choices="Kakoni;Kashuri;Katojo;Nyampikyi;Nyarugunda;Nyaruhanga;Rutooma"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+
+                <Criteria type="EQUALS" id="11b" value="Nyarutojo"/>
+            </and>
+
+        </ShowIf>
+        <Element
+            id="11f"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Western Ward Parish"
+            choices="Kagongo;Kashayo;Kigarama;Kirundwe;Kyampoza;Kyamugaga;Kyomuringa;Mushunga;Nyakagyezi;Nyakeina;Nyarutojo;Omubajagari;Rwere"
+            answer=""/>
+    </Page>
+
+
 
     <Page>
         <Element
