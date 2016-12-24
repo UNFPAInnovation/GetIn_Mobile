@@ -54,4 +54,5 @@
    <string name="cfg_midwife_appointment_note">ae0775ec-5a8c-4f2c-8c78-13325e26f03f</string>
     <string name="cfg_alphabet" translatable="false">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
     <string name="cfg_mapping_form" translatable="false">9b4ca27f-83ea-4b23-884b-5dffa97eb429</string>
+    <string name="cfg_task_concept">58ad20e0-ac3e-46aa-bfd3-da2c79bf3b5e</string>
 </resources>
