@@ -33,6 +33,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 
+import org.sana.core.Model;
 import org.sana.net.Response;
 
 import java.util.HashMap;
@@ -76,7 +77,13 @@ public final class ModelEntity {
             Iterator<String> keys = form.keySet().iterator();
             while(keys.hasNext()){
                 String key = keys.next();
-                data.put(key, form.getString(key));
+                Object obj = form.get(key);
+                if(obj == null)
+                    data.put(key, "");
+                else if(obj instanceof Model)
+                    data.put(key, ((Model)obj).getUuid());
+                else
+                    data.put(key, String.valueOf(obj));
             }
         }
         return data;
