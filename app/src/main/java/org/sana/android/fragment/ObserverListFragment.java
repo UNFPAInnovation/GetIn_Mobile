@@ -1,16 +1,26 @@
 package org.sana.android.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.sana.R;
+import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverWrapper;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Observers;
 import org.sana.core.Observer;
 
@@ -23,13 +33,16 @@ import java.util.Map;
  * Activities containing this fragment MUST implement the {@link ModelSelectedListener}
  * interface.
  */
-public class ObserverListFragment extends ListFragment {
+public class ObserverListFragment extends ListFragment implements
+        LoaderManager.LoaderCallbacks<Cursor>, AdapterView.OnItemClickListener {
 
     // TODO: Customize parameter argument names
     private static final String ARG_COLUMN_COUNT = "column-count";
     // TODO: Customize parameters
     private int mColumnCount = 1;
     private ModelSelectedListener<Observer> mListener = null;
+    private ObserverCursorAdapter mAdapter = null;
+    private Uri mUri = Observers.CONTENT_URI;
     static final String[] mProjection = null;
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
@@ -73,15 +86,75 @@ public class ObserverListFragment extends ListFragment {
         }
     }
 
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        // TODO initialize mAdapter
+        mAdapter = new ObserverCursorAdapter(getActivity(), null, 0);
+        setListAdapter(mAdapter);
+
+        LoaderManager.enableDebugLogging(true);
+        getActivity().getSupportLoaderManager().initLoader(Uris.OBSERVER_DIR, null, this);
+        // set the list item click listener
+        getListView().setOnItemClickListener(this);
+
+    }
+
     @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
     }
 
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        CursorLoader loader = new CursorLoader(getActivity(),
+                mUri,
+                mProjection,
+                null, null, null);
+        return loader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
+        if (cursor == null || (cursor !=null && cursor.getCount() == 0)) {
+            setEmptyText(getString(R.string.msg_drivers_vht));
+        }
+        if(cursor != null){
+            ((ObserverCursorAdapter) this.getListAdapter()).swapCursor(cursor);
+        }
+
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        ((ObserverCursorAdapter)this.getListAdapter()).swapCursor(null);
+    }
+
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            // Implement click to call functionality
+            Object number = view.getTag();
+            if(number != null){
+                // TODO Should probably check that number is valid pattern
+                Intent intent = new Intent(Intent.ACTION_CALL,
+                        Uri.parse("tel:" + String.valueOf(number)));
+//            Log.v(TAG, "the telephone number is" +String.valueOf(number));
+                if(number.toString().length() == 10){
+                    startActivity(intent);
+                }
+
+            } else {
+                if (mListener != null) {
+                    mListener.onModelSelected((Observer)mAdapter.getItem(position));
+                }
+            }
+        }
+
     public static class ObserverCursorAdapter extends CursorAdapter{
 
-        protected Map<Long, Observer> mHolders = new HashMap<>();
+        protected Map<Integer, Observer> mHolders = new HashMap<>();
 
 
         public ObserverCursorAdapter(Context context, Cursor c, int resId) {
@@ -97,12 +170,13 @@ public class ObserverListFragment extends ListFragment {
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            final int firstNameCol = cursor.getColumnIndex(Observers.Contract.FIRST_NAME);
-            final int lastNameCol = cursor.getColumnIndex(Observers.Contract.LAST_NAME);
-            final int phoneNumberCol = cursor.getColumnIndex(Observers.Contract.PHONE_NUMBER);
-            setText(view, R.id.first_name, cursor.getString(firstNameCol));
-            setText(view, R.id.last_name, cursor.getString(lastNameCol));
-            setText(view, R.id.phone_number, cursor.getString(phoneNumberCol));
+            Observer obj = (Observer) new ObserverWrapper(cursor).getObject();
+            view.setTag(obj.getPhoneNumber());
+            // TODO fill in any fields etc
+            setText(view, R.id.first_name, obj.getFirstName());
+            setText(view, R.id.last_name, obj.getLastName());
+            setText(view, R.id.phone_number, obj.getPhoneNumber());
+            mHolders.put(cursor.getPosition(), obj);
         }
 
         public Object getItem(int position){
