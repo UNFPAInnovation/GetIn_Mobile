@@ -196,6 +196,7 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         values.put(Observers.Contract.ROLE, object.getRole());
         values.put(Observers.Contract.FIRST_NAME, object.getFirstName());
         values.put(Observers.Contract.LAST_NAME, object.getLastName());
+        values.put(Observers.Contract.ROLE, object.getRole());
         // TODO
         // values.put(Observers.Contract.LOCATIONS, object.getLocations());
         return values;
