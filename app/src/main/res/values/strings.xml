@@ -278,5 +278,6 @@
     <string name="title_activity_encounter_list_detail">
         EncounterListDetailActivity
     </string>
+    <string name="title_observer_list">Observer List</string>
 
 </resources>

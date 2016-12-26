@@ -27,6 +27,10 @@
  */
 package org.sana.api;
 
+import org.sana.core.Location;
+
+import java.util.List;
+
 /**
  * Declares the behavior for an entity that collects or processes data.
  * 
@@ -57,4 +61,10 @@ public interface IObserver extends IModel{
 	public String getRole();
 
 	public String getPhoneNumber();
+
+    public String getFirstName();
+
+    public String getLastName();
+
+    public List<Location> getLocations();
 }

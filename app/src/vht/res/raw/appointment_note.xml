@@ -121,7 +121,7 @@
             concept="VHT FOLLOW UP MEANS"
             required="true"
             question="How was this FollowUp done ?"
-            choices="Call; Personal Visit"
+            choices="Call;Personal Visit"
             answer="Personal Visit"/>
     </Page>
 </Procedure>

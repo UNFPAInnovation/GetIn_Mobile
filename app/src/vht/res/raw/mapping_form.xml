@@ -6,7 +6,7 @@
     locale="en"
     class="org.sana.core.Subject"
     on_complete="intent://org.sana.provider/core/procedure/a6bae73a-d07a-4df0-9830-f243383d9778#Intent;scheme=content;action=org.sana.android.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end"
-    >
+>
     <!-- This uuid was picked from registration xml file  !-->
     <Page>
         <Element
@@ -79,10 +79,10 @@
     </Page>
     <Page>
         <Element id="9" type="RADIO"
-            concept="LOCATION PATIENT HOUSE"
-            question="Are you at the girl's home?"
-            answer="Yes"
-            choices="Yes;No" />
+                 concept="LOCATION PATIENT HOUSE"
+                 question="Are you at the girl's home?"
+                 answer="Yes"
+                 choices="Yes;No" />
     </Page>
 
     <Page>
@@ -106,7 +106,7 @@
             type="SELECT"
             required="true"
             question="Pick Girls Sub County"
-            choices="Kambuga;Kanungu_Tc;Kanyantorogo;Kayonza;Kihiihi;Kirima;Mpungu;Nyamirama;Rugyeyo;Rutenga"
+            choices="Kambuga;Kanungu_Tc"
             answer="Kanungu_Tc"/>
     </Page>
     <Page>
@@ -191,7 +191,6 @@
             choices="Burebane;Bwoma;Ifubura;Irumba;Kanungu;Kyamogote;Mashenga;Nyakatare"
             answer=""/>
     </Page>
-
     <Page>
         <ShowIf>
             <Criteria type="EQUALS" id="10a" value="Kambuga"/>
@@ -204,17 +203,33 @@
             choices=" Bugongi;Katete;Kiringa;Nyarugunda;Nyarutojo;Ruhandagazi"
             answer=""/>
     </Page>
-
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="11a" value="Kambuga"/>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
 
-                <Criteria type="EQUALS" id="11b" value="Bugongi"/>
+                <Criteria type="EQUALS" id="11b" value="Ruhandagazi"/>
             </and>
+
         </ShowIf>
         <Element
             id="11c"
+            concept="VILLAGE"
+            type="SELECT"
+            question="Pick Girl's Village in Ruhandagazi Parish"
+            choices="Bunyinya;Kanyamomo;Katungu;Kayanga;Kibale;Kibale I;Kibale II;Kitorero;Moocha;Ngarama;Nyakatunguru;Rugari"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <and>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
+
+                <Criteria type="EQUALS" id="11b" value=""/>
+            </and>
+        </ShowIf>
+        <Element
+            id="11d"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in Bugongi Parish"
@@ -225,14 +240,14 @@
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="11a" value="Kambuga"/>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
 
                 <Criteria type="EQUALS" id="11b" value="Kiringa"/>
             </and>
 
         </ShowIf>
         <Element
-            id="11d"
+            id="11e"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in Kiringa Parish"
@@ -243,14 +258,14 @@
         <ShowIf>
 
             <and>
-                <Criteria type="EQUALS" id="11a" value="Kambuga"/>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
 
                 <Criteria type="EQUALS" id="11b" value="Nyarugunda"/>
             </and>
 
         </ShowIf>
         <Element
-            id="11e"
+            id="11f"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in Nyarugunda Parish"
@@ -260,14 +275,14 @@
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="11a" value="Kambuga"/>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
 
                 <Criteria type="EQUALS" id="11b" value="Nyarutojo"/>
             </and>
 
         </ShowIf>
         <Element
-            id="11f"
+            id="11g"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in Western Ward Parish"
@@ -277,17 +292,17 @@
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="11a" value="Kambuga"/>
+                <Criteria type="EQUALS" id="10a" value="Kambuga"/>
 
                 <Criteria type="EQUALS" id="11b" value="Ruhandagazi"/>
             </and>
 
         </ShowIf>
         <Element
-            id="11f"
+            id="11h"
             concept="VILLAGE"
             type="SELECT"
-            question="Pick Girl's Village in Western Ward Parish"
+            question="Pick Girl's Village in Ruhandagazi Parish"
             choices="Bunyinya;Kanyamomo;Katungu;Kayanga;Kibale;Kibale I;Kibale Ii;Kitorero;Moocha;Ngarama;Nyakatunguru;Rugari"
             answer=""/>
     </Page>
@@ -333,51 +348,39 @@
             <Criteria type="EQUALS" id="14" value="Yes"/>
         </ShowIf>
         <Element id="15a" type="DATE"
-            concept="ANC VISIT"
-            question="Enter Next ANC visit from Card"
-            required="true"
-            answer=""
+                 concept="ANC VISIT"
+                 question="Enter Next ANC visit from Card"
+                 required="true"
+                 answer=""
         />
     </Page>
-    <!-- <Page>
-         <ShowIf>
-             <Criteria type="EQUALS" id="14" value="No"/>
-         </ShowIf>
-         <Element id="15b" type="DATE"
-             concept="GENERATED ANC CARD DATE"
-             question="Your next ANC visit is on "
-             answer=""
-         />
-     </Page>
-     -->
+    <!-- Are these supposed to be patient fields -->
+    <!--
+        They are not included in the Patient Model if they are
+        and seem more likely transactional data that is associated
+        with a Midwife appointment note.
+    -->
+    <!--
     <Page>
         <Element
             id="16"
             type="TEXT"
             question="GIRLS APPOINTMENT NOTES"
-        />
+            />
         <Element
             id="17"
             type="ENTRY"
             concept="MIDWIFE RISK IDENTIFIED"
             question="Any RISK identified?"
             answer=""
-        />
+            />
         <Element
             id="18"
             type="ENTRY"
             concept=" MIDWIFE ACTION TAKEN"
             question="Action taken"
             answer=""
-        />
-
-        <!-- <Element
-             id="21"
-             type="DATE"
-             concept="NEXT APPOINTMENT"
-             question="Next Appointment Date"
-             answer=""
-             />
-             -->
+            />
     </Page>
+    -->
 </Procedure>

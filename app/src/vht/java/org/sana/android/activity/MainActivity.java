@@ -143,10 +143,16 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         mEncounter = Uri.EMPTY;
                         break;
                     case PICK_PATIENT:
+                        if((flags & Intents.FLAG_VIEW) == Intents.FLAG_VIEW){
+                            intent = new Intent(this, PatientViewActivity.class);
+                            intent.setData(data.getData());
+                            startActivityForResult(intent, VIEW_PATIENT);
+                        } else {
                         intent.setAction(Intent.ACTION_PICK)
                                 .setData(Procedures.CONTENT_URI)
                                 .putExtras(data);
                         startActivityForResult(intent, PICK_PROCEDURE);
+                        }
                         break;
                     case PICK_PROCEDURE:
                         Uri procedureUri = data.getData();
@@ -159,7 +165,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
                                             getString(R.string.procs_subject_short_form1)))
                                     .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                            .mapping_form_midwife)
+                                            .mapping_form)
                                     .putExtra(Intents.EXTRA_SUBJECT, mSubject)
                                     .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                             startActivityForResult(intent, Intents.RUN_PROCEDURE);
@@ -667,9 +673,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.procs_subject_short_form1)))
+                                getString(R.string.cfg_mapping_form)))
                         .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                .mapping_form_midwife)
+                                .mapping_form)
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
@@ -1159,7 +1165,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
             // send to sync
             Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, uuid));
+                    Intent(Intents.ACTION_CREATE, EncounterTasks.CONTENT_URI);
             intent.putExtra("form", form);
             startService(intent);
         }

@@ -78,12 +78,15 @@ import org.sana.android.content.Intents;
 import org.sana.android.content.ModelContext;
 import org.sana.android.content.ModelEntity;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.net.MDSInterface2;
 import org.sana.android.provider.AmbulanceDrivers;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Observers;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
@@ -94,6 +97,7 @@ import org.sana.android.util.SanaUtil;
 import org.sana.api.task.EncounterTask;
 import org.sana.core.AmbulanceDriver;
 import org.sana.core.Model;
+import org.sana.core.Observer;
 import org.sana.core.Patient;
 import org.sana.core.Procedure;
 import org.sana.core.Subject;
@@ -102,6 +106,7 @@ import org.sana.net.Response;
 import org.sana.net.http.HttpTaskFactory;
 import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
 import org.sana.net.http.handler.EncounterTaskResponseHandler;
+import org.sana.net.http.handler.ObserverResponseHandler;
 import org.sana.net.http.handler.PatientResponseHandler;
 import org.sana.net.http.handler.VHTResponseHandler;
 import org.sana.util.DateUtil;
@@ -613,7 +618,6 @@ public class DispatchService extends Service{
                         case Uris.SUBJECT_DIR:
 
                             try {
-                                //List<ContentValues> content = new ArrayList<ContentValues>();
                                 PatientResponseHandler pHandler = new PatientResponseHandler();
                                 Response<Collection<Patient>> patientListResponse = MDSInterface2.apiGet(uri,username,password,
                                     pHandler);
@@ -623,7 +627,6 @@ public class DispatchService extends Service{
                             } catch (Exception e) {
                                     Log.e(TAG,"...." + e.getMessage());
                                     Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    //bcastMessage = e.getMessage();
                                     bcastCode = 400;
                             }
                             break;
@@ -690,23 +693,35 @@ public class DispatchService extends Service{
                             }
                             break;
                         case Uris.ENCOUNTER_TASK_DIR:
-                            if (method.equals("GET")){
-                                EncounterTaskResponseHandler handler = new EncounterTaskResponseHandler();
-                                Collection<EncounterTask> objs = Collections.emptyList();
-                                try {
-                                    Response<Collection<EncounterTask>> response = MDSInterface2.apiGet(uri,username,password,handler);
-                                    objs = response.message;
-                                    Log.i(TAG, "GET EncounterTask: Returned " +
-                                            "n=" + objs.size());
-                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                            EncounterTaskResponseHandler handler = new EncounterTaskResponseHandler();
+                            Response<Collection<EncounterTask>> response= null;
 
+                            if(method.equals("GET")) {
+                                try {
+                                    response = MDSInterface2.apiGet(uri, username, password, handler);
+                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
                                 } catch (Exception e) {
                                     Log.w(TAG, "GET failed: " + uri
                                             .toASCIIString());
-                                    Log.w(TAG,"...." + e.getMessage());
+                                    Log.w(TAG, "...." + e.getMessage());
                                     e.printStackTrace();
                                     Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
                                     bcastMessage = e.getMessage();//getString(R.string.upload_fail);
+                                    bcastCode = 400;
+                                }
+                            } else if(method.equals("POST")){
+                                try {
+                                    Bundle form = data.getBundle("form");
+                                    Map<String, String> formData = ModelEntity.toMap(form);
+                                    response = MDSInterface2.apiPost(uri, username, password, formData, eTaskHandler);
+                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                }   catch(Exception e){
+                                    e.printStackTrace();
+                                    addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
+                                    Log.e(TAG, "PUT failed: " + msgUri);
+                                    Log.e(TAG,"...." + e.getMessage());
+                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                    bcastMessage = e.getMessage();
                                     bcastCode = 400;
                                 }
                             }
@@ -714,20 +729,23 @@ public class DispatchService extends Service{
                         case Uris.ENCOUNTER_TASK_ITEM:
                         case Uris.ENCOUNTER_TASK_UUID:
                             try{
+                                Bundle form = data.getBundle("form");
+                                Log.d(TAG, "....form size: " + ((form != null)? form.size():"NULL FORM"));
+                                Response<Collection<EncounterTask>> e = null;
                                 if (method.equals("PUT")) {
                                     Log.i(TAG, "....Updating task: " + msgUri);
-                                    Bundle form = data.getBundle("form");
-                                    Log.d(TAG, "....form size: " + ((form != null)? form.size():"NULL FORM"));
-                                    Response<Collection<EncounterTask>> e = MDSInterface2.syncUpdate(DispatchService.this,
+                                    e = MDSInterface2.syncUpdate(DispatchService.this,
                                             msgUri, username, password, form, null, eTaskHandler);
                                     Log.d(TAG, "....UPDATE " + e.status +" --> " + e.message);
-                                    if(e.code != 200)
-                                        addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
-                                    else
-                                        bcastMessage = getString(R.string.upload_success);
 
                                 }
+
+                                if(e != null && e.code != 200)
+                                    addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
+                                else
+                                    bcastMessage = getString(R.string.upload_success);
                             } catch(Exception e){
+                                e.printStackTrace();
                                 addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
                                 Log.e(TAG, "PUT failed: " + msgUri);
                                 Log.e(TAG,"...." + e.getMessage());
@@ -792,6 +810,22 @@ public class DispatchService extends Service{
                                 }
 
 
+                                break;
+
+                            case Uris.OBSERVER_DIR:
+                                try {
+                                    ObserverResponseHandler observerHandler = new ObserverResponseHandler();
+                                    if(method.equals("GET")){
+                                        // Call get request - MDSInterface2.apiGet should work
+                                        Response<Collection<Observer>> observerResponse = MDSInterface2.apiGet(uri,
+                                                username,password, observerHandler);
+//
+                                        bcastCode = createOrUpdateObservers(observerResponse.getMessage(), startId);
+                                    }
+
+                                }catch (Exception e) {
+                                    e.printStackTrace();
+                                }
                                 break;
                         case Uris.PACKAGE_DIR:
                             Logf.D(TAG, "handleMessage(Message)",
@@ -1292,7 +1326,7 @@ public class DispatchService extends Service{
         boolean exists = false;
         Cursor c = null;
         try{
-            Uri target = Uri.parse(uri + "/" + obj.uuid);
+            Uri target = Uris.withAppendedUuid(uri,obj.uuid);
             c = getContentResolver().query(target,null,null,null,null);
             if(c!= null && c.getCount() == 1){
                 exists = true;
@@ -1456,6 +1490,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             ////////////////////////////////////////////////////////////
             // Handle images
             ////////////////////////////////////////////////////////////
+            /*
             File file = new File(dir, p.getImage().toASCIIString());
             // check that file is valid
             if(file != null
@@ -1463,11 +1498,13 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             {
                 getFileIfNotExistsOrNotModified(p.getImage(), dir, vals, startId);
             }
+            */
             // Don't add uuid initially
             if(!exists(Subjects.CONTENT_URI, p)){
                 vals.put(Patients.Contract.UUID, p.uuid);
                 insert.add(vals);
             } else {
+                //vals.remove(Patients.Contract.UUID);
                 update.add(
                         new ModelEntity(
                             Uris.withAppendedUuid(Subjects.CONTENT_URI, p.uuid),
@@ -1544,6 +1581,68 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             result = 200;
             return result;
         }
+
+    public final int createOrUpdateObservers(Collection<Observer> t, int startId) {
+        Log.i(TAG, "createOrUpdateObservers(Collection<Patient>,int)");
+        int size = (t != null)?t.size():0;
+        Log.d(TAG,"...size="+size);
+        // return a 404 not found code if size is zero
+        if(size == 0)
+            return Response.Code.NOT_FOUND.code;
+
+        Uri result = Uri.EMPTY;
+        final File dir = ModelContext.getExternalFilesDir(Subjects.CONTENT_URI);
+
+        // Containers for instances that must be inserted or updated
+        List<ContentValues> insert = new ArrayList<ContentValues>();
+        List<ModelEntity> update = new ArrayList<ModelEntity>();
+
+        // Begin process of iterating over the list
+        int index = 0;
+        Iterator<Observer> iterator =  t.iterator();
+        while(iterator.hasNext()){
+            Observer obj = iterator.next();
+            ContentValues vals = ObserverWrapper.toValues(obj);
+            ////////////////////////////////////////////////////////////
+            // Handle images
+            ////////////////////////////////////////////////////////////
+            /*
+            File file = new File(dir, p.getImage().toASCIIString());
+            // check that file is valid
+            if(file != null
+                && (file.getPath().endsWith("jpg") || file.getPath().endsWith("png")))
+            {
+                getFileIfNotExistsOrNotModified(p.getImage(), dir, vals, startId);
+            }
+            */
+            // Don't add uuid initially
+            if(!exists(Subjects.CONTENT_URI, obj)){
+                vals.put(BaseContract.UUID, obj.uuid);
+                insert.add(vals);
+            } else {
+                vals.remove(BaseContract.UUID);
+                update.add(
+                        new ModelEntity(
+                                Uris.withAppendedUuid(Observers.CONTENT_URI, obj.uuid),
+                                vals));
+            }
+
+        }
+        // Handle the insert(s)
+        int inserted = getContentResolver().bulkInsert(Observers.CONTENT_URI,
+                toArray(insert));
+        Log.d(TAG, "....inserted=" + inserted);
+
+        // Handle the update(s)
+        int updated = 0;
+        for(ModelEntity me:update){
+            updated += getContentResolver().update(me.getUri(),
+                    me.getEntityValues(),null,null);
+        }
+        Log.d(TAG, "....updates=" + updated);
+        // Successful return a 200 code
+        return Response.Code.OK.code;
+    }
 
     final Handler.Callback updateCheckRunnable(Handler handler) throws URISyntaxException{
 
@@ -1670,7 +1769,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         //notifyIntent.addCategory(Intent.CATEGORY_HOME);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notify(resID,code,notifyIntent);
+        //notify(resID,code,notifyIntent);
     }
 
     public final void handleRequestStart(int id){
@@ -1682,7 +1781,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         //notifyIntent.addCategory(Intent.CATEGORY_HOME);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        notify(resID,notifyIntent);
+        //notify(resID,notifyIntent);
     }
 
     public final void handleRequestComplete(int id){
@@ -1698,7 +1797,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
         notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-        notify(resID,notifyIntent);
+        //notify(resID,notifyIntent);
     }
 
     public final void handleQueueEmpty(){

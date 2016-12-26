@@ -103,6 +103,30 @@ public class MDSInterface2 {
 
 	public static final String TAG = MDSInterface2.class.getSimpleName();
 
+    protected static Uri.Builder getBuilder(Context context){
+        String host = context.getString(R.string.host_mds);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        host = preferences.getString(Constants.PREFERENCE_MDS_URL, host);
+
+        Uri.Builder builder = Uri.EMPTY.buildUpon();
+        builder.scheme("https")
+                .authority(host)
+                .appendPath("mds");
+        return builder;
+    }
+
+    protected static Uri build(Context context, Uri contentUri){
+        Uri.Builder builder = getBuilder(context);
+        for(String pathSegment: contentUri.getPathSegments()){
+            builder.appendPath(pathSegment);
+        }
+        Uri result = builder.build();
+        if(!result.getPath().endsWith("/")){
+            return builder.appendPath("").build();
+        }
+        return result;
+    }
+
 	/**
 	 * Gets the value in the MDS url setting and add the correct scheme, i.e.
 	 * http or https, depending on the value of the use secure transmission
@@ -120,7 +144,7 @@ public class MDSInterface2 {
 		boolean useSecure = preferences.getBoolean(
 				Constants.PREFERENCE_SECURE_TRANSMISSION, true);
 		String scheme = (useSecure)? "https": "http";
-		String url = scheme + "://" + host +"/"+ root;
+		String url = scheme + "://" + host + root;
 		return (TextUtils.isEmpty(path)? url: url + path);
 	}
 
@@ -1218,8 +1242,14 @@ public class MDSInterface2 {
 		int port = getPort(c);
 		String root = c.getString(R.string.path_root);
 		Log.i(TAG," path:"+  root + path);
-		URI uri =  new URI(scheme, null, host, port,root + path, query, null);
-		Log.i(TAG, "uri: " + uri.toString() +", path:" + path);
+        // Clean up path
+        String normalizedPath = root + path;
+        if(!normalizedPath.endsWith("/")){
+            normalizedPath = normalizedPath + "/";
+        }
+        normalizedPath = normalizedPath.replace("//", "/" );
+		URI uri =  new URI(scheme, null, host, port, normalizedPath, query, null);
+        Log.i(TAG, "uri: " + uri.toString() +", path:" + normalizedPath);
 		return uri;
 	}
 
@@ -1312,11 +1342,13 @@ public class MDSInterface2 {
             URI target = getURI(context, Subjects.CONTENT_URI.getPath() + "/");
             Map<String,String> values = new HashMap<String,String>();
             values = PatientWrapper.toForm(patient);
-            String locationUUID = values.get(Patients.Contract.LOCATION + "__uuid");
+            //String locationUUID = values.get(Patients.Contract.LOCATION + "__uuid");
+            /*
             if(!UUIDUtil.isValid(locationUUID)){
                 values.put(Patients.Contract.LOCATION + "__uuid",
                         context.getString(R.string.cfg_default_location));
             }
+            */
             response = MDSInterface2.apiPost(target, username, password,
                     values, handler);
         } catch (URISyntaxException e) {
@@ -1344,11 +1376,13 @@ public class MDSInterface2 {
             values = PatientWrapper.toForm(patient);
             // Patient UUID is in the URI here for a PUT request
             values.remove(Patients.Contract.UUID);
+            /*
             String locationUUID = values.get(Patients.Contract.LOCATION + "__uuid");
             if(!UUIDUtil.isValid(locationUUID)){
                 values.put(Patients.Contract.LOCATION + "__uuid",
                     context.getString(R.string.cfg_default_location));
             }
+            */
             response = MDSInterface2.apiPut(target, username, password,
                     values, null, handler);
         } catch (URISyntaxException e) {

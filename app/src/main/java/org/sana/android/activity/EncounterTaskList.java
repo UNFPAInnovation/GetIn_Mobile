@@ -184,7 +184,9 @@ public class EncounterTaskList extends FragmentActivity implements
             if(!Uris.isEmpty(observer)){
                 String observerUuid = ModelWrapper.getUuid(observer, getContentResolver());
                 Log.i(TAG, "observer: " + observer);
-                Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter("assigned_to__uuid",observerUuid).build();
+                //Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter("assigned_to__uuid",observerUuid).build();
+                // TODO use village based?
+                Uri u = EncounterTasks.CONTENT_URI;
                 mListFragment.sync(this, u);
             }
             return true;
@@ -255,7 +257,7 @@ public class EncounterTaskList extends FragmentActivity implements
             case Uris.SUBJECT:
                 Log.d(TAG, ".... got subject 200");
                 String observerUuid = ModelWrapper.getUuid(observer, getContentResolver());
-                Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter("assigned_to__uuid",observerUuid).build();
+                Uri u = EncounterTasks.CONTENT_URI;//.buildUpon().appendQueryParameter("assigned_to__uuid",observerUuid).build();
                 mListFragment.sync(this, u);
             break;
             case Uris.ENCOUNTER_TASK:

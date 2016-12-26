@@ -28,7 +28,17 @@
 package org.sana.android.content;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+import android.util.Log;
+
+import org.sana.core.Model;
+import org.sana.net.Response;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @author Sana Development
@@ -59,4 +69,23 @@ public final class ModelEntity {
 	public Uri getUri(){
 		return uri;
 	}
+
+    public static Map<String, String> toMap(Bundle form){
+        Map<String, String> data = new HashMap<String, String>();
+        // Should have at least one field that need to be updated
+        if(form != null){
+            Iterator<String> keys = form.keySet().iterator();
+            while(keys.hasNext()){
+                String key = keys.next();
+                Object obj = form.get(key);
+                if(obj == null)
+                    data.put(key, "");
+                else if(obj instanceof Model)
+                    data.put(key, ((Model)obj).getUuid());
+                else
+                    data.put(key, String.valueOf(obj));
+            }
+        }
+        return data;
+    }
 }

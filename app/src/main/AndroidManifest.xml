@@ -483,6 +483,10 @@
             android:name=".android.activity.EncounterListDetailActivity"
             android:label="@string/title_activity_encounter_list_detail">
         </activity>
+        <activity
+            android:name=".android.activity.ObserverList"
+            android:label="@string/title_observer_list">
+        </activity>
     </application>
 
 </manifest>

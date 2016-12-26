@@ -91,6 +91,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     public static final int VIEW_ENCOUNTER = 7;
     public static final int SETTINGS = 8;
     public static final int EXECUTE_TASK = 9;
+    public static final int VIEW_PATIENT = 10;
 //    public static final int VIEW_ASSIGNED_TASK = 10;
     private Runner<Intent,Intent> runner;
 
@@ -132,6 +133,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 Uri dataUri = (data != null)? data.getData(): Uri.EMPTY;
                 Intent intent = new Intent();
                 onSaveAppState(intent);
+                int flags = data.getFlags();
                 switch(requestCode){
                     case AUTHENTICATE:
                         hideViewsByRole();
@@ -140,22 +142,38 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         mEncounter = Uri.EMPTY;
                         break;
                     case PICK_PATIENT:
-                        // Fork behavior here depending on whether edting patient
-                        // or executing Procedure for Encounter
-
-                        // Add conditional
-                        // Default behavior
-                        intent.setAction(Intent.ACTION_PICK)
-                                .setData(Procedures.CONTENT_URI)
-                                .putExtras(data);
-                        startActivityForResult(intent, PICK_PROCEDURE);
-                        // new behavior - start PatientRunner
+                        if((flags & Intents.FLAG_VIEW) == Intents.FLAG_VIEW){
+                            intent = new Intent(this, PatientViewActivity.class);
+                            intent.setData(data.getData());
+                            startActivityForResult(intent, VIEW_PATIENT);
+                        } else {
+                            intent.setAction(Intent.ACTION_PICK)
+                                    .setData(Procedures.CONTENT_URI)
+                                    .putExtras(data);
+                            startActivityForResult(intent, PICK_PROCEDURE);
+                        }
                         break;
                     case PICK_PROCEDURE:
-                        intent.setAction(Intents.ACTION_RUN_PROCEDURE)
-                                .setData(data.getData())
-                                .putExtras(data);
-                        startActivityForResult(intent, RUN_PROCEDURE);
+                        Uri procedureUri = data.getData();
+                        String uuid = ModelWrapper.getUuid(procedureUri, getContentResolver());
+                        String mappingUuid = getString(R.string.cfg_mapping_form);
+                        if(uuid.compareToIgnoreCase(mappingUuid) == 0){
+                            intent = new Intent(Intent.ACTION_EDIT, mSubject);
+                            //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                            //intent.setDataAndType(mSubject, Subjects.CONTENT_TYPE)
+                            intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                    getString(R.string.procs_subject_short_form1)))
+                                    .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
+                                            .mapping_form_midwife)
+                                    .putExtra(Intents.EXTRA_SUBJECT, mSubject)
+                                    .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                            startActivityForResult(intent, Intents.RUN_PROCEDURE);
+                        } else {
+                            intent.setAction(Intents.ACTION_RUN_PROCEDURE)
+                                    .setData(data.getData())
+                                    .putExtras(data);
+                            startActivityForResult(intent, RUN_PROCEDURE);
+                        }
                         break;
                     case PICK_ENCOUNTER:
                         //intent.setAction(Intent.ACTION_VIEW)
@@ -167,7 +185,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         break;
                     case PICK_ENCOUNTER_TASK:
                         //Uri task = data.getParcelableExtra(Intents.EXTRA_TASK);
-                        int flags = data.getFlags();
                         uri = Uri.EMPTY;
                         if(data.hasCategory(Intents.CATEGORY_TASK_COMPLETE)){
                             Log.i(TAG, "....Task complete: "+ mTask);
@@ -243,7 +260,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             }
                         }
                         break;
-
+                    case VIEW_PATIENT:
+                        // TODO Where should this return to after view
+                        onPickSubject();
+                        break;
 //                    case VIEW_ASSIGNED_TASK:
 //                        //Uri task = data.getParcelableExtra(Intents.EXTRA_TASK);
 //                        int flags1 = data.getFlags();
@@ -656,7 +676,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_PROCEDURE);
                 break;*/
             case R.id.btn_main_view_call_VHT:
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
+                intent = new Intent(MainActivity.this, ObserverList.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
                 break;
@@ -922,12 +942,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         String uuid1 = mSubject.getLastPathSegment();
         String uuid3 = mObserver.getLastPathSegment();
 
-
-
-
-
-
-
         /**
          * TODO
          * think about the procedure or activity to call when the due date is reached
@@ -1101,16 +1115,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         //String uuid = ModelWrapper.getUuid(Patients.CONTENT_URI,getContentResolver());
         String uuid1 = mObserver.getLastPathSegment();
-       String uuid3 = mSubject.getLastPathSegment();
-        //EncounterTask task= new EncounterTask();
-    String uuid = UUID.randomUUID().toString();
-        //InputStream uuid= this.getResources().openRawResource(R.raw.midwife_appointment_notexml);
-          //tasks.
-
-        //UUID  uui= UUID.randomUUID();
-       //String uuid2 = uuid.toString();
-        //String uuid1 = uui.toString();
-        //String uuid2 = uui.toString();
+        String uuid3 = mSubject.getLastPathSegment();
+        String uuid = UUID.randomUUID().toString();
 
         for ( EncounterTask task : tasks) {
 
@@ -1118,27 +1124,34 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             ContentValues values = new ContentValues();
             values.put(Tasks.Contract.OBSERVER,uuid1);
            values.put(Tasks.Contract.SUBJECT,uuid3.toString());
-            values.put(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
+            values.put(Tasks.Contract.PROCEDURE, getString(R.string.cfg_midwife_appointment_note));
             values.put(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             values.put(Tasks.Contract.STATUS, status.toString());
-           values.put(Tasks.Contract.UUID,uuid);
+            values.put(Tasks.Contract.UUID,uuid);
             getContentResolver().insert(
                     EncounterTasks.CONTENT_URI, values);
 
 
             Bundle form = new Bundle();
             form.putString(Tasks.Contract.OBSERVER,uuid1 );
+            form.putString("assigned_to", uuid1 );
             form.putString(Tasks.Contract.SUBJECT,uuid3.toString());
-            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_appointment_note));
+            form.putString(Tasks.Contract.PROCEDURE,getString(R.string.cfg_midwife_appointment_note));
             form.putString(Tasks.Contract.DUE_DATE, sdf.format(task.due_on));
             form.putString(Tasks.Contract.STATUS,status.toString());
             form.putString(Tasks.Contract.UUID,uuid);
+            // Server tweaks
+            // Server uses an int mapping so ASSIGNED = 3
+            form.putInt(Tasks.Contract.STATUS, status.code);
+            // Need to associate concept here for visit categorization
+            form.putString("concept", getString(R.string.cfg_task_concept));
 
 
             // send to sync
-            Intent intent = new
-                    Intent(Intents.ACTION_CREATE, Uris.withAppendedUuid (EncounterTasks.CONTENT_URI, uuid));
-            intent.putExtra("form", form);
+            Intent intent = new Intent(this, DispatchService.class);
+            intent.setAction(Intents.ACTION_CREATE)
+                .setData(EncounterTasks.CONTENT_URI)
+                .putExtra("form", form);
             startService(intent);
         }
     }
@@ -1177,5 +1190,19 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                     default:
                 }
         }
+    }
+
+    public void onPickEncounterTask(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
+        onSaveAppState(intent);
+        startActivityForResult(intent, PICK_ENCOUNTER_TASK);
+    }
+
+    public void onPickSubject(){
+        Intent intent = new Intent(Intent.ACTION_PICK);
+        intent.setDataAndType(Subjects.CONTENT_URI, Subjects.CONTENT_TYPE);
+        onSaveAppState(intent);
+        startActivityForResult(intent, PICK_PATIENT);
     }
 }

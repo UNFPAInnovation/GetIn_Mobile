@@ -33,11 +33,10 @@ package org.sana.api.task;
  */
 public enum Status {
     UNKNOWN(-1),
-	ASSIGNED(1),
-	REVIEWED(5),
-	REJECTED(3),
-	COMPLETED(2),
-    IN_PROGRESS(4);
+	ASSIGNED(3),
+    IN_PROGRESS(4),
+    COMPLETED(5),
+    CANCELLED(6);
     public final int code;
     Status(int code){
         this.code = code;

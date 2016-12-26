@@ -29,6 +29,10 @@ package org.sana.core;
 
 import org.sana.api.IObserver;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 /**
  * An entity that collects data.
  * 
@@ -37,13 +41,26 @@ import org.sana.api.IObserver;
  */
 public class Observer extends Model implements IObserver{
 
+    public static class User{
+        public String username;
+        private String password;
+        public String first_name;
+        public String last_name;
+        public String[] groups;
+    }
+
 	private String username;
 	private String password;
 	private String role;
 	private String phone_number;
+    private List<Location> locations;
+    private User user;
 	
 	/** Default Constructor */
-	public Observer(){}
+	public Observer(){
+        user = new User();
+        locations = new ArrayList<>();
+    }
 	
 	/**
 	 * Creates a new instance with a specified unique id.
@@ -53,6 +70,7 @@ public class Observer extends Model implements IObserver{
 	public Observer(String uuid){
 		super();
 		setUuid(uuid);
+        user = new User();
 	}
 
 	/*
@@ -60,7 +78,7 @@ public class Observer extends Model implements IObserver{
 	 * @see org.sana.api.IObserver#getUsername()
 	 */
 	public String getUsername() {
-		return username;
+		return user.username;
 	}
 
 	/**
@@ -69,7 +87,7 @@ public class Observer extends Model implements IObserver{
 	 * @param username the username to set
 	 */
 	public void setUsername(String username) {
-		this.username = username;
+		user.username = username;
 	}
 
 	/*
@@ -77,7 +95,7 @@ public class Observer extends Model implements IObserver{
 	 * @see org.sana.api.IObserver#getPassword()
 	 */
 	public String getPassword() {
-		return password;
+		return user.password;
 	}
 
 	/**
@@ -86,7 +104,7 @@ public class Observer extends Model implements IObserver{
 	 * @param password the password to set
 	 */
 	public void setPassword(String password) {
-		this.password = password;
+		user.password = password;
 	}
 
 	/*
@@ -118,5 +136,29 @@ public class Observer extends Model implements IObserver{
 	public void setPhoneNumber(String phone_number) {
 		this.phone_number = phone_number;
 	}
+
+    public String getFirstName(){
+        return user.first_name;
+    }
+
+    public void setFirstName(String name){
+        user.first_name = name;
+    }
+
+    public String getLastName(){
+        return user.last_name;
+    }
+
+    public void setLastName(String name){
+        user.last_name = name;
+    }
+
+    public List<Location> getLocations(){
+        return locations;
+    }
+
+    public void setLocations(Collection<Location> locations){
+        this.locations = new ArrayList<>(locations);
+    }
 	
 }
