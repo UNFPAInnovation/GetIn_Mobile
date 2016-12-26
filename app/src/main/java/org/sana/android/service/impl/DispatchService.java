@@ -87,6 +87,7 @@ import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
+import org.sana.android.provider.VHTs;
 import org.sana.android.service.QueueManager;
 import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
@@ -96,11 +97,13 @@ import org.sana.core.Model;
 import org.sana.core.Patient;
 import org.sana.core.Procedure;
 import org.sana.core.Subject;
+import org.sana.core.VHT;
 import org.sana.net.Response;
 import org.sana.net.http.HttpTaskFactory;
 import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
 import org.sana.net.http.handler.EncounterTaskResponseHandler;
 import org.sana.net.http.handler.PatientResponseHandler;
+import org.sana.net.http.handler.VHTResponseHandler;
 import org.sana.util.DateUtil;
 
 import java.io.BufferedInputStream;
@@ -733,6 +736,31 @@ public class DispatchService extends Service{
                                 bcastCode = 400;
                             }
                             break;
+                            case Uris.VHT_DIR:
+                                //response handler for vht
+                                VHTResponseHandler vhtResponseHandler = new VHTResponseHandler();
+                                //check for GET method
+                                try {
+                                    if(method.equals("GET")){
+                                        //call get request
+                                        Response<Collection<VHT>> adResponse = MDSInterface2.apiGet(uri, username
+                                        ,password, vhtResponseHandler);
+                                        bcastCode = createOrUpdateVHT(adResponse.getMessage(),startId);
+
+                                    }
+                                }catch (Exception e){
+                                    Log.e(TAG, "........"+e.getMessage());
+
+                                    Log.w(TAG, "GET failed: " + uri
+                                            .toASCIIString());
+                                    Log.w(TAG,"...." + e.getMessage());
+                                    e.printStackTrace();
+                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                    bcastMessage = e.getMessage();
+                                    bcastCode = 400;
+
+                                }
+                                break;
                             case Uris.AMBULANCE_DRIVER_DIR:
                                 // TODO Implement AmbulanceDriver request handling
                                 // Get response handler for ambulance driver
@@ -1313,7 +1341,51 @@ public class DispatchService extends Service{
         }
         return result;
     }
+public final int createOrUpdateVHT(Collection<VHT> v, int startId){
+    int size = (v != null)?v.size():0;
+    //return 404 not found code if the size is zero
+    if(size == 0){
+        return Response.Code.NOT_FOUND.code;
+    }
+    //containers for the instances that should be inserted or updated
+    List<ContentValues> insert = new ArrayList<ContentValues>();
+    List<ModelEntity> update = new ArrayList<>();
 
+    //iterate over the returned list
+    Iterator<VHT> iterator = v.iterator();
+    while(iterator.hasNext()){
+        VHT vht = iterator.next();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(VHTs.Contract.FIRST_NAME, vht.getFirstName());
+        contentValues.put(VHTs.Contract.LAST_NAME, vht.getLastname());
+        contentValues.put(VHTs.Contract.PHONE_NUMBER, vht.getPhoneNumber());
+        contentValues.put(VHTs.Contract.LOCATION, vht.getLocation());
+
+        // Don't add uuid initially
+        if(!exists(VHTs.CONTENT_URI, vht)){
+            contentValues.put(VHTs.Contract.UUID, vht.uuid);
+            insert.add(contentValues);
+        } else {
+            update.add(
+                    new ModelEntity(
+                            Uris.withAppendedUuid(VHTs.CONTENT_URI, vht.uuid),
+                            contentValues));
+        }
+    }
+    // Handle the insert(s)
+    int inserted = getContentResolver().bulkInsert(VHTs.CONTENT_URI,
+            toArray(insert));
+    Log.d(TAG, "....inserted=" + inserted);
+    // Handle the update(s)
+    int updated = 0;
+    for(ModelEntity me:update){
+        updated += getContentResolver().update(me.getUri(),
+                me.getEntityValues(),null,null);
+    }
+    Log.d(TAG, "....updates=" + updated);
+    // Successful return a 200 code
+    return Response.Code.OK.code;
+}
 public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, int startId){
     int size = (t != null)?t.size():0;
     //return 404 not found code if the size is zero
