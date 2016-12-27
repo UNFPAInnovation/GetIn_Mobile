@@ -30,10 +30,16 @@ public class VHTs {
      */
     public static final Uri CONTENT_URI = Uri.parse("content://"
             + AUTHORITY + "/core/vht");
+    /**
+     * sort order according to the first name
+     */
+    public static final String FIRST_NAME_SORT_ORDER = Contract.FIRST_NAME + " ASC";
+
 
     public interface Contract extends BaseContract<VHT>{
         public static final String PHONE_NUMBER = "phone_number";
         public static final String FIRST_NAME = "first_name";
-        public static final String SURNAME = "surname";
+        public static final String LAST_NAME = "last_name";
+        public static final String LOCATION = "location";
     }
 }
