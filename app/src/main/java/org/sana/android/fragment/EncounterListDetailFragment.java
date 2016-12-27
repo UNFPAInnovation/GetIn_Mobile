@@ -120,7 +120,7 @@ public class EncounterListDetailFragment extends BaseFragment {
 
         // load concept
         TextView concept = (TextView) view.findViewById(R.id.txt_concept);
-        String conceptName = object.getConcept().toLowerCase();
+        String conceptName = object.getConcept().getName().toLowerCase();
         String first = conceptName.substring(0,1).toUpperCase();
         String remainder = conceptName.substring(1);
         concept.setText(first.concat(remainder));
