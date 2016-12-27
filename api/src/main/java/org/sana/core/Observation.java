@@ -12,8 +12,8 @@ import org.sana.api.IObservation;
  *
  */
 public class Observation extends Model implements IObservation {
-	
-	private String id;
+
+    private String node;
 	private Encounter encounter;
 	private Concept concept;
 	private String value_complex;
@@ -40,14 +40,14 @@ public class Observation extends Model implements IObservation {
 	 */
 	@Override
 	public String getId() {
-		return id;
+		return node;
 	}
 	
 	/**
 	 * @param id the id to set
 	 */
 	public void setId(String id) {
-		this.id = id;
+		node = id;
 	}
 	
 	/* (non-Javadoc)
