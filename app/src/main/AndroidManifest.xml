@@ -480,6 +480,10 @@
             android:label="@string/title_activity_ambulance_driver_list">
         </activity>
         <activity
+            android:name=".android.activity.VHTList"
+            android:label="@string/title_vht_list">
+        </activity>
+        <activity
             android:name=".android.activity.EncounterListDetailActivity"
             android:label="@string/title_activity_encounter_list_detail">
         </activity>
