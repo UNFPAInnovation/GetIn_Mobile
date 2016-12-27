@@ -27,10 +27,9 @@
  */
 package org.sana.android.content;
 
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import android.content.UriMatcher;
+import android.net.Uri;
+import android.text.TextUtils;
 
 import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.provider.Concepts;
@@ -45,15 +44,13 @@ import org.sana.android.provider.Observations;
 import org.sana.android.provider.Observers;
 import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
+import org.sana.android.provider.VHTs;
 import org.sana.util.UUIDUtil;
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.UriMatcher;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.text.TextUtils;
-import android.util.Log;
+import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 /**
  * a container of Uri descriptor values and related constants. The static 
  * methods of this class are primarily intended for consistent, application-wide
@@ -150,6 +147,7 @@ public final class Uris {
 	public static final int ENCOUNTER_TASK = 1024 << CONTENT_SHIFT;
 	public static final int OBSERVATION_TASK = 2048 << CONTENT_SHIFT;
     public static final int AMBULANCE_DRIVER = 4096 << CONTENT_SHIFT;
+	public static final int VHT = 8192 << CONTENT_SHIFT;
 	
 	// dir match codes OBJECT | ITEMS
 	public static final int CONCEPT_DIR = CONCEPT | ITEMS;
@@ -165,6 +163,7 @@ public final class Uris {
 	public static final int ENCOUNTER_TASK_DIR = ENCOUNTER_TASK | ITEMS;
 	public static final int OBSERVATION_TASK_DIR = OBSERVATION_TASK | ITEMS;
     public static final int AMBULANCE_DRIVER_DIR = AMBULANCE_DRIVER | ITEMS;
+    public static final int VHT_DIR = VHT | ITEMS;
 	
 	// item match codes OBJECT | ITEM_ID
 	public static final int CONCEPT_ITEM = CONCEPT | ITEM_ID;
@@ -180,6 +179,7 @@ public final class Uris {
 	public static final int ENCOUNTER_TASK_ITEM = ENCOUNTER_TASK | ITEM_ID;
 	public static final int OBSERVATION_TASK_ITEM = OBSERVATION_TASK | ITEM_ID;
     public static final int AMBULANCE_DRIVER_ITEM= AMBULANCE_DRIVER | ITEM_ID;
+    public static final int VHT_ITEM = VHT | ITEM_ID;
 	
 	// item match codes OBJECT | ITEM_UUID
 	public static final int CONCEPT_UUID = CONCEPT | ITEM_UUID;
@@ -195,6 +195,7 @@ public final class Uris {
 	public static final int ENCOUNTER_TASK_UUID = ENCOUNTER_TASK | ITEM_UUID;
 	public static final int OBSERVATION_TASK_UUID = OBSERVATION_TASK | ITEM_UUID;
     public static final int AMBULANCE_DRIVER_UUID= AMBULANCE_DRIVER | ITEM_UUID;
+    public static final int VHT_UUID = VHT | ITEM_UUID;
 	
 	// Matcher for mapping the Uri to code mappings 
 	private static final UriMatcher mMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -252,6 +253,11 @@ public final class Uris {
         mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/", AMBULANCE_DRIVER_DIR);
         mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/#", AMBULANCE_DRIVER_ITEM);
         mMatcher.addURI(Models.AUTHORITY, "core/ambulancedriver/*", AMBULANCE_DRIVER_UUID);
+
+        //Add VHT
+        mMatcher.addURI(Models.AUTHORITY, "core/vht/", VHT_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/vht/#", VHT_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/vht/*", VHT_UUID);
 		
 	}
 	
@@ -434,6 +440,11 @@ public final class Uris {
             case AMBULANCE_DRIVER_ITEM:
             case AMBULANCE_DRIVER_UUID:
                 return AmbulanceDrivers.CONTENT_ITEM_TYPE;
+            case VHT_DIR:
+                return VHTs.CONTENT_TYPE;
+            case VHT_ITEM:
+            case VHT_UUID:
+                return VHTs.CONTENT_ITEM_TYPE;
             case PACKAGE_DIR:
 			    return "application/vnd.android.package-archive";
 		default:
