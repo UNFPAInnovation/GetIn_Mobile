@@ -147,7 +147,7 @@ public class Observation extends Model implements IObservation {
 		return value_complex;
 	}
 	/**
-	 * @param value_complex the value_complex to set
+	 * @param valueComplex the value_complex to set
 	 */
 	public void setValue_complex(String valueComplex) {
 		this.value_complex = valueComplex;
