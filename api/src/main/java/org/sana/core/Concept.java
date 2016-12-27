@@ -40,7 +40,7 @@ public class Concept extends Model implements IConcept{
 	
 	/** Mime type. Default should be text/plain.  */
 	@Expose
-	public String mediatype;
+	public String mediatype = "text/plain";
 	
 	/** A validation function string to enforce on associated values
 	 *  @see Observation#setValue(Object)
@@ -83,7 +83,7 @@ public class Concept extends Model implements IConcept{
 	}
 
 	/**
-	 * @param display_name the display_name to set
+	 * @param displayName the display_name to set
 	 */
 	public void setDisplayName(String displayName) {
 		this.display_name = displayName;
@@ -139,7 +139,7 @@ public class Concept extends Model implements IConcept{
 	}
 
 	/**
-	 * @param constraint the constraint to set
+	 * @param constraints the constraint to set
 	 */
 	public void setConstraints(String constraints) {
 		this.constraint = constraints;
