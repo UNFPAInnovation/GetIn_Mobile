@@ -28,6 +28,9 @@
 package org.sana.api;
 
 
+import org.sana.core.Concept;
+import org.sana.core.Encounter;
+
 /**
  * Declares the behavior for an observation.
  * 
@@ -47,13 +50,13 @@ public interface IObservation extends IModel{
 	 * 
 	 * @return the encounter
 	 */
-	public String getEncounter();
+	public Encounter getEncounter();
 
 	/**
 	 * Provides the uuid of the concept.
 	 * @return the concept
 	 */
-	public String getConcept();
+	public Concept getConcept();
 
 	/**
 	 * Returns the complex value as a file path or uri.
