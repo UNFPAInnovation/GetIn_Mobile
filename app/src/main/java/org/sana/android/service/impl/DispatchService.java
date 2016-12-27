@@ -78,6 +78,8 @@ import org.sana.android.content.Intents;
 import org.sana.android.content.ModelContext;
 import org.sana.android.content.ModelEntity;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.EncounterWrapper;
+import org.sana.android.content.core.ObservationWrapper;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
@@ -86,6 +88,7 @@ import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Observations;
 import org.sana.android.provider.Observers;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
@@ -96,7 +99,9 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.task.EncounterTask;
 import org.sana.core.AmbulanceDriver;
+import org.sana.core.Encounter;
 import org.sana.core.Model;
+import org.sana.core.Observation;
 import org.sana.core.Observer;
 import org.sana.core.Patient;
 import org.sana.core.Procedure;
@@ -105,7 +110,9 @@ import org.sana.core.VHT;
 import org.sana.net.Response;
 import org.sana.net.http.HttpTaskFactory;
 import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
+import org.sana.net.http.handler.EncounterResponseHandler;
 import org.sana.net.http.handler.EncounterTaskResponseHandler;
+import org.sana.net.http.handler.ObservationResponseHandler;
 import org.sana.net.http.handler.ObserverResponseHandler;
 import org.sana.net.http.handler.PatientResponseHandler;
 import org.sana.net.http.handler.VHTResponseHandler;
@@ -127,7 +134,6 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -521,6 +527,10 @@ public class DispatchService extends Service{
                             break;
                         case Uris.ENCOUNTER_DIR:
                             // TODO implement as a query from msg.data
+                            EncounterResponseHandler eHandler = new EncounterResponseHandler();
+                            Response<Collection<Encounter>> encounterResponse = MDSInterface2.apiGet(
+                                    uri,username, password,eHandler);
+                            bcastCode = createOrUpdateEncounters(encounterResponse.getMessage(),startId);
                             break;
                         case Uris.ENCOUNTER_UUID:
                         case Uris.ENCOUNTER_ITEM:
@@ -593,7 +603,10 @@ public class DispatchService extends Service{
                             }
                             break;
                         case Uris.OBSERVATION_DIR:
-                            // TODO implement as a query from msg.data
+                            ObservationResponseHandler oHandler = new ObservationResponseHandler();
+                            Response<Collection<Observation>> oResponse = MDSInterface2.apiGet(
+                                    uri,username, password,oHandler);
+                            bcastCode = createOrUpdateObservations(oResponse.getMessage(),startId);
                             break;
                         case Uris.OBSERVATION_UUID:
                             // TODO Allows GET or POST
@@ -1642,6 +1655,71 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         Log.d(TAG, "....updates=" + updated);
         // Successful return a 200 code
         return Response.Code.OK.code;
+    }
+
+    public final int createOrUpdateEncounters(Collection<Encounter> t, int startId) {
+        Log.i(TAG, "createOrUpdateEncounters() size="
+                +((t != null)?t.size():"null"));
+        int result = 400;
+        ContentValues[] values = null;
+        List<ContentValues> insert = new ArrayList<ContentValues>();
+        List<ModelEntity> update = new ArrayList<ModelEntity>();
+
+        Iterator<Encounter> iterator =  t.iterator();
+        int index = 0;
+        while(iterator.hasNext()){
+            Encounter obj = iterator.next();
+            ContentValues value = EncounterWrapper.toValues(obj);
+            if(!exists(Encounters.CONTENT_URI, obj))
+                insert.add(value);
+            else
+                update.add(
+                        new ModelEntity(
+                                Uris.withAppendedUuid(Encounters.CONTENT_URI, obj.uuid),
+                                value));
+        }
+
+        int inserted = getContentResolver().bulkInsert(Encounters.CONTENT_URI, toArray(insert));
+        int updated = 0;
+        for(ModelEntity me:update){
+            updated += getContentResolver().update(me.getUri(),me.getEntityValues(),null,null);
+        }
+        Log.d(TAG, "....inserted=" + inserted+", updated=" + updated);
+        result = 200;
+        return result;
+    }
+
+    public final int createOrUpdateObservations(Collection<Observation> objects, int startId) {
+        Log.i(TAG, "createOrUpdateObservations() size="
+                +((objects != null)? objects.size():"null"));
+        int result = 400;
+        ContentValues[] values = null;
+        List<ContentValues> insert = new ArrayList<ContentValues>();
+        List<ModelEntity> update = new ArrayList<ModelEntity>();
+
+        Iterator<Observation> iterator =  objects.iterator();
+        int index = 0;
+        while(iterator.hasNext()){
+            Observation obj = iterator.next();
+            ContentValues value = ObservationWrapper.toValues(obj);
+            if(!exists(Observations.CONTENT_URI, obj))
+                insert.add(value);
+            else
+                update.add(
+                        new ModelEntity(
+                                Uris.withAppendedUuid(Observations.CONTENT_URI, obj.uuid),
+                                value));
+        }
+
+        int inserted = getContentResolver().bulkInsert(Observations.CONTENT_URI, toArray(insert));
+        int updated = 0;
+        for(ModelEntity me:update){
+            updated += getContentResolver().update(me.getUri(),me.getEntityValues(),null,null);
+        }
+        Log.d(TAG, "....inserted=" + inserted+", updated=" + updated);
+        //createOrUpdateSubjects(patients.values(), startId);
+        result = 200;
+        return result;
     }
 
     final Handler.Callback updateCheckRunnable(Handler handler) throws URISyntaxException{
