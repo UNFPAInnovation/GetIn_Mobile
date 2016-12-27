@@ -559,8 +559,9 @@ public final class Uris {
 			throws MalformedURLException, URISyntaxException
 	{
 		String path = String.format("%s%s", rootPath, uri.getPath());
-                if(!path.endsWith("/"))
+        if(!path.endsWith("/"))
                     path = path + "/";
+        path = path.replace("//", "/");
 		String query = uri.getEncodedQuery();
 		URL url = null;
 		if(!TextUtils.isEmpty(query)){
