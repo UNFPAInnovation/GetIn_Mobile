@@ -26,7 +26,7 @@ public class VHTsHelper extends TableHelper<VHT> {
                 // Fill in the fields of the VHT class
                 + VHTs.Contract.PHONE_NUMBER + " TEXT,"
                 + VHTs.Contract.FIRST_NAME + " TEXT,"
-                +VHTs.Contract.SURNAME+ " TEXT,"
+                +VHTs.Contract.LAST_NAME + " TEXT,"
                 + ");";
     }
 
