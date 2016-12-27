@@ -33,6 +33,7 @@ import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Observations;
 import org.sana.api.IObservation;
+import org.sana.core.Concept;
 import org.sana.core.Encounter;
 import org.sana.core.Observation;
 import org.sana.util.DateUtil;
@@ -70,16 +71,20 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 	 * @see org.sana.api.IObservation#getEncounter()
 	 */
 	@Override
-	public String getEncounter() {
-		return getStringField(Observations.Contract.ENCOUNTER);
+	public Encounter getEncounter() {
+        Encounter encounter = new Encounter();
+        encounter.setUuid(getStringField(Observations.Contract.ENCOUNTER));
+        return encounter;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.sana.api.IObservation#getConcept()
 	 */
 	@Override
-	public String getConcept() {
-		return getStringField(Observations.Contract.CONCEPT);
+	public Concept getConcept() {
+        Concept concept = new Concept();
+		concept.setName(getStringField(Observations.Contract.CONCEPT));
+        return concept;
 	}
 
 	/* (non-Javadoc)
@@ -109,9 +114,7 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
         obj.setModified(getModified());
         obj.setConcept(getConcept());
         obj.setValue(getValue_text());
-        Encounter encounter = new Encounter();
-        encounter.setUuid(getEncounter());
-        obj.setEncounter(encounter);
+        obj.setEncounter(getEncounter());
         return obj;
 	}
 	
@@ -307,7 +310,7 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
                 DateUtil.format(obj.getModified()));
         values.put(Observations.Contract.ENCOUNTER, obj.getUuid());
         values.put(Observations.Contract.ID, obj.getId());
-        values.put(Observations.Contract.CONCEPT, obj.getConcept());
+        values.put(Observations.Contract.CONCEPT, obj.getConcept().getName());
         values.put(Observations.Contract.VALUE_TEXT, obj.getValue_text());
         return values;
     }

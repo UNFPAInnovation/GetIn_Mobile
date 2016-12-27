@@ -77,8 +77,8 @@ public class ObservationParcel extends Observation implements Parcelable {
 		dest.writeString(DateUtil.format(getCreated()));
 		dest.writeString(DateUtil.format(getModified()));
 		dest.writeString(getId());
-		dest.writeString(getEncounter());
-		dest.writeString(getConcept());
+		dest.writeString(getEncounter().getUuid());
+		dest.writeString(getConcept().getName());
 		dest.writeString(getValue_text());
 		dest.writeString(getValue_complex());
 		dest.writeString(Boolean.toString(getIsComplex()));
