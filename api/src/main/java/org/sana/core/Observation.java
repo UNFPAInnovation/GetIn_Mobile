@@ -14,8 +14,8 @@ import org.sana.api.IObservation;
 public class Observation extends Model implements IObservation {
 	
 	private String id;
-	private String encounter;
-	private String concept;
+	private Encounter encounter;
+	private Concept concept;
 	private String value_complex;
 	private String valueText;
 	private boolean isComplex = false;
@@ -54,17 +54,18 @@ public class Observation extends Model implements IObservation {
 	 * @see org.sana.core.IObservation#getEncounter()
 	 */
 	@Override
-	public String getEncounter() {
+	public Encounter getEncounter() {
 		return encounter;
 	}
 	
 	/**
 	 * Sets the uuid of the encounter.
 	 * 
-	 * @param encounter the uuid to set
+	 * @param encounterUUID the uuid to set
 	 */
-	public void setEncounter(String encounter) {
-		this.encounter = encounter;
+	public void setEncounter(String encounterUUID) {
+        encounter = new Encounter();
+        encounter.setUuid(encounterUUID);
 	}
 
 	/**
@@ -73,23 +74,25 @@ public class Observation extends Model implements IObservation {
 	 * @param encounter
 	 */
 	public void setEncounter(Encounter encounter) {
-		this.encounter = encounter.getUuid();
+        this.encounter = encounter;
 	}
 
 	/* (non-Javadoc)
 	 * @see org.sana.core.IObservation#getConcept()
 	 */
 	@Override
-	public String getConcept() {
+	public Concept getConcept() {
 		return concept;
 	}
 	/**
-	 * @param concept the concept to set
+	 * @param conceptName the concept to set
 	 */
-	public void setConcept(String concept) {
-		this.concept = concept;
-	}
-	
+	public void setConcept(String conceptName) {
+        concept = new Concept();
+        concept.setName(conceptName);
+        setIsComplex(concept);
+    }
+
 	/**
 	 * Sets the value of whether this observation's stored value is complex 
 	 * based on the value of {@link org.sana.core.Concept#isComplex()} and the 
@@ -98,7 +101,7 @@ public class Observation extends Model implements IObservation {
 	 * @param concept 
 	 */
 	public void setConcept(Concept concept){
-		this.concept = concept.getUuid();
+		this.concept = concept;
 		setIsComplex(concept);
 	}
 	
