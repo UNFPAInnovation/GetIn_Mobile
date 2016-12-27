@@ -30,12 +30,15 @@ package org.sana.android.content.core;
 import java.io.File;
 
 import org.sana.android.db.ModelWrapper;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Observations;
 import org.sana.api.IObservation;
 import org.sana.core.Encounter;
 import org.sana.core.Observation;
+import org.sana.util.DateUtil;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -293,4 +296,19 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 		}
 		return (TextUtils.isEmpty(path))? null: new File(path);
 	}
+
+
+    public static ContentValues toValues(Observation obj){
+        ContentValues values = new ContentValues();
+        values.put(BaseContract.UUID , obj.getUuid());
+        values.put(BaseContract.CREATED ,
+                DateUtil.format(obj.getCreated()));
+        values.put(BaseContract.MODIFIED ,
+                DateUtil.format(obj.getModified()));
+        values.put(Observations.Contract.ENCOUNTER, obj.getUuid());
+        values.put(Observations.Contract.ID, obj.getId());
+        values.put(Observations.Contract.CONCEPT, obj.getConcept());
+        values.put(Observations.Contract.VALUE_TEXT, obj.getValue_text());
+        return values;
+    }
 }

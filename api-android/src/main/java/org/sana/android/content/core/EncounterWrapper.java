@@ -4,6 +4,7 @@
 package org.sana.android.content.core;
 
 import org.sana.android.db.ModelWrapper;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Concepts;
 import org.sana.android.provider.Encounters;
 import org.sana.api.IConcept;
@@ -14,8 +15,10 @@ import org.sana.core.Encounter;
 import org.sana.core.Observer;
 import org.sana.core.Procedure;
 import org.sana.core.Subject;
+import org.sana.util.DateUtil;
 
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.database.Cursor;
 
 /**
@@ -69,5 +72,18 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 		}
 		return object;
 	}
+
+    public static ContentValues toValues(Encounter obj){
+        ContentValues values = new ContentValues();
+        values.put(BaseContract.UUID , obj.getUuid());
+        values.put(BaseContract.CREATED ,
+                DateUtil.format(obj.getCreated()));
+        values.put(BaseContract.MODIFIED ,
+                DateUtil.format(obj.getModified()));
+        values.put(Encounters.Contract.PROCEDURE , obj.getProcedure().getUuid());
+        values.put(Encounters.Contract.SUBJECT , obj.getSubject().getUuid() );
+        values.put(Encounters.Contract.OBSERVER , obj.getObserver().getUuid());
+        return values;
+    }
 
 }
