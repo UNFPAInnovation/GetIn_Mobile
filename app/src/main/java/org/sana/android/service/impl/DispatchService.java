@@ -1702,10 +1702,14 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Observation obj = iterator.next();
             ContentValues value = ObservationWrapper.toValues(obj);
-            if(!ObservationWrapper.existsByEncounterAndId(this,
-                    obj.getEncounter().getUuid(), obj.getId()))
-                insert.add(value);
-            else
+            if(!exists(Observations.CONTENT_URI, obj)) {
+                if (!ObservationWrapper.existsByEncounterAndId(this,
+                        obj.getEncounter().getUuid(), obj.getId()))
+                    insert.add(value);
+                else
+                    update.add(new ModelEntity(Uris.withAppendedUuid(
+                            Observations.CONTENT_URI, obj.uuid),value));
+            }else
                 update.add(new ModelEntity(Uris.withAppendedUuid(
                         Observations.CONTENT_URI, obj.uuid),value));
         }
