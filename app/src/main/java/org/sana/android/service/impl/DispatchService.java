@@ -1629,7 +1629,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             }
             */
             // Don't add uuid initially
-            if(!exists(Subjects.CONTENT_URI, obj)){
+            if(!exists(Observers.CONTENT_URI, obj)){
                 vals.put(BaseContract.UUID, obj.uuid);
                 insert.add(vals);
             } else {
@@ -1702,13 +1702,12 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Observation obj = iterator.next();
             ContentValues value = ObservationWrapper.toValues(obj);
-            if(!exists(Observations.CONTENT_URI, obj))
+            if(!ObservationWrapper.existsByEncounterAndId(this,
+                    obj.getEncounter().getUuid(), obj.getId()))
                 insert.add(value);
             else
-                update.add(
-                        new ModelEntity(
-                                Uris.withAppendedUuid(Observations.CONTENT_URI, obj.uuid),
-                                value));
+                update.add(new ModelEntity(Uris.withAppendedUuid(
+                        Observations.CONTENT_URI, obj.uuid),value));
         }
 
         int inserted = getContentResolver().bulkInsert(Observations.CONTENT_URI, toArray(insert));
