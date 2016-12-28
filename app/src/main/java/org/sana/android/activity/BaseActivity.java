@@ -31,6 +31,10 @@ import org.sana.android.content.DispatchResponseReceiver;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
+import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Observations;
+import org.sana.android.provider.Observers;
+import org.sana.android.provider.Subjects;
 import org.sana.android.util.Logf;
 import org.sana.android.util.UriUtil;
 import org.sana.net.Response;
@@ -586,5 +590,17 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
             mDialogString = null;
         }
 
+    }
+
+    protected void syncAll(){
+        // Set period for these
+        sync(Observers.CONTENT_URI);
+        sync(Subjects.CONTENT_URI);
+        sync(Encounters.CONTENT_URI);
+        sync(Observations.CONTENT_URI);
+    }
+
+    protected void sync(Uri uri){
+        startService(new Intent(Intents.ACTION_READ, uri));
     }
 }
