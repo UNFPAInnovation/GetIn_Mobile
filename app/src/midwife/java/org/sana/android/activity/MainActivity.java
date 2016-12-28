@@ -136,6 +136,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 int flags = data.getFlags();
                 switch(requestCode){
                     case AUTHENTICATE:
+                        syncAll();
                         hideViewsByRole();
                         break;
                     case RUN_REGISTRATION:
