@@ -40,6 +40,7 @@ import org.sana.util.DateUtil;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.text.TextUtils;
@@ -300,6 +301,26 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 		return (TextUtils.isEmpty(path))? null: new File(path);
 	}
 
+    public static boolean existsByEncounterAndId(Context context,
+                                                 String encounter, String id)
+    {
+        boolean exists = false;
+        ObservationWrapper wrapper = null;
+        try {
+            wrapper = new ObservationWrapper(ModelWrapper.getOneByFields(
+                    Observations.CONTENT_URI, context.getContentResolver(),
+                    new String[]{Observations.Contract.ENCOUNTER,
+                            Observations.Contract.ID},
+                    new String[]{"'" + encounter + "'", id}));
+            if (wrapper != null && wrapper.getCount() == 1)
+                exists = true;
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally {
+            wrapper.close();
+        }
+        return exists;
+    }
 
     public static ContentValues toValues(Observation obj){
         ContentValues values = new ContentValues();
@@ -308,10 +329,11 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
                 DateUtil.format(obj.getCreated()));
         values.put(BaseContract.MODIFIED ,
                 DateUtil.format(obj.getModified()));
-        values.put(Observations.Contract.ENCOUNTER, obj.getUuid());
+        values.put(Observations.Contract.ENCOUNTER, obj.getEncounter().getUuid());
         values.put(Observations.Contract.ID, obj.getId());
         values.put(Observations.Contract.CONCEPT, obj.getConcept().getName());
-        values.put(Observations.Contract.VALUE_TEXT, obj.getValue_text());
+        values.put(Observations.Contract.VALUE, obj.getValue_text());
+        values.put(Observations.Contract.SUBJECT, obj.getEncounter().getSubject().getUuid());
         return values;
     }
 }
