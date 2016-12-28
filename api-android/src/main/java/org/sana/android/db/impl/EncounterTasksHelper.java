@@ -96,12 +96,12 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
             String completed = values.getAsString(Contract.COMPLETED);
             if(!TextUtils.isEmpty(completed)){
                 checkDate = sdf.parse(completed);
-                vals.put( Contract.COMPLETED, sdf.format(completed));
+                vals.put( Contract.COMPLETED, sdf.format(checkDate));
             }
             String started = values.getAsString(Contract.STARTED);
             if(!TextUtils.isEmpty(started)){
                 checkDate = sdf.parse(started);
-                vals.put( Contract.STARTED, sdf.format(started));
+                vals.put( Contract.STARTED, sdf.format(checkDate));
             }
         } catch (ParseException e) {
 		// TODO Auto-generated catch block
