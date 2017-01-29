@@ -28,27 +28,42 @@
 package org.sana.android.db;
 
 import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.UUID;
 
+import org.sana.android.content.ModelEntity;
 import org.sana.android.content.Uris;
 import org.sana.android.provider.BaseContract;
+import org.sana.android.provider.Models;
 import org.sana.api.IModel;
 import org.sana.util.DateUtil;
 
+import android.content.ContentProvider;
+import android.content.ContentProviderClient;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
+
+import static org.sana.android.content.Uris.ITEMS;
+import static org.sana.android.content.Uris.ITEM_ID;
+import static org.sana.android.content.Uris.ITEM_UUID;
 
 public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
     implements ModelIterable<T>, IModel
@@ -584,9 +599,9 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
     {
         switch(Uris.getTypeDescriptor(uri)) {
             case Uris.ITEM_UUID:
-            case Uris.ITEM_ID:
+            case ITEM_ID:
                 return exists(context,uri,null,null);
-            case Uris.ITEMS:
+            case ITEMS:
             default:
                 throw new IllegalArgumentException("Invalid Uri. Directory type." + uri);
         }
@@ -610,14 +625,14 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
 
         switch(Uris.getTypeDescriptor(uri)){
         case Uris.ITEM_UUID:
-        case Uris.ITEM_ID:
+        case ITEM_ID:
             if(Uris.isEmpty(exists(resolver, uri, null, null))){
                 updated = resolver.update(uri, values, null, null);
             } else {
               throw new IllegalArgumentException("Error updating. Item does not exist: " + uri);
             }
             break;
-        case Uris.ITEMS:
+        case ITEMS:
             if(uri.getQuery() != null){
                 String uuid = uri.getQueryParameter(BaseContract.UUID);
                 String selection = BaseContract.UUID + "=?";
@@ -654,7 +669,7 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
         switch(descriptor){
         case Uris.ITEM_UUID:
             return uri.getLastPathSegment();
-        case Uris.ITEM_ID:
+        case ITEM_ID:
             Cursor c = null;
             String uuid = null;
             try{
@@ -684,7 +699,7 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
      */
     public static synchronized long getRowId(Uri uri, ContentResolver resolver){
         switch(Uris.getTypeDescriptor(uri)){
-        case Uris.ITEM_ID:
+        case ITEM_ID:
             return Long.parseLong(uri.getLastPathSegment());
         case Uris.ITEM_UUID:
             long id = -1;
@@ -701,5 +716,99 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
         default:
             throw new IllegalArgumentException("Invalid item uri");
         }
+    }
+
+    public static int bulkInsertOrUpdate(Context context, Uri uri, Collection<ContentValues> values) {
+
+        //List<ContentValues> insert = new ArrayList<>();
+        //List<ModelEntity> update = new ArrayList<>();
+
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+
+        for (ContentValues fields : values) {
+            String uuid = fields.getAsString(BaseContract.UUID);
+            if (!TextUtils.isEmpty(uuid)) {
+                Uri instanceUri = Uris.withAppendedUuid(uri, uuid);
+                if (!exists(context, instanceUri)) {
+                    ops.add(ContentProviderOperation.newInsert(uri)
+                            .withValues(fields)
+                            .withYieldAllowed(true)
+                            .build());
+                } else {
+                    fields.remove(BaseContract.UUID);
+                    ops.add(ContentProviderOperation.newUpdate(instanceUri)
+                            .withValues(fields)
+                            .withYieldAllowed(true)
+                            .build());
+                }
+            }
+        }
+        int delta = 0;
+        try {
+            ContentProviderResult[] results = context.getContentResolver().applyBatch(Models.AUTHORITY, ops);
+            delta = results.length;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        }
+        return delta;
+    }
+
+    public static int bulkInsertOrUpdate(Context context, Collection<ModelEntity> values) {
+
+        //List<ContentValues> insert = new ArrayList<>();
+        //List<ModelEntity> update = new ArrayList<>();
+
+        ArrayList<ContentProviderOperation> asserts = new ArrayList<>();
+        ArrayList<ContentProviderOperation> ops = new ArrayList<>();
+        ArrayList<ContentProviderOperation> updates = new ArrayList<>();
+        try{
+        for (ModelEntity entity: values) {
+            asserts.add(ContentProviderOperation
+                    .newAssertQuery(entity.getUri())
+                    .withExpectedCount(1)
+                    .withYieldAllowed(true)
+                    .build());
+        }
+            ContentProviderResult[] results = context.getContentResolver().applyBatch(Models.AUTHORITY, ops);
+            for(ContentProviderResult result:results) {
+                if(result.count == 0) {
+
+                }
+            }
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        }
+
+    for (ModelEntity entity: values) {
+            switch (Uris.getTypeDescriptor(entity.getUri())) {
+                case ITEM_ID:
+                case ITEM_UUID:
+                    ops.add(ContentProviderOperation.newUpdate(entity.getUri())
+                            .withValues(entity.getEntityValues())
+                            .withYieldAllowed(true)
+                            .build());
+                    break;
+                case ITEMS:
+                    ops.add(ContentProviderOperation.newInsert(entity.getUri())
+                            .withValues(entity.getEntityValues())
+                            .withYieldAllowed(true)
+                            .build());
+                    break;
+            }
+        }
+        int delta = 0;
+        try {
+            ContentProviderResult[] results = context.getContentResolver().applyBatch(Models.AUTHORITY, ops);
+            delta = results.length;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        } catch (OperationApplicationException e) {
+            e.printStackTrace();
+        }
+        return delta;
     }
 }
