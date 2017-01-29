@@ -39,9 +39,11 @@ import org.sana.core.Observation;
 import org.sana.util.DateUtil;
 
 import android.content.ContentResolver;
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
 import android.text.TextUtils;
 
@@ -53,7 +55,13 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 	IObservation
 {
 	public static final String TAG = ObservationWrapper.class.getSimpleName();
-	/**
+
+    private static final String SELECTION_UNIQUE =
+            BaseContract.UUID + "=CAST(? AS TEXT) OR ("
+            + Observations.Contract.ENCOUNTER + "=CAST(? AS TEXT) AND "
+            + Observations.Contract.ID + "=CAST(? AS TEXT))";
+
+    /**
 	 * @param cursor
 	 */
 	public ObservationWrapper(Cursor cursor) {
@@ -229,6 +237,77 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
 		return object;
 	}
 
+    public static Uri getByEncounterAndId(Context context, String encounter,
+                                          String id)
+    {
+        Uri result = Uri.EMPTY;
+        Cursor cursor = null;
+        boolean multipleExist = false;
+        try {
+            final String[] projection = new String[]{ BaseContract._ID };
+            final String selection = Observations.Contract.ENCOUNTER + "='"+encounter+"'"
+                    + " AND " + Observations.Contract.ID + "='"+id+"'";
+            String[] selectionArgs = new String[]{ id };
+            cursor = context.getContentResolver().query(
+                    Observations.CONTENT_URI, projection, selection,
+                    null, null);
+            if (cursor != null)
+                if(cursor.getCount() == 1 && cursor.moveToFirst())
+                    result = ContentUris.withAppendedId(Observations.CONTENT_URI, cursor.getLong(0));
+                else if(cursor.getCount() > 1)
+                    multipleExist = true;
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally {
+            if(cursor != null) cursor.close();
+        }
+        if(multipleExist)
+            throw new SQLiteDatabaseCorruptException("");
+        return result;
+    }
+
+    public static Uri getUnique(Context context, Observation object)
+    {
+        return getUnique(context, object.getUuid(),
+                    object.getEncounter().getUuid(),
+                    object.getId());
+    }
+
+
+    public static Uri getUnique(Context context, String uuid,
+                                String encounter, String node)
+    {
+        Uri result = Uri.EMPTY;
+        Cursor cursor = null;
+        boolean multipleExist = false;
+        final String[] selectionArgs = new String[]{
+                uuid,
+                encounter,
+                node
+        };
+        try {
+            final String[] projection = new String[]{ BaseContract._ID };
+            cursor = context.getContentResolver().query(
+                    Observations.CONTENT_URI,
+                    projection,
+                    SELECTION_UNIQUE,
+                    selectionArgs,
+                    null);
+            if (cursor != null)
+                if(cursor.getCount() == 1 && cursor.moveToFirst())
+                    result = ContentUris.withAppendedId(Observations.CONTENT_URI, cursor.getLong(0));
+                else if(cursor.getCount() > 1)
+                    multipleExist = true;
+        } catch(Exception e){
+            e.printStackTrace();
+        } finally {
+            if(cursor != null) cursor.close();
+        }
+        if(multipleExist)
+            throw new SQLiteDatabaseCorruptException("Uniqueness on uuid or encounter and node violated!");
+        return result;
+    }
+
 	/**
 	 * Returns a all of the observations within an encounter.
 	 * 
@@ -320,6 +399,33 @@ public class ObservationWrapper extends ModelWrapper<IObservation> implements
             wrapper.close();
         }
         return exists;
+    }
+
+    public static int deleteCorrupted(Context context, String uuid,
+                                      String encounter, String node) {
+        Uri result = Uri.EMPTY;
+        int deleted = 0;
+        final String[] selectionArgs = new String[]{
+                uuid,
+                encounter,
+                node
+        };
+        try {
+            final String[] projection = new String[]{BaseContract._ID};
+            deleted = context.getContentResolver().delete(
+                    Observations.CONTENT_URI,
+                    SELECTION_UNIQUE,
+                    selectionArgs);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return deleted;
+    }
+
+    public static int deleteCorrupted(Context context, Observation object) {
+        return deleteCorrupted(context, object.getUuid(),
+                object.getEncounter().getUuid(),
+                object.getId());
     }
 
     public static ContentValues toValues(Observation obj){
