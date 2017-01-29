@@ -45,6 +45,7 @@ import org.sana.android.db.impl.ObservationsHelper;
 import org.sana.android.db.impl.ObserversHelper;
 import org.sana.android.db.impl.ProceduresHelper;
 import org.sana.android.db.impl.SubjectsHelper;
+import org.sana.android.provider.BaseContract;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -124,10 +125,10 @@ public abstract class ModelContentProvider extends ContentProvider {
 	 */
 	@Override
 	public synchronized  int delete(Uri uri, String selection, String[] selectionArgs) {
-        Log.d(TAG, "delete() uri=" + uri 
-				+ ", selection= " + selection
-			    + ", selectionArgs=" + ((selectionArgs != null)?TextUtils.join(",", selectionArgs):"null")
-				+ " );");
+        Log.d(TAG, "delete(Uri, String, String[])");
+        Log.v(TAG, "uri=" + uri
+				+ "\nselection= " + selection
+			    + "\nselectionArgs=[" + ((selectionArgs != null)?TextUtils.join(",", selectionArgs): "")+"]");
 		String whereClause = DBUtils.getWhereClause(uri, 
 				Uris.getDescriptor(uri), 
 				selection);
@@ -162,8 +163,8 @@ public abstract class ModelContentProvider extends ContentProvider {
 	 */
 	@Override
 	public synchronized Uri insert(Uri uri, ContentValues values) {
-		Log.d(TAG, "insert(" + uri.toString() +", N = " 
-	        	+ String.valueOf((values == null)?0:values.size()) + " values.)");
+		Log.d(TAG, "insert(Uri, ContentValues)");
+        Log.v(TAG, "...uri="+ uri.toString());
         TableHelper<?> helper = getTableHelper(uri);
         
         // set default insert values and execute
@@ -172,8 +173,10 @@ public abstract class ModelContentProvider extends ContentProvider {
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();//mOpener.getWritableDatabase();
 		long id = db.insert(table, null, values);
 		DatabaseManager.getInstance().closeDatabase();
-		
-		Uri result = ContentUris.withAppendedId(uri, id);
+        // Return the UUID based Uri when available
+		Uri result = (values.containsKey(BaseContract.UUID))?
+                Uris.withAppendedUuid(uri, values.getAsString(BaseContract.UUID)):
+                ContentUris.withAppendedId(uri, id);
 		getContext().getContentResolver().notifyChange(uri, null);
 		Log.d(TAG, "insert(): Successfully inserted => " + result);
 		return result;
@@ -186,9 +189,10 @@ public abstract class ModelContentProvider extends ContentProvider {
 	@Override
 	public synchronized Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-        Log.d(TAG, ".query(" + uri.toString() +");");
+        Log.d(TAG, ".query(Uri, String[], String, String[], String)");
+        Log.d(TAG, "...uri=" + uri.toString());
         TableHelper<?> helper = getTableHelper(uri);
-        
+
         // set query and execute
         sortOrder = (TextUtils.isEmpty(sortOrder))? helper.onSort(uri): sortOrder;
 		switch(Uris.getTypeDescriptor(uri)){
@@ -199,15 +203,14 @@ public abstract class ModelContentProvider extends ContentProvider {
 			selection = DBUtils.getWhereClauseWithUUID(uri, selection);
 		default:
 		}
-        Log.d(TAG, ".query(.) selection = " + selection);
-        String uriQS = DBUtils.convertUriQueryToSelect(uri);
-        Log.d(TAG, ".query(.) uri qs = " + selection);
-        if(!TextUtils.isEmpty(uriQS)){
-        	selection = String.format("%s %s", selection, uriQS);
-        	Log.d(TAG, ".query(.) selection --> " + selection);
-		}
+        Log.v(TAG, "...selection = " + selection);
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
 		qb.setTables(helper.getTable());
+        String uriQS = DBUtils.convertUriQueryToSelect(uri);
+        if(!TextUtils.isEmpty(uriQS)){
+            //selection = String.format("%s %s", selection, uriQS);
+            selection = DBUtils.concatenateWhere(selection, uriQS);
+        }
         SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();//mOpener.getReadableDatabase();
         //Cursor cursor = helper.onQuery(db, projection, selection, selectionArgs, sortOrder);
         Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
