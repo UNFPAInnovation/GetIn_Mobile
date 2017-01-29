@@ -36,6 +36,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
 import android.os.Binder;
 import android.os.Bundle;
@@ -1616,18 +1617,6 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Observer obj = iterator.next();
             ContentValues vals = ObserverWrapper.toValues(obj);
-            ////////////////////////////////////////////////////////////
-            // Handle images
-            ////////////////////////////////////////////////////////////
-            /*
-            File file = new File(dir, p.getImage().toASCIIString());
-            // check that file is valid
-            if(file != null
-                && (file.getPath().endsWith("jpg") || file.getPath().endsWith("png")))
-            {
-                getFileIfNotExistsOrNotModified(p.getImage(), dir, vals, startId);
-            }
-            */
             // Don't add uuid initially
             if(!exists(Observers.CONTENT_URI, obj)){
                 vals.put(BaseContract.UUID, obj.uuid);
@@ -1661,15 +1650,18 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         Log.i(TAG, "createOrUpdateEncounters() size="
                 +((t != null)?t.size():"null"));
         int result = 400;
-        ContentValues[] values = null;
+        //ContentValues[] values = null;
         List<ContentValues> insert = new ArrayList<ContentValues>();
         List<ModelEntity> update = new ArrayList<ModelEntity>();
+        List<ContentValues> values = new ArrayList<>();
 
         Iterator<Encounter> iterator =  t.iterator();
         int index = 0;
         while(iterator.hasNext()){
             Encounter obj = iterator.next();
             ContentValues value = EncounterWrapper.toValues(obj);
+            values.add(value);
+            /*
             if(!exists(Encounters.CONTENT_URI, obj))
                 insert.add(value);
             else
@@ -1677,14 +1669,17 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                         new ModelEntity(
                                 Uris.withAppendedUuid(Encounters.CONTENT_URI, obj.uuid),
                                 value));
+                                */
         }
-
+        /*
         int inserted = getContentResolver().bulkInsert(Encounters.CONTENT_URI, toArray(insert));
         int updated = 0;
         for(ModelEntity me:update){
             updated += getContentResolver().update(me.getUri(),me.getEntityValues(),null,null);
         }
         Log.d(TAG, "....inserted=" + inserted+", updated=" + updated);
+        */
+        int delta = ModelWrapper.bulkInsertOrUpdate(this, Encounters.CONTENT_URI, values);
         result = 200;
         return result;
     }
@@ -1702,16 +1697,25 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Observation obj = iterator.next();
             ContentValues value = ObservationWrapper.toValues(obj);
-            if(!exists(Observations.CONTENT_URI, obj)) {
-                if (!ObservationWrapper.existsByEncounterAndId(this,
-                        obj.getEncounter().getUuid(), obj.getId()))
+            // TODO Optimize this?
+            //if(!exists(Observations.CONTENT_URI, obj)) {
+            Uri queriedUri = Uri.EMPTY;
+            try {
+                queriedUri = ObservationWrapper.getUnique(this, obj);
+                if (Uris.isEmpty(queriedUri))
                     insert.add(value);
                 else
-                    update.add(new ModelEntity(Uris.withAppendedUuid(
-                            Observations.CONTENT_URI, obj.uuid),value));
-            }else
-                update.add(new ModelEntity(Uris.withAppendedUuid(
-                        Observations.CONTENT_URI, obj.uuid),value));
+                    update.add(new ModelEntity(queriedUri, value));
+            } catch(SQLiteDatabaseCorruptException e){
+                int deleted = ObservationWrapper.deleteCorrupted(this, obj);
+                Log.w(TAG, "....cleaned="+deleted);
+                insert.add(value);
+            }
+            /*
+            else
+                update.add(new ModelEntity(Uris.withAppendedUuid(Observations.CONTENT_URI,
+                        obj.uuid),value));
+             */
         }
 
         int inserted = getContentResolver().bulkInsert(Observations.CONTENT_URI, toArray(insert));
