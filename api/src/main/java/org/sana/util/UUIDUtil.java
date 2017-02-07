@@ -43,8 +43,9 @@ public class UUIDUtil {
 	public static final String OBSERVATION_UUID = "22f73cbc-a66d-3567-a074-607341b35757";
 	public static final String OBSERVER_UUID = "14034c9f-09b1-349c-b633-127e6e10357c";
 	public static final String SUBJECT_UUID = "12edc2564-46b9-3da0-8156-79ff18456bce";
-	
-	public static UUID EMPTY = UUID.fromString(NAMESPACE_OID);
+    public static final String LOCATION_UUID = "cd3a1c36-71dc-324b-a7eb-9ee77e569ec1";
+
+    public static UUID EMPTY = UUID.fromString(NAMESPACE_OID);
 			
 	static final Pattern PATTERN =Pattern.compile(
 			"^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$");
