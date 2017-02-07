@@ -27,17 +27,27 @@
  */
 package org.sana.android.service.impl;
 
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 import org.apache.http.client.methods.HttpPost;
 import org.sana.R;
 import org.sana.android.Constants;
+import org.sana.android.content.Uris;
+import org.sana.android.content.core.LocationWrapper;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.net.HttpTask;
 import org.sana.android.net.MDSInterface;
 import org.sana.android.net.MDSInterface2;
+import org.sana.api.BuildConfig;
+import org.sana.core.Location;
+import org.sana.core.Observation;
+import org.sana.core.Observer;
 import org.sana.net.MDSResult;
 import org.sana.net.Response;
 import org.sana.android.net.NetworkTaskListener;
@@ -62,6 +72,8 @@ import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.text.TextUtils;
 import android.util.Log;
+
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Service which provides session based authentication into the system. 
@@ -166,7 +178,7 @@ public class SessionService extends Service{
 		}
 	}
 	*/
-	private class AuthListener implements NetworkTaskListener<Response<String>>{
+	private class AuthListener implements NetworkTaskListener<Response<Collection<Observer>>> {
 		
 		String tempKey = null;
 		
@@ -175,17 +187,36 @@ public class SessionService extends Service{
 		}
 		
 		@Override
-		public void onTaskComplete(Response<String> t) {
+		public void onTaskComplete(Response<Collection<Observer>> t) {
 			// TODO Auto-generated method stub
 			if(t.succeeded()){
-				// MDSResult should return the actual session key
-				handleSessionAuthResult(SUCCESS, tempKey, t.getMessage());
+				List<Observer> observers = new ArrayList<>(t.getMessage());
+				if (observers.size() == 0) {
+					handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
+				} else if (observers.size() > 1) {
+					handleSessionAuthResult(INDETERMINATE, tempKey, INVALID.toString());
+				}
+				Observer observer = observers.get(0);
+                // Check that the user role is equal to the Flavor else fail
+                if(observer.getRole().equals(BuildConfig.FLAVOR)){
+                    // MDSResult should return the actual session key
+                    handleSessionAuthResult(SUCCESS, tempKey, observer);
+                } else {
+                    handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
+                }
 			} else if (t.getCode() == -1){
 				handleSessionAuthResult(INDETERMINATE, tempKey, INVALID.toString());
 			} else {
 				// data should be some informative message
 				handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
 			}
+		}
+
+		@Override
+		public Type getType() {
+			final Type type = new TypeToken<Response<Collection<Observer>>>() {
+			}.getType();
+			return type;
 		}
 	}
 
@@ -237,8 +268,6 @@ public class SessionService extends Service{
 	 * admin credentials. 
 	 *  
 	 * @param state
-	 * @param username
-	 * @param password
 	 */
 	protected void openSession(int state, String tempKey){
 		switch(state){
@@ -307,7 +336,7 @@ public class SessionService extends Service{
 			HttpPost post = MDSInterface2.createSessionRequest(this, 
 					credentials[0], credentials[1]);
 			Log.i(TAG, "openNetworkSession(...) " + post.getURI());
-			new HttpTask<String>(new AuthListener(tempKey)).execute(post);
+			new HttpTask<Collection<Observer>>(new AuthListener(tempKey), 10000).execute(post);
 		} catch(Exception e){
 			Log.e(TAG, e.getMessage());
 			e.printStackTrace();
@@ -315,6 +344,89 @@ public class SessionService extends Service{
 		}
 	}
 	
+	protected void handleSessionAuthResult(int status, String tempKey,
+										   Observer observer) {
+		Log.i(TAG, "Handling result: '" + status
+				+ "' for temp session: " + tempKey);
+		String[] credentials = tempSessions.get(tempKey);
+		final String username = credentials[0];
+		final String password = credentials[1];
+		String sessionKey = observer.getUuid();
+		switch (status) {
+			case SUCCESS:
+				// Got successful authentication from network
+				// update cache with the validated password, may exist already but
+				// this should handle any situations where the network value changed
+				if (isLocalUsername(username)) {
+					Log.i(TAG, "Updating credentials for user: " + username);
+                    List<String> locationIds = new ArrayList<String>();
+                    for (Location location : observer.getLocations()) {
+                        LocationWrapper.getOrCreate(this, location);
+                        locationIds.add(location.getUuid());
+                    }
+					ContentValues values = new ContentValues();
+					values.put(Observers.Contract.PASSWORD, encrypt(password));
+                    values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationIds));
+					int updated = getContentResolver().update(
+							Observers.CONTENT_URI,
+							values,
+							Observers.Contract.USERNAME + " = ?",
+							new String[]{username});
+					if (updated == 1)
+						Log.i(TAG, "Succesfully updated: " + username);
+					else
+						Log.w(TAG, "OOPS! Something went horribly wrong updating" +
+								"the password for user: " + username
+								+ " or the password was unchanged!");
+
+					// i name didn't exist already we need to insert instead of update.
+				} else {
+					List<String> locationIds = new ArrayList<String>();
+					for (Location location : observer.getLocations()) {
+						LocationWrapper.getOrCreate(this, location);
+						locationIds.add(location.getUuid());
+					}
+					Uri observerUri = Uris.withAppendedUuid(Observers.CONTENT_URI, sessionKey);
+					boolean exists = ModelWrapper.exists(this, observerUri);
+					ContentValues values = new ContentValues();
+					values.put(Observers.Contract.USERNAME, username);
+					values.put(Observers.Contract.PASSWORD, encrypt(password));
+					values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationIds));
+					if(!exists) {
+						values.put(Observers.Contract.UUID, sessionKey);
+						getContentResolver().insert(Observers.CONTENT_URI,
+								values);
+					} else {
+						getContentResolver().update(observerUri, values, null, null);
+					}
+				}
+				SharedPreferences preferences = PreferenceManager
+						.getDefaultSharedPreferences(this.getBaseContext());
+				preferences.edit().putString(
+						Constants.PREFERENCE_EMR_USERNAME, username);
+				preferences.edit().putString(
+						Constants.PREFERENCE_EMR_PASSWORD, password);
+				preferences.edit().commit();
+
+				// send result to the call back (INVALID, user uuid)
+				removeTempSession(tempKey);
+				addAuthenticatedSession(sessionKey, credentials);
+				sendResult(SUCCESS, tempKey, sessionKey);
+				break;
+			// connected and failed
+			case FAILURE:
+				// send result to the call back (INVALID, user )
+				removeTempSession(tempKey);
+				sendResult(FAILURE, tempKey, sessionKey);
+				break;
+			case INDETERMINATE:
+				openSession(STATE_LOCAL, tempKey);
+				break;
+			default:
+				throw new IllegalArgumentException();
+		}
+	}
+
 	/**
 	 * Handles authentication attempts for temporary tempSessions. If successful,
 	 * the temporary session will be moved to a list of authorized tempSessions.
@@ -467,7 +579,7 @@ public class SessionService extends Service{
 	
 	/**
 	 * Retrieves the memory stored password for network authentication
-	 * @param session
+	 * @param sessionKey
 	 * @return
 	 */
 	protected String getPassword(String sessionKey){
