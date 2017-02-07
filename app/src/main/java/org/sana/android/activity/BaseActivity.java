@@ -603,4 +603,8 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
     protected void sync(Uri uri){
         startService(new Intent(Intents.ACTION_READ, uri));
     }
+
+    public Uri getObserver(){
+        return mObserver;
+    }
 }
