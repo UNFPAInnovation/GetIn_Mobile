@@ -27,6 +27,8 @@
  */
 package org.sana.android.net;
 
+import java.lang.reflect.Type;
+
 /**
  * Callback interface for handling network tasks.
  * 
@@ -36,4 +38,6 @@ package org.sana.android.net;
 public interface NetworkTaskListener<T> {
 
 	void onTaskComplete(T t);
+
+    Type getType();
 }
