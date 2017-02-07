@@ -29,22 +29,29 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.sana.R;
 import org.sana.android.Constants;
+import org.sana.android.activity.BaseActivity;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.content.Intents;
+import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Patients.Contract;
 import org.sana.android.util.Bitmaps;
 import org.sana.android.util.Dates;
 import org.sana.android.util.Logf;
 import org.sana.android.widget.ScrollCompleteListener;
+import org.sana.api.IObserver;
+import org.sana.core.Location;
+import org.sana.core.Observer;
 import org.sana.core.Patient;
 import org.sana.util.StringUtil;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 /**
@@ -517,7 +524,19 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     	if((now - lastSync) > delta){
         	Logf.W(TAG, "sync(): synchronizing patient list");
     		prefs.edit().putLong("patient_sync", now).commit();
-    		Intent intent = new Intent(Intents.ACTION_READ,uri);
+    		// Get logged in user list of village names
+            Uri observerUri = ((BaseActivity) getActivity()).getObserver();
+            Observer observer = (Observer) ObserverWrapper.getOne(getActivity(), observerUri);
+            List<Location> locations = observer.getLocations();
+            List<String> villages = new ArrayList<>();
+            for(Location location: locations){
+                villages.add(location.getName());
+            }
+            String villageNames = TextUtils.join(",", villages);
+            // Append the village list query parameter
+            Uri.Builder builder = uri.buildUpon();
+            builder.appendQueryParameter("village__in", villageNames);
+            Intent intent = new Intent(Intents.ACTION_READ,builder.build());
     		context.startService(intent);
             result = true;
     	}
