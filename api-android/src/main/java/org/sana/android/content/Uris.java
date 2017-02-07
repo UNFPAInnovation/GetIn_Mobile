@@ -37,6 +37,7 @@ import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Events;
 import org.sana.android.provider.Instructions;
+import org.sana.android.provider.Locations;
 import org.sana.android.provider.Models;
 import org.sana.android.provider.Notifications;
 import org.sana.android.provider.ObservationTasks;
@@ -148,8 +149,10 @@ public final class Uris {
 	public static final int OBSERVATION_TASK = 2048 << CONTENT_SHIFT;
     public static final int AMBULANCE_DRIVER = 4096 << CONTENT_SHIFT;
 	public static final int VHT = 8192 << CONTENT_SHIFT;
-	
-	// dir match codes OBJECT | ITEMS
+    public static final int LOCATION = 16384 << CONTENT_SHIFT;
+
+
+    // dir match codes OBJECT | ITEMS
 	public static final int CONCEPT_DIR = CONCEPT | ITEMS;
 	public static final int ENCOUNTER_DIR = ENCOUNTER | ITEMS;
 	public static final int EVENT_DIR = EVENT | ITEMS;
@@ -164,6 +167,7 @@ public final class Uris {
 	public static final int OBSERVATION_TASK_DIR = OBSERVATION_TASK | ITEMS;
     public static final int AMBULANCE_DRIVER_DIR = AMBULANCE_DRIVER | ITEMS;
     public static final int VHT_DIR = VHT | ITEMS;
+    public static final int LOCATION_DIR = LOCATION | ITEMS;
 	
 	// item match codes OBJECT | ITEM_ID
 	public static final int CONCEPT_ITEM = CONCEPT | ITEM_ID;
@@ -180,6 +184,7 @@ public final class Uris {
 	public static final int OBSERVATION_TASK_ITEM = OBSERVATION_TASK | ITEM_ID;
     public static final int AMBULANCE_DRIVER_ITEM= AMBULANCE_DRIVER | ITEM_ID;
     public static final int VHT_ITEM = VHT | ITEM_ID;
+    public static final int LOCATION_ITEM = LOCATION | ITEM_ID;
 	
 	// item match codes OBJECT | ITEM_UUID
 	public static final int CONCEPT_UUID = CONCEPT | ITEM_UUID;
@@ -196,6 +201,7 @@ public final class Uris {
 	public static final int OBSERVATION_TASK_UUID = OBSERVATION_TASK | ITEM_UUID;
     public static final int AMBULANCE_DRIVER_UUID= AMBULANCE_DRIVER | ITEM_UUID;
     public static final int VHT_UUID = VHT | ITEM_UUID;
+    public static final int LOCATION_UUID = LOCATION | ITEM_UUID;
 	
 	// Matcher for mapping the Uri to code mappings 
 	private static final UriMatcher mMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -258,6 +264,11 @@ public final class Uris {
         mMatcher.addURI(Models.AUTHORITY, "core/vht/", VHT_DIR);
         mMatcher.addURI(Models.AUTHORITY, "core/vht/#", VHT_ITEM);
         mMatcher.addURI(Models.AUTHORITY, "core/vht/*", VHT_UUID);
+
+        // Add Location
+        mMatcher.addURI(Models.AUTHORITY, "core/location/", LOCATION_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/location/#", LOCATION_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/location/*", LOCATION_UUID);
 		
 	}
 	
