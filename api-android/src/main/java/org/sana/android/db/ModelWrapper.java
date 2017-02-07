@@ -811,4 +811,14 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
         }
         return delta;
     }
+
+    public static synchronized Cursor getOne(Context context, Uri contentUri)
+    {
+        Cursor cursor = context.getContentResolver().query(contentUri, null, null, null, null);
+        if(cursor != null && cursor.getCount() > 1){
+            cursor.close();
+            throw new IllegalArgumentException("Multiple entries found! Expecting one.");
+        }
+        return cursor;
+    }
 }
