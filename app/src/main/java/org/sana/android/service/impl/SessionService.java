@@ -399,6 +399,11 @@ public class SessionService extends Service{
 					} else {
 						getContentResolver().update(observerUri, values, null, null);
 					}
+                    // Add locations to local database
+                    for (Location location : observer.getLocations()) {
+                        LocationWrapper.getOrCreate(this, location);
+                        locationIds.add(location.getUuid());
+                    }
 				}
 				SharedPreferences preferences = PreferenceManager
 						.getDefaultSharedPreferences(this.getBaseContext());
