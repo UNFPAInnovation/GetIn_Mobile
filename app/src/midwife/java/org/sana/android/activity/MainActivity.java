@@ -533,21 +533,21 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         PreferenceManager.setDefaultValues(this, R.xml.settings, true);
         PreferenceManager.setDefaultValues(this, R.xml.network_settings,true);
-        PreferenceManager.setDefaultValues(this, R.xml.resource_settings, true);
-        PreferenceManager.setDefaultValues(this, R.xml.notifications, true);
-        if(!dbInit){
-            Logf.D(TAG, "init()", "Initializing");
-            doClearDatabase();
-            // Make sure directory structure is in place on external drive
-            EducationResource.intializeDevice();
-            Procedure.intializeDevice();
-            preferences.edit().putBoolean(Constants.DB_INIT, true).commit();
-            init = true;
-        } else {
-            Logf.D(TAG, "init()", "reloading");
             // RELOAD Database
             //preferences.edit().clear().commit();
             //PreferenceManager.setDefaultValues(this, R.xml.network_settings,true);
+            PreferenceManager.setDefaultValues(this, R.xml.resource_settings, true);
+            PreferenceManager.setDefaultValues(this, R.xml.notifications, true);
+            if(!dbInit){
+                Logf.D(TAG, "init()", "Initializing");
+                doClearDatabase();
+                // Make sure directory structure is in place on external drive
+                EducationResource.intializeDevice();
+                Procedure.intializeDevice();
+                preferences.edit().putBoolean(Constants.DB_INIT, true).commit();
+                init = true;
+            } else {
+                Logf.D(TAG, "init()", "reloading");
             doClearDatabase(new Uri[]{ Procedures.CONTENT_URI });
             preferences.edit().putBoolean(Constants.DB_INIT, true).commit();
 
@@ -960,11 +960,15 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
         //String Due_Date;
+        long days_in_years =x.getTime()- dob.getTime();
+        long age =days_in_years *60*24*60*1000;
+        //8760- number of days in 24 years
+
         //  long age = x.getTime() - dob.getTime();
         long no_LMD = days / (60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" + no_LMD);
 
-        if (no_LMD > 84 && anc.equals("No")) {
+        if (no_LMD > 84 && anc.equals("No")&& age < 8760) {
             Calendar c1 = Calendar.getInstance();
             //c1.setTime(new Date());
 
@@ -1021,7 +1025,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Get a random number , add it to the day she was mapped
         Then work out the logic of her appointment being between Tuesday and Thursday
          */
-        else if(no_LMD < 84 && anc.equals("No")){
+        else if(no_LMD < 84 && anc.equals("No")&& age < 8760){
             Calendar c = Calendar.getInstance();
             int new_lmd = (int)no_LMD; // cast lmd to int (maximum of random number to be generated)
            int rand_diff = 84-new_lmd; // The minimum of the random number to be generated
