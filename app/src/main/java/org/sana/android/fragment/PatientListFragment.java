@@ -524,17 +524,9 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     	if((now - lastSync) > delta){
         	Logf.W(TAG, "sync(): synchronizing patient list");
     		prefs.edit().putLong("patient_sync", now).commit();
-    		// Get logged in user list of village names
-            Uri observerUri = ((BaseActivity) getActivity()).getObserver();
-            Observer observer = (Observer) ObserverWrapper.getOne(getActivity(), observerUri);
-            List<Location> locations = observer.getLocations();
-            List<String> villages = new ArrayList<>();
-            for(Location location: locations){
-                villages.add(location.getName());
-            }
-            String villageNames = TextUtils.join(",", villages);
             // Append the village list query parameter
             Uri.Builder builder = uri.buildUpon();
+            String villageNames = getVillageQueryString();
             builder.appendQueryParameter("village__in", villageNames);
             Intent intent = new Intent(Intents.ACTION_READ,builder.build());
     		context.startService(intent);
@@ -544,13 +536,16 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     }
 
     public final boolean syncForced(Context context, Uri uri){
+        String villageNames = getVillageQueryString();
+        Uri.Builder builder = uri.buildUpon();
+        builder.appendQueryParameter("village__in", villageNames);
         Log.d(TAG, "syncForced(Context,Uri)");
         boolean result = false;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         long now = System.currentTimeMillis();
         // Once a day 86400000
         prefs.edit().putLong("patient_sync", now).commit();
-        Intent intent = new Intent(Intents.ACTION_READ,uri);
+        Intent intent = new Intent(Intents.ACTION_READ, builder.build());
         context.startService(intent);
         result = true;
         return result;
@@ -568,5 +563,19 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
 
     public void filter(String constraint){
         mAdapter.getFilter().filter(constraint);
+    }
+
+    public String getVillageQueryString(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(getActivity(), Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getActivity().getContentResolver(), user);
+        List<Location> locations = observer.getLocations();
+        List<String> villages = new ArrayList<>();
+        for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return TextUtils.join(",", villages);
     }
 }

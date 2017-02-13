@@ -68,32 +68,36 @@ import android.util.Log;
  * @param <T>
  *
  */
-public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, Response<T>>{
+public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, T>{
 	public static final String TAG = HttpTask.class.getSimpleName();
 	
 	public static final int FAIL = 0;
 	public static final int SUCCEED = 1;
 	public static final int NO_SERVICE = 2;
-	
+    final static Gson gson = new GsonBuilder()
+            .setFieldNamingPolicy(FieldNamingPolicy.LOWER_CASE_WITH_UNDERSCORES)
+            .setDateFormat("yyyy-MM-dd'T'HH:mm:ss")
+            .create();
+
 	private final int timeout;
 	
-	NetworkTaskListener<Response<T>> listener = null;
+	NetworkTaskListener<T> listener = null;
 	Messenger handler = null;
 	Message message = null;
 	public HttpTask(){
 		this(null,-1);
 	}
 	
-	public HttpTask(NetworkTaskListener<Response<T>> listener){
+	public HttpTask(NetworkTaskListener<T> listener){
 		this(listener, -1);
 	}
 	
-	public HttpTask(NetworkTaskListener<Response<T>> listener, int timeout){
+	public HttpTask(NetworkTaskListener<T> listener, int timeout){
 		this.listener = listener;
 		this.timeout = timeout;
 	}
 	
-	public void setListener(NetworkTaskListener<Response<T>> listener){
+	public void setListener(NetworkTaskListener<T> listener){
 		this.listener = listener;
 	}
 	
@@ -109,7 +113,7 @@ public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, Response<T>>{
 	 * @see android.os.AsyncTask#doInBackground(Params[])
 	 */
 	@Override
-	protected Response<T> doInBackground(HttpUriRequest... params) {
+	protected T doInBackground(HttpUriRequest... params) {
 		HttpUriRequest method = params[0];
 		HttpClient client = HttpTaskFactory.CLIENT_FACTORY.produce();
 		HttpParams httpParams = client.getParams();
@@ -120,7 +124,7 @@ public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, Response<T>>{
 		
 		HttpResponse httpResponse = null;
 		String responseString = null;
-		Response<T> response = Response.empty();
+		T response = null;
 		try {
 			Log.i(TAG, "doInBackground(): About to execute request...");
 			httpResponse = client.execute(method);
@@ -133,8 +137,8 @@ public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, Response<T>>{
 				message.obj = responseString;
 				message.sendToTarget();
 			} else {
-				Type type = new TypeToken<Response<T>>(){}.getType();
-				response = new Gson().fromJson(responseString, type);
+				Type type = (listener != null)? listener.getType():new TypeToken<Response<T>>(){}.getType();
+				response = gson.fromJson(responseString, type);
 			}
 		} catch (ClientProtocolException e) {
 			Log.e(TAG, "ClientProtocolException: " + e.getMessage());
@@ -151,8 +155,8 @@ public class HttpTask<T> extends AsyncTask<HttpUriRequest,Integer, Response<T>>{
 		return response;
 	}
 	
-	
-	protected void onPostExecute(Response<T> result){
+	@Override
+	public void onPostExecute(T result){
 		if(listener != null){
 			listener.onTaskComplete(result);
 		}

@@ -35,6 +35,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.apache.http.client.methods.HttpPost;
+import org.sana.BuildConfig;
 import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.content.Uris;
@@ -42,11 +43,8 @@ import org.sana.android.content.core.LocationWrapper;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.net.HttpTask;
-import org.sana.android.net.MDSInterface;
 import org.sana.android.net.MDSInterface2;
-import org.sana.api.BuildConfig;
 import org.sana.core.Location;
-import org.sana.core.Observation;
 import org.sana.core.Observer;
 import org.sana.net.MDSResult;
 import org.sana.net.Response;
@@ -188,8 +186,12 @@ public class SessionService extends Service{
 		
 		@Override
 		public void onTaskComplete(Response<Collection<Observer>> t) {
-			// TODO Auto-generated method stub
-			if(t.succeeded()){
+            // Null check should be treated as a FAILURE? or INDETERMINATE
+			if(t == null){
+                handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
+            }
+
+            if(t.succeeded()){
 				List<Observer> observers = new ArrayList<>(t.getMessage());
 				if (observers.size() == 0) {
 					handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
@@ -222,7 +224,7 @@ public class SessionService extends Service{
 
 	//HttpSessionAuthListener mNetListener = null;
 	
-	HttpTask mNetTask = null;
+	HttpTask<Response<Collection<Observer>>> mNetTask = null;
 	
 	/* (non-Javadoc)
 	 * @see android.app.Service#onBind(android.content.Intent)
@@ -336,7 +338,8 @@ public class SessionService extends Service{
 			HttpPost post = MDSInterface2.createSessionRequest(this, 
 					credentials[0], credentials[1]);
 			Log.i(TAG, "openNetworkSession(...) " + post.getURI());
-			new HttpTask<Collection<Observer>>(new AuthListener(tempKey), 10000).execute(post);
+			mNetTask = new HttpTask<Response<Collection<Observer>>>(new AuthListener(tempKey), 10000);
+            mNetTask.execute(post);
 		} catch(Exception e){
 			Log.e(TAG, e.getMessage());
 			e.printStackTrace();
@@ -399,6 +402,11 @@ public class SessionService extends Service{
 					} else {
 						getContentResolver().update(observerUri, values, null, null);
 					}
+                    // Add locations to local database
+                    for (Location location : observer.getLocations()) {
+                        LocationWrapper.getOrCreate(this, location);
+                        locationIds.add(location.getUuid());
+                    }
 				}
 				SharedPreferences preferences = PreferenceManager
 						.getDefaultSharedPreferences(this.getBaseContext());

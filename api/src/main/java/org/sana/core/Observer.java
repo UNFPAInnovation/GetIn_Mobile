@@ -27,11 +27,15 @@
  */
 package org.sana.core;
 
+import com.google.gson.annotations.Expose;
+
 import org.sana.api.IObserver;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * An entity that collects data.
@@ -41,25 +45,41 @@ import java.util.List;
  */
 public class Observer extends Model implements IObserver{
 
+	/**
+	 * Simple user representation
+	 */
     public static class User{
-        public String username;
-        private String password;
-        public String first_name;
-        public String last_name;
-        public String[] groups;
+        public String first_name = null;
+        public String last_name = null;
+		public String username = null;
+		public String password = null;
+		public boolean is_admin = false;
+		public String[] groups = new String[0];
     }
 
-	private String username;
-	private String password;
-	private String role;
+	@Expose
+	public User user = new User();
+
+	public String username = null;
+
+	public String password = null;
+
+	@Expose
+	public String role;
 	private String phone_number;
-    private List<Location> locations;
-    private User user;
+	@Expose
+	Set<Location> locations = new HashSet<>();
 	
 	/** Default Constructor */
-	public Observer(){
+	public Observer() {
         user = new User();
-        locations = new ArrayList<>();
+    }
+
+    public Observer(Observer obj){
+		setUsername(obj.getUsername());
+		setPassword(obj.getPassword());
+		setRole(obj.getRole());
+		setLocations(obj.getLocations());
     }
 	
 	/**
@@ -71,6 +91,10 @@ public class Observer extends Model implements IObserver{
 		super();
 		setUuid(uuid);
         user = new User();
+	}
+
+	public User getUser() {
+		return user;
 	}
 
 	/*
@@ -154,11 +178,26 @@ public class Observer extends Model implements IObserver{
     }
 
     public List<Location> getLocations(){
-        return locations;
+		return new ArrayList<>(locations);
     }
 
     public void setLocations(Collection<Location> locations){
-        this.locations = new ArrayList<>(locations);
+		this.locations.addAll(locations);
     }
 	
+	public void setLocations(String[] locations) {
+		for (String location : locations) {
+			Location l = new Location();
+			l.setUuid(location);
+			this.locations.add(l);
+		}
+	}
+
+	public boolean isAdmin() {
+		return user.is_admin;
+	}
+
+	public boolean setIsAdmin(boolean isAdmin) {
+		return user.is_admin = isAdmin;
+	}
 }
