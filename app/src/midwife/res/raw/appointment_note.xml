@@ -76,12 +76,51 @@
             question="Action Taken"
             answer=""
         />
-        <Element
+        <Page>
+            <Element
+                id="14"
+                type="RADIO" choices="Yes;No"
+                question="Do you have an ANC card?"
+                concept="ANC Status"
+                required="true"
+                answer=""
+            />
+
+        </Page>
+        <Page>
+            <ShowIf>
+                <and>
+                    <Criteria type="EQUALS" id="14" value="Yes"/>
+                    <Criteria type="EQUALS" id="1" value="No"/>
+                </and>
+            </ShowIf>
+            <Element id="15a" type="DATE"
+                concept="ANC VISIT"
+                question="Enter Next ANC visit from Card "
+                required="true"
+                answer=""
+            />
+        </Page>
+        <Page>
+            <ShowIf>
+                <and>
+                    <Criteria type="EQUALS" id="14" value="Yes"/>
+                    <Criteria type="EQUALS" id="1" value="Yes"/>
+                </and>
+            </ShowIf>
+            <Element id="15b" type="DATE"
+                concept="ANC VISIT"
+                question="Enter a new Date to reschedule Appointment"
+                required="true"
+                answer=""
+            />
+        </Page>
+       <!-- <Element
             id="6"
             type="DATE"
             concept="NEXT APPOINTMENT"
             question="Next Appointment Date"
             answer=""
-        />
+        /> -->
     </Page>
 </Procedure>
