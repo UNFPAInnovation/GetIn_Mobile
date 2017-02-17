@@ -301,7 +301,7 @@
             question="Have you used Contraceptives before?"
             answer=""/>
     </Page>
-    <Page>
+  <!--  <Page>
         <Element
             id="14"
             type="RADIO" choices="Yes;No"
@@ -323,6 +323,8 @@
                  answer=""
             />
     </Page>
+
+    -->
     <!-- Are these supposed to be patient fields -->
     <!--
         They are not included in the Patient Model if they are
