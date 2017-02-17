@@ -75,8 +75,9 @@ public class SelectElement extends SelectionElement {
         Log.i(TAG, "[" + id + "]getAnswer()");
         if(!isViewActive())
             return answer;
-        return this.getValueFromLabel(adapter.getItem(spin
+        answer = getValueFromLabel(adapter.getItem(spin
                 .getSelectedItemPosition()));
+        return answer;
     }
 
     /** Default constructor */

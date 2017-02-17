@@ -192,8 +192,11 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         CursorLoader loader = new CursorLoader(getActivity(),
                 mUri,
                 mProjection,
-                        getSelection(),
-                new String[]{ getObserver() , getSelectedStatus() },
+                null,
+                null,
+                // Commented out to select all synched
+                //        getSelection(),
+                //new String[]{ getObserver() , getSelectedStatus() },
                 Contract.DUE_DATE + " ASC");
         return loader;
     }
@@ -368,7 +371,14 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
             Log.d(TAG+".mAdapter", "new view  cursor position: "
                 + ((cursor != null)? cursor.getPosition(): 0));
-            View view = mInflater.inflate(R.layout.encountertask_list_item, null);
+            String status = cursor.getString(statusIndex);
+            View view = null;
+            if(status.compareToIgnoreCase(Status.COMPLETED.toString()) == 0) {
+                // TODO Update this layout to something more visually intuitive that it is completed
+                view = mInflater.inflate(R.layout.encountertask_list_item_complete, null);
+            } else {
+                view = mInflater.inflate(R.layout.encountertask_list_item, null);
+            }
             bindView(view, context, cursor);
             return view;
         }

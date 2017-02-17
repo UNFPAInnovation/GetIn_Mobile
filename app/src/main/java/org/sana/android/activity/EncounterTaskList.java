@@ -1,9 +1,16 @@
 
 package org.sana.android.activity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.sana.R;
+import org.sana.android.Constants;
+import org.sana.android.app.Preferences;
+import org.sana.android.content.core.ObserverWrapper;
+import org.sana.core.Location;
+import org.sana.core.Observer;
 import org.sana.net.Response;
 import org.sana.android.app.Locales;
 import org.sana.android.content.DispatchResponseReceiver;
@@ -28,6 +35,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -176,6 +184,10 @@ public class EncounterTaskList extends FragmentActivity implements
             Log.i(TAG, "observer: " + observer);
             if(!Uris.isEmpty(observer)){
                 Log.i(TAG, "observer: " + observer);
+                String villageNames = getVillageQueryString();
+                Uri.Builder builder = Subjects.CONTENT_URI.buildUpon();
+                builder.appendQueryParameter("village__in", villageNames);
+                // TODO replace line below wih builder.build to complete
                 mListFragment.sync(this, Subjects.CONTENT_URI);
             }
             return true;
@@ -186,6 +198,13 @@ public class EncounterTaskList extends FragmentActivity implements
                 Log.i(TAG, "observer: " + observer);
                 //Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter("assigned_to__uuid",observerUuid).build();
                 // TODO use village based?
+                // This is how it would be done but there is an issue in the Subject Child Model
+                // in how it is declared on the server-will need to migrate the
+                // Patients model fields.
+                String villageNames = getVillageQueryString();
+                Uri.Builder builder = EncounterTasks.CONTENT_URI.buildUpon();
+                builder.appendQueryParameter("subject__village__in", villageNames);
+                // TODO just replace assigned value below with builder.build()
                 Uri u = EncounterTasks.CONTENT_URI;
                 mListFragment.sync(this, u);
             }
@@ -285,5 +304,19 @@ public class EncounterTaskList extends FragmentActivity implements
         } else {
             hideProgressDialogFragment();
         }
+    }
+
+    public String getVillageQueryString(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(this, Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getContentResolver(), user);
+        List<Location> locations = observer.getLocations();
+        List<String> villages = new ArrayList<>();
+        for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return TextUtils.join(",", villages);
     }
 }
