@@ -135,6 +135,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 Uri dataUri = (data != null)? data.getData(): Uri.EMPTY;
                 Intent intent = new Intent();
                 onSaveAppState(intent);
+                int flags = data.getFlags();
                 switch(requestCode){
                     case AUTHENTICATE:
                         hideViewsByRole();
@@ -944,7 +945,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Date lmd = patient.getLMD();
         String anc = patient.getANC_status();
         Date dob = patient.getDob();
-        Date anc_visit = patient.getANC_visit();
+        //Date anc_visit = patient.getANC_visit();
+        int age =patient.getAge();
 
         //String uuid = this.get
         String uuid1 = mSubject.getLastPathSegment();
@@ -973,11 +975,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
         //String Due_Date;
-        //  long age = x.getTime() - dob.getTime();
+
+       // long age = x.getTime() - dob.getTime();
         long no_LMD = days / (60 * 24 * 60 * 1000);
         Log.i(TAG, "the number of lmd days are" + no_LMD);
 
-        if (no_LMD > 84 && anc.equals("No")) {
+        if (no_LMD > 84 && anc.equals("No") && age < 25) {
             Calendar c1 = Calendar.getInstance();
             //c1.setTime(new Date());
 
@@ -1034,7 +1037,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Get a random number , add it to the day she was mapped
         Then work out the logic of her appointment being between Tuesday and Thursday
          */
-        else if(no_LMD < 84 && anc.equals("No")){
+        else if(no_LMD < 84 && anc.equals("No") && age<25){
             Calendar c = Calendar.getInstance();
             int new_lmd = (int)no_LMD; // cast lmd to int (maximum of random number to be generated)
            int rand_diff = 84-new_lmd; // The minimum of the random number to be generated
@@ -1099,7 +1102,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         /*if girl has ever attended ANC
         *Pick ANC date from card
          */
-        else if (anc.equals("Yes")){
+        else if (anc.equals("Yes") && age <25){
             Date due_on = patient.getANC_visit();
 
             task.due_on = due_on;
