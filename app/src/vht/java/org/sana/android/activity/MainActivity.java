@@ -945,7 +945,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Date lmd = patient.getLMD();
         String anc = patient.getANC_status();
         Date dob = patient.getDob();
-        //Date anc_visit = patient.getANC_visit();
+        Date anc_visit = patient.getANC_visit();
         int age =patient.getAge();
 
         //String uuid = this.get
