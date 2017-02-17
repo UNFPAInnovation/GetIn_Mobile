@@ -39,7 +39,7 @@
         <Element
             id="3"
             type="TEXT"
-            question="RISK ASSESMENT"/>
+            question="RISK ASSESSMENT"/>
         <Element
             id="3a"
             concept="MENSTRUAL FLOW"
@@ -108,13 +108,53 @@
             question="Action taken"
             answer=""
             />
-        <Element
+      <!--  <Element
             id="6"
             type="DATE"
             concept="VHT NEXT APPOINTMENT"
             question="Next Appointment Date"
             answer=""
+            /> -->
+        <Page>
+            <Element
+                id="14"
+                type="RADIO" choices="Yes;No"
+                question="Do you have an ANC card?"
+                concept="ANC Status"
+                required="true"
+                answer=""
             />
+
+        </Page>
+        <Page>
+            <ShowIf>
+                <and>
+                <Criteria type="EQUALS" id="14" value="Yes"/>
+                <Criteria type="EQUALS" id="1" value="No"/>
+                </and>
+            </ShowIf>
+            <Element id="15a" type="DATE"
+                concept="ANC VISIT"
+                question="Enter Next ANC visit from Card "
+                required="true"
+                answer=""
+            />
+        </Page>
+        <Page>
+            <ShowIf>
+                <and>
+                    <Criteria type="EQUALS" id="14" value="Yes"/>
+                    <Criteria type="EQUALS" id="1" value="Yes"/>
+                </and>
+            </ShowIf>
+            <Element id="15b" type="DATE"
+                concept="ANC VISIT"
+                question="Enter a new Date to reschedule Appointment"
+                required="true"
+                answer=""
+            />
+        </Page>
+
         <Element
             id="7"
             type="RADIO"
