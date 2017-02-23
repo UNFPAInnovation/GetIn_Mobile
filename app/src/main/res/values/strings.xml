@@ -87,6 +87,7 @@
     <string name="general_synchronizing">Synchronizing</string>
     <string name="general_fetching_patients">Getting patient list</string>
     <string name="general_fetching_drivers">Getting drivers list</string>
+    <string name="general_fetching_vhts">Getting vht list</string>
     <string name="general_upload_in_progress">Upload in progress</string>
     <string name="general_uploading">Uploading</string>
     <string name="general_incomplete">incomplete</string>

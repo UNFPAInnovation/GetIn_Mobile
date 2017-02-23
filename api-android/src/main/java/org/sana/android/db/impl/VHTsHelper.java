@@ -11,11 +11,15 @@ import org.sana.core.VHT;
 
 public class VHTsHelper extends TableHelper<VHT> {
 
-    public static final String INSTANCE = VHTsHelper.class.getName();
+    public static final String TAG = VHTsHelper.class.getName();
 
     protected VHTsHelper(){
         super(VHT.class);
     }
+
+    final static VHTsHelper mInstance = new VHTsHelper();
+
+    public final static VHTsHelper getmInstance() { return mInstance; }
     @Override
     public String onCreate() {
         return "CREATE TABLE " + getTable() + " ("
@@ -27,6 +31,7 @@ public class VHTsHelper extends TableHelper<VHT> {
                 + VHTs.Contract.PHONE_NUMBER + " TEXT,"
                 + VHTs.Contract.FIRST_NAME + " TEXT,"
                 +VHTs.Contract.LAST_NAME + " TEXT,"
+                +VHTs.Contract.LOCATION + " TEXT"
                 + ");";
     }
 

@@ -376,14 +376,14 @@ public class VHTListFragment extends ListFragment implements
         Log.d(TAG, "sync(Context,Uri)");
         boolean result = false;
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        long lastSync = prefs.getLong("driver_sync", 0);
+        long lastSync = prefs.getLong("vht_sync", 0);
         long now = System.currentTimeMillis();
 //        Log.d(TAG, "last: " + lastSync +", now: " + now+ ", delta: " + (now-lastSync) + ", doSync: " + ((now - lastSync) > 86400000));
 //        // TODO
         // Once a day 86400000
         if((now - lastSync) > delta){
-//            Logf.W(TAG, "sync(): synchronizing patient list");
-            prefs.edit().putLong("driver_sync", now).commit();
+//            Logf.W(TAG, "sync(): synchronizing vht list");
+            prefs.edit().putLong("vht_sync", now).commit();
             Intent intent = new Intent(Intents.ACTION_READ,uri);
             context.startService(intent);
             result = true;

@@ -677,7 +677,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_PROCEDURE);
                 break;*/
             case R.id.btn_main_view_call_VHT:
-                intent = new Intent(MainActivity.this, ObserverList.class);
+//                intent = new Intent(MainActivity.this, ObserverList.class);
+                intent = new Intent(MainActivity.this, VHTListActivity.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
                 break;
@@ -962,7 +963,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         //String Due_Date;
         long days_in_years =x.getTime()- dob.getTime();
-        long age =days_in_years *60*24*60*1000;
+        long agez =days_in_years *60*24*60*1000;
         //8760- number of days in 24 years
 
         //  long age = x.getTime() - dob.getTime();
