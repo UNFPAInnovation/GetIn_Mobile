@@ -52,7 +52,7 @@ public class ObserverListFragment extends ListFragment implements
             Observers.Contract.PHONE_NUMBER,
             Observers.Contract.LOCATIONS
     };
-    static final String mSelect = "(" + Observers.Contract.ROLE +" = 'vht')";
+    static final String mSelect = Observers.Contract.ROLE +" = 'vht'";
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -121,7 +121,7 @@ public class ObserverListFragment extends ListFragment implements
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getActivity(),
                 mUri,
-                mProjection,
+                null,//mProjection,
                 mSelect, null, null);
         return loader;
     }
@@ -179,7 +179,10 @@ public class ObserverListFragment extends ListFragment implements
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-            Observer obj = (Observer) new ObserverWrapper(cursor).getObject();
+            ObserverWrapper wrapper = new ObserverWrapper(cursor);
+            if(wrapper == null || wrapper.isBeforeFirst() || cursor.getCount() == 0)
+                return;
+            Observer obj = (Observer) wrapper.getObject();
             view.setTag(obj.getPhoneNumber());
             // TODO fill in any fields etc
             setText(view, R.id.first_name, obj.getFirstName());
