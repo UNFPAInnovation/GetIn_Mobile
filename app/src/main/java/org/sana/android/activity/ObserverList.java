@@ -10,9 +10,11 @@ import android.support.v4.app.Fragment;
 
 import org.sana.R;
 import org.sana.android.content.Intents;
+import org.sana.android.fragment.ModelSelectedListener;
 import org.sana.android.provider.Observers;
+import org.sana.core.Observer;
 
-public class ObserverList extends BaseActivity {
+public class ObserverList extends BaseActivity implements ModelSelectedListener<Observer> {
 
     // ms*sec*min*hrs
     private int delta =1000*1*1*1;
@@ -42,5 +44,10 @@ public class ObserverList extends BaseActivity {
             result = true;
         }
         return result;
+    }
+
+    @Override
+    public void onModelSelected(Observer instance) {
+        // TODO Implement the "call" functionality, etc.
     }
 }
