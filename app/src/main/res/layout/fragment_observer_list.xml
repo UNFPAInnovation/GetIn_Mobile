@@ -10,7 +10,7 @@
     android:layout_marginRight="16dp"
     tools:context="org.sana.android.fragment.ObserverListFragment">
 <ListView
-    android:id="@+id/list"
+    android:id="@android:id/list"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
