@@ -52,7 +52,7 @@ public class ObserverListFragment extends ListFragment implements
             Observers.Contract.PHONE_NUMBER,
             Observers.Contract.LOCATIONS
     };
-    static final String mSelect = "(" + Observers.Contract.ROLE +" 'vht')";
+    static final String mSelect = "(" + Observers.Contract.ROLE +" = 'vht')";
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
