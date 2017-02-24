@@ -10,17 +10,16 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.ObserverWrapper;
-import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Observers;
 import org.sana.core.Observer;
 
@@ -43,7 +42,17 @@ public class ObserverListFragment extends ListFragment implements
     private ModelSelectedListener<Observer> mListener = null;
     private ObserverCursorAdapter mAdapter = null;
     private Uri mUri = Observers.CONTENT_URI;
-    static final String[] mProjection = null;
+//    static final String[] mProjection = null;
+    public static final String TAG = ObserverListFragment.class.getName();
+
+    static final String[] mProjection = new String[] {
+            Observers.Contract._ID,
+            Observers.Contract.FIRST_NAME,
+            Observers.Contract.LAST_NAME,
+            Observers.Contract.PHONE_NUMBER,
+            Observers.Contract.LOCATIONS
+    };
+    static final String mSelect = "(" + Observers.Contract.ROLE +" 'vht')";
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -113,7 +122,7 @@ public class ObserverListFragment extends ListFragment implements
         CursorLoader loader = new CursorLoader(getActivity(),
                 mUri,
                 mProjection,
-                null, null, null);
+                mSelect, null, null);
         return loader;
     }
 
@@ -177,6 +186,7 @@ public class ObserverListFragment extends ListFragment implements
             setText(view, R.id.last_name, obj.getLastName());
             setText(view, R.id.phone_number, obj.getPhoneNumber());
             mHolders.put(cursor.getPosition(), obj);
+            Log.v(TAG,",.,.,.<><><><><><.,.,.,.<><><><>"+obj.getFirstName());
         }
 
         public Object getItem(int position){

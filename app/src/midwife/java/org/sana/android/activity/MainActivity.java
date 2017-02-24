@@ -677,8 +677,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, PICK_PROCEDURE);
                 break;*/
             case R.id.btn_main_view_call_VHT:
-//                intent = new Intent(MainActivity.this, ObserverList.class);
-                intent = new Intent(MainActivity.this, VHTListActivity.class);
+                intent = new Intent(MainActivity.this, ObserverList.class);
+//                intent = new Intent(MainActivity.this, VHTListActivity.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
                 break;
