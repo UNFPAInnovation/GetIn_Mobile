@@ -522,31 +522,37 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     	// TODO
     	// Once a day 86400000
     	if((now - lastSync) > delta){
-        	Logf.W(TAG, "sync(): synchronizing patient list");
-    		prefs.edit().putLong("patient_sync", now).commit();
-            // Append the village list query parameter
-            Uri.Builder builder = uri.buildUpon();
-            String villageNames = getVillageQueryString();
-            builder.appendQueryParameter("village__in", villageNames);
-            Intent intent = new Intent(Intents.ACTION_READ,builder.build());
-    		context.startService(intent);
+            // village is a text field so we need to send individually
+            List<String> villageNames = getVillageNamesForObserver();
+            for(String village:villageNames) {
+                // Append the village list query parameter
+                Uri.Builder builder = uri.buildUpon();
+                builder.appendQueryParameter("village", village);
+                Intent intent = new Intent(Intents.ACTION_READ, builder.build());
+                context.startService(intent);
+            }
+            Logf.W(TAG, "sync(): synchronizing patient list");
+            prefs.edit().putLong("patient_sync", now).commit();
             result = true;
     	}
         return result;
     }
 
     public final boolean syncForced(Context context, Uri uri){
-        String villageNames = getVillageQueryString();
-        Uri.Builder builder = uri.buildUpon();
-        builder.appendQueryParameter("village__in", villageNames);
         Log.d(TAG, "syncForced(Context,Uri)");
+        List<String> villageNames = getVillageNamesForObserver();
         boolean result = false;
+        for(String village:villageNames) {
+            Uri.Builder builder = uri.buildUpon();
+            builder.appendQueryParameter("village", village);
+            Intent intent = new Intent(Intents.ACTION_READ, builder.build());
+            context.startService(intent);
+
+        }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
         long now = System.currentTimeMillis();
         // Once a day 86400000
         prefs.edit().putLong("patient_sync", now).commit();
-        Intent intent = new Intent(Intents.ACTION_READ, builder.build());
-        context.startService(intent);
         result = true;
         return result;
     }
@@ -571,11 +577,27 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         // Get logged in user list of village names
         Observer observer = (Observer) ObserverWrapper.getOneByUsername(
                 getActivity().getContentResolver(), user);
+        ObserverWrapper.initializeRelated(getActivity(), observer);
         List<Location> locations = observer.getLocations();
         List<String> villages = new ArrayList<>();
         for(Location location: locations){
             villages.add(location.getName());
         }
         return TextUtils.join(",", villages);
+    }
+
+    public List<String> getVillageNamesForObserver(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(getActivity(), Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getActivity().getContentResolver(), user);
+        ObserverWrapper.initializeRelated(getActivity(), observer);
+        List<Location> locations = observer.getLocations();
+        List<String> villages = new ArrayList<>();
+        for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return villages;
     }
 }
