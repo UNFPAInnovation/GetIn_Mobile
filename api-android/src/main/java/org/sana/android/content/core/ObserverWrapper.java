@@ -27,7 +27,9 @@
  */
 package org.sana.android.content.core;
 
+import org.sana.android.content.Uris;
 import org.sana.android.db.ModelWrapper;
+import org.sana.android.provider.Locations;
 import org.sana.android.provider.Observers;
 import org.sana.android.util.Dates;
 import org.sana.api.IObserver;
@@ -36,8 +38,12 @@ import org.sana.core.Observer;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
+import android.text.TextUtils;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -97,9 +103,14 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 
     @Override
     public List<Location> getLocations() {
-        //String[] names = getListField(Observers.Contract.LOCATIONS);
-        // TODO
-        return Collections.EMPTY_LIST;
+        String[] uuids = getStringArrayField(Observers.Contract.LOCATIONS);
+        List<Location> locations = new ArrayList<>(uuids.length);
+        for(String uuid: uuids){
+            Location location = new Location();
+            location.setUuid(uuid);
+            locations.add(location);
+        }
+        return locations;
     }
 
 	/* (non-Javadoc)
@@ -198,7 +209,11 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         values.put(Observers.Contract.LAST_NAME, object.getLastName());
         values.put(Observers.Contract.ROLE, object.getRole());
         // TODO
-        // values.put(Observers.Contract.LOCATIONS, object.getLocations());
+        List<String> locationUUIDs = new ArrayList<>();
+        for(Location location: object.getLocations()){
+            locationUUIDs.add(location.getUuid());
+        }
+        values.put(Observers.Contract.LOCATIONS, TextUtils.join(",",locationUUIDs));
         return values;
     }
 
@@ -208,5 +223,16 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
             values.remove(exclude);
         }
         return values;
+    }
+
+    public static void initializeRelated(Context context, Observer observer){
+        List<Location> locations = new ArrayList<>();
+        for(Location uninitialized: observer.getLocations()){
+            Uri uri = Uris.withAppendedUuid(Locations.CONTENT_URI,
+                    uninitialized.getUuid());
+            Location location = (Location) LocationWrapper.get(context,uri);
+            locations.add(location);
+        }
+        observer.setLocations(locations);
     }
 }
