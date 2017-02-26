@@ -106,6 +106,11 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
         return getBooleanField(getColumnIndex(field));
     }
 
+    public String[] getStringArrayField(String field){
+        String values = getStringField(field);
+        return TextUtils.split(values, ",");
+    }
+
     /* (non-Javadoc)
      * @see org.sana.api.IModel#getUuid()
      */
