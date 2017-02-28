@@ -306,6 +306,8 @@ public final class Intents{
 
     public static final int FLAG_VIEW = 32;
 
+    public static final int FLAG_REPLACE_FIELDS = 64;
+
 	/**
 	 * Copies an intent into a new one including all data, type, extras, and 
 	 * categories.
