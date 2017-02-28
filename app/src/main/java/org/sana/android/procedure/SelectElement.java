@@ -12,6 +12,7 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
 import android.widget.Spinner;
@@ -54,18 +55,37 @@ public class SelectElement extends SelectionElement {
         int selected =  adapter.getPosition(getLabelFromValue(answer));
         if(selected != -1)
             spin.setSelection(selected);
+
+        // Set callback for user selection
+        spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String newValue = String.valueOf(parent.getItemAtPosition(position));
+                answer = getValueFromLabel(newValue);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Nothing selected - answer not updated
+            }
+        });
         return encapsulateQuestion(c, v);
     }
 
     @Override
     public void setAnswer(String answer) {
         Log.i(TAG,"["  + id +"]setAnswer() --> " + answer);
-        this.answer = answer;
+        // answer should only set the raw string directly if View is not
+        // active, otherwise we want to read from the UI View
         if(isViewActive()) {
+            // TODO Is this redundant since we are now using the item selected listener
             int index = adapter.getPosition(getLabelFromValue(answer));
             if(index > -1)
                 spin.setSelection(index);
             spin.refreshDrawableState();
+        } else {
+            this.answer = answer;
         }
     }
 
