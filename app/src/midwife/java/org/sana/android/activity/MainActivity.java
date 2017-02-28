@@ -167,7 +167,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                     .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
                                             .mapping_form_midwife)
                                     .putExtra(Intents.EXTRA_SUBJECT, mSubject)
-                                    .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                                    .putExtra(Intents.EXTRA_OBSERVER, mObserver)
+                                    .addFlags(Intents.FLAG_REPLACE_FIELDS);
                             startActivityForResult(intent, Intents.RUN_PROCEDURE);
                         } else {
                             intent.setAction(Intents.ACTION_RUN_PROCEDURE)
@@ -248,6 +249,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                         }
                         mEncounter = Uri.EMPTY;
                         String onComplete = data.getStringExtra(Intents.EXTRA_ON_COMPLETE);
+                        // check if we have a Intents.FLAG_REPLACE_FIELDS set
+                        boolean replace = (data.getFlags() & Intents.FLAG_REPLACE_FIELDS) > 0;
+
                         // If procedure onComplete was set start it
                         if(!TextUtils.isEmpty(onComplete)) {
                             try {
@@ -255,7 +259,14 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                 next = Intent.parseUri(onComplete, Intent
                                         .URI_INTENT_SCHEME);
                                 onSaveAppState(next);
-                                startActivityForResult(next, RUN_PROCEDURE);
+                                switch (Uris.getDescriptor(dataUri)) {
+                                    case Uris.SUBJECT_UUID:
+                                        if(!replace)
+                                            startActivityForResult(next, RUN_PROCEDURE);
+                                        break;
+                                    default:
+                                        startActivityForResult(next, RUN_PROCEDURE);
+                                }
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
