@@ -180,16 +180,20 @@ public class EncounterTaskList extends FragmentActivity implements
         Uri observer = getIntent().getParcelableExtra(Intents.EXTRA_OBSERVER);
         switch (item.getItemId()) {
         case OPTION_SYNC_PATIENT:
+            mListFragment.syncSubjects(this, Subjects.CONTENT_URI);
+            /*
             //getContentResolver().delete(EncounterTasks.CONTENT_URI, null,null);
             Log.i(TAG, "observer: " + observer);
             if(!Uris.isEmpty(observer)){
                 Log.i(TAG, "observer: " + observer);
                 String villageNames = getVillageQueryString();
+
                 Uri.Builder builder = Subjects.CONTENT_URI.buildUpon();
                 builder.appendQueryParameter("village__in", villageNames);
                 // TODO replace line below wih builder.build to complete
                 mListFragment.sync(this, Subjects.CONTENT_URI);
             }
+            */
             return true;
         case OPTION_SYNC_TASKS:
             Log.i(TAG, "observer: " + observer);
@@ -201,9 +205,9 @@ public class EncounterTaskList extends FragmentActivity implements
                 // This is how it would be done but there is an issue in the Subject Child Model
                 // in how it is declared on the server-will need to migrate the
                 // Patients model fields.
-                String villageNames = getVillageQueryString();
+                String villageNames = getLocationUUIDs();
                 Uri.Builder builder = EncounterTasks.CONTENT_URI.buildUpon();
-                builder.appendQueryParameter("subject__village__in", villageNames);
+                builder.appendQueryParameter("observer__location__uuid__in", villageNames);
                 // TODO just replace assigned value below with builder.build()
                 Uri u = EncounterTasks.CONTENT_URI;
                 mListFragment.sync(this, u);
@@ -306,17 +310,17 @@ public class EncounterTaskList extends FragmentActivity implements
         }
     }
 
-    public String getVillageQueryString(){
+    public String getLocationUUIDs(){
         // Get current logged in username - this is a little hacked
         String user = Preferences.getString(this, Constants.PREFERENCE_EMR_USERNAME);
         // Get logged in user list of village names
         Observer observer = (Observer) ObserverWrapper.getOneByUsername(
                 getContentResolver(), user);
         List<Location> locations = observer.getLocations();
-        List<String> villages = new ArrayList<>();
+        List<String> uuids = new ArrayList<>();
         for(Location location: locations){
-            villages.add(location.getName());
+            uuids.add(location.getUuid());
         }
-        return TextUtils.join(",", villages);
+        return TextUtils.join(",", uuids);
     }
 }

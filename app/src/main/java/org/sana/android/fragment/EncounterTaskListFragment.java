@@ -3,7 +3,9 @@ package org.sana.android.fragment;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
@@ -14,6 +16,7 @@ import org.sana.android.app.Preferences;
 import org.sana.android.content.DispatchResponseReceiver;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.EncounterTasks;
@@ -30,6 +33,8 @@ import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
 
 import org.sana.api.task.Status;
+import org.sana.core.Location;
+import org.sana.core.Observer;
 import org.sana.util.StringUtil;
 
 import android.content.Context;
@@ -443,12 +448,17 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         Log.d(TAG, "last: " + lastSync +", now: " + now+ ", delta: " + (now-lastSync) + ", doSync: " + ((now - lastSync) > delta));
         // TODO
         if((now - lastSync) > delta){
-            Logf.I(TAG, "sync(): synchronizing list: " + uri);
+            Logf.I(TAG, "sync(): synchronizing list: " + uri);// village is a text field so we need to send individually
+            List<String> villageNames = getVillageNamesForObserver();
+            for(String village:villageNames) {
+                // Append the village list query parameter
+                Uri.Builder builder = uri.buildUpon();
+                builder.appendQueryParameter("village", village);
+                Intent intent;
+                intent = new Intent(Intents.ACTION_READ, builder.build());
+                context.startService(intent);
+            }
             prefs.edit().putLong("patient_sync", now).commit();
-
-            Intent intent;
-            intent = new Intent(Intents.ACTION_READ, uri);
-            context.startService(intent);
         } else {
             /*
             Intent broadcast = new Intent(DispatchResponseReceiver.BROADCAST_RESPONSE);
@@ -568,5 +578,34 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
     public Bundle getSelectedData(long id){
         Bundle data = mData.get(id);
         return data;
+    }
+
+    public List<String> getVillageNamesForObserver(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(getActivity(), Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getActivity().getContentResolver(), user);
+        ObserverWrapper.initializeRelated(getActivity(), observer);
+        List<Location> locations = observer.getLocations();
+        List<String> villages = new ArrayList<>();
+        for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return villages;
+    }
+
+    public String getLocationUUIDs(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(getActivity(), Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getActivity().getContentResolver(), user);
+        List<Location> locations = observer.getLocations();
+        List<String> uuids = new ArrayList<>();
+        for(Location location: locations){
+            uuids.add(location.getUuid());
+        }
+        return TextUtils.join(",", uuids);
     }
 }
