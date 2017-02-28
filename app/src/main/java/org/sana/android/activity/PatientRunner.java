@@ -119,6 +119,8 @@ public class PatientRunner extends BaseRunner {
     public void onProcedureComplete(Intent data){
         Log.i(TAG, "onProcedureComplete(): " + data);
         startService(data);
+        // Copy the original intent flags
+        data.setFlags(getIntent().getFlags());
         setResult(RESULT_OK,data);
         finish();
     }
