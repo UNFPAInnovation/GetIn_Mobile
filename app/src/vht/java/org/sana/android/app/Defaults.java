@@ -11,7 +11,7 @@ public class Defaults {
     public static final int[] procedures(){
         return new int[]{
                 R.raw.mapping_form,
-                R.raw.follow_up_note_vht1
+                R.raw.appointment_note
         };
     }
 }
