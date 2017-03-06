@@ -19,7 +19,9 @@ import org.sana.util.DateUtil;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 
 /**
  * @author ewinkler
@@ -72,6 +74,36 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 		}
 		return object;
 	}
+
+    /**
+     * Gets a single Encounter representation.
+     *
+     * @param context The context
+     * @param uri The encounter Uri
+     * @return
+     * @throws IllegalArgumentException If the Uri returns more than one
+     *  Encounter reference or none.
+     */
+    public static IEncounter get(Context context, Uri uri){
+        Cursor cursor = null;
+        EncounterWrapper wrapper = null;
+        IEncounter object = null;
+            try{
+                cursor = context.getContentResolver().query(
+                        Encounters.CONTENT_URI, null, null, null, null);
+                if(cursor != null){
+                    wrapper = new EncounterWrapper(cursor);
+                    if(wrapper.moveToFirst() && wrapper.getCount() == 1){
+                        object = wrapper.getObject();
+                    } else {
+                        throw new IllegalArgumentException("Invalid Encounter Uri");
+                    }
+                }
+            } finally {
+                if(wrapper != null) wrapper.close();
+            }
+        return object;
+    }
 
     public static ContentValues toValues(Encounter obj){
         ContentValues values = new ContentValues();
