@@ -10,6 +10,7 @@ import android.util.Log;
 
 import org.sana.R;
 import org.sana.android.content.Intents;
+import org.sana.android.db.ModelWrapper;
 import org.sana.android.procedure.Procedure;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Observations;
@@ -46,23 +47,28 @@ public class EncounterTaskManager {
         return encounterTasks;
     }
 
-    public static Date getDateFromEncounter(Context context, Uri encounter) throws ParseException {
+    public static Date getDateFromEncounter(Context context, Uri encounter) {
         Date date = null;
         Cursor cursor = null;
-        String encounterUUID = encounter.getLastPathSegment();
+        String encounterUUID = ModelWrapper.getUuid(encounter, context);
         try {
             String dateStr = null;
             String selection = Observations.Contract.ENCOUNTER +"='" +
-                    encounterUUID +"'";
+                    encounterUUID +"' AND " + Observations.Contract.CONCEPT +
+                    "='ANC VISIT'";
             String[] projection = new String[]{
-                Observations.Contract.VALUE_TEXT
+                Observations.Contract.VALUE
             };
             cursor = context.getContentResolver().query(Observations.CONTENT_URI,
                     projection,selection,null, null);
             if(cursor != null && cursor.moveToFirst()){
                 dateStr = cursor.getString(0);
             }
-            date = Dates.fromSQL(dateStr);
+            try {
+                date = Dates.fromSQL(dateStr);
+            } catch (ParseException e) {
+                throw new IllegalArgumentException(e);
+            }
         } finally {
             if (cursor != null) cursor.close();
         }
