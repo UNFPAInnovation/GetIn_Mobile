@@ -32,9 +32,11 @@ import org.sana.analytics.Runner;
 import org.sana.android.Constants;
 import org.sana.android.activity.settings.Settings;
 import org.sana.android.app.DefaultActivityRunner;
+import org.sana.android.app.EncounterTaskManager;
 import org.sana.android.app.Locales;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.EncounterWrapper;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
@@ -56,12 +58,14 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
+import org.sana.core.Encounter;
 import org.sana.core.Observer;
 import org.sana.core.Patient;
 import org.sana.net.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -164,8 +168,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             //intent.setDataAndType(mSubject, Subjects.CONTENT_TYPE)
                             intent.putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
                                     getString(R.string.procs_subject_short_form1)))
-                                    .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                            .mapping_form_midwife)
+                                    .putExtra(Intents.EXTRA_PROCEDURE_ID,
+                                            R.raw.mapping_form)
                                     .putExtra(Intents.EXTRA_SUBJECT, mSubject)
                                     .putExtra(Intents.EXTRA_OBSERVER, mObserver)
                                     .addFlags(Intents.FLAG_REPLACE_FIELDS);
@@ -219,6 +223,15 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                             case Uris.ENCOUNTER_ITEM:
                                // startService(data);
                             case Uris.ENCOUNTER_UUID:
+                                Encounter encounter = (Encounter) EncounterWrapper.get(this, data.getData());
+                                Uri patientUri = Uris.withAppendedUuid(
+                                        Patients.CONTENT_URI,
+                                        encounter.getSubject().getUuid()
+                                );
+                                Patient patient = getPatient(patientUri);
+                                List<EncounterTask> tasks = getVisits(
+                                        patient, null, null, data.getData());
+                                createTasks(tasks);
                                 break;
                             default:
                         }
@@ -240,9 +253,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                                  * TODO
                                  * work on the procedure to return and the observer
                                  */
-                                List<EncounterTask> tasks = getVisits(
-                                        patient,null,null);
-                                createTasks(tasks);
+                                //List<EncounterTask> tasks = getVisits(
+                                //        patient,null,null);
+                                //createTasks(tasks);
 
                                 break;
                                 default:
@@ -558,6 +571,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 preferences.edit().putBoolean(Constants.DB_INIT, true).commit();
                 init = true;
             } else {
+                Procedure.intializeDevice();
                 Logf.D(TAG, "init()", "reloading");
             doClearDatabase(new Uri[]{ Procedures.CONTENT_URI });
             preferences.edit().putBoolean(Constants.DB_INIT, true).commit();
@@ -671,8 +685,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
                                 getString(R.string.procs_subject_short_form1)))
-                        .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                .mapping_form_midwife)
+                        .putExtra(Intents.EXTRA_PROCEDURE_ID,
+                                R.raw.mapping_form)
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 startActivityForResult(intent, Intents.RUN_PROCEDURE);
 
@@ -941,7 +955,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     }
 
 
-    public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer observer) {
+    public EncounterTask calculateFirstVisit(Patient patient, Procedure procedure, Observer observer,
+                                             Uri encounter) {
         EncounterTask task = new EncounterTask();
         //assignedTo =task.observer;
 //        assignedTo.
@@ -1104,7 +1119,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         *Pick ANC date from card
          */
         else if (anc.equals("Yes")&& age < 25){
-            Date due_on = patient.getANC_visit();
+            Date due_on = EncounterTaskManager.getDateFromEncounter(this,
+                        encounter);
+            //patient.getANC_visit();
 
             task.due_on = due_on;
 
@@ -1118,11 +1135,12 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
 
 
-     public List<EncounterTask> getVisits(Patient patient, Procedure procedure, Observer observer){
+     public List<EncounterTask> getVisits(Patient patient, Procedure procedure, Observer observer,
+                                          Uri encounter){
         //invoke methods from (2) above
          //adding the encounterTasks to the list
        List<EncounterTask> encounterTasks = new ArrayList<EncounterTask>();
-         encounterTasks.add(calculateFirstVisit(patient, procedure,observer));
+         encounterTasks.add(calculateFirstVisit(patient, procedure,observer, encounter));
          return encounterTasks;
     }
 
