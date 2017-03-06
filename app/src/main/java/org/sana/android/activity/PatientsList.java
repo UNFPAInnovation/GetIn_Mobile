@@ -338,7 +338,7 @@ public class PatientsList extends FragmentActivity implements
                 int resId = getProcedureResourceId("registration_short");
                 // Default to english version
                 //resId  = (resId != 0)? resId: R.raw.registration_short_en;
-                resId  = (resId != 0)? resId: R.raw.mapping_form_midwife;
+                resId  = (resId != 0)? resId: R.raw.mapping_form;
                 // build launch intent
                 intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
