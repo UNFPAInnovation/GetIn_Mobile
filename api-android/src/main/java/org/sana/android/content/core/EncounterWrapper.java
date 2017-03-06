@@ -3,6 +3,7 @@
  */
 package org.sana.android.content.core;
 
+import org.sana.android.content.Uris;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Concepts;
@@ -88,20 +89,29 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
         Cursor cursor = null;
         EncounterWrapper wrapper = null;
         IEncounter object = null;
-            try{
-                cursor = context.getContentResolver().query(
-                        Encounters.CONTENT_URI, null, null, null, null);
-                if(cursor != null){
-                    wrapper = new EncounterWrapper(cursor);
-                    if(wrapper.moveToFirst() && wrapper.getCount() == 1){
-                        object = wrapper.getObject();
-                    } else {
-                        throw new IllegalArgumentException("Invalid Encounter Uri");
-                    }
+        int descriptor = Uris.getDescriptor(uri);
+        // Safety check
+        switch(descriptor){
+            case Uris.ENCOUNTER_ITEM:
+            case Uris.ENCOUNTER_UUID:
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid Encounter Uri");
+        }
+        try{
+            cursor = context.getContentResolver().query(
+                    uri, null, null, null, null);
+            if(cursor != null){
+                wrapper = new EncounterWrapper(cursor);
+                if(wrapper.moveToFirst() && wrapper.getCount() == 1){
+                    object = wrapper.getObject();
+                } else {
+                    throw new IllegalArgumentException("Invalid Encounter Uri");
                 }
-            } finally {
-                if(wrapper != null) wrapper.close();
             }
+        } finally {
+            if(wrapper != null) wrapper.close();
+        }
         return object;
     }
 
