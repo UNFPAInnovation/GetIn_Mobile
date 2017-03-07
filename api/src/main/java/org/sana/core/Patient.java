@@ -4,7 +4,9 @@
 package org.sana.core;
 
 import java.net.URI;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -21,6 +23,11 @@ import com.google.gson.annotations.Expose;
  *
  */
 public class Patient extends Subject implements IPatient{
+
+    private static final Calendar ZERO =Calendar.getInstance(TimeZone.getTimeZone("UTC"));
+    static{
+        ZERO.clear();
+    }
 
     @Expose
     public String given_name;
@@ -65,7 +72,7 @@ public class Patient extends Subject implements IPatient{
 	@Expose
 	public String anc_status = "No";
 	@Expose
-	public Date anc_visit;
+	public Date anc_visit = ZERO.getTime();
 	@Expose
 	public String ambulance_need  = "No";
 	@Expose
