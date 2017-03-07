@@ -189,6 +189,7 @@ public class SessionService extends Service{
             // Null check should be treated as a FAILURE? or INDETERMINATE
 			if(t == null){
                 handleSessionAuthResult(FAILURE, tempKey, INVALID.toString());
+                return;
             }
 
             if(t.succeeded()){
