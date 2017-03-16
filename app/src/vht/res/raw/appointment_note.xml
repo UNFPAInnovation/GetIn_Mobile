@@ -115,7 +115,7 @@
             question="Next Appointment Date"
             answer=""
             /> -->
-        <Page>
+
             <Element
                 id="14"
                 type="RADIO" choices="Yes;No"
@@ -155,7 +155,7 @@
                 answer=""
             />
         </Page>
-
+<Page>
         <Element
             id="7"
             type="RADIO"
