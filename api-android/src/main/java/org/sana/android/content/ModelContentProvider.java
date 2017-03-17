@@ -146,9 +146,9 @@ public abstract class ModelContentProvider extends ContentProvider {
 		}
         TableHelper<?> helper = getTableHelper(uri);
 		String table = helper.getTable();
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openWritableDatabase();
 		int count = db.delete(table, selection, selectionArgs);
-        DatabaseManager.getInstance().closeDatabase();
+        //DatabaseManager.getInstance().closeDatabase();
 		getContext().getContentResolver().notifyChange(uri, null);
 		return count;
 	}
@@ -173,9 +173,9 @@ public abstract class ModelContentProvider extends ContentProvider {
         // set default insert values and execute
         values = helper.onInsert(values);
 		String table = helper.getTable();
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();//mOpener.getWritableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openWritableDatabase();//mOpener.getWritableDatabase();
 		long id = db.insert(table, null, values);
-		DatabaseManager.getInstance().closeDatabase();
+		//DatabaseManager.getInstance().closeDatabase();
         // Return the UUID based Uri when available
 		Uri result = (values.containsKey(BaseContract.UUID))?
                 Uris.withAppendedUuid(uri, values.getAsString(BaseContract.UUID)):
@@ -214,7 +214,7 @@ public abstract class ModelContentProvider extends ContentProvider {
             //selection = String.format("%s %s", selection, uriQS);
             selection = DBUtils.concatenateWhere(selection, uriQS);
         }
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();//mOpener.getReadableDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openReadableDatabase();//mOpener.getReadableDatabase();
         //Cursor cursor = helper.onQuery(db, projection, selection, selectionArgs, sortOrder);
         Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -244,9 +244,9 @@ public abstract class ModelContentProvider extends ContentProvider {
 			selection = DBUtils.getWhereClauseWithUUID(uri, selection);
 		default:
 		}
-        SQLiteDatabase db = DatabaseManager.getInstance().openDatabase();
+        SQLiteDatabase db = DatabaseManager.getInstance().openWritableDatabase();
 		int result = db.update(table, values, selection, selectionArgs);
-		DatabaseManager.getInstance().closeDatabase();
+		//DatabaseManager.getInstance().closeDatabase();
 		getContext().getContentResolver().notifyChange(uri, null);
 		return result;
 	}
