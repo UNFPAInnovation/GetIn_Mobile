@@ -54,12 +54,12 @@ public abstract class DatabaseOpenHelper extends SQLiteOpenHelper
 	 * 
 	 * @param context
 	 * @param name
-	 * @param matcher TODO
+     * @param version
 	 */
 	public DatabaseOpenHelper(Context context, String name, int version){
 		super(context,name,null,version);
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.sana.android.db.InsertHelper#onInsert(android.content.ContentValues)
 	@Override
