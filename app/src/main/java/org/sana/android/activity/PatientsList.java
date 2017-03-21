@@ -196,7 +196,7 @@ public class PatientsList extends FragmentActivity implements
                 .setItems(items, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        Toast.makeText(PatientsList.this, "clicked "+items[which], Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(PatientsList.this, "clicked "+items[which], Toast.LENGTH_SHORT).show();
                         switch(which){
                             case 0:
                                 break;
