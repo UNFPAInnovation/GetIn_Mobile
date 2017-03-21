@@ -76,7 +76,7 @@
             question="Action Taken"
             answer=""
         />
-        <Page>
+       <!-- <Page>
             <Element
                 id="14"
                 type="RADIO" choices="Yes;No"
@@ -94,14 +94,15 @@
                     <Criteria type="EQUALS" id="1" value="No"/>
                 </and>
             </ShowIf>
+            -->
             <Element id="15a" type="DATE"
                 concept="ANC VISIT"
-                question="Enter Next ANC visit from Card "
+                question="Enter Next ANC visit "
                 required="true"
                 answer=""
             />
         </Page>
-        <Page>
+       <!-- <Page>
             <ShowIf>
                 <and>
                     <Criteria type="EQUALS" id="14" value="Yes"/>
@@ -115,12 +116,12 @@
                 answer=""
             />
         </Page>
-       <!-- <Element
+        <Element
             id="6"
             type="DATE"
             concept="NEXT APPOINTMENT"
             question="Next Appointment Date"
             answer=""
         /> -->
-    </Page>
+
 </Procedure>
