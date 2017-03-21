@@ -105,36 +105,36 @@
             type="SELECT"
             required="true"
             question="Pick Girls Sub County"
-            choices="Kanungu_Tc"
-            answer="Kanungu_Tc"/>
+            choices="BUTOGOTA TC,KAMBUGA,KANYANTOROGO,KATETE,KAYONZA,KIHIHI,KINAABA,KIRIMA,MPUNGU,NYAKINONI,NYAMIRAMA,NYANGA,RUGYEYO"
+            answer="BUTOGOTA TC"/>
     </Page>
     <Page>
         <ShowIf>
-            <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+            <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
         </ShowIf>
         <Element
             id="10b"
             concept="PARISH"
             type="SELECT"
             question="Pick Girl's Parish"
-            choices="Eastern_Ward;Northern_Ward;Southern_Ward;Western_Ward"
+            choices="WESTERN WARD"
             answer=""/>
     </Page>
 
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="10a" value="Kanungu_Tc"/>
+                <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
 
-                <Criteria type="EQUALS" id="10b" value="Eastern_Ward"/>
+                <Criteria type="EQUALS" id="10b" value="WESTERN WARD"/>
             </and>
         </ShowIf>
         <Element
             id="10c"
             concept="VILLAGE"
             type="SELECT"
-            question="Pick Girl's Village in Eastern Ward Parish"
-            choices="Burondo;Katate;Kifunjo;Kirengye;Kyamunjuri;Marumba;Murengyeza;Mushasha;Rugoma"
+            question="Pick Girl's Village in WESTERN WARD Parish"
+            choices="MUNYAGA;NYAKIREHE"
             answer=""/>
     </Page>
 
@@ -301,7 +301,7 @@
             question="Have you used Contraceptives before?"
             answer=""/>
     </Page>
-  <!--  <Page>
+    <Page>
         <Element
             id="14"
             type="RADIO" choices="Yes;No"
@@ -312,6 +312,7 @@
             />
 
     </Page>
+    <!--
     <Page>
         <ShowIf>
             <Criteria type="EQUALS" id="14" value="Yes"/>
