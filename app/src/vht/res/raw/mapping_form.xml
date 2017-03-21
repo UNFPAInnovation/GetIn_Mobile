@@ -324,6 +324,8 @@
             question="Highest Education Level"
             choices="Primary_level;OLevel;Alevel;Tertiary"
             answer=""/>
+        </Page>
+    <Page>
         <Element
             id="13"
             concept="CONTRACEPTIVE USE"
@@ -331,9 +333,9 @@
             choices="Yes;No"
             question="Have you used Contraceptives before?"
             answer=""/>
-    </Page>
-    <!--
-    <Page>
+
+
+
         <Element
             id="14"
             type="RADIO" choices="Yes;No"
@@ -342,7 +344,8 @@
             required="true"
             answer=""
         />
-
+    </Page>
+<!--
     </Page>
     <Page>
         <ShowIf>
