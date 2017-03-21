@@ -105,7 +105,7 @@
             type="SELECT"
             required="true"
             question="Pick Girls Sub County"
-            choices="BUTOGOTA TC,KAMBUGA,KANYANTOROGO,KATETE,KAYONZA,KIHIHI,KINAABA,KIRIMA,MPUNGU,NYAKINONI,NYAMIRAMA,NYANGA,RUGYEYO"
+            choices="BUTOGOTA TC;KAMBUGA;KANYANTOROGO;KATETE;KAYONZA;KIHIHI;KINAABA;KIRIMA;MPUNGU;NYAKINONI;NYAMIRAMA;NYANGA;RUGYEYO"
             answer="BUTOGOTA TC"/>
     </Page>
     <Page>
