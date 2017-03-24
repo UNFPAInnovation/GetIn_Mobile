@@ -1,7 +1,6 @@
 package org.sana.android.activity;
 
 import android.content.ComponentName;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -697,6 +696,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
             case R.id.btn_main_view_ambulance_drivers:
                 intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
+                startActivity(intent);
+                break;
+            case R.id.btn_main_view_midwife:
+                intent = new Intent(MainActivity.this,ObserverList.class);
+                intent.putExtra("user", "midwife");
                 startActivity(intent);
                 break;
            /* case R.id.btn_main_procedures:

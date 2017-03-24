@@ -18,6 +18,7 @@ import android.widget.AdapterView;
 import android.widget.TextView;
 
 import org.sana.R;
+import org.sana.android.activity.ObserverList;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.provider.Observers;
@@ -44,6 +45,7 @@ public class ObserverListFragment extends ListFragment implements
     private Uri mUri = Observers.CONTENT_URI;
 //    static final String[] mProjection = null;
     public static final String TAG = ObserverListFragment.class.getName();
+    static ObserverList observerList = new ObserverList();
 
     static final String[] mProjection = new String[] {
             Observers.Contract._ID,
@@ -52,7 +54,9 @@ public class ObserverListFragment extends ListFragment implements
             Observers.Contract.PHONE_NUMBER,
             Observers.Contract.LOCATIONS
     };
-    static final String mSelect = Observers.Contract.ROLE +" = 'vht'";
+//    static final String mSelect = Observers.Contract.ROLE +" = '"+  observerList.getUser() +"'";
+    static final String userSelect = Observers.Contract.ROLE +" = 'vht'";
+
     /**
      * Mandatory empty constructor for the fragment manager to instantiate the
      * fragment (e.g. upon screen orientation changes).
@@ -66,6 +70,7 @@ public class ObserverListFragment extends ListFragment implements
         ObserverListFragment fragment = new ObserverListFragment();
         Bundle args = new Bundle();
         args.putInt(ARG_COLUMN_COUNT, columnCount);
+//        args.putString("user", observerListuser);
         fragment.setArguments(args);
         return fragment;
     }
@@ -80,6 +85,8 @@ public class ObserverListFragment extends ListFragment implements
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_observer_list, container, false);
         // TODO Anything else related to the view that needs to happen here
+
+//        Toast.makeText(ObserverListFragment.this.getContext(), ""+mSelect, Toast.LENGTH_SHORT).show();
         return view;
     }
 
@@ -87,6 +94,10 @@ public class ObserverListFragment extends ListFragment implements
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+
+//        userSelect = Observers.Contract.ROLE +" = 'midwife'";
+//        final String mSelect = Observers.Contract.ROLE +" = '"+  observerList.getUser() +"'";
+
         if (context instanceof ModelSelectedListener) {
             mListener = (ModelSelectedListener<Observer>) context;
         } else {
@@ -119,10 +130,13 @@ public class ObserverListFragment extends ListFragment implements
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+
+        String user = Observers.Contract.ROLE +" = '"+  getActivity().getIntent().getStringExtra("user") +"'";
         CursorLoader loader = new CursorLoader(getActivity(),
                 mUri,
                 null,//mProjection,
-                mSelect, null, null);
+                //mSelect
+                user, null, null);
         return loader;
     }
 

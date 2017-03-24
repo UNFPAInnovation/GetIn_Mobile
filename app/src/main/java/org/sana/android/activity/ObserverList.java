@@ -18,6 +18,9 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
 
     // ms*sec*min*hrs
     private int delta =1000*1*1*1;
+//    String user;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -28,6 +31,7 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
     @Override
     public void onAttachFragment(Fragment fragment) {
         super.onAttachFragment(fragment);
+
     }
 
 
