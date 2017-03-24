@@ -43,6 +43,14 @@ public class DatabaseManager {
         return mDatabase;
     }
 
+    public SQLiteDatabase openReadableDatabase() {
+        return mDatabaseHelper.getReadableDatabase();
+    }
+
+    public SQLiteDatabase openWritableDatabase() {
+        return mDatabaseHelper.getWritableDatabase();
+    }
+
     public void closeDatabase() {
         if(mOpenCounter.decrementAndGet() == 0) {
             // Closing database

@@ -65,7 +65,6 @@ import org.sana.net.Response;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -703,6 +702,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 break;*/
             case R.id.btn_main_view_call_VHT:
                 intent = new Intent(MainActivity.this, ObserverList.class);
+                intent.putExtra("user", "vht");
 //                intent = new Intent(MainActivity.this, VHTListActivity.class);
                 Log.d(TAG,intent.toUri(Intent.URI_INTENT_SCHEME));
                 startActivity(intent);
