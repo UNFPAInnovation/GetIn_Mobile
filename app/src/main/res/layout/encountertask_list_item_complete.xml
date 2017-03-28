@@ -95,7 +95,19 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true" 
                 android:text="Procedure Title"/>
-  
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/image1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp"
+                    android:adjustViewBounds="true"
+                    android:maxHeight="56dp"
+                    android:maxWidth="96dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/completed_task2" />
             <TextView
                 android:id="@+id/due_on"
                 android:layout_width="wrap_content"
@@ -109,6 +121,10 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true" 
                 android:text="2001-01-01 23:59"/>
+
+
+
+            </LinearLayout>
         </LinearLayout>
 
         <ImageView
