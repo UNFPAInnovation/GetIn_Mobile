@@ -210,7 +210,7 @@ public class EncounterTaskList extends FragmentActivity implements
                 builder.appendQueryParameter("observer__location__uuid__in", villageNames);
                 // TODO just replace assigned value below with builder.build()
                 Uri u = EncounterTasks.CONTENT_URI;
-                mListFragment.sync(this, u);
+                mListFragment.sync(this, builder.build());
             }
             return true;
 
