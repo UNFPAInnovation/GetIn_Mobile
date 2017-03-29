@@ -95,11 +95,13 @@ public class EncounterTaskList extends FragmentActivity implements
             Uri subj = selected.getParcelable(Intents.EXTRA_SUBJECT);
             Uri procedure = selected.getParcelable(Intents.EXTRA_PROCEDURE);
             Uri task = selected.getParcelable(Intents.EXTRA_TASK_ENCOUNTER);
+            Uri encounter = selected.getParcelable(Intents.EXTRA_ENCOUNTER);
             Intent data = new Intent();
             data.setDataAndType(task,EncounterTasks.CONTENT_ITEM_TYPE);
             data.putExtra(Intents.EXTRA_SUBJECT, subj);
             data.putExtra(Intents.EXTRA_PROCEDURE, procedure);
             data.putExtra(Intents.EXTRA_TASK, task);
+            data.putExtra(Intents.EXTRA_ENCOUNTER, encounter);
             String status = selected.getString(EncounterTasks.Contract.STATUS);
 
             boolean complete = (status.compareToIgnoreCase("Completed") == 0)? true: false;
