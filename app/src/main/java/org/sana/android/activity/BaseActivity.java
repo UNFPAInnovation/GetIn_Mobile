@@ -1,5 +1,7 @@
 package org.sana.android.activity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -27,9 +29,11 @@ import org.sana.android.Constants;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.app.State.Keys;
+import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.DispatchResponseReceiver;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Observations;
@@ -37,6 +41,8 @@ import org.sana.android.provider.Observers;
 import org.sana.android.provider.Subjects;
 import org.sana.android.util.Logf;
 import org.sana.android.util.UriUtil;
+import org.sana.core.Location;
+import org.sana.core.Observer;
 import org.sana.net.Response;
 
 /**
@@ -594,10 +600,22 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     protected void syncAll(){
         // Set period for these
+        /*
         sync(Observers.CONTENT_URI);
         sync(Subjects.CONTENT_URI);
         sync(Encounters.CONTENT_URI);
         sync(Observations.CONTENT_URI);
+        */
+        SynchronizationManager.sync(this, Observers.CONTENT_URI);
+        List<String> villageNames = getVillageNamesForObserver();
+        for(String village:villageNames) {
+            // Append the village list query parameter
+            Uri.Builder builder = Subjects.CONTENT_URI.buildUpon();
+            builder.appendQueryParameter("village", village);
+            SynchronizationManager.sync(this, builder.build());
+        }
+        SynchronizationManager.sync(this, Encounters.CONTENT_URI);
+        SynchronizationManager.sync(this, Observations.CONTENT_URI);
     }
 
     protected void sync(Uri uri){
@@ -606,5 +624,20 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     public Uri getObserver(){
         return mObserver;
+    }
+
+    public List<String> getVillageNamesForObserver(){
+        // Get current logged in username - this is a little hacked
+        String user = Preferences.getString(this, Constants.PREFERENCE_EMR_USERNAME);
+        // Get logged in user list of village names
+        Observer observer = (Observer) ObserverWrapper.getOneByUsername(
+                getContentResolver(), user);
+        ObserverWrapper.initializeRelated(this, observer);
+        List<Location> locations = observer.getLocations();
+        List<String> villages = new ArrayList<>();
+        for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return villages;
     }
 }
