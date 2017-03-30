@@ -95,11 +95,13 @@ public class EncounterTaskList extends FragmentActivity implements
             Uri subj = selected.getParcelable(Intents.EXTRA_SUBJECT);
             Uri procedure = selected.getParcelable(Intents.EXTRA_PROCEDURE);
             Uri task = selected.getParcelable(Intents.EXTRA_TASK_ENCOUNTER);
+            Uri encounter = selected.getParcelable(Intents.EXTRA_ENCOUNTER);
             Intent data = new Intent();
             data.setDataAndType(task,EncounterTasks.CONTENT_ITEM_TYPE);
             data.putExtra(Intents.EXTRA_SUBJECT, subj);
             data.putExtra(Intents.EXTRA_PROCEDURE, procedure);
             data.putExtra(Intents.EXTRA_TASK, task);
+            data.putExtra(Intents.EXTRA_ENCOUNTER, encounter);
             String status = selected.getString(EncounterTasks.Contract.STATUS);
 
             boolean complete = (status.compareToIgnoreCase("Completed") == 0)? true: false;
@@ -210,7 +212,7 @@ public class EncounterTaskList extends FragmentActivity implements
                 builder.appendQueryParameter("observer__location__uuid__in", villageNames);
                 // TODO just replace assigned value below with builder.build()
                 Uri u = EncounterTasks.CONTENT_URI;
-                mListFragment.sync(this, u);
+                mListFragment.sync(this, builder.build());
             }
             return true;
 

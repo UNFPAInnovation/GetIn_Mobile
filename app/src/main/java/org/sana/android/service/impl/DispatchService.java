@@ -48,6 +48,7 @@ import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.content.LocalBroadcastManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.FieldNamingPolicy;
@@ -75,6 +76,7 @@ import org.sana.android.activity.EncounterList;
 import org.sana.android.activity.MainActivity;
 import org.sana.android.app.Locales;
 import org.sana.android.app.NotificationFactory;
+import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.Intents;
 import org.sana.android.content.ModelContext;
 import org.sana.android.content.ModelEntity;
@@ -96,6 +98,7 @@ import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
 import org.sana.android.provider.VHTs;
 import org.sana.android.service.QueueManager;
+import org.sana.android.util.Dates;
 import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.task.EncounterTask;
@@ -531,7 +534,10 @@ public class DispatchService extends Service{
                             EncounterResponseHandler eHandler = new EncounterResponseHandler();
                             Response<Collection<Encounter>> encounterResponse = MDSInterface2.apiGet(
                                     uri,username, password,eHandler);
-                            bcastCode = createOrUpdateEncounters(encounterResponse.getMessage(),startId);
+                            if(encounterResponse.getMessage() != null)
+                                bcastCode = createOrUpdateEncounters(encounterResponse.getMessage(),startId);
+                            else
+                                bcastCode = encounterResponse.getCode();
                             break;
                         case Uris.ENCOUNTER_UUID:
                         case Uris.ENCOUNTER_ITEM:
@@ -607,7 +613,10 @@ public class DispatchService extends Service{
                             ObservationResponseHandler oHandler = new ObservationResponseHandler();
                             Response<Collection<Observation>> oResponse = MDSInterface2.apiGet(
                                     uri,username, password,oHandler);
-                            bcastCode = createOrUpdateObservations(oResponse.getMessage(),startId);
+                            if(oResponse.getMessage() != null)
+                                bcastCode = createOrUpdateObservations(oResponse.getMessage(),startId);
+                            else
+                                bcastCode = oResponse.getCode();
                             break;
                         case Uris.OBSERVATION_UUID:
                             // TODO Allows GET or POST
@@ -635,7 +644,10 @@ public class DispatchService extends Service{
                                 PatientResponseHandler pHandler = new PatientResponseHandler();
                                 Response<Collection<Patient>> patientListResponse = MDSInterface2.apiGet(uri,username,password,
                                     pHandler);
-                                bcastCode = createOrUpdateSubjects(patientListResponse.message, startId);
+                                if(patientListResponse.getMessage() != null)
+                                    bcastCode = createOrUpdateSubjects(patientListResponse.message, startId);
+                                else
+                                    bcastCode = patientListResponse.getCode();
                                 bcastMessage = "";
                                 Log.d(TAG, "" +Uris.SUBJECT_DIR+"...code " + bcastCode);
                             } catch (Exception e) {
@@ -664,8 +676,11 @@ public class DispatchService extends Service{
                                 Log.d(TAG, "...response: code=" +
                                         patientResponse.getCode() + ", data=" +
                                         patientResponse.getMessage());
+                                if(patientResponse.getMessage() != null)
                                 bcastCode = createOrUpdateSubjects(
                                         patientResponse.message, startId);
+                                else
+                                    bcastCode = patientResponse.getCode();
                                 // If successful create, we need to swap the
                                 // client side uuid out with the server side
                                 // value
@@ -713,7 +728,11 @@ public class DispatchService extends Service{
                             if(method.equals("GET")) {
                                 try {
                                     response = MDSInterface2.apiGet(uri, username, password, handler);
-                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+
+                                    if(response.getMessage() != null)
+                                        bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                    else
+                                        bcastCode = response.getCode();
                                 } catch (Exception e) {
                                     Log.w(TAG, "GET failed: " + uri
                                             .toASCIIString());
@@ -728,7 +747,11 @@ public class DispatchService extends Service{
                                     Bundle form = data.getBundle("form");
                                     Map<String, String> formData = ModelEntity.toMap(form);
                                     response = MDSInterface2.apiPost(uri, username, password, formData, eTaskHandler);
-                                    bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+
+                                    if(response.getMessage() != null)
+                                        bcastCode = createOrUpdateEncounterTasks(response.message, startId);
+                                    else
+                                        bcastCode = response.getCode();
                                 }   catch(Exception e){
                                     e.printStackTrace();
                                     addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
@@ -777,7 +800,11 @@ public class DispatchService extends Service{
                                         //call get request
                                         Response<Collection<VHT>> adResponse = MDSInterface2.apiGet(uri, username
                                         ,password, vhtResponseHandler);
-                                        bcastCode = createOrUpdateVHT(adResponse.getMessage(),startId);
+
+                                        if(adResponse.getMessage() != null)
+                                            bcastCode = createOrUpdateVHT(adResponse.getMessage(),startId);
+                                        else
+                                            bcastCode = adResponse.getCode();
 
                                     }
                                 }catch (Exception e){
@@ -807,7 +834,11 @@ public class DispatchService extends Service{
 //                                        request = new HttpGet(uri);
                                         // Handle response
                                         // See examples above.
-                                        bcastCode = createOrUpdateAmbulanceDrivers(adResponse.getMessage(), startId);
+
+                                        if(adResponse.getMessage() != null)
+                                            bcastCode = createOrUpdateAmbulanceDrivers(adResponse.getMessage(), startId);
+                                        else
+                                            bcastCode = adResponse.getCode();
                                     }
 
                                 }catch (Exception e){
@@ -833,8 +864,11 @@ public class DispatchService extends Service{
                                         // Call get request - MDSInterface2.apiGet should work
                                         Response<Collection<Observer>> observerResponse = MDSInterface2.apiGet(uri,
                                                 username,password, observerHandler);
-//
-                                        bcastCode = createOrUpdateObservers(observerResponse.getMessage(), startId);
+
+                                        if(observerResponse.getMessage() != null)
+                                            bcastCode = createOrUpdateObservers(observerResponse.getMessage(), startId);
+                                        else
+                                            bcastCode = observerResponse.getCode();
                                     }
 
                                 }catch (Exception e) {
@@ -855,6 +889,9 @@ public class DispatchService extends Service{
 
                         if(bcastCode != NO_BROADCAST)
                             broadcastResult(intent.getData(),bcastCode,bcastMessage);
+                        if(bcastCode == 200){
+                            SynchronizationManager.setLastSynch(DispatchService.this, msgUri);
+                        }
                         break;
 
                     case RESPONSE:
