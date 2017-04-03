@@ -95,7 +95,7 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true" 
                 android:text="Procedure Title"/>
-  
+
             <TextView
                 android:id="@+id/due_on"
                 android:layout_width="wrap_content"
@@ -107,8 +107,9 @@
                 android:singleLine="true"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/complete"
-                android:textIsSelectable="true" 
+                android:textIsSelectable="true"
                 android:text="2001-01-01 23:59"/>
+
         </LinearLayout>
 
         <ImageView

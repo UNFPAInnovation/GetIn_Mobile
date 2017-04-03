@@ -110,7 +110,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:onClick="submit"
-            android:drawableLeft="@drawable/call_icon"
+            android:drawableLeft="@drawable/ic_menu_call"
             android:text="@string/button_call_midwife"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
