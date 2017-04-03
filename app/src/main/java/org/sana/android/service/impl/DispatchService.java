@@ -1654,6 +1654,8 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Observer obj = iterator.next();
             ContentValues vals = ObserverWrapper.toValues(obj);
+            // Remove the null password here that is returned with the GET request
+            vals.remove(Observers.Contract.PASSWORD);
             // Don't add uuid initially
             if(!exists(Observers.CONTENT_URI, obj)){
                 vals.put(BaseContract.UUID, obj.uuid);
