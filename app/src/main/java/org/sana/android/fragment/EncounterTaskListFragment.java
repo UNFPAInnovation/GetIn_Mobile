@@ -104,7 +104,8 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
                 Contract.COMPLETED,
                 Contract.ENCOUNTER
         };
-
+    protected String orderBy = Contract.STATUS + " ASC, "
+            + Contract.DUE_DATE + " ASC";
     // Once a day 86400000
     long delta = 1000;
     protected Uri mUri;
@@ -202,7 +203,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
                 // Commented out to select all synched
                 //        getSelection(),
                 //new String[]{ getObserver() , getSelectedStatus() },
-                Contract.DUE_DATE + " ASC");
+                orderBy);
         return loader;
     }
 
