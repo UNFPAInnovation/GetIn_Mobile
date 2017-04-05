@@ -155,25 +155,40 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         delta = getActivity().getResources().getInteger(
             R.integer.sync_delta_encountertasks);
         // Always sync subjects first
-        syncSubjects(getActivity(),Subjects.CONTENT_URI);
+        //syncSubjects(getActivity(),Subjects.CONTENT_URI);
 
         // sync for specific observer or all tasks
         if(!Uris.isEmpty(observer)){
             Log.i(TAG, "sync: observer = " + observer);
             // sync subjects first
-            sync(getActivity(), Subjects.CONTENT_URI);
+            //sync(getActivity(), Subjects.CONTENT_URI);
             String observerUuid = ModelWrapper.getUuid(
                 observer, getActivity().getContentResolver());
             //Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter(
             //    "assigned_to__uuid",observerUuid).build();
-
+            String uuids = getLocationUUIDs();
             Uri u = EncounterTasks.CONTENT_URI;
-            sync(getActivity(), u);
+            List<String> villageNames = getVillageNamesForObserver();
+            for(String village:villageNames) {
+                Uri.Builder builder = u.buildUpon();
+                builder.appendQueryParameter("subject__patients__village", village);
+                sync(getActivity(), builder.build());
+            }
         } else {
             Log.i(TAG, "sync: all ");
             // sync subjects first
-            sync(getActivity(), Subjects.CONTENT_URI);
-            sync(getActivity(), EncounterTasks.CONTENT_URI);
+            //sync(getActivity(), Subjects.CONTENT_URI);
+            String uuids = getLocationUUIDs();
+            Uri u = EncounterTasks.CONTENT_URI;
+            //Uri.Builder builder = u.buildUpon();
+            //builder.appendQueryParameter("assigned_to__locations__in",uuids);
+            //sync(getActivity(), builder.build());
+            List<String> villageNames = getVillageNamesForObserver();
+            for(String village:villageNames) {
+                Uri.Builder builder = u.buildUpon();
+                builder.appendQueryParameter("subject__patients__village", village);
+                sync(getActivity(), builder.build());
+            }
         }
         LoaderManager.enableDebugLogging(true);
         getActivity().getSupportLoaderManager().initLoader(Uris.ENCOUNTER_TASK_DIR, null, this);
@@ -321,6 +336,32 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             return super.swapCursor(newCursor);
 
         }
+        @Override
+        public int getViewTypeCount() {
+            return 2;
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            Cursor cursor = (Cursor)getItem(position);
+            return getItemViewType(cursor);
+        }
+
+        public int getItemViewType(Cursor cursor) {
+            int type = 1;
+            String status = cursor.getString(statusIndex);
+            Status stat = Status.fromString(status);
+            switch (stat) {
+                case COMPLETED:
+                    type = 0;
+                    break;
+                case ASSIGNED:
+                    type = 1;
+                    break;
+                default:
+                }
+            return type;
+        }
 
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
@@ -360,6 +401,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
                 Uris.withAppendedUuid(Procedures.CONTENT_URI, procedureUuid));
             data.putParcelable(Intents.EXTRA_TASK_ENCOUNTER,
                 Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, uuid));
+            data.putString(Contract.STATUS, status);
             if(!TextUtils.isEmpty(encounter))
                 data.putParcelable(Intents.EXTRA_ENCOUNTER,
                     Uris.withAppendedUuid(Encounters.CONTENT_URI, encounter));
@@ -368,22 +410,18 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             Log.i(TAG, "Finished setting data for: " + position);
         }
 
-        public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(TAG+".mAdapter", "get view ");
-            return super.getView(position,convertView, parent);
-        }
-
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
             Log.d(TAG+".mAdapter", "new view  cursor position: "
                 + ((cursor != null)? cursor.getPosition(): 0));
+            int position = cursor.getPosition();
             String status = cursor.getString(statusIndex);
             View view = null;
-            if(status.compareToIgnoreCase(Status.COMPLETED.toString()) == 0) {
+            if(getItemViewType(cursor) == 0) {
                 // TODO Update this layout to something more visually intuitive that it is completed
-                view = mInflater.inflate(R.layout.encountertask_list_item_complete, null);
+                view = mInflater.inflate(R.layout.encountertask_list_item_complete, null, false);
             } else {
-                view = mInflater.inflate(R.layout.encountertask_list_item, null);
+                view = mInflater.inflate(R.layout.encountertask_list_item, null, false);
             }
             bindView(view, context, cursor);
             return view;
@@ -549,13 +587,21 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         ImageView image = (ImageView)view.findViewById(R.id.image);
         try{
             c = ModelWrapper.getOneByUuid(Subjects.CONTENT_URI, context.getContentResolver(), uuid);
-            if(c != null && c.moveToFirst()){
+            if(c != null)
+                if(c.moveToFirst()){
                 familyName = c.getString(c.getColumnIndex(Patients.Contract.FAMILY_NAME));
                 givenName = c.getString(c.getColumnIndex(Patients.Contract.GIVEN_NAME));
                // id = c.getString(c.getColumnIndex(Patients.Contract.PATIENT_ID));
                 displayName = StringUtil.formatPatientDisplayName(givenName, familyName);
                 imagePath = c.getString(c.getColumnIndex(Patients.Contract.IMAGE));
-            }
+                } else {
+                    Log.w(TAG, "Patient not found: " + uuid);
+                    Uri uri = Uris.withAppendedUuid(Subjects.CONTENT_URI, uuid);
+                    Intent intent = new Intent(Intents.ACTION_READ, uri);
+                    //getActivity().startService(intent);
+                }
+
+
         } finally {
             if(c != null) c.close();
             name.setText((TextUtils.isEmpty(displayName)? "null": displayName));
