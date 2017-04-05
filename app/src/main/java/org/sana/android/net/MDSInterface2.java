@@ -1076,6 +1076,7 @@ public class MDSInterface2 {
                 Log.i(TAG, "apiPost()" + uri);
 		HttpClient client = buildBasicAuthClient(username,password);
 		HttpPost request = new HttpPost(uri);
+        request.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = null;
 		Response<T> response = Response.empty();
 		try {
@@ -1111,6 +1112,7 @@ public class MDSInterface2 {
 			ResponseHandler<Response<T>> handler){
 		HttpClient client = buildBasicAuthClient(username,password);
 		HttpPut request = new HttpPut(uri);
+        request.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = null;
 		Response<T> response = Response.empty();
 		try{
@@ -1147,6 +1149,7 @@ public class MDSInterface2 {
 			ResponseHandler<Response<T>> handler){
 		HttpClient client = buildBasicAuthClient(username,password);
 		HttpDelete request = new HttpDelete(uri);
+        request.setHeader("Accept", "application/json");
 		HttpResponse httpResponse = null;
 		Response<T> response = Response.empty();
 		try {
