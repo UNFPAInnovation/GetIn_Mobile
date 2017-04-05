@@ -28,6 +28,7 @@
 package org.sana.net.http;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URI;
@@ -36,6 +37,9 @@ import java.util.Map;
 
 
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
@@ -59,6 +63,7 @@ import org.apache.http.params.HttpConnectionParams;
 import org.apache.http.params.HttpParams;
 import org.apache.http.params.HttpProtocolParams;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
 import org.sana.net.http.ssl.EasySSLSocketFactory;
 
 /**
@@ -161,11 +166,21 @@ public class HttpTaskFactory {
             
             HttpParams params = basicParams();
             ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
-            return new DefaultHttpClient(cm, params);
+            DefaultHttpClient client = new DefaultHttpClient(cm, params);
+            client.addRequestInterceptor(new HttpRequestInterceptor() {
+                @Override
+                public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+                    if (!request.containsHeader("Accept")) {
+                        request.addHeader("Accept", "application/json");
+                    }
+                }
+            });
+            return client;
         }
 
         @Override
         public HttpClient produce(InputStream keystore, String keypass) {
+            DefaultHttpClient client;
             try {
                 KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
                 trustStore.load(keystore, keypass.toCharArray());
@@ -180,10 +195,19 @@ public class HttpTaskFactory {
 
                 ClientConnectionManager ccm = new ThreadSafeClientConnManager(params, registry);
 
-                return new DefaultHttpClient(ccm, params);
+                client = new DefaultHttpClient(ccm, params);
+                client.addRequestInterceptor(new HttpRequestInterceptor() {
+                    @Override
+                    public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
+                        if (!request.containsHeader("Accept")) {
+                            request.addHeader("Accept", "application/json");
+                        }
+                    }
+                });
             } catch (Exception e) {
-                return new DefaultHttpClient();
+                client = new DefaultHttpClient();
             }
+            return client;
         }
         
         protected HttpParams basicParams(){
