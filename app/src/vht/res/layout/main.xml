@@ -3,7 +3,7 @@
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/background_color"
+    android:background="@color/light_gray"
     android:gravity="fill_vertical"
     android:orientation="vertical">
 
@@ -21,7 +21,7 @@
         android:id="@+id/imageView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/logo"
+        android:src="@drawable/ic_getin_logo"
         android:cropToPadding="false"
         android:adjustViewBounds="true"
         android:maxHeight="32dip"
@@ -54,7 +54,7 @@
             android:drawableLeft="@drawable/ic_menu_archive"
             android:text="@string/button_main_select_patient"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/background_color"
             android:layout_margin="10dp"/>
 
         <Button
@@ -65,7 +65,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
             android:text="@string/button_main_training_mode"
-            android:background="#9E9D24"
+            android:background="@color/background_color"
             android:layout_margin="10dp"/>
 
 
@@ -78,7 +78,7 @@
             android:text="@string/button_upcoming_appointments"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/background_color"
             android:layout_margin="10dp"/>
 
 
@@ -102,7 +102,7 @@
             android:text="@string/btn_main_view_ambulance_drivers"
             android:drawableLeft="@android:drawable/ic_menu_call"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/background_color"
             android:layout_margin="10dp"/>
 
         <Button
@@ -113,7 +113,7 @@
             android:drawableLeft="@android:drawable/ic_menu_call"
             android:text="@string/button_call_midwife"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/background_color"
             android:layout_margin="10dp"/>
 
         <!-- This is redundant -->
