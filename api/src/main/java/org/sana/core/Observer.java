@@ -182,10 +182,12 @@ public class Observer extends Model implements IObserver{
     }
 
     public void setLocations(Collection<Location> locations){
-		this.locations.addAll(locations);
+		this.locations.clear();
+        this.locations.addAll(locations);
     }
 	
 	public void setLocations(String[] locations) {
+        this.locations.clear();
 		for (String location : locations) {
 			Location l = new Location();
 			l.setUuid(location);
