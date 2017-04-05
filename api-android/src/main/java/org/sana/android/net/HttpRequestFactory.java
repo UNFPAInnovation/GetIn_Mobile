@@ -89,6 +89,7 @@ public final class HttpRequestFactory {
 		try{
 			URI uri = URIUtils.createURI(scheme, host, port, path,null,null);
 			HttpPost post = new HttpPost(uri);
+            post.setHeader("Accept", "application/json");
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postData, "UTF-8");
 			post.setEntity(entity);
 			return post;
@@ -103,6 +104,7 @@ public final class HttpRequestFactory {
 	{
 		try{
 			HttpPost post = new HttpPost(uri);
+            post.setHeader("Accept", "application/json");
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(postData, "UTF-8");
 			post.setEntity(entity);
 			return post;
@@ -144,6 +146,7 @@ public final class HttpRequestFactory {
 					URLEncodedUtils.format(queryParams, "UTF-8"), null);
 			HttpGet get = new HttpGet(uri);
 			get.addHeader(header);
+            get.setHeader("Accept", "application/json");
 			return get;
 		} catch (URISyntaxException e) {
 			throw new IllegalArgumentException(e);
