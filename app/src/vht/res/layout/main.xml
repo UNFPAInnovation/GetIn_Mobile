@@ -100,7 +100,7 @@
             android:layout_height="wrap_content"
             android:onClick="submit"
             android:text="@string/btn_main_view_ambulance_drivers"
-            android:drawableLeft="@drawable/ic_menu_allfriends"
+            android:drawableLeft="@android:drawable/ic_menu_call"
             style="@style/Widget.Button.Large.Dark"
             android:background="#9E9D24"
             android:layout_margin="10dp"/>
