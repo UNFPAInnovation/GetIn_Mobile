@@ -122,7 +122,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
     public void storeCurrentProcedure(boolean finished, boolean skipHidden) {
         Log.i(TAG, "storeCurrentProcedure(boolean,boolean)");
         Log.d(TAG, "...Checking for null patient");
-        if(mPatient == null){
+        if (mPatient == null) {
             Log.w(TAG, "...Subject is null");
             return;
         }
@@ -133,210 +133,213 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
         Log.d(TAG, "...Patient: " + String.valueOf(mPatient));
 
         // Set any patient fields from current page elements
-        for(String concept: page.getConcepts()){
-            String id = page.elementWithConcept(concept);
-            String val = page.getElementValue(id);
-            ProcedureElement element = page.getElementById(id);
-            switch (element.getType()){
-                case HIDDEN:
-                    if (!skipHidden && !TextUtils.isEmpty(element.getAction())) {
-                        Intent intent;
-                        try {
-                            Intent reply = new Intent();
-                            reply.setClass(getActivity(),
-                                    PatientRunner.class);
-                            reply.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                            reply.putExtra("id", element.getId());
-                            // the getCurrentIndex() returns a 1 based index
-                            reply.putExtra("page",
-                                    this.mProcedure.getCurrentIndex() - 1);
-                            PendingIntent replyTo = PendingIntent.getActivity(
-                                    getActivity(),
-                                    PatientRunner.OBJECT_FIELD_RESULT_CODE,
-                                    reply, 0);
-                            intent = Intent.parseUri(element.getAction(),
-                                    Intent.URI_INTENT_SCHEME);
-                            intent.setDataAndType(uSubject, Patients.CONTENT_ITEM_TYPE);
-                            intent.putExtra(Intent.EXTRA_INTENT, replyTo);
-                            intent.putExtra("extra_data", reply.getExtras());
-                            getActivity().startService(intent);
-                        } catch (URISyntaxException e) {
-                            e.printStackTrace();
+        if(page.shouldDisplay()){
+            for (String concept : page.getConcepts()) {
+                String id = page.elementWithConcept(concept);
+                String val = page.getElementValue(id);
+                ProcedureElement element = page.getElementById(id);
+                switch (element.getType()) {
+                    case HIDDEN:
+                        if (!skipHidden && !TextUtils.isEmpty(element.getAction())) {
+                            Intent intent;
+                            try {
+                                Intent reply = new Intent();
+                                reply.setClass(getActivity(),
+                                        PatientRunner.class);
+                                reply.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                                reply.putExtra("id", element.getId());
+                                // the getCurrentIndex() returns a 1 based index
+                                reply.putExtra("page",
+                                        this.mProcedure.getCurrentIndex() - 1);
+                                PendingIntent replyTo = PendingIntent.getActivity(
+                                        getActivity(),
+                                        PatientRunner.OBJECT_FIELD_RESULT_CODE,
+                                        reply, 0);
+                                intent = Intent.parseUri(element.getAction(),
+                                        Intent.URI_INTENT_SCHEME);
+                                intent.setDataAndType(uSubject, Patients.CONTENT_ITEM_TYPE);
+                                intent.putExtra(Intent.EXTRA_INTENT, replyTo);
+                                intent.putExtra("extra_data", reply.getExtras());
+                                getActivity().startService(intent);
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
+                            }
                         }
+                        break;
+                    default:
+                        // Others do nothing here.
+                }
+                String field = concept.replace(" ", "_");
+                Log.d(TAG, "\tsetting field'" + field + "' for concept '" +
+                        concept + "'");
+                if (field.compareToIgnoreCase(Patients.Contract.PATIENT_ID) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.PATIENT_ID + "'=" + val);
+                    if (!TextUtils.isEmpty(val))
+                        mPatient.setSystemId(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.GIVEN_NAME) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.GIVEN_NAME + "'=" + val);
+                    if (!TextUtils.isEmpty(val))
+                        mPatient.setGiven_name(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.FAMILY_NAME) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.FAMILY_NAME + "'=" + val);
+                    if (!TextUtils.isEmpty(val))
+                        mPatient.setFamily_name(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.DOB) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.DOB + "'=" + val);
+                    try {
+                        mPatient.setDob(DateUtil.parseDate(val));
+                    } catch (ParseException e) {
+                        Log.e(TAG, e.getMessage());
+                        e.printStackTrace();
                     }
-                    break;
-                default:
-                    // Others do nothing here.
-            }
-            String field = concept.replace(" ","_");
-            Log.d(TAG,"\tsetting field'" + field + "' for concept '" +
-                    concept + "'");
-            if(field.compareToIgnoreCase(Patients.Contract.PATIENT_ID) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.PATIENT_ID + "'=" + val);
-                if(!TextUtils.isEmpty(val))
-                    mPatient.setSystemId(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.GIVEN_NAME) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.GIVEN_NAME + "'=" + val);
-                if(!TextUtils.isEmpty(val))
-                    mPatient.setGiven_name(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.FAMILY_NAME) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.FAMILY_NAME + "'=" + val);
-                if(!TextUtils.isEmpty(val))
-                    mPatient.setFamily_name(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.DOB) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.DOB + "'=" + val);
-                try {
-                    mPatient.setDob(DateUtil.parseDate(val));
-                } catch (ParseException e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
                 }
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.GENDER) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.GENDER +"'=" +val);
-                mPatient.setGender(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.PNUMBER) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.PNUMBER +"'=" +val);
-                mPatient.setpNumber(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.HOLDER_pNUMBER) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.HOLDER_pNUMBER +"'=" +val);
-                mPatient.setHolder_pNumber(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.LMD) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.LMD + "'=" + val);
-                try {
-                    mPatient.setLMD(DateUtil.parseDate(val));
-                    setEdd(mPatient);
-                } catch (ParseException e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
+                if (field.compareToIgnoreCase(Patients.Contract.GENDER) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.GENDER + "'=" + val);
+                    mPatient.setGender(val);
                 }
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.MARITAL_STATUS) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.MARITAL_STATUS +"'=" +val);
-                mPatient.setMarital_status(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.EDUCATION_LEVEL) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.EDUCATION_LEVEL +"'=" +val);
-                mPatient.setEducation_level(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.CONTRACEPTIVE_USE) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.CONTRACEPTIVE_USE +"'=" +val);
-                mPatient.setContraceptive_use(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.ANC_STATUS) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_STATUS +"'=" +val);
-                mPatient.setANC_status(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.ANC_VISIT) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_VISIT +"'=" +val);
-
-                try {
-                    mPatient.setANC_visit(DateUtil.parseDate(val));
-                } catch (ParseException e) {
-                    Log.e(TAG, e.getMessage());
-                    e.printStackTrace();
+                if (field.compareToIgnoreCase(Patients.Contract.PNUMBER) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.PNUMBER + "'=" + val);
+                    mPatient.setpNumber(val);
                 }
-            }
+                if (field.compareToIgnoreCase(Patients.Contract.HOLDER_pNUMBER) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.HOLDER_pNUMBER + "'=" + val);
+                    mPatient.setHolder_pNumber(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.LMD) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.LMD + "'=" + val);
+                    try {
+                        mPatient.setLMD(DateUtil.parseDate(val));
+                        setEdd(mPatient);
+                    } catch (ParseException e) {
+                        Log.e(TAG, e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.MARITAL_STATUS) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.MARITAL_STATUS + "'=" + val);
+                    mPatient.setMarital_status(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.EDUCATION_LEVEL) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.EDUCATION_LEVEL + "'=" + val);
+                    mPatient.setEducation_level(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.CONTRACEPTIVE_USE) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.CONTRACEPTIVE_USE + "'=" + val);
+                    mPatient.setContraceptive_use(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.ANC_STATUS) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_STATUS + "'=" + val);
+                    mPatient.setANC_status(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.ANC_VISIT) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.ANC_VISIT + "'=" + val);
 
-            if(field.compareToIgnoreCase(Patients.Contract.AMBULANCE_NEED) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_NEED+"'=" +val);
-                mPatient.setAMBULANCE_need(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.AMBULANCE_RESPONSE) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_RESPONSE +"'=" +val);
-                mPatient.setAMBULANCE_response(val);
-            }
+                    try {
+                        mPatient.setANC_visit(DateUtil.parseDate(val));
+                    } catch (ParseException e) {
+                        Log.e(TAG, e.getMessage());
+                        e.printStackTrace();
+                    }
+                }
 
-            if(field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.EDD +"'=" +val);
-                mPatient.setEDD(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.RECEIVE_SMS) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.RECEIVE_SMS +"'=" +val);
-                mPatient.setreceive_sms(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.FOLLOW_UP) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.FOLLOW_UP +"'=" +val);
-                mPatient.setfollow_up(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.CUG_STATUS) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.CUG_STATUS +"'=" +val);
-                mPatient.setCUG_status(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.COMMENT) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.COMMENT +"'=" +val);
-                mPatient.setcomment(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.BLEEDING) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.BLEEDING +"'=" +val);
-                mPatient.setBleeding(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.FEVER) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.FEVER +"'=" +val);
-                mPatient.setFever(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.SWOLLEN_FEET) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.SWOLLEN_FEET +"'=" +val);
-                mPatient.setSwollen_feet(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.BLURRED_VISION) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.BLURRED_VISION +"'=" +val);
-                mPatient.setBlurred_vision(val);
-            }
+                if (field.compareToIgnoreCase(Patients.Contract.AMBULANCE_NEED) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_NEED + "'=" + val);
+                    mPatient.setAMBULANCE_need(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.AMBULANCE_RESPONSE) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.AMBULANCE_RESPONSE + "'=" + val);
+                    mPatient.setAMBULANCE_response(val);
+                }
+
+                if (field.compareToIgnoreCase(Patients.Contract.EDD) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.EDD + "'=" + val);
+                    mPatient.setEDD(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.RECEIVE_SMS) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.RECEIVE_SMS + "'=" + val);
+                    mPatient.setreceive_sms(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.FOLLOW_UP) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.FOLLOW_UP + "'=" + val);
+                    mPatient.setfollow_up(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.CUG_STATUS) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.CUG_STATUS + "'=" + val);
+                    mPatient.setCUG_status(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.COMMENT) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.COMMENT + "'=" + val);
+                    mPatient.setcomment(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.BLEEDING) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.BLEEDING + "'=" + val);
+                    mPatient.setBleeding(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.FEVER) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.FEVER + "'=" + val);
+                    mPatient.setFever(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.SWOLLEN_FEET) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.SWOLLEN_FEET + "'=" + val);
+                    mPatient.setSwollen_feet(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.BLURRED_VISION) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.BLURRED_VISION + "'=" + val);
+                    mPatient.setBlurred_vision(val);
+                }
 
 
-            if(field.compareToIgnoreCase(Patients.Contract.IMAGE) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.IMAGE +"'=" +val);
-                URI file = URI.create(val);
-                mPatient.setImage(file);
-            }
-            // Commenting this out-set indirectly through InstrumentationService
+                if (field.compareToIgnoreCase(Patients.Contract.IMAGE) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.IMAGE + "'=" + val);
+                    URI file = URI.create(val);
+                    mPatient.setImage(file);
+                }
+                // Commenting this out-set indirectly through InstrumentationService
             /*
             if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
                 Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
                 mPatient.setLocation(val);
             }
             */
-            if(field.compareToIgnoreCase(Patients.Contract.CONFIRMED) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.CONFIRMED + "'=" + val);
-                mPatient.setConfirmed(Boolean.valueOf(val));
+                if (field.compareToIgnoreCase(Patients.Contract.CONFIRMED) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.CONFIRMED + "'=" + val);
+                    mPatient.setConfirmed(Boolean.valueOf(val));
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.DOB_ESTIMATED) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.DOB_ESTIMATED + "'=" + val);
+                    mPatient.setConfirmed(Boolean.valueOf(val));
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
+                    mPatient.setLocation(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.DISTRICT) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.DISTRICT + "'=" + val);
+                    mPatient.setLocation(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.COUNTY) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.COUNTY + "'=" + val);
+                    mPatient.setLocation(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.SUBCOUNTY) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.SUBCOUNTY + "'=" + val);
+                    mPatient.setLocation(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.PARISH) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.PARISH + "'=" + val);
+                    mPatient.setLocation(val);
+                }
+                if (field.compareToIgnoreCase(Patients.Contract.VILLAGE) == 0) {
+                    Log.d(TAG, "\tsetting '" + Patients.Contract.VILLAGE + "'=" + val);
+                    mPatient.setVillage(val);
+                }
             }
-            if(field.compareToIgnoreCase(Patients.Contract.DOB_ESTIMATED) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.DOB_ESTIMATED + "'=" + val);
-                mPatient.setConfirmed(Boolean.valueOf(val));
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
-                mPatient.setLocation(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.DISTRICT) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.DISTRICT + "'=" + val);
-                mPatient.setLocation(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.COUNTY) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.COUNTY + "'=" + val);
-                mPatient.setLocation(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.SUBCOUNTY) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.SUBCOUNTY + "'=" + val);
-                mPatient.setLocation(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.PARISH) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.PARISH + "'=" + val);
-                mPatient.setLocation(val);
-            }
-            if(field.compareToIgnoreCase(Patients.Contract.VILLAGE) == 0) {
-                Log.d(TAG, "\tsetting '" + Patients.Contract.VILLAGE + "'=" + val);
-                mPatient.setVillage(val);
-            }
+            Log.d(TAG, "...Updated Patient: " + String.valueOf(mPatient));
+
         }
-        Log.d(TAG, "...Updated Patient: " + String.valueOf(mPatient));
         // Only save to database after we are finished
         Log.d(TAG,"...finished=" + finished);
         if (finished) {
@@ -728,7 +731,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
 
     public final void onViewChanged(ProcedurePage page, Patient data) {
         Log.i(TAG, "onViewChanged(Page,Patient");
-        if (data != null) {
+        if (data != null && page.shouldDisplay()) {
 
             // Set any patient fields from current page elements
             for (ProcedureElement element : page.getElements()) {
