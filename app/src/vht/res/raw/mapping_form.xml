@@ -117,7 +117,7 @@
     <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
 </ShowIf>
 <Element
-    id="10b"
+    id="10b0"
     concept="PARISH"
     type="SELECT"
     question="Pick Girl's Parish"
@@ -130,7 +130,7 @@
     <and>
         <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
 
-        <Criteria type="EQUALS" id="10b" value="WESTERN WARD"/>
+        <Criteria type="EQUALS" id="10b0" value="WESTERN WARD"/>
     </and>
 </ShowIf>
 <Element
@@ -146,7 +146,7 @@
     <Criteria type="EQUALS" id="10a" value="KAMBUGA"/>
 </ShowIf>
 <Element
-    id="10b"
+    id="10b1"
     concept="PARISH"
     type="SELECT"
     question="Pick Girl's Parish"
@@ -160,7 +160,7 @@
     <and>
         <Criteria type="EQUALS" id="10a" value="KAMBUGA"/>
 
-        <Criteria type="EQUALS" id="10b" value="BUGONGI"/>
+        <Criteria type="EQUALS" id="10b1" value="BUGONGI"/>
     </and>
 
 </ShowIf>
