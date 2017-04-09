@@ -13,7 +13,7 @@
             id="1"
             type="TEXT"
             concept="demographics text"
-            question="GIRLS DEMOGRAPHICS DETAILS"
+            question="GIRL'S DEMOGRAPHICS DETAILS"
         />
         <Element
             id="2"
@@ -150,7 +150,7 @@
     concept="PARISH"
     type="SELECT"
     question="Pick Girl's Parish"
-    choices=" BUGONGI "
+    choices="BUGONGI"
     answer=""/>
 </Page>
 
