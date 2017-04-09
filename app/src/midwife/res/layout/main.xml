@@ -14,7 +14,7 @@
     android:id="@+id/main_root"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/highlighted_text_holo_dark"
+    android:background="@color/background_color"
     android:gravity="fill_vertical"
     android:orientation="vertical">
 
@@ -55,7 +55,7 @@
             android:drawableLeft="@drawable/ic_menu_allfriends"
             android:text="@string/button_main_register_patients"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/grey_medium"
             android:layout_margin="10dp"/>
 
      <!--   <Button
@@ -78,7 +78,7 @@
             android:onClick="submit"
             android:drawableLeft="@drawable/ic_menu_edit"
             android:text="@string/button_main_training_mode"
-            android:background="#9E9D24"
+            android:background="@color/grey_medium"
             android:layout_margin="10dp"/>
 
 
@@ -91,7 +91,7 @@
             android:text="@string/button_upcoming_appointments"
             android:drawableLeft="@drawable/ic_menu_friendslist"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/grey_medium"
             android:layout_margin="10dp"/>
 
 
@@ -103,7 +103,7 @@
             android:drawableLeft="@android:drawable/ic_menu_call"
             android:text="@string/button_call_ambulance"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/grey_medium"
             android:layout_margin="10dp"/>
 
         <Button
@@ -114,7 +114,7 @@
             android:drawableLeft="@android:drawable/ic_menu_call"
             android:text="@string/btn_main_view_VHTs"
             style="@style/Widget.Button.Large.Dark"
-            android:background="#9E9D24"
+            android:background="@color/grey_medium"
             android:layout_margin="10dp"/>
 
 
