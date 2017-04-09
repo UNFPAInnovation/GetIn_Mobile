@@ -55,6 +55,7 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:textIsSelectable="true"
                 android:text="GivenName Surname" />
+          <!--
             <TextView
                 android:id="@+id/system_id"
                 android:layout_width="wrap_content"
@@ -68,6 +69,7 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true"
                 android:text="123456" />
+            -->
             <TextView
                 android:id="@+id/location"
                 android:layout_width="wrap_content"
@@ -94,7 +96,7 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true" 
-                android:text="Procedure Title"/>
+                android:text="Appointment_note"/>
 
             <TextView
                 android:id="@+id/due_on"
