@@ -1053,7 +1053,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         Get a random number , add it to the day she was mapped
         Then work out the logic of her appointment being between Tuesday and Thursday
          */
-        else if(no_LMD < 84 && anc.equals("No")&& age < 25){
+
+     /*   else if(no_LMD < 84 && anc.equals("No")&& age < 25){
             Calendar c = Calendar.getInstance();
             int new_lmd = (int)no_LMD; // cast lmd to int (maximum of random number to be generated)
            int rand_diff = 84-new_lmd; // The minimum of the random number to be generated
@@ -1114,11 +1115,11 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                     break;
                 default:
             }
-        }
+        } */
         /*if girl has ever attended ANC
         *Pick ANC date from card
          */
-        else if (anc.equals("Yes")&& age < 25){
+        else if (anc.equals("Yes")|| anc.equals("No")&& age < 25){
             Date due_on = EncounterTaskManager.getDateFromEncounter(this,
                         encounter);
             //patient.getANC_visit();
