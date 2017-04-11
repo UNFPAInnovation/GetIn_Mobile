@@ -523,7 +523,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             }
         } finally {
             if(c != null) c.close();
-            procedureTitle.setText((TextUtils.isEmpty(title)? "null": title));
+            procedureTitle.setText((TextUtils.isEmpty(title)? "Appointment_note": title));
         }
         Log.d(TAG+".setProcedure", "finished setting view: " + title);
     }
