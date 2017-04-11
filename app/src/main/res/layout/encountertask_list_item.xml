@@ -83,7 +83,7 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true"
                 android:visibility="gone" />
-            
+
             <TextView
                 android:id="@+id/procedure_title"
                 android:layout_width="wrap_content"
@@ -97,6 +97,7 @@
                 android:textColor="@color/light_gray"
                 android:textIsSelectable="true" 
                 android:text="Appointment_note"/>
+
 
             <TextView
                 android:id="@+id/due_on"
