@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Animatable;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.animation.Animation;
 import android.widget.Button;
 import android.widget.Gallery;
 import android.widget.ImageView;
@@ -20,6 +22,7 @@ import org.sana.android.media.AudioPlayer;
 import org.sana.android.media.EducationResource;
 import org.sana.android.util.SanaUtil;
 import org.w3c.dom.Node;
+import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
 
@@ -714,6 +717,7 @@ public abstract class ProcedureElement {
     	LinearLayout ll = new LinearLayout(c);
     	ll.setOrientation(LinearLayout.VERTICAL);
     	ll.setGravity(Gravity.CENTER);
+        ll.setBackgroundColor(Color.CYAN);
     	ll.setPadding(5, 0, 5, 0);
     	ll.setLayoutParams(new LayoutParams(LayoutParams.FILL_PARENT,
     			LayoutParams.WRAP_CONTENT));
@@ -722,7 +726,10 @@ public abstract class ProcedureElement {
     	for(String intentStr: action.split(",")){
     		Log.d(TAG, intentStr);
     		Button button = new Button(c);
-    		button.setText("????");
+    		button.setTextColor(Color.BLUE);
+            button.setHint("TOUCH TO CALL");
+            button.setHintTextColor(Color.CYAN);
+            button.setText("Call Anbulance");
     		try {
 				Intent buttonAction = Intent.parseUri(intentStr, Intent.URI_INTENT_SCHEME);
 	    		button.setTag(buttonAction);
