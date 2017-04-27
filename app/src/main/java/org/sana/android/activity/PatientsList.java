@@ -280,10 +280,11 @@ public class PatientsList extends FragmentActivity implements
             Log.d(TAG, "...code=100, CONTINUE" );
             // do nothing
         }  else if (result == 200){
-            Log.d(TAG, "...code=" + result + ", unknown");
+            Log.d(TAG, "...code=" + result + ", SUCCESS");
             hideProgressDialog();
         } else if (result >= 400){
-
+            Log.w(TAG, "...code=" + result + ", Something went wrong?");
+            hideProgressDialog();
         }
     }
 
