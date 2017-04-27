@@ -205,15 +205,21 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         values.put(Observers.Contract.PASSWORD, object.getPassword());
         values.put(Observers.Contract.PHONE_NUMBER, object.getPhoneNumber());
         values.put(Observers.Contract.ROLE, object.getRole());
-        values.put(Observers.Contract.FIRST_NAME, object.getFirstName());
-        values.put(Observers.Contract.LAST_NAME, object.getLastName());
+        if(!TextUtils.isEmpty(object.getFirstName())) {
+            values.put(Observers.Contract.FIRST_NAME, object.getFirstName());
+        }
+        if(!TextUtils.isEmpty(object.getLastName())) {
+            values.put(Observers.Contract.LAST_NAME, object.getLastName());
+        }
         values.put(Observers.Contract.ROLE, object.getRole());
         // TODO
         List<String> locationUUIDs = new ArrayList<>();
         for(Location location: object.getLocations()){
             locationUUIDs.add(location.getUuid());
         }
-        values.put(Observers.Contract.LOCATIONS, TextUtils.join(",",locationUUIDs));
+        if(locationUUIDs.size() > 0) {
+            values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationUUIDs));
+        }
         return values;
     }
 
