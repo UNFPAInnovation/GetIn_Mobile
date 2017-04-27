@@ -729,7 +729,7 @@ public abstract class ProcedureElement {
     		button.setTextColor(Color.BLUE);
             button.setHint("TOUCH TO CALL");
             button.setHintTextColor(Color.CYAN);
-            button.setText("Call Anbulance");
+            button.setText("Call Ambulance");
     		try {
 				Intent buttonAction = Intent.parseUri(intentStr, Intent.URI_INTENT_SCHEME);
 	    		button.setTag(buttonAction);
