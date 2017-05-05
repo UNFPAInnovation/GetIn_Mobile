@@ -12,8 +12,8 @@
             id="1"
             type="TEXT"
             concept="demographics text"
-            question="GIRLS DEMOGRAPHICS DETAILS"
-            />
+            question="GIRL'S DEMOGRAPHICS DETAILS"
+        />
         <Element
             id="2"
             concept="GIVEN NAME"
@@ -22,7 +22,7 @@
             question="Enter First Name"
             answer=""
             helpText="Please enter the given name"
-            />
+        />
         <Element
             id="3"
             concept="FAMILY NAME"
@@ -30,7 +30,7 @@
             required="true"
             question="Enter Last Name"
             answer=""
-            />
+        />
         <Element
             id="4"
             concept="DOB"
@@ -38,7 +38,7 @@
             required="true"
             question="Enter Date of Birth"
             answer=""
-            />
+        />
 
         <Element
             id="5"
@@ -57,7 +57,7 @@
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
-            />
+        />
         <Element
             id="7"
             concept="HOLDER PNUMBER"
@@ -66,7 +66,7 @@
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
-            />
+        />
         <Element
             id="8"
             type="DATE"
@@ -74,14 +74,14 @@
             concept="LMD"
             required="true"
             answer=""
-            />
+        />
     </Page>
     <Page>
         <Element id="9" type="RADIO"
-                 concept="LOCATION PATIENT HOUSE"
-                 question="Are you at the girl's home?"
-                 answer="Yes"
-                 choices="Yes;No" />
+            concept="LOCATION PATIENT HOUSE"
+            question="Are you at the girl's home?"
+            answer="Yes"
+            choices="Yes;No" />
     </Page>
 
     <Page>
@@ -96,8 +96,10 @@
             question="Girl's Address/Location"
             Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
             action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
-            />
+        />
     </Page>
+
+
 
     <Page>
         <Element
@@ -106,7 +108,7 @@
             type="SELECT"
             required="true"
             question="Pick Girls Sub County"
-            choices="BUTOGOTA TC;KAMBUGA;KANYANTOROGO;KATETE;KAYONZA;KIHIHI;KINAABA;KIRIMA;MPUNGU;NYAKINONI;NYAMIRAMA;NYANGA;RUGYEYO"
+            choices="BUTOGOTA TC;KAMBUGA;KANYANTOROGO;KATETE;KAYONZA;KIHIHI;KINAABA;KIRIMA;MPUNGU;NYAKINONI;NYAMIRAMA;NYANGA;RUGYEYO;RUTENGA"
             answer="BUTOGOTA TC"/>
     </Page>
     <Page>
@@ -114,7 +116,7 @@
             <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
         </ShowIf>
         <Element
-            id="10b"
+            id="10b0"
             concept="PARISH"
             type="SELECT"
             question="Pick Girl's Parish"
@@ -127,7 +129,7 @@
             <and>
                 <Criteria type="EQUALS" id="10a" value="BUTOGOTA TC"/>
 
-                <Criteria type="EQUALS" id="10b" value="WESTERN WARD"/>
+                <Criteria type="EQUALS" id="10b0" value="WESTERN WARD"/>
             </and>
         </ShowIf>
         <Element
@@ -143,11 +145,11 @@
             <Criteria type="EQUALS" id="10a" value="KAMBUGA"/>
         </ShowIf>
         <Element
-            id="10b"
+            id="10b1"
             concept="PARISH"
             type="SELECT"
             question="Pick Girl's Parish"
-            choices=" BUGONGI "
+            choices="BUGONGI"
             answer=""/>
     </Page>
 
@@ -157,7 +159,7 @@
             <and>
                 <Criteria type="EQUALS" id="10a" value="KAMBUGA"/>
 
-                <Criteria type="EQUALS" id="10b" value="BUGONGI"/>
+                <Criteria type="EQUALS" id="10b1" value="BUGONGI"/>
             </and>
 
         </ShowIf>
@@ -166,7 +168,7 @@
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in BUGONGI Parish"
-            choices="IHEMBE;MUKOLOGYERO;RUSHEBEYA "
+            choices="IHEMBE;MUKOLOGYERO;RUSHEBEYA"
             answer=""/>
     </Page>
     <Page>
@@ -1061,7 +1063,7 @@
             <and>
                 <Criteria type="EQUALS" id="10a" value="NYANGA"/>
 
-            <Criteria type="EQUALS" id="20b" value="BUKORWE"/>
+                <Criteria type="EQUALS" id="20b" value="BUKORWE"/>
             </and>
         </ShowIf>
         <Element
@@ -1133,7 +1135,7 @@
             concept="PARISH"
             type="SELECT"
             question="Pick Girl's Parish"
-            choices="KATUNGU;KAYUNGWE;KITOJO;MISHENYI;NYARURAMBI;KATOJO;MAFUUGA;MURAMBA"
+            choices="KATUNGU;KAYUNGWE;KITOJO;MISHENYI;NYARURAMBIKATOJO;MAFUUGA;MURAMBA"
             answer=""/>
     </Page>
 
@@ -1224,15 +1226,27 @@
     </Page>
     <Page>
         <ShowIf>
+            <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
+        </ShowIf>
+        <Element
+            id="22b"
+            concept="PARISH"
+            type="SELECT"
+            question="Pick Girl's Parish"
+            choices="KATOJO;MAFUUGA;MURAMBA"
+            answer=""/>
+    </Page>
+    <Page>
+        <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+                <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-                <Criteria type="EQUALS" id="21b" value="KATOJO"/>
+                <Criteria type="EQUALS" id="22b" value="KATOJO"/>
             </and>
 
         </ShowIf>
         <Element
-            id="21h"
+            id="22c"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in KATOJO Parish"
@@ -1242,39 +1256,37 @@
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+                <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-                <Criteria type="EQUALS" id="21b" value="MAFUUGA"/>
+                <Criteria type="EQUALS" id="22b" value="MAFUUGA"/>
             </and>
 
         </ShowIf>
         <Element
-            id="21i"
+            id="22d"
             concept="VILLAGE"
             type="SELECT"
-            question="Pick Girl's Village in RUSHAKA Parish"
+            question="Pick Girl's Village in MAFUGA Parish"
             choices="KANGARAME;NYAKARAMBI;NYAMUGARI "
             answer=""/>
     </Page>
     <Page>
         <ShowIf>
             <and>
-                <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+                <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-                <Criteria type="EQUALS" id="21b" value="MURAMBA"/>
+                <Criteria type="EQUALS" id="22b" value="MURAMBA"/>
             </and>
 
         </ShowIf>
         <Element
-            id="21j"
+            id="22e"
             concept="VILLAGE"
             type="SELECT"
             question="Pick Girl's Village in MAFUUGA Parish"
             choices="KIJUMWA;KYANKYERE;NYUNDO;RWEMENGO"
             answer=""/>
     </Page>
-
-
     <Page>
         <Element
             id="11"
@@ -1284,7 +1296,7 @@
             question="Martial Status"
             choices="SINGLE;MARRIED;DIVORCED"
             answer=""
-            />
+        />
         <Element
             id="12"
             concept="EDUCATION LEVEL"
@@ -1293,6 +1305,8 @@
             question="Highest Education Level"
             choices="Primary_level;OLevel;Alevel;Tertiary"
             answer=""/>
+    </Page>
+    <Page>
         <Element
             id="13"
             concept="CONTRACEPTIVE USE"
@@ -1300,8 +1314,9 @@
             choices="Yes;No"
             question="Have you used Contraceptives before?"
             answer=""/>
-    </Page>
-    <Page>
+
+
+
         <Element
             id="14"
             type="RADIO" choices="Yes;No"
@@ -1309,23 +1324,21 @@
             concept="ANC Status"
             required="true"
             answer=""
-            />
-
+        />
     </Page>
     <!--
-    <Page>
-        <ShowIf>
-            <Criteria type="EQUALS" id="14" value="Yes"/>
-        </ShowIf>
-        <Element id="15a" type="DATE"
-                 concept="ANC VISIT"
-                 question="Enter Next ANC visit from Card"
-                 required="true"
-                 answer=""
+        </Page>
+        <Page>
+            <ShowIf>
+                <Criteria type="EQUALS" id="14" value="Yes"/>
+            </ShowIf>
+            <Element id="15a" type="DATE"
+                     concept="ANC VISIT"
+                     question="Enter Next ANC visit from Card"
+                     required="true"
+                     answer=""
             />
-    </Page>
-
-    -->
+        </Page> -->
     <!-- Are these supposed to be patient fields -->
     <!--
         They are not included in the Patient Model if they are
