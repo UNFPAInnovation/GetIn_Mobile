@@ -180,6 +180,11 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
 		}
 		return object;
 	}
+
+    public static IObserver getOneByUsername(Context context, String username)
+    {
+        return getOneByUsername(context.getContentResolver(), username);
+    }
 	
 	public static IObserver getOneByUuid(ContentResolver resolver, String uuid){
 		ObserverWrapper wrapper = new ObserverWrapper(ModelWrapper.getOneByUuid(
