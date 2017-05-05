@@ -109,7 +109,7 @@
     type="SELECT"
     required="true"
     question="Pick Girls Sub County"
-    choices="BUTOGOTA TC;KAMBUGA;KANYANTOROGO;KATETE;KAYONZA;KIHIHI;KINAABA;KIRIMA;MPUNGU;NYAKINONI;NYAMIRAMA;NYANGA;RUGYEYO"
+    choices="BUTOGOTA TC;KAMBUGA;KANYANTOROGO;KATETE;KAYONZA;KIHIHI;KINAABA;KIRIMA;MPUNGU;NYAKINONI;NYAMIRAMA;NYANGA;RUGYEYO;RUTENGA"
     answer="BUTOGOTA TC"/>
 </Page>
 <Page>
@@ -169,7 +169,7 @@
     concept="VILLAGE"
     type="SELECT"
     question="Pick Girl's Village in BUGONGI Parish"
-    choices="IHEMBE;MUKOLOGYERO;RUSHEBEYA "
+    choices="IHEMBE;MUKOLOGYERO;RUSHEBEYA"
     answer=""/>
 </Page>
 <Page>
@@ -1136,7 +1136,7 @@
     concept="PARISH"
     type="SELECT"
     question="Pick Girl's Parish"
-    choices="KATUNGU;KAYUNGWE;KITOJO;MISHENYI;NYARURAMBI;KATOJO;MAFUUGA;MURAMBA"
+    choices="KATUNGU;KAYUNGWE;KITOJO;MISHENYI;NYARURAMBIKATOJO;MAFUUGA;MURAMBA"
     answer=""/>
 </Page>
 
@@ -1225,17 +1225,29 @@
     choices="KATERAMPUNGU;KISHORORO"
     answer=""/>
 </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
+        </ShowIf>
+        <Element
+            id="22b"
+            concept="PARISH"
+            type="SELECT"
+            question="Pick Girl's Parish"
+            choices="KATOJO;MAFUUGA;MURAMBA"
+            answer=""/>
+    </Page>
 <Page>
 <ShowIf>
     <and>
-        <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+        <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-        <Criteria type="EQUALS" id="21b" value="KATOJO"/>
+        <Criteria type="EQUALS" id="22b" value="KATOJO"/>
     </and>
 
 </ShowIf>
 <Element
-    id="21h"
+    id="22c"
     concept="VILLAGE"
     type="SELECT"
     question="Pick Girl's Village in KATOJO Parish"
@@ -1245,31 +1257,31 @@
 <Page>
 <ShowIf>
     <and>
-        <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+        <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-        <Criteria type="EQUALS" id="21b" value="MAFUUGA"/>
+        <Criteria type="EQUALS" id="22b" value="MAFUUGA"/>
     </and>
 
 </ShowIf>
 <Element
-    id="21i"
+    id="22d"
     concept="VILLAGE"
     type="SELECT"
-    question="Pick Girl's Village in RUSHAKA Parish"
+    question="Pick Girl's Village in MAFUGA Parish"
     choices="KANGARAME;NYAKARAMBI;NYAMUGARI "
     answer=""/>
 </Page>
 <Page>
 <ShowIf>
     <and>
-        <Criteria type="EQUALS" id="10a" value="RUGYEYO"/>
+        <Criteria type="EQUALS" id="10a" value="RUTENGA"/>
 
-        <Criteria type="EQUALS" id="21b" value="MURAMBA"/>
+        <Criteria type="EQUALS" id="22b" value="MURAMBA"/>
     </and>
 
 </ShowIf>
 <Element
-    id="21j"
+    id="22e"
     concept="VILLAGE"
     type="SELECT"
     question="Pick Girl's Village in MAFUUGA Parish"
