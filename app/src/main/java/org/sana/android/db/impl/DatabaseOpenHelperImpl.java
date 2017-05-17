@@ -113,7 +113,9 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 				ObserversHelper.getInstance(),
 				ProceduresHelper.getInstance(),
 				SubjectsHelper.getInstance(),
-                    LocationsHelper.getInstance() };
+                    LocationsHelper.getInstance(),
+                    AmbulanceDriversHelper.getInstance()
+            };
 
 			
 			for(TableHelper<?> helper:helpers){
@@ -122,7 +124,7 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 					db.execSQL(helper.onCreate());
 				} else {
 					String sql = helper.onUpgrade(oldVersion, newVersion);
-					Log.i(TAG, String.format("onUpgrade(int,int)", ((sql == null)?"NULL":sql)));
+					Log.i(TAG, String.format(helper.getTable() +": onUpgrade(int,int)", ((sql == null)?"NULL":sql)));
 					if(sql != null)
 						db.execSQL(helper.onUpgrade(oldVersion, newVersion));
 				}

@@ -113,6 +113,13 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         return locations;
     }
 
+    public Location getSubcounty(){
+        String name = getStringField(Observers.Contract.SUBCOUNTY);
+        Location subcounty = new Location();
+        subcounty.setName(name);
+        return subcounty;
+    }
+
 	/* (non-Javadoc)
 	 * @see org.sana.android.db.ModelWrapper#getObject()
 	 */
@@ -131,6 +138,7 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         object.setFirstName(getFirstName());
         object.setLastName(getLastName());
         object.setLocations(getLocations());
+        object.setSubcounty(getSubcounty());
 		return object;
 	}
 	
@@ -225,6 +233,8 @@ public class ObserverWrapper extends ModelWrapper<IObserver> implements
         if(locationUUIDs.size() > 0) {
             values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationUUIDs));
         }
+        if(object.getSubcounty() != null)
+            values.put(Observers.Contract.SUBCOUNTY, object.getSubcounty().getName());
         return values;
     }
 

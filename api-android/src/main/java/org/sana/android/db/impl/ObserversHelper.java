@@ -82,20 +82,21 @@ public class ObserversHelper extends TableHelper<Observer>{
 	public String onCreate() {
 		Log.i(TAG, "onCreate()");
 		return "CREATE TABLE " + getTable() + " ("
-		+ Contract._ID 		+ " INTEGER PRIMARY KEY,"
-		+ Contract.UUID 	+ " TEXT NOT NULL,"
-        + Contract.CREATED 	+ " DATE,"
-        + Contract.MODIFIED + " DATE,"
-		+ Contract.USERNAME + " TEXT,"
-		+ Contract.PASSWORD + " TEXT,"
-		+ Contract.CONTACT1 + " TEXT,"
-		+ Contract.CONTACT2 + " TEXT,"
-				+ Contract.PHONE_NUMBER + " TEXT,"
+                + Contract._ID 		+ " INTEGER PRIMARY KEY,"
+                + Contract.UUID 	+ " TEXT NOT NULL,"
+                + Contract.CREATED 	+ " DATE,"
+                + Contract.MODIFIED + " DATE,"
+                + Contract.USERNAME + " TEXT,"
+                + Contract.PASSWORD + " TEXT,"
+                + Contract.CONTACT1 + " TEXT,"
+                + Contract.CONTACT2 + " TEXT,"
+                + Contract.PHONE_NUMBER + " TEXT,"
                 + Contract.FIRST_NAME + " TEXT,"
                 + Contract.LAST_NAME + " TEXT,"
                 + Contract.LOCATIONS + " TEXT,"
-		+ Contract.ROLE + " TEXT"
-        + ");";
+                + Contract.ROLE + " TEXT,"
+                + Contract.SUBCOUNTY + " TEXT"
+                + ");";
 		
 	}
 
@@ -110,6 +111,9 @@ public class ObserversHelper extends TableHelper<Observer>{
             builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.FIRST_NAME + " TEXT;");
             builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.LAST_NAME + " TEXT;");
             builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.LOCATIONS + " TEXT;");
+        }
+        if(oldVersion < newVersion && newVersion == 8){
+            builder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY + " TEXT;");
         }
         if(builder.length() > 0)
             return builder.toString();

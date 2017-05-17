@@ -32,12 +32,21 @@ public class AmbulanceDriversHelper extends TableHelper<AmbulanceDriver> {
                 + AmbulanceDrivers.Contract.PHONE_NUMBER + " TEXT,"
                 + AmbulanceDrivers.Contract.FIRST_NAME + " TEXT,"
                 + AmbulanceDrivers.Contract.LAST_NAME + " TEXT,"
-                + AmbulanceDrivers.Contract.LOCATION + " TEXT"
+                + AmbulanceDrivers.Contract.LOCATION + " TEXT,"
+                + AmbulanceDrivers.Contract.SUBCOUNTY + " TEXT"
                 + ");";
     }
 
     @Override
     public String onUpgrade(int oldVersion, int newVersion) {
-        return null;
+        StringBuilder builder = new StringBuilder();
+        if(oldVersion < newVersion && newVersion == 8){
+            builder.append("ALTER TABLE " + getTable() + " ADD COLUMN "
+                    + AmbulanceDrivers.Contract.SUBCOUNTY + " TEXT;");
+        }
+        if(builder.length() > 0)
+            return builder.toString();
+        else
+            return null;
     }
 }

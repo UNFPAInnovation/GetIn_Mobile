@@ -61,7 +61,7 @@ public class LocationsHelper extends TableHelper<Location> {
         Log.v(TAG, "onUpgrade(" + oldVersion + ", " + newVersion + ")");
         String sql = null;
         if (oldVersion < newVersion) {
-            sql = "";
+            //sql = "";
             if (oldVersion == 6 && newVersion == 7){
                 sql = onCreate();
             }
