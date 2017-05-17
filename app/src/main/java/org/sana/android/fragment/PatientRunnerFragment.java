@@ -310,7 +310,7 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.DOB_ESTIMATED) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.DOB_ESTIMATED + "'=" + val);
-                    mPatient.setConfirmed(Boolean.valueOf(val));
+                    mPatient.setDobEstimated(Boolean.valueOf(val));
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.LOCATION) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.LOCATION + "'=" + val);
@@ -318,19 +318,19 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.DISTRICT) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.DISTRICT + "'=" + val);
-                    mPatient.setLocation(val);
+                    mPatient.setDistrict(val);
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.COUNTY) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.COUNTY + "'=" + val);
-                    mPatient.setLocation(val);
+                    mPatient.setCounty(val);
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.SUBCOUNTY) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.SUBCOUNTY + "'=" + val);
-                    mPatient.setLocation(val);
+                    mPatient.setSubCounty(val);
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.PARISH) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.PARISH + "'=" + val);
-                    mPatient.setLocation(val);
+                    mPatient.setParish(val);
                 }
                 if (field.compareToIgnoreCase(Patients.Contract.VILLAGE) == 0) {
                     Log.d(TAG, "\tsetting '" + Patients.Contract.VILLAGE + "'=" + val);
