@@ -27,10 +27,15 @@
  */
 package org.sana.android.content.core;
 
+import org.sana.core.Location;
 import org.sana.core.Observer;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * @author Sana Development
@@ -39,12 +44,39 @@ import android.os.Parcelable;
 public class ObserverParcel extends Observer implements Parcelable {
 	public static final String TAG = ObserverParcel.class.getSimpleName();
 
+    public ObserverParcel(){}
+
+    public ObserverParcel(Observer observer){
+        super(observer);
+    }
+
+    public ObserverParcel(Parcel in){
+        setUuid(in.readString());
+        setCreated(new Date(in.readLong()));
+        setModified(new Date(in.readLong()));
+        setUsername(in.readString());
+        setPassword(in.readString());
+        setRole(in.readString());
+        setIsAdmin(Boolean.parseBoolean(in.readString()));
+        setFirstName(in.readString());
+        setLastName(in.readString());
+        setPhoneNumber(in.readString());
+
+        List<LocationParcel> locationParcels = new ArrayList<>();
+        in.readTypedList(locationParcels, LocationParcel.CREATOR);
+        List<Location> locations = new ArrayList<Location>();
+        for (LocationParcel lp : locationParcels) {
+            locations.add(lp.getLocation());
+        }
+        setLocations(locations);
+        LocationParcel lp = in.readParcelable(LocationParcel.class.getClassLoader());
+        setSubcounty(lp.getLocation());
+    }
 	/* (non-Javadoc)
 	 * @see android.os.Parcelable#describeContents()
 	 */
 	@Override
 	public int describeContents() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -53,8 +85,22 @@ public class ObserverParcel extends Observer implements Parcelable {
 	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-
+        dest.writeString(getUuid());
+        dest.writeLong(getCreated().getTime());
+        dest.writeLong(getModified().getTime());
+        dest.writeString(getUsername());
+        dest.writeString(getPassword());
+        dest.writeString(getRole());
+        dest.writeString(String.valueOf(isAdmin()));
+        dest.writeString(getFirstName());
+        dest.writeString(getLastName());
+        dest.writeString(getPhoneNumber());
+        List<LocationParcel> locationParcels = new ArrayList<>();
+        for(Location l:getLocations()){
+            locationParcels.add(new LocationParcel(l));
+        }
+        dest.writeTypedList(locationParcels);
+        dest.writeParcelable(new LocationParcel(getSubcounty()), flags);
 	}
 
 	public static final Parcelable.Creator<ObserverParcel> CREATOR = 
@@ -62,14 +108,12 @@ public class ObserverParcel extends Observer implements Parcelable {
 
 				@Override
 				public ObserverParcel createFromParcel(Parcel source) {
-					// TODO Auto-generated method stub
-					return null;
+					return new ObserverParcel(source);
 				}
 
 				@Override
 				public ObserverParcel[] newArray(int size) {
-					// TODO Auto-generated method stub
-					return null;
+					return new ObserverParcel[size];
 				}
 			};
 }

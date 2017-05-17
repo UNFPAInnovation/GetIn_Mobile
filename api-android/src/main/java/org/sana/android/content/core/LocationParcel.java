@@ -27,6 +27,15 @@ public class LocationParcel extends Location implements Parcelable {
         setName(location.getName());
         code = location.code;
     }
+    public Location getLocation() {
+        Location location = new Location();
+        location.uuid = getUuid();
+        location.setName(getName());
+        location.code = code;
+        location.setCreated(getCreated());
+        location.setModified(getModified());
+        return location;
+    }
 
     public static final Creator<LocationParcel> CREATOR = new Creator<LocationParcel>() {
         @Override

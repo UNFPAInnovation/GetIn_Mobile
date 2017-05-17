@@ -85,5 +85,7 @@ public class Observers{
         public static final String LAST_NAME = "last_name";
 
         public static final String LOCATIONS = "locations";
+
+        public static final String SUBCOUNTY = "subcounty";
 	}
 }
