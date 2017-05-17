@@ -67,4 +67,6 @@ public interface IObserver extends IModel{
     public String getLastName();
 
     public List<Location> getLocations();
+
+    public Location getSubcounty();
 }

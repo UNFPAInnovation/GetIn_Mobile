@@ -16,6 +16,8 @@ public class AmbulanceDriver extends Model{
     public String lastName;
     @Expose
     public String location;
+    @Expose
+    public Location subcounty;
 
     public String getFirstName() {
         return firstName;
@@ -47,5 +49,14 @@ public class AmbulanceDriver extends Model{
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+
+    public Location getSubcounty() {
+        return subcounty;
+    }
+
+    public void setSubcounty(Location subcounty) {
+        this.subcounty = subcounty;
     }
 }

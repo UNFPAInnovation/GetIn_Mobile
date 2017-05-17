@@ -69,7 +69,8 @@ public class Observer extends Model implements IObserver{
 	private String phone_number;
 	@Expose
 	Set<Location> locations = new HashSet<>();
-	
+	@Expose
+    public Location subcounty = null;
 	/** Default Constructor */
 	public Observer() {
         user = new User();
@@ -202,4 +203,9 @@ public class Observer extends Model implements IObserver{
 	public boolean setIsAdmin(boolean isAdmin) {
 		return user.is_admin = isAdmin;
 	}
+
+    @Override
+    public Location getSubcounty() {
+        return subcounty;
+    }
 }
