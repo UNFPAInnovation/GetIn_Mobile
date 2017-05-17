@@ -38,6 +38,7 @@ import java.util.Map;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
+import org.apache.http.HttpHeaders;
 import org.apache.http.HttpRequest;
 import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpVersion;
@@ -154,9 +155,12 @@ public class HttpTaskFactory {
     };
     
     public static ClientFactory CLIENT_FACTORY = new ClientFactory(){
-
+        private DefaultHttpClient client = null;
         @Override
         public HttpClient produce() {
+            if(client != null){
+                return client;
+            }
             //Set up your HTTPS connection
             SchemeRegistry schemeRegistry = new SchemeRegistry();
             // http scheme
@@ -166,12 +170,12 @@ public class HttpTaskFactory {
             
             HttpParams params = basicParams();
             ClientConnectionManager cm = new ThreadSafeClientConnManager(params, schemeRegistry);
-            DefaultHttpClient client = new DefaultHttpClient(cm, params);
+            client = new DefaultHttpClient(cm, params);
             client.addRequestInterceptor(new HttpRequestInterceptor() {
                 @Override
                 public void process(HttpRequest request, HttpContext context) throws HttpException, IOException {
-                    if (!request.containsHeader("Accept")) {
-                        request.addHeader("Accept", "application/json");
+                    if (!request.containsHeader(HttpHeaders.ACCEPT)) {
+                        request.addHeader(HttpHeaders.ACCEPT, "application/json");
                     }
                 }
             });
@@ -180,7 +184,9 @@ public class HttpTaskFactory {
 
         @Override
         public HttpClient produce(InputStream keystore, String keypass) {
-            DefaultHttpClient client;
+            if(client != null){
+                return client;
+            }
             try {
                 KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
                 trustStore.load(keystore, keypass.toCharArray());
