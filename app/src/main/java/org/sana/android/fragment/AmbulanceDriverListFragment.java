@@ -27,9 +27,11 @@ import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
+import org.sana.android.app.SessionManager;
 import org.sana.android.content.Intents;
 import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.widget.ScrollCompleteListener;
+import org.sana.core.Observer;
 import org.sana.util.StringUtil;
 
 import java.util.ArrayList;
@@ -382,8 +384,20 @@ public class AmbulanceDriverListFragment extends ListFragment implements
         // Once a day 86400000
         if((now - lastSync) > delta){
 //            Logf.W(TAG, "sync(): synchronizing patient list");
+            Observer observer = SessionManager.getCurrentUser(getActivity());
             prefs.edit().putLong("driver_sync", now).commit();
-            Intent intent = new Intent(Intents.ACTION_READ,uri);
+
+            Uri target = null;
+            if(observer.getSubcounty() != null){
+                target = uri.buildUpon()
+                        .appendQueryParameter(
+                                AmbulanceDrivers.Contract.SUBCOUNTY+"__name",
+                                observer.getSubcounty().getName())
+                        .build();
+            } else {
+                target = uri;
+            }
+            Intent intent = new Intent(Intents.ACTION_READ, target);
             context.startService(intent);
             result = true;
         }
