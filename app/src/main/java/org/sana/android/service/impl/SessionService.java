@@ -34,6 +34,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.apache.http.HttpHeaders;
 import org.apache.http.client.methods.HttpPost;
 import org.sana.BuildConfig;
 import org.sana.R;
@@ -338,6 +339,7 @@ public class SessionService extends Service{
 			String[] credentials = tempSessions.get(tempKey);
 			HttpPost post = MDSInterface2.createSessionRequest(this, 
 					credentials[0], credentials[1]);
+            post.setHeader(HttpHeaders.ACCEPT, "application/json");
 			Log.i(TAG, "openNetworkSession(...) " + post.getURI());
 			mNetTask = new HttpTask<Response<Collection<Observer>>>(new AuthListener(tempKey), 10000);
             mNetTask.execute(post);
