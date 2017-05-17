@@ -1,6 +1,5 @@
 package org.sana.android.procedure;
 
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -8,7 +7,6 @@ import java.util.Map;
 
 
 import org.sana.android.activity.EducationResourceList;
-import org.sana.android.content.core.ObservationWrapper;
 import org.sana.android.db.PatientValidator;
 import org.sana.android.media.EducationResource;
 import org.sana.android.media.EducationResource.Audience;
@@ -19,7 +17,6 @@ import org.w3c.dom.NodeList;
 
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
@@ -48,6 +45,7 @@ public class ProcedurePage {
 	private Context cachedContext;
 
 	List<ProcedureElement> elements;
+    Map<String, ProcedureElement> elementSet = new HashMap<>();
 	
 	Procedure procedure;
 	Criteria criteria;
@@ -59,8 +57,13 @@ public class ProcedurePage {
 	 * @param elements a list of displayable elements
 	 */
 	public ProcedurePage(List<ProcedureElement> elements) {
+        this(elements, new Criteria());
+        /*
 		this.elements = elements;
+        for(ProcedureElement element:elements)
+            elementSet.put(element.getId(), element);
 		this.criteria = new Criteria();
+		*/
 	}
 
 	/** 
@@ -89,6 +92,8 @@ public class ProcedurePage {
 	 */
 	public ProcedurePage(List<ProcedureElement> elements, Criteria criteria) {
 		this.elements = elements;
+        for(ProcedureElement element:elements)
+            elementSet.put(element.getId(), element);
 		this.criteria = criteria;
 	}
 
@@ -181,6 +186,7 @@ public class ProcedurePage {
 	}
 
     public ProcedureElement getElementById(String id) {
+        /*
         ProcedureElement p = null;
         for (ProcedureElement el:elements) {
             if (el.getId().compareTo(id) == 0) {
@@ -189,6 +195,8 @@ public class ProcedurePage {
             }
         }
         return p;
+        */
+        return elementSet.get(id);
     }
 
     public List<ProcedureElement> getElements(){
@@ -196,6 +204,7 @@ public class ProcedurePage {
     }
 
     public boolean hasElementWithId(String id) {
+        /*
         boolean result = false;
         for (ProcedureElement el:elements) {
             if (el.getId().compareTo(id) == 0) {
@@ -204,6 +213,9 @@ public class ProcedurePage {
             }
         }
         return result;
+        */
+        boolean isIn = elementSet.containsKey(id);
+        return isIn;
     }
 
 	public String elementWithConcept(String concept) {
