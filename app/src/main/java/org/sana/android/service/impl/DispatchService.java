@@ -1491,7 +1491,8 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         contentValues.put(AmbulanceDrivers.Contract.LAST_NAME, ambulanceDriver.getLastname());
         contentValues.put(AmbulanceDrivers.Contract.PHONE_NUMBER, ambulanceDriver.getPhoneNumber());
         contentValues.put(AmbulanceDrivers.Contract.LOCATION, ambulanceDriver.getLocation());
-
+        if(ambulanceDriver.getSubcounty() != null)
+            contentValues.put(AmbulanceDrivers.Contract.SUBCOUNTY, ambulanceDriver.getSubcounty().getName());
         // Don't add uuid initially
         if(!exists(AmbulanceDrivers.CONTENT_URI, ambulanceDriver)){
             contentValues.put(AmbulanceDrivers.Contract.UUID, ambulanceDriver.uuid);
