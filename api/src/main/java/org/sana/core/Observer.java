@@ -208,4 +208,8 @@ public class Observer extends Model implements IObserver{
     public Location getSubcounty() {
         return subcounty;
     }
+
+    public void setSubcounty(Location subcounty) {
+        this.subcounty = subcounty;
+    }
 }
