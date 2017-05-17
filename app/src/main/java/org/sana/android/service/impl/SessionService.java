@@ -373,7 +373,11 @@ public class SessionService extends Service{
 					ContentValues values = new ContentValues();
 					values.put(Observers.Contract.PASSWORD, encrypt(password));
                     values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationIds));
-					int updated = getContentResolver().update(
+
+                    if(observer.getSubcounty() != null)
+                        values.put(Observers.Contract.SUBCOUNTY, observer.getSubcounty().getName());
+
+                    int updated = getContentResolver().update(
 							Observers.CONTENT_URI,
 							values,
 							Observers.Contract.USERNAME + " = ?",
@@ -398,18 +402,17 @@ public class SessionService extends Service{
 					values.put(Observers.Contract.USERNAME, username);
 					values.put(Observers.Contract.PASSWORD, encrypt(password));
 					values.put(Observers.Contract.LOCATIONS, TextUtils.join(",", locationIds));
-					if(!exists) {
+
+                    if(observer.getSubcounty() != null)
+                        values.put(Observers.Contract.SUBCOUNTY, observer.getSubcounty().getName());
+
+                    if(!exists) {
 						values.put(Observers.Contract.UUID, sessionKey);
 						getContentResolver().insert(Observers.CONTENT_URI,
 								values);
 					} else {
 						getContentResolver().update(observerUri, values, null, null);
 					}
-                    // Add locations to local database
-                    for (Location location : observer.getLocations()) {
-                        LocationWrapper.getOrCreate(this, location);
-                        locationIds.add(location.getUuid());
-                    }
 				}
 				SharedPreferences preferences = PreferenceManager
 						.getDefaultSharedPreferences(this.getBaseContext());
