@@ -1256,6 +1256,11 @@ public class MDSInterface2 {
 			return "http";
 	}
 
+    public static String getScheme(Context context){
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        return getScheme(prefs);
+    }
+
 	static int getPort(Context c){
 		SharedPreferences preferences = PreferenceManager
 											.getDefaultSharedPreferences(c);
