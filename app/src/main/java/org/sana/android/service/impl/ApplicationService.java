@@ -30,9 +30,9 @@ package org.sana.android.service.impl;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
+import org.sana.BuildConfig;
 import org.sana.R;
 import org.sana.android.Constants;
-import org.sana.android.app.Preferences;
 import org.sana.android.content.Uris;
 import org.sana.android.net.MDSInterface2;
 import org.sana.android.provider.Models;
@@ -42,7 +42,6 @@ import org.sana.android.util.SanaUtil;
 import org.sana.clients.Client;
 import org.sana.net.Response;
 import org.sana.net.http.HttpTaskFactory;
-import org.sana.net.http.handler.ApiResponseHandler;
 import org.sana.net.http.handler.ClientResponseHandler;
 import org.sana.net.http.handler.FileHandler;
 
@@ -54,21 +53,22 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.text.TextUtils;
 import android.util.Log;
-
-import com.google.gson.reflect.TypeToken;
 
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.lang.reflect.Type;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * @author Sana Development
@@ -84,6 +84,49 @@ public class ApplicationService extends IntentService {
             + Models.AUTHORITY + "/mds/clients/");
     public static final String UPDATE_URI = "org.sana.extra.UPDATE_URI";
     public static final String MIMETYPE_PKG = "application/vnd.android.package-archive";
+
+    private static class UpdateTask extends AsyncTask<Void,Integer,Void>{
+
+        private final Context mContext;
+
+        public UpdateTask(Context context){
+            mContext = context;
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            if(ApplicationService.isChecking())
+                return null;
+            ApplicationService.setChecking(true);
+            try {
+                Client client = getCurrent(mContext);
+                if (client.version > version(mContext)) {
+                    Log.w(TAG, "...update available!");
+                    Uri uri = getDownloadUri(mContext, client);
+                    String authKey = getAuth(mContext);
+                    String name = "getin-" + BuildConfig.FLAVOR + "-" + client.version + ".apk";
+                    Uri apk = getUpdatePackage(name, uri, authKey);
+                    if (apk != Uri.EMPTY) {
+                        installUpdate(mContext, apk);
+                    }
+                }
+            } catch(Exception e){
+                e.printStackTrace();
+            }
+            ApplicationService.setChecking(false);
+            return null;
+        }
+    }
+
+    private static final AtomicBoolean mChecking = new AtomicBoolean(false);
+
+    public static void setChecking(boolean checking){
+        mChecking.set(checking);
+    }
+
+    public static boolean isChecking(){
+        return mChecking.get();
+    }
 
     private static String getAuth(Context context){
         return "Bearer " + context.getString(org.sana.R.string.key_api_secret);
@@ -104,9 +147,20 @@ public class ApplicationService extends IntentService {
         return Uris.iriToURI(CONTENT_URI,scheme, authority, port,  "");
     }
 
-    public static Uri getDownloadUri(Client client){
+    public static Uri getDownloadUri(Context context, Client client){
         Uri uri = Uri.EMPTY;
-
+        Uri.Builder builder = uri.buildUpon();
+        // TODO Change to when server fixed
+        // builder.scheme(MDSInterface2.getScheme(context))
+        builder.scheme("http")
+                .authority(context.getString(R.string.host_mds));
+        if(client != null && !TextUtils.isEmpty(client.app)){
+            for(String segment:client.app.split("/")){
+                if(!TextUtils.isEmpty(segment))
+                    builder.appendPath(segment);
+            }
+            uri = builder.build();
+        }
         return uri;
     }
 
@@ -124,6 +178,9 @@ public class ApplicationService extends IntentService {
         }
         return version;
     }
+
+
+    UpdateTask task = null;
 
     public ApplicationService() {
 		super(Application.class.getName());
@@ -145,34 +202,12 @@ public class ApplicationService extends IntentService {
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		Logf.D(TAG, "onHandleIntent(Intent)", "handling");
-		checkForInitialization();
+		//checkForInitialization();
         String action = intent.getAction();
         if(action.equals(UPDATE_CHECK)){
-            Client client = getCurrent(this);
-            if(client.version > version(this)){
-                Log.w(TAG, "...update available!");
-                Uri uri = getDownloadUri(client);
-                Intent get = new Intent(this, ApplicationService.class);
-                get.putExtra(UPDATE_URI, uri);
-                startService(get);
-            }
-        } else if(action.equals(UPDATE_GET)){
-            Uri uri = intent.getParcelableExtra(UPDATE_URI);
-            String authKey = getAuth(this);
-            Uri apk = getUpdatePackage(uri, authKey);
-            if(apk != Uri.EMPTY){
-                Intent install = new Intent(this, ApplicationService.class);
-                install.setAction(UPDATE_INSTALL);
-                install.putExtra(UPDATE_URI, apk);
-                startService(install);
-            }
-        } else if(action.equals(UPDATE_INSTALL)){
-            Uri uri = intent.getParcelableExtra(UPDATE_URI);
-            installUpdate(uri);
-        } else {
-            stopSelf();
+            UpdateTask task = new UpdateTask(this.getApplicationContext());
+            task.execute();
         }
-		//checkForUpdate();
 	}
 	
 	final void checkForInitialization(){
@@ -218,7 +253,7 @@ public class ApplicationService extends IntentService {
 	    }
 	}
 
-    public Client getCurrent(Context context){
+    public static Client getCurrent(Context context){
         URI uri = null;
         Client client = new Client();
         Response<Collection<Client>> response = Response.empty();
@@ -241,10 +276,12 @@ public class ApplicationService extends IntentService {
         return client;
     }
 
-    public Uri getUpdatePackage(Uri remoteUri, String authKey){
+    public static Uri getUpdatePackage(String name, Uri remoteUri, String authKey){
         Uri apkUri = Uri.EMPTY;
         File out = null;
-        FileHandler handler = new FileHandler(apkUri.getPath());
+        File dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+        File file = new File(dir, name);
+        FileHandler handler = new FileHandler(file);
         URI uri = URI.create(remoteUri.toString());
         HttpGet get = new HttpGet(uri);
         get.addHeader("Authorization", authKey);
@@ -254,7 +291,7 @@ public class ApplicationService extends IntentService {
             response = client.execute(get);
             out = handler.handleResponse(response);
             Log.e(TAG, "Size: " + out.length());
-            return Uri.fromFile(out);
+            return Uri.fromFile(file);
         } catch (IOException e) {
             Log.e(TAG, "ERROR UPDATING");
             //e.printStackTrace();
@@ -262,13 +299,13 @@ public class ApplicationService extends IntentService {
         return Uri.EMPTY;
     }
 
-    public void installUpdate(Uri uri){
+    public static void installUpdate(Context context, Uri uri){
         Log.d(TAG, "installUpdate()");
         Log.d(TAG, "...logged in installing");
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setDataAndType(uri, MIMETYPE_PKG);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        startActivity(intent);
+        context.startActivity(intent);
     }
 
 
