@@ -24,14 +24,13 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
-
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:icon="@drawable/ic_getin_logo"
         android:label="@string/app_name"
-        android:theme="@style/Theme.Large.NoActionBar"
         android:largeHeap="true"
+        android:theme="@style/Theme.Large.NoActionBar"
         tools:replace="android:icon, android:theme">
         <meta-data
             android:name="local_build"
@@ -439,7 +438,17 @@
                     android:scheme="package"/>
             </intent-filter>
         </service>
-        <service android:name=".android.service.impl.ApplicationService"/>
+        <service android:name=".android.service.impl.ApplicationService">
+            <intent-filter>
+                <action android:name="org.sana.intent.action.UPDATE_CHECK"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.sana.intent.action.UPDATE_GET"/>
+            </intent-filter>
+            <intent-filter>
+                <action android:name="org.sana.intent.action.UPDATE_INSTALL"/>
+            </intent-filter>
+        </service>
         <service android:name=".android.service.impl.InstrumentationService">
             <intent-filter>
                 <action android:name="org.sana.android.intent.ACTION_RECORD_GPS"/>
@@ -481,7 +490,7 @@
             android:label="@string/title_activity_ambulance_driver_list">
         </activity>
         <activity
-            android:name=".android.activity.VHTList"
+            android:name=".android.activity.VHTListActivity"
             android:label="@string/title_vht_list">
         </activity>
         <activity
@@ -492,6 +501,12 @@
             android:name=".android.activity.ObserverList"
             android:label="@string/title_observer_list">
         </activity>
+
+        <receiver
+            android:name=".android.app.UpdateReceiver"
+            android:enabled="true"
+            android:exported="true">
+        </receiver>
     </application>
 
 </manifest>
