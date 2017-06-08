@@ -15,19 +15,25 @@ public class FileHandler implements ResponseHandler<File> {
     public static final String TAG = FileHandler.class.getSimpleName();
 
     final String path;
+    final File file;
 
     public FileHandler(String path){
         this.path = path;
+        file = new File(path);
+    }
+
+    public FileHandler(File file){
+        this.file = file;
+        path = file.getPath();
     }
 
     @Override
     public File handleResponse(HttpResponse response){
-        File out = new File(path);
-        if(out.exists()) out.delete();
+        if(file.exists()) file.delete();
         HttpEntity entity = response.getEntity();
         if (entity != null) {
             try {
-                FileOutputStream os = new FileOutputStream(out);
+                FileOutputStream os = new FileOutputStream(file);
                 InputStream is = entity.getContent();
                 int inByte;
                 while((inByte = is.read()) != -1) os.write(inByte);
@@ -37,6 +43,6 @@ public class FileHandler implements ResponseHandler<File> {
                 ioe.printStackTrace();
             }
         }
-        return out;
+        return file;
     }
 }
