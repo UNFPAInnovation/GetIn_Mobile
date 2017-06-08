@@ -990,7 +990,7 @@ public class MDSInterface2 {
 
 	public static  Response<String> apiGet(URI uri) throws UnsupportedEncodingException
 	{
-		return apiGet(uri, null, null);
+		return apiGet(uri, "", "");
 	}
 
 	public static  Response<String> apiGet(URI uri, String username, String password) throws UnsupportedEncodingException
@@ -1068,6 +1068,52 @@ public class MDSInterface2 {
 	{
 		return apiGet(uri,"","",handler);
 	}
+
+    public static synchronized <T> Response<T> apiGet(URI uri, String token,
+                                                      ResponseHandler<Response<T>> handler) throws UnsupportedEncodingException {
+        HttpClient client = HttpTaskFactory.CLIENT_FACTORY.produce();
+        HttpGet request = new HttpGet(uri);
+        request.setHeader("Authorization", token);
+        HttpResponse httpResponse = null;
+        Response<T> response = Response.empty();
+        try {
+            httpResponse = client.execute(request);
+            response = handler.handleResponse(httpResponse);
+        } catch (ClientProtocolException e) {
+            response.setCode(500);
+            response.setStatus(Response.FAILURE);
+            response.errors = new String[]{
+                    "ClientProtocolException executing request",
+                    e.toString()
+            };
+            e.printStackTrace();
+        } catch (IOException e) {
+            response.setCode(501);
+            response.setStatus(Response.FAILURE);
+            response.errors = new String[]{
+                    "IOException executing request",
+                    e.toString()
+            };
+            e.printStackTrace();
+        } catch (OutOfMemoryError e) {
+            response.setCode(500);
+            response.setStatus(Response.FAILURE);
+            response.errors = new String[]{
+                    "OutOfMemoryError reading server response",
+                    e.toString()
+            };
+            e.printStackTrace();
+        } catch (Exception e) {
+            response.setCode(501);
+            response.setStatus(Response.FAILURE);
+            response.errors = new String[]{
+                    "Exception",
+                    e.toString()
+            };
+            //e.printStackTrace();
+        }
+        return response;
+    }
 
 	public static synchronized <T> Response<T> apiPost(URI uri, String username, String password,
 			Map<String, String> values,
@@ -1203,7 +1249,7 @@ public class MDSInterface2 {
 		return Uris.iriToURI(uri, scheme, host, port, root);
 	}
 
-	static String getScheme(SharedPreferences preferences){
+	public static String getScheme(SharedPreferences preferences){
 		if(preferences.getBoolean(Constants.PREFERENCE_SECURE_TRANSMISSION, true))
 			return "https";
 		else
