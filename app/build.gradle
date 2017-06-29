@@ -1,6 +1,36 @@
 apply plugin: 'com.android.application'
+def Properties props = new Properties()
+def propFile = file('../secure.properties')
+def storepass = '';
+def keypass = '';
+// Reads the store password and key password from properties file
+if (propFile.canRead()){
+    props.load(new FileInputStream(propFile))
 
+    if (props!=null){
+        if(props.containsKey('store.password') && props.containsKey('store.password')) {
+            storepass = props['store.password']
+        }
+        if(props.containsKey('key.password') && props.containsKey('key.password')) {
+            keypass = props['key.password']
+        }
+    }
+}
 android {
+    signingConfigs {
+        release {
+            keyAlias 'getin-release'
+            keyPassword keypass
+            storeFile file('../project.jks')
+            storePassword storepass
+        }
+        dev {
+            keyAlias 'getin-dev'
+            keyPassword keypass
+            storeFile file('../project.jks')
+            storePassword storepass
+        }
+    }
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
     compileOptions {
@@ -17,10 +47,12 @@ android {
     buildTypes {
         debug {
             debuggable true
+            signingConfig signingConfigs.dev
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     packagingOptions {
