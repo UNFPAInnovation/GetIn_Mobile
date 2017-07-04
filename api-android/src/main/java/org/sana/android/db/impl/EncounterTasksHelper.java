@@ -34,7 +34,9 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.sana.android.db.TableHelper;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.EncounterTasks.Contract;
+import org.sana.android.provider.Models;
 import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
 import org.sana.api.task.Status;
@@ -110,6 +112,9 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
         vals.put( Contract.DUE_DATE, sdf.format(dueDate));
         
         vals.putAll(values);
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.NEW);
+        }
 		return super.onInsert(vals);
 	}
 
@@ -118,24 +123,9 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 	 */
 	@Override
 	public ContentValues onUpdate(Uri uri, ContentValues values) {
-		/*
-		ContentValues vals = new ContentValues();
-        vals.put( Contract.OBSERVER, "");
-        vals.put(Contract.STATUS, "");
-        vals.put(Contract.SUBJECT, "");
-        vals.put( Contract.PROCEDURE, "");
-        vals.put(Contract.ENCOUNTER, "");
-        String dueStr = values.getAsString(Contract.DUE_DATE);
-		Date dueDate = new Date();
-		try {
-			dueDate = (dueStr != null)? sdf.parse(dueStr): new Date();
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-        vals.put( Contract.DUE_DATE, sdf.format(dueDate));
-        vals.putAll(values);
-        */
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.MODIFIED);
+        }
 		return super.onUpdate(uri, values);
 	}
 
@@ -158,7 +148,8 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 				+ Contract.SUBJECT + " TEXT, "
 
                 + Contract.CREATED + " DATE,"
-                + Contract.MODIFIED + " DATE"
+                + Contract.MODIFIED + " DATE,"
+                + BaseContract.SYNCH + " INTEGER DEFAULT '-1'"
 				+ ");";
 		
 	}
@@ -168,7 +159,16 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 	 */
 	@Override
 	public String onUpgrade(int oldVersion, int newVersion) {
-		return null;
+        String sql = null;
+		if(oldVersion < newVersion){
+            StringBuilder sqlBuilder = new StringBuilder();
+            if (newVersion == 9){
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                    BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
+            }
+            sql = sqlBuilder.toString();
+        }
+        return sql;
 	}
 	
 

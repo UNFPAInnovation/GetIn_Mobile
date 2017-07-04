@@ -33,6 +33,8 @@ import android.util.Log;
 
 import org.sana.android.db.TableHelper;
 
+import org.sana.android.provider.BaseContract;
+import org.sana.android.provider.Models;
 import org.sana.android.provider.Patients.Contract;
 import org.sana.core.Subject;
 
@@ -65,6 +67,9 @@ public class SubjectsHelper extends TableHelper<Subject>{
 	 */
 	@Override
 	public ContentValues onInsert(ContentValues values) {
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.NEW);
+        }
 		return super.onInsert(values);
 	}
 
@@ -73,6 +78,9 @@ public class SubjectsHelper extends TableHelper<Subject>{
 	 */
 	@Override
 	public ContentValues onUpdate(Uri uri, ContentValues values) {
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.MODIFIED);
+        }
 		return super.onUpdate(uri, values);
 	}
 
@@ -87,6 +95,7 @@ public class SubjectsHelper extends TableHelper<Subject>{
 		        + Contract.UUID 			+ " TEXT NOT NULL,"
                 + Contract.CREATED 			+ " DATE,"
                 + Contract.MODIFIED 		+ " DATE,"
+                + BaseContract.SYNCH + " INTEGER DEFAULT '-1', "
                 + Contract.PATIENT_ID 		+ " TEXT,"
                 + Contract.GIVEN_NAME 		+ " TEXT NOT NULL,"
                 + Contract.FAMILY_NAME		+ " TEXT NOT NULL,"
@@ -128,7 +137,6 @@ public class SubjectsHelper extends TableHelper<Subject>{
                 + Contract.CONTACT_THREE 	+ " TEXT,"
                 + Contract.CONTACT_FOUR 	+ " TEXT"
 
-
                 //TODO update db, replace line above, and uncomment
                 //+ Contract.CONTACT_FOUR + " TEXT,"
                 //+ Contract.CONFIRMED + " BOOLEAN,"
@@ -144,17 +152,22 @@ public class SubjectsHelper extends TableHelper<Subject>{
 	public String onUpgrade(int oldVersion, int newVersion) {
 		Log.i(TAG, "onUpgrade()");
 		String sql = null;
-		if (newVersion > oldVersion){
-			if (oldVersion == 2 && newVersion == 3) {
+		if (newVersion > oldVersion) {
+            if (oldVersion == 2 && newVersion == 3) {
                 sql = "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_NEED + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE 	+ " TEXT;";
-				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.VILLAGE 	+ " TEXT;";
-				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DISTRICT 	+ " TEXT;";
-				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.COUNTY 	+ " TEXT;";
-				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY 	+ " TEXT;";
-				sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH 	+ " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.VILLAGE + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DISTRICT + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.COUNTY + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY + " TEXT;";
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH + " TEXT;";
             }
-	    }
+            if (newVersion == 9) {
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';";
+
+            }
+        }
 		return sql;
 	}
 	

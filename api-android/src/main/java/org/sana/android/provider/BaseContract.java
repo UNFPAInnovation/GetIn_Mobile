@@ -22,5 +22,7 @@ public interface BaseContract<T> extends BaseColumns {
 
     /** The date the record was last modified. */
     public static final String MODIFIED = "modified";
+
+    public static final String SYNCH = "_synch";
 	
 }

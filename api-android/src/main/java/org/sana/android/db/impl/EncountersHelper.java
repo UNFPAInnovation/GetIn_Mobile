@@ -39,7 +39,9 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import org.sana.android.db.TableHelper;
+import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Models;
 import org.sana.android.provider.Patients;
 import org.sana.core.Encounter;
 import org.sana.util.UUIDUtil;
@@ -116,6 +118,9 @@ public class EncountersHelper extends TableHelper<Encounter>{
         if(values.containsKey(Encounters.Contract.UPLOAD_QUEUE) == false) {
             values.put(Encounters.Contract.UPLOAD_QUEUE, -1);
         }
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.NEW);
+        }
         return super.onInsert(values);
     }
 
@@ -124,6 +129,9 @@ public class EncountersHelper extends TableHelper<Encounter>{
      */
     @Override
     public ContentValues onUpdate(Uri uri, ContentValues values) {
+        if(!values.containsKey(BaseContract.SYNCH)){
+            values.put(BaseContract.SYNCH, Models.Synch.MODIFIED);
+        }
         return super.onUpdate(uri, values);
     }
 
@@ -145,7 +153,8 @@ public class EncountersHelper extends TableHelper<Encounter>{
                 + Encounters.Contract.UPLOAD_STATUS + " INTEGER,"
                 + Encounters.Contract.UPLOAD_QUEUE + " INTEGER,"
                 + Encounters.Contract.CREATED + " TEXT,"
-                + Encounters.Contract.MODIFIED + " TEXT"
+                + Encounters.Contract.MODIFIED + " TEXT,"
+                + BaseContract.SYNCH + " INTEGER DEFAULT '-1'"
                 + ");";
     }
 
@@ -154,8 +163,17 @@ public class EncountersHelper extends TableHelper<Encounter>{
      */
     @Override
     public String onUpgrade(int oldVersion, int newVersion) {
-        // TODO Auto-generated method stub
-        return null;
+        String sql = null;
+        if(oldVersion < newVersion){
+            StringBuilder sqlBuilder = new StringBuilder();
+            if (newVersion == 9){
+                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';";
+
+            }
+            sql = sqlBuilder.toString();
+        }
+        return sql;
     }
     
     /* (non-Javadoc)
@@ -165,22 +183,4 @@ public class EncountersHelper extends TableHelper<Encounter>{
     public String onSort(Uri uri) {
         return Encounters.Contract.CREATED + " DESC";
     }
-    
-    /*
-    @Override
-    public Cursor onQuery(SQLiteDatabase db, String[] projection, 
-            String selection, String[] selectionArgs, String sortOrder){
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        if(TextUtils.isEmpty(selection)){
-            String[] tables = new String[] { getTable(), SubjectsHelper.getInstance().getTable()};
-            selection = String.format("%s LEFT OUTER JOIN %s ON %s = %s",
-                    tables[0], tables[1], Encounters.Contract.SUBJECT, Patients.Contract.UUID);
-            qb.setTables(tables[0]+","+tables[1]);
-        } else {
-            qb.setTables(getTable());
-        }
-        Cursor cursor = qb.query(db, projection, selection, selectionArgs, null,null, sortOrder);
-        return cursor;
-    }
-    */
 }
