@@ -3,16 +3,24 @@ def Properties props = new Properties()
 def propFile = file('../secure.properties')
 def storepass = '';
 def keypass = '';
+def debugHost = '';
+def releaseHost = '';
 // Reads the store password and key password from properties file
 if (propFile.canRead()){
     props.load(new FileInputStream(propFile))
 
     if (props!=null){
-        if(props.containsKey('store.password') && props.containsKey('store.password')) {
+        if(props.containsKey('store.password')) {
             storepass = props['store.password']
         }
-        if(props.containsKey('key.password') && props.containsKey('key.password')) {
+        if(props.containsKey('key.password')) {
             keypass = props['key.password']
+        }
+        if(props.containsKey('debug.host')) {
+            debugHost = props['debug.host']
+        }
+        if(props.containsKey('release.host')) {
+            releaseHost = props['release.host']
         }
     }
 }
@@ -48,11 +56,13 @@ android {
         debug {
             debuggable true
             signingConfig signingConfigs.dev
+            resValue('string', 'host_mds', debugHost)
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
+            resValue('string', 'host_mds', releaseHost)
         }
     }
     packagingOptions {
