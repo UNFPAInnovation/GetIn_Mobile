@@ -3,6 +3,7 @@ package org.sana.android.app;
 import android.content.Context;
 
 import org.sana.android.Constants;
+import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.core.Location;
 import org.sana.core.Observer;
@@ -29,6 +30,20 @@ public final class SessionManager {
             }
         }
         return object;
+    }
+
+    public static ObserverParcel getObserver(Context context){
+        ObserverParcel object = null;
+        String username = Preferences.getString(context,
+                Constants.PREFERENCE_EMR_USERNAME, null);
+        if(username != null){
+            object = (ObserverParcel) ObserverWrapper.getOneByUsername(context, username);
+            if(object != null){
+                ObserverWrapper.initializeRelated(context, object);
+            }
+        }
+        return object;
+
     }
 
     public static List<Location> getCurrentUserLocations(Context context){
