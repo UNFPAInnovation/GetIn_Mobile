@@ -38,6 +38,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabaseCorruptException;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.Handler;
@@ -76,6 +77,7 @@ import org.sana.android.activity.EncounterList;
 import org.sana.android.activity.MainActivity;
 import org.sana.android.app.Locales;
 import org.sana.android.app.NotificationFactory;
+import org.sana.android.app.SessionManager;
 import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.Intents;
 import org.sana.android.content.ModelContext;
@@ -83,6 +85,7 @@ import org.sana.android.content.ModelEntity;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.EncounterWrapper;
 import org.sana.android.content.core.ObservationWrapper;
+import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
@@ -91,6 +94,7 @@ import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
+import org.sana.android.provider.Models;
 import org.sana.android.provider.Observations;
 import org.sana.android.provider.Observers;
 import org.sana.android.provider.Patients;
@@ -676,9 +680,10 @@ public class DispatchService extends Service{
                                 Log.d(TAG, "...response: code=" +
                                         patientResponse.getCode() + ", data=" +
                                         patientResponse.getMessage());
-                                if(patientResponse.getMessage() != null)
-                                bcastCode = createOrUpdateSubjects(
-                                        patientResponse.message, startId);
+                                if(patientResponse.getMessage() != null) {
+                                    bcastCode = createOrUpdateSubjects(
+                                            patientResponse.message, startId);
+                                }
                                 else
                                     bcastCode = patientResponse.getCode();
                                 // If successful create, we need to swap the
@@ -779,8 +784,10 @@ public class DispatchService extends Service{
 
                                 if(e != null && e.code != 200)
                                     addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
-                                else
+                                else {
+                                    Models.markUpToDate(DispatchService.this, msgUri);
                                     bcastMessage = getString(R.string.upload_success);
+                                }
                             } catch(Exception e){
                                 e.printStackTrace();
                                 addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
@@ -979,7 +986,7 @@ public class DispatchService extends Service{
     boolean mAllowRebind;                       // indicates whether onRebind should be used
     private Looper mServiceLooper;
     private Handler mHandler;
-    private boolean initialized = false;
+    private AtomicBoolean initialized = new AtomicBoolean(false);
     private NotificationFactory mNotificationFactory;
 
     private AtomicInteger numNotifications = new AtomicInteger(0);
@@ -1002,8 +1009,8 @@ public class DispatchService extends Service{
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = thread.getLooper();
         mHandler = new Handler(mServiceLooper, getHandlerCallback());
-        if(!initialized)
-            initialized = checkInit();
+        //if(!initialized)
+        //    initialized = checkInit();
         mNotificationFactory = NotificationFactory.getInstance(this);
         mNotificationFactory.setContentTitle(R.string.network_alert);
       }
@@ -1063,6 +1070,9 @@ public class DispatchService extends Service{
                 msg.setData(intent.getExtras());
                 mHandler.sendMessage(msg);
             } else {
+                if(!initialized.get()){
+                    startup(startId,true,true);
+                }
                 Log.e(TAG, String.format(
                         "Unrecognized message. what: %d, match: %d", what,
                         matchesPackage));
@@ -1079,7 +1089,8 @@ public class DispatchService extends Service{
 
     @Override
     public void onDestroy(){
-        Logf.D(TAG, "onDestroy()", "...finishing");
+        Log.i(TAG, "onDestroy()");
+        initialized.set(false);
         try{
             if(!failQueue.isEmpty()){
                 Log.w(TAG, "RESEND queue is not empty");
@@ -1096,6 +1107,9 @@ public class DispatchService extends Service{
     public boolean stopService(Intent intent){
         Logf.I(TAG, "stopService()",
                     (intent != null)? intent.toUri(Intent.URI_INTENT_SCHEME): "null");
+        failQueue.cancel();
+        mNotificationFactory.cancelAll();
+        initialized.set(false);
         return super.stopService(intent);
         /*
         if(intent != null){
@@ -1539,6 +1553,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Patient p = iterator.next();
             ContentValues vals = PatientWrapper.toValues(p);
+            vals.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
             ////////////////////////////////////////////////////////////
             // Handle images
             ////////////////////////////////////////////////////////////
@@ -1600,6 +1615,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                 value.put(EncounterTasks.Contract.PROCEDURE , task.procedure.uuid);
                 value.put(EncounterTasks.Contract.SUBJECT , task.subject.uuid );
                 subjects.put(task.subject.uuid, task.subject);
+                value.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
                 if(task.encounter != null)
                     value.put(EncounterTasks.Contract.ENCOUNTER, task.encounter.uuid);
                 value.put(EncounterTasks.Contract.OBSERVER , task.assigned_to.uuid);
@@ -1700,6 +1716,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Encounter obj = iterator.next();
             ContentValues value = EncounterWrapper.toValues(obj);
+            value.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
             values.add(value);
             /*
             if(!exists(Encounters.CONTENT_URI, obj))
@@ -2058,6 +2075,59 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             Log.i(TAG, "QueueControl start()");
             halt.set(false);
         }
+
+    }
+
+    private final void startup(int id, final boolean sendAll, boolean restartAll) {
+
+        ObserverParcel obs = SessionManager.getObserver(this);
+        AsyncTask<Object, Void, List<Intent>> task = new AsyncTask<Object, Void, List<Intent>>() {
+            @Override
+            protected List<Intent> doInBackground(Object... params) {
+                Context mContext = (Context) params[0];
+                ObserverParcel obs = (ObserverParcel) params[1];
+                List<Uri> list = Models.getReadyToSynchNew(mContext);
+                List<Uri> updated = Models.getReadyToSynch(mContext);
+                // Need to handle non dirty starts
+                List<Uri> pending = Models.getReadyToSynchPending(mContext);
+                List<Intent> result = new ArrayList<>();
+
+                for (Uri uri : list) {
+                    int what = Uris.getDescriptor(uri);
+                    Intent intent = new Intent(Intents.ACTION_CREATE, uri);
+                    intent.putExtra(Intents.EXTRA_OBSERVER, obs);
+                    intent.addFlags(Intents.FLAG_RETRY_ON_FAIL | Intents.FLAG_NOTIFY);
+                    result.add(intent);
+                }
+                for (Uri uri : updated) {
+                    int what = Uris.getDescriptor(uri);
+                    Intent intent = new Intent(Intents.ACTION_CREATE, uri);
+                    intent.putExtra(Intents.EXTRA_OBSERVER, obs);
+                    intent.addFlags(Intents.FLAG_RETRY_ON_FAIL | Intents.FLAG_NOTIFY);
+                    result.add(intent);
+                }
+                if (sendAll) {
+                    for (Uri uri : pending) {
+                        int what = Uris.getDescriptor(uri);
+                        Intent intent = new Intent(Intents.ACTION_CREATE, uri);
+                        intent.putExtra(Intents.EXTRA_OBSERVER, obs);
+                        intent.addFlags(Intents.FLAG_RETRY_ON_FAIL | Intents.FLAG_NOTIFY);
+                        result.add(intent);
+                    }
+                }
+                return result;
+            }
+
+            @Override
+            public void onPostExecute(List<Intent> objs) {
+                DispatchService.this.onStartupComplete(objs);
+            }
+        };
+        task.execute(getApplicationContext(), obs);
+        initialized.set(true);
+    }
+
+    public final void onStartupComplete(List<Intent> objs) {
 
     }
 }
