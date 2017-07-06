@@ -576,11 +576,9 @@ public final class Uris {
 		String query = uri.getEncodedQuery();
 		URL url = null;
 		if(!TextUtils.isEmpty(query)){
-			path = String.format("%s%s?%s", path,query);
-			url = new URL(scheme, host, port, path);
-		} else {String.format("%s%s", rootPath, uri.getPath());
-			url = new URL(scheme, host, port, path);
+			path = String.format("%s?%s", path,query);
 		}
+        url = new URL(scheme, host, port, path);
 		URI u  = url.toURI();
 		return u;
 	}
