@@ -129,7 +129,7 @@ public class ApplicationService extends IntentService {
     }
 
     private static String getAuth(Context context){
-        return "Bearer " + context.getString(org.sana.R.string.key_api_secret);
+        return "Bearer " + context.getString(R.string.key_clients_api);
     }
 
     public static URI getCheckUri(Context context) throws MalformedURLException, URISyntaxException {
@@ -144,7 +144,9 @@ public class ApplicationService extends IntentService {
         } catch (Exception e){
             e.printStackTrace();
         }
-        return Uris.iriToURI(CONTENT_URI,scheme, authority, port,  "");
+        Uri.Builder builder = CONTENT_URI.buildUpon();
+        builder.appendQueryParameter("flavor", BuildConfig.FLAVOR);
+        return Uris.iriToURI(builder.build(),scheme, authority, port,  "");
     }
 
     public static Uri getDownloadUri(Context context, Client client){
