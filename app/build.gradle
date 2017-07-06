@@ -5,6 +5,7 @@ def storepass = '';
 def keypass = '';
 def debugHost = '';
 def releaseHost = '';
+def keyClientAPI = '';
 // Reads the store password and key password from properties file
 if (propFile.canRead()){
     props.load(new FileInputStream(propFile))
@@ -51,6 +52,7 @@ android {
         targetSdkVersion 17
         versionCode 9
         versionName '2.1.0-beta6'
+        resValue('string', 'key_clients_api', keyClientAPI)
     }
     buildTypes {
         debug {
