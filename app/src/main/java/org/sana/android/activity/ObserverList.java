@@ -9,7 +9,9 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 
 import org.sana.R;
+import org.sana.android.app.SessionManager;
 import org.sana.android.content.Intents;
+import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.fragment.ModelSelectedListener;
 import org.sana.android.provider.Observers;
 import org.sana.core.Observer;
@@ -25,7 +27,12 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_observer_list);
-        sync(this, Observers.CONTENT_URI);
+        ObserverParcel observer = SessionManager.getObserver(this);
+        String subcounty = observer.getSubcounty().getName();
+        Uri observerUri = Observers.CONTENT_URI.buildUpon()
+                .appendQueryParameter("subcounty__name", subcounty)
+                .build();
+        sync(this, observerUri);
     }
     
     @Override
@@ -42,6 +49,11 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
         long now = System.currentTimeMillis();
         if((now - lastSync) > delta){
             prefs.edit().putLong("observer_sync", now).commit();
+            ObserverParcel observer = SessionManager.getObserver(this);
+            String subcounty = observer.getSubcounty().getName();
+            Uri observerUri = Observers.CONTENT_URI.buildUpon()
+                    .appendQueryParameter("subcounty__name", subcounty)
+                    .build();
             Intent intent = new Intent(Intents.ACTION_READ,uri);
             context.startService(intent);
             result = true;
