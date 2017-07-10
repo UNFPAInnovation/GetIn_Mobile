@@ -41,8 +41,7 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
         long lastSync = prefs.getLong("observer_sync", 0);
         long now = System.currentTimeMillis();
         if((now - lastSync) > delta){
-//            Logf.W(TAG, "sync(): synchronizing patient list");
-            prefs.edit().putLong("driver_sync", now).commit();
+            prefs.edit().putLong("observer_sync", now).commit();
             Intent intent = new Intent(Intents.ACTION_READ,uri);
             context.startService(intent);
             result = true;

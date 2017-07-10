@@ -142,11 +142,15 @@ public class ObserverListFragment extends ListFragment implements
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor cursor) {
-        if (cursor == null || (cursor !=null && cursor.getCount() == 0)) {
-            setEmptyText(getString(R.string.msg_drivers_vht));
+        if (cursor == null){
+            ((TextView)getListView().getEmptyView()).setText(getString(R.string.msg_drivers_vht));
         }
         if(cursor != null){
-            ((ObserverCursorAdapter) this.getListAdapter()).swapCursor(cursor);
+            if(cursor.getCount() == 0) {
+
+            } else{
+                ((ObserverCursorAdapter) this.getListAdapter()).swapCursor(cursor);
+            }
         }
 
     }
@@ -163,10 +167,11 @@ public class ObserverListFragment extends ListFragment implements
                 // TODO Should probably check that number is valid pattern
                 Intent intent = new Intent(Intent.ACTION_CALL,
                         Uri.parse("tel:" + String.valueOf(number)));
-//            Log.v(TAG, "the telephone number is" +String.valueOf(number));
-                if(number.toString().length() == 10){
-                    startActivity(intent);
-                }
+                startActivity(intent);
+                //TODO Should we include a length check before starting the activity
+                //if(number.toString().length() == 10){
+                //    startActivity(intent);
+                //}
 
             } else {
                 if (mListener != null) {
