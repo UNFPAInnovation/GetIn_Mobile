@@ -147,7 +147,7 @@ public class ObserverListFragment extends ListFragment implements
         }
         if(cursor != null){
             if(cursor.getCount() == 0) {
-
+                ((TextView)getListView().getEmptyView()).setText(getString(R.string.msg_drivers_vht));
             } else{
                 ((ObserverCursorAdapter) this.getListAdapter()).swapCursor(cursor);
             }
