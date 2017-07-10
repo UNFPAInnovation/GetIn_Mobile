@@ -108,7 +108,9 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
 
     public String[] getStringArrayField(String field){
         String values = getStringField(field);
-        return TextUtils.split(values, ",");
+        return (TextUtils.isEmpty(values))?
+                new String[]{}:
+                TextUtils.split(values, ",");
     }
 
     /* (non-Javadoc)
