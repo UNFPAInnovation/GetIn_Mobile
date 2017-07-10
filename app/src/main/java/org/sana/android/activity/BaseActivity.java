@@ -28,11 +28,13 @@ import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
+import org.sana.android.app.SessionManager;
 import org.sana.android.app.State.Keys;
 import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.DispatchResponseReceiver;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.fragment.AuthenticationDialogFragment.AuthenticationDialogListener;
 import org.sana.android.provider.Encounters;
@@ -599,15 +601,13 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
     }
 
     protected void syncAll(){
-        // Set period for these
-        /*
-        sync(Observers.CONTENT_URI);
-        sync(Subjects.CONTENT_URI);
-        sync(Encounters.CONTENT_URI);
-        sync(Observations.CONTENT_URI);
-        */
-        SynchronizationManager.sync(this, Observers.CONTENT_URI);
-        List<String> villageNames = getVillageNamesForObserver();
+        ObserverParcel observer = SessionManager.getObserver(this);
+        String subcounty = observer.getSubcounty().getName();
+        Uri observerUri = Observers.CONTENT_URI.buildUpon()
+                .appendQueryParameter("subcounty__name", subcounty)
+                .build();
+        SynchronizationManager.sync(this, observerUri);
+        List<String> villageNames = getVillageNamesForObserver(observer);
         for(String village:villageNames) {
             // Append the village list query parameter
             Uri.Builder builder = Subjects.CONTENT_URI.buildUpon();
@@ -636,6 +636,14 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
         List<Location> locations = observer.getLocations();
         List<String> villages = new ArrayList<>();
         for(Location location: locations){
+            villages.add(location.getName());
+        }
+        return villages;
+    }
+
+    public List<String> getVillageNamesForObserver(Observer observer){
+        List<String> villages = new ArrayList<>();
+        for(Location location: observer.getLocations()){
             villages.add(location.getName());
         }
         return villages;
