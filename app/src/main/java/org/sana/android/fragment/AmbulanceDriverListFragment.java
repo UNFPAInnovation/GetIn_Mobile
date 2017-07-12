@@ -30,6 +30,7 @@ import org.sana.android.app.Preferences;
 import org.sana.android.app.SessionManager;
 import org.sana.android.content.Intents;
 import org.sana.android.provider.AmbulanceDrivers;
+import org.sana.android.util.PhoneUtil;
 import org.sana.android.widget.ScrollCompleteListener;
 import org.sana.core.Observer;
 import org.sana.util.StringUtil;
@@ -119,14 +120,14 @@ public class AmbulanceDriverListFragment extends ListFragment implements
         // Implement click to call functionality
         Object number = view.getTag();
         if(number != null){
-            // TODO Should probably check that number is valid pattern
-            Intent intent = new Intent(Intent.ACTION_CALL,
-                    Uri.parse("tel:" + String.valueOf(number)));
-//            Log.v(TAG, "the telephone number is" +String.valueOf(number));
-            if(number.toString().length() == 10){
+            try{
+                // TODO Should probably check that number is valid pattern
+                Intent intent = new Intent(Intent.ACTION_CALL,
+                    Uri.parse("tel:" + PhoneUtil.formatNumber(String.valueOf(number))));
                 startActivity(intent);
-            }else {
-                Toast.makeText(AmbulanceDriverListFragment.this.getContext(), "invalid phone number", Toast.LENGTH_SHORT).show();
+            } catch(Exception e){
+                Toast.makeText(getActivity(), R.string.error_unable_to_call,
+                        Toast.LENGTH_LONG);
             }
 
         } else {

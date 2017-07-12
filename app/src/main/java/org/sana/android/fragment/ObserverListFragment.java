@@ -25,6 +25,7 @@ import org.sana.android.activity.ObserverList;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.provider.Observers;
+import org.sana.android.util.PhoneUtil;
 import org.sana.core.Observer;
 
 import java.util.HashMap;
@@ -171,17 +172,7 @@ public class ObserverListFragment extends ListFragment implements
             Object number = view.getTag();
             if(number != null){
                 try {
-                    String numberStr = String.valueOf(number);
-                    // TODO handle other international numbers
-                    if(numberStr.startsWith("256")){
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            numberStr = PhoneNumberUtils.normalizeNumber(numberStr);
-                            numberStr = PhoneNumberUtils.formatNumberToE164(numberStr, "UG");
-                        } else {
-                            numberStr = numberStr.replace(" ","");
-                            numberStr = "+" + numberStr;
-                        }
-                    }
+                    String numberStr = PhoneUtil.formatNumber(String.valueOf(number));
                     // TODO Check format and reformat as needed
                     Intent intent = new Intent(Intent.ACTION_CALL,
                             Uri.parse("tel:" + numberStr));

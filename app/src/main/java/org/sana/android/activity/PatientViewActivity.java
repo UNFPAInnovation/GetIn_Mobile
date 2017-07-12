@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.content.Intents;
@@ -28,6 +29,7 @@ import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Observations;
 import org.sana.android.provider.Patients;
+import org.sana.android.util.PhoneUtil;
 import org.sana.api.IModel;
 import org.sana.api.task.EncounterTask;
 import org.sana.core.Encounter;
@@ -133,17 +135,27 @@ public class PatientViewActivity extends BaseActivity {
                 finish();
                 break;
             case R.id.btn_call_pnumber:
-                if(!TextUtils.isEmpty(patient.getpNumber())) {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL,
-                            Uri.parse("tel:" + patient.getpNumber()));
-                    startActivityForResult(callIntent,0);
+                try{
+                    if(!TextUtils.isEmpty(patient.getpNumber())) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL,
+                                Uri.parse("tel:" + PhoneUtil.formatNumber(patient.getpNumber())));
+                        startActivityForResult(callIntent,0);
+                    }
+                } catch(Exception e){
+                    Toast.makeText(this, R.string.error_unable_to_call,
+                            Toast.LENGTH_LONG);
                 }
                 break;
             case R.id.btn_call_powerholder:
-                if(!TextUtils.isEmpty(patient.getHolder_pNumber())) {
-                    Intent callIntent = new Intent(Intent.ACTION_CALL,
-                            Uri.parse("tel:" + patient.getHolder_pNumber()));
-                    startActivityForResult(callIntent, 1);
+                try{
+                    if(!TextUtils.isEmpty(patient.getHolder_pNumber())) {
+                        Intent callIntent = new Intent(Intent.ACTION_CALL,
+                            Uri.parse("tel:" + PhoneUtil.formatNumber(patient.getHolder_pNumber())));
+                        startActivityForResult(callIntent, 1);
+                    }
+                } catch(Exception e){
+                    Toast.makeText(this, R.string.error_unable_to_call,
+                    Toast.LENGTH_LONG);
                 }
                 break;
             case R.id.btn_view_encounters:
