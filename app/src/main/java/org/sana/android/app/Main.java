@@ -33,6 +33,7 @@ public class Main extends Application {
                 intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
         AlarmManager alarmManager = (AlarmManager)getSystemService(ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC, calendar.getTimeInMillis(), pi);
+        alarmManager.setRepeating(AlarmManager.RTC, calendar.getTimeInMillis() + 10000,
+                AlarmManager.INTERVAL_HOUR*4, pi);
     }
 }
