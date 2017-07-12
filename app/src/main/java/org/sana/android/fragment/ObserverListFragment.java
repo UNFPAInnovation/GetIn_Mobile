@@ -4,18 +4,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.CursorAdapter;
+import android.telephony.PhoneNumberUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.activity.ObserverList;
@@ -25,7 +28,10 @@ import org.sana.android.provider.Observers;
 import org.sana.core.Observer;
 
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
+
+import static android.telephony.PhoneNumberUtils.formatNumberToE164;
 
 /**
  * A fragment representing a list of Items.
@@ -164,15 +170,26 @@ public class ObserverListFragment extends ListFragment implements
             // Implement click to call functionality
             Object number = view.getTag();
             if(number != null){
-                // TODO Should probably check that number is valid pattern
-                Intent intent = new Intent(Intent.ACTION_CALL,
-                        Uri.parse("tel:" + String.valueOf(number)));
-                startActivity(intent);
-                //TODO Should we include a length check before starting the activity
-                //if(number.toString().length() == 10){
-                //    startActivity(intent);
-                //}
-
+                try {
+                    String numberStr = String.valueOf(number);
+                    // TODO handle other international numbers
+                    if(numberStr.startsWith("256")){
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            numberStr = PhoneNumberUtils.normalizeNumber(numberStr);
+                            numberStr = PhoneNumberUtils.formatNumberToE164(numberStr, "UG");
+                        } else {
+                            numberStr = numberStr.replace(" ","");
+                            numberStr = "+" + numberStr;
+                        }
+                    }
+                    // TODO Check format and reformat as needed
+                    Intent intent = new Intent(Intent.ACTION_CALL,
+                            Uri.parse("tel:" + numberStr));
+                    startActivity(intent);
+                } catch(Exception e){
+                    Toast.makeText(getActivity(), R.string.error_unable_to_call,
+                            Toast.LENGTH_LONG);
+                }
             } else {
                 if (mListener != null) {
                     mListener.onModelSelected((Observer)mAdapter.getItem(position));
