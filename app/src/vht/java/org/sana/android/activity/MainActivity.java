@@ -329,8 +329,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         mRoot = isAdmin(mObserver);
         if(!mRoot){
             LinearLayout main = (LinearLayout) findViewById(R.id.main_root);
-            // TODO RBAC
-            //main.removeView(findViewById(R.id.btn_main_select_patient));
         }
     }
 
@@ -342,14 +340,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         mDebug = this.getResources().getBoolean(R.bool.debug);
         Locales.updateLocale(this, getString(R.string.force_locale));
         setContentView(R.layout.main);
-        /*
-        if(mDebug)
-            setContentView(R.layout.main);
-        else
-            setContentView(R.layout.main_ht);
-        */
         // TODO rethink where to integrate this
-        checkUpdate(Uris.buildUri("package", "org.sana.provider" , ""));
         runner = new DefaultActivityRunner();
         init();
         if(Uris.isEmpty(mObserver)){
@@ -703,11 +694,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 intent.putExtra("user", "midwife");
                 startActivity(intent);
                 break;
-           /* case R.id.btn_main_procedures:
-                intent = new Intent(Intent.ACTION_PICK);
-                intent.setDataAndType(Procedures.CONTENT_URI, Procedures.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_PROCEDURE);
-                break;*/
             case R.id.btn_main_tasks:
                 intent = new Intent(Intent.ACTION_PICK);
                 intent.setDataAndType(EncounterTasks.CONTENT_URI, EncounterTasks.CONTENT_TYPE);
@@ -726,24 +712,6 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                 startActivityForResult(intent, RUN_PROCEDURE);
 
                 break;
-           /* case R.id.button_call_ambulance:
-
-                intent = new Intent(MainActivity.this, AmbulanceDriverListActivity.class);
-                startActivity(intent);
-
-                break;
-*/
-
-            /*case R.id.btn_main_unregistered_subject:
-                intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
-                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
-                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.procs_subject_short_form)))
-                        .putExtra(Intents.EXTRA_PROCEDURE_ID,R.raw
-                                .registration_short_en)
-                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-                startActivityForResult(intent, Intents.RUN_PROCEDURE);
-                break;*/
 
             case R.id.btn_exit:
                 clearCredentials();
@@ -790,7 +758,7 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
                     break;
                 case SessionService.SUCCESS:
                     loginsRemaining = 0;
-                    Bundle b = msg.getData(); //(Bundle)msg.obj;
+                    Bundle b = msg.getData();
                     Uri uri = Uris.withAppendedUuid(Observers.CONTENT_URI,
                             b.getString(Intents.EXTRA_OBSERVER));
                     Log.i(TAG, uri.toString());
