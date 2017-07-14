@@ -172,11 +172,7 @@ public class ObserverListFragment extends ListFragment implements
             Object number = view.getTag();
             if(number != null){
                 try {
-                    String numberStr = PhoneUtil.formatNumber(String.valueOf(number));
-                    // TODO Check format and reformat as needed
-                    Intent intent = new Intent(Intent.ACTION_CALL,
-                            Uri.parse("tel:" + numberStr));
-                    startActivity(intent);
+                    PhoneUtil.call(getActivity(), String.valueOf(number));
                 } catch(Exception e){
                     Toast.makeText(getActivity(), R.string.error_unable_to_call,
                             Toast.LENGTH_LONG);

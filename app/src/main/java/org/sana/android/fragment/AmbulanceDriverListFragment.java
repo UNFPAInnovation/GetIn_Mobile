@@ -117,14 +117,10 @@ public class AmbulanceDriverListFragment extends ListFragment implements
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        // Implement click to call functionality
         Object number = view.getTag();
         if(number != null){
             try{
-                // TODO Should probably check that number is valid pattern
-                Intent intent = new Intent(Intent.ACTION_CALL,
-                    Uri.parse("tel:" + PhoneUtil.formatNumber(String.valueOf(number))));
-                startActivity(intent);
+                PhoneUtil.call(getActivity(), String.valueOf(number));
             } catch(Exception e){
                 Toast.makeText(getActivity(), R.string.error_unable_to_call,
                         Toast.LENGTH_LONG);
