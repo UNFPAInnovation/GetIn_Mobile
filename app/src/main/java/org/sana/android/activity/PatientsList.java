@@ -28,11 +28,14 @@ import org.sana.R;
 import org.sana.android.Constants;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
+import org.sana.android.app.SessionManager;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.fragment.PatientListFragment;
 import org.sana.android.fragment.PatientListFragment.OnPatientSelectedListener;
+import org.sana.android.provider.Observers;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
@@ -221,12 +224,16 @@ public class PatientsList extends FragmentActivity implements
 
         // Have dialog buttons call default behavior or edit behavior
         // Default behavior - follow up note, set
+        long id = ModelWrapper.getRowId(uri,getContentResolver());
+        onPatientSelected(id);
+        /*
         Intent data = new Intent();
         data.setDataAndType(uri,Patients.CONTENT_ITEM_TYPE);
         //data.putExtra(EXTRA_PATIENT_ID, patientId);
         data.putExtra(Intents.EXTRA_SUBJECT, uri);
         setResult(RESULT_OK, data);
         finish();
+        */
     }
     @Override
     public void onStart(){
@@ -335,7 +342,18 @@ public class PatientsList extends FragmentActivity implements
         Intent intent = null;
         switch(view.getId()){
             case R.id.register:
-                // TODO Should really use an asset file
+                ObserverParcel observer = SessionManager.getObserver(this);
+                Uri mObserver = Uris.withAppendedUuid(Observers.CONTENT_URI,
+                        observer.getUuid());
+                intent = new Intent(Intent.ACTION_INSERT);
+                //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
+                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
+                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                getString(R.string.procs_subject_short_form1)))
+                        .putExtra(Intents.EXTRA_PROCEDURE_ID,
+                                R.raw.mapping_form)
+                        .putExtra(Intents.EXTRA_OBSERVER, mObserver);
+                /*
                 int resId = getProcedureResourceId("registration_short");
                 // Default to english version
                 //resId  = (resId != 0)? resId: R.raw.registration_short_en;
@@ -347,10 +365,11 @@ public class PatientsList extends FragmentActivity implements
                                // getString(R.string.procs_subject_short_form)))
                                 getString(R.string.cfg_midwife_procedure)))
                         .putExtra(Intents.EXTRA_PROCEDURE_ID, resId);
+                */
                 startActivityForResult(intent, CREATE_PATIENT);
                 break;
             case R.id.sync:
-                getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+                //getContentResolver().delete(Subjects.CONTENT_URI, null,null);
                 mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
                 break;
             default:
