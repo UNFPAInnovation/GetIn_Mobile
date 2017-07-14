@@ -137,9 +137,7 @@ public class PatientViewActivity extends BaseActivity {
             case R.id.btn_call_pnumber:
                 try{
                     if(!TextUtils.isEmpty(patient.getpNumber())) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL,
-                                Uri.parse("tel:" + PhoneUtil.formatNumber(patient.getpNumber())));
-                        startActivityForResult(callIntent,0);
+                        PhoneUtil.callForResult(this, patient.getpNumber(), 0);
                     }
                 } catch(Exception e){
                     Toast.makeText(this, R.string.error_unable_to_call,
@@ -149,13 +147,11 @@ public class PatientViewActivity extends BaseActivity {
             case R.id.btn_call_powerholder:
                 try{
                     if(!TextUtils.isEmpty(patient.getHolder_pNumber())) {
-                        Intent callIntent = new Intent(Intent.ACTION_CALL,
-                            Uri.parse("tel:" + PhoneUtil.formatNumber(patient.getHolder_pNumber())));
-                        startActivityForResult(callIntent, 1);
+                        PhoneUtil.callForResult(this, patient.getHolder_pNumber(), 0);
                     }
                 } catch(Exception e){
                     Toast.makeText(this, R.string.error_unable_to_call,
-                    Toast.LENGTH_LONG);
+                        Toast.LENGTH_LONG);
                 }
                 break;
             case R.id.btn_view_encounters:
