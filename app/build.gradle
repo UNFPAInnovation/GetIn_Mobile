@@ -6,6 +6,7 @@ def keypass = '';
 def debugHost = '';
 def releaseHost = '';
 def keyClientAPI = '';
+def keyClientAPIRelease = '';
 // Reads the store password and key password from properties file
 if (propFile.canRead()){
     props.load(new FileInputStream(propFile))
@@ -22,6 +23,12 @@ if (propFile.canRead()){
         }
         if(props.containsKey('release.host')) {
             releaseHost = props['release.host']
+        }
+        if(props.containsKey('key.clients.api')) {
+            keyClientAPI = props['key.clients.api']
+        }
+        if(props.containsKey('key.clients.api.release')) {
+            keyClientAPIRelease = props['key.clients.api.release']
         }
     }
 }
@@ -51,7 +58,7 @@ android {
         minSdkVersion 11
         targetSdkVersion 17
         versionCode 9
-        versionName '2.1.0-beta6'
+        versionName '2.1.0'
         resValue('string', 'key_clients_api', keyClientAPI)
     }
     buildTypes {
@@ -59,12 +66,14 @@ android {
             debuggable true
             signingConfig signingConfigs.dev
             resValue('string', 'host_mds', debugHost)
+            resValue('string', 'key_clients_api', keyClientAPI)
         }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
             resValue('string', 'host_mds', releaseHost)
+            resValue('string', 'key_clients_api', keyClientAPIRelease)
         }
     }
     packagingOptions {
