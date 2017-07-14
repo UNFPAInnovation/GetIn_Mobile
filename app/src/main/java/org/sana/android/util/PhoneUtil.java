@@ -1,7 +1,9 @@
 package org.sana.android.util;
 
-import android.os.Build;
-import android.telephony.PhoneNumberUtils;
+import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.text.TextUtils;
 
 /**
@@ -20,5 +22,19 @@ public class PhoneUtil {
             numberStr = "+" + numberStr;
         }
         return numberStr;
+    }
+
+    public static void call(Context context, String number){
+        String numberStr = formatNumber(number);
+        Intent intent = new Intent(Intent.ACTION_CALL,
+                Uri.parse("tel:" + numberStr));
+        context.startActivity(intent);
+    }
+
+    public static void callForResult(Activity activity, String number, int requestCode){
+        String numberStr = formatNumber(number);
+        Intent intent = new Intent(Intent.ACTION_CALL,
+                Uri.parse("tel:" + numberStr));
+        activity.startActivityForResult(intent, requestCode);
     }
 }
