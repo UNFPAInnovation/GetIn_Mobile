@@ -531,18 +531,14 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     public String getBuildString() {
         String version = "";
-        String versionFormat = "%s-%s";
+        String versionFormat = "%s-%d";
         try {
             PackageInfo pi = getPackageManager().getPackageInfo(
                     getPackageName(), 0);
             ApplicationInfo ai  = getPackageManager().getApplicationInfo(
                     getPackageName(), PackageManager.GET_META_DATA);
             Bundle metadata = ai.metaData;
-            String local = metadata.getString("local_build");
-            Log.i(TAG, "Version info: name=" + pi.versionName +", code=" +
-                    pi.versionCode);
-            version = (!TextUtils.isEmpty(local))?
-                    String.format(versionFormat, pi.versionName, local): pi.versionName;
+            version = String.format(versionFormat, pi.versionName, pi.versionCode);
         } catch (Exception e) {
 
         }
