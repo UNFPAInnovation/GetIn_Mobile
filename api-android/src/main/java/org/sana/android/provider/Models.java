@@ -83,6 +83,7 @@ public class Models {
         int UP_TO_DATE = 0;
         int PENDING = 1;
         int NEW = 2;
+        int DELAY = 4;
     }
 
     public static void markModified(Context context, Collection<Uri> list) {
@@ -139,6 +140,23 @@ public class Models {
     public static void markPending(ContentValues values) {
         if (!values.containsKey(BaseContract.SYNCH))
             values.put(BaseContract.SYNCH, Synch.PENDING);
+    }
+
+    public static void markDelay(Context context, Collection<Uri> list) {
+        for (Uri uri : list) {
+            markDelay(context, uri);
+        }
+    }
+
+    public static void markDelay(Context context, Uri uri) {
+        ContentValues values = new ContentValues();
+        markDelay(values);
+        context.getContentResolver().update(uri, values, null, null);
+    }
+
+    public static void markDelay(ContentValues values) {
+        if (!values.containsKey(BaseContract.SYNCH))
+            values.put(BaseContract.SYNCH, Synch.DELAY);
     }
 
     public static final List<Uri> getReadyToSynch(Context context) {
