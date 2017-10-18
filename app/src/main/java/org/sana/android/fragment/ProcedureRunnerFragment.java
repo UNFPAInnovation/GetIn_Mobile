@@ -305,13 +305,6 @@ public class ProcedureRunnerFragment extends BaseRunnerFragment {
 			vals.put(Observations.Contract.PARENT, el.getId());
 			vals.put(Observations.Contract.VALUE, answer);
 			vals.put(Observations.Contract.ID, subId);
-			//TODO remove this debug block and move to a unit test
-			Log.d(TAG,Observations.Contract.ENCOUNTER+": " +encounter);
-			Log.d(TAG,Observations.Contract.SUBJECT+": " +subject);
-			Log.d(TAG,Observations.Contract.CONCEPT+": " +el.getConcept());
-			Log.d(TAG,Observations.Contract.PARENT+": " +el.getId());
-			Log.d(TAG,Observations.Contract.VALUE+": " +answer);
-			Log.d(TAG,Observations.Contract.ID+": " +subId);
 			if (!exists){
 				// !exists so we insert
 				String uuid = UUID.randomUUID().toString();
