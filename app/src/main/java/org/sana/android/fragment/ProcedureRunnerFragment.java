@@ -16,6 +16,7 @@ import org.sana.android.procedure.ProcedureElement;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Events.EventType;
+import org.sana.android.provider.Models;
 import org.sana.android.provider.Observations;
 
 import android.app.Activity;
@@ -247,8 +248,12 @@ public class ProcedureRunnerFragment extends BaseRunnerFragment {
 			ContentValues cv = new ContentValues();
 			cv.put(Encounters.Contract.STATE, json);
 
-			if (finished)
-				cv.put(Encounters.Contract.FINISHED, finished);
+			if (finished) {
+                cv.put(Encounters.Contract.FINISHED, finished);
+                Models.markModified(cv);
+            } else {
+                Models.markDelay(cv);
+            }
 
 			int updatedObjects = getActivity().getContentResolver().update(
 					uEncounter, cv, null, null);
@@ -309,13 +314,10 @@ public class ProcedureRunnerFragment extends BaseRunnerFragment {
 				// !exists so we insert
 				String uuid = UUID.randomUUID().toString();
 				vals.put(Observations.Contract.UUID, uuid);
-				Log.d(TAG,Observations.Contract.UUID+": " +uuid);
-				Log.i(TAG, "Inserting: " + uuid);
 				getActivity().getContentResolver().insert(
 						Observations.CONTENT_URI, vals);
 			} else {
-				// exists so we update 
-				Log.i(TAG, "Updating: " + mObs);
+				// exists so we update
 				getActivity().getContentResolver().update(mObs,
 						vals, null, null);
 			}
