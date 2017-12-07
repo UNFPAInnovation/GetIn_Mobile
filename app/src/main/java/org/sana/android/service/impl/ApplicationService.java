@@ -54,6 +54,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Environment;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
@@ -189,13 +190,19 @@ public class ApplicationService extends IntentService {
 		
 	}
 
+    private final AppServiceBinder mBinder = new AppServiceBinder();
+    public class AppServiceBinder extends Binder {
+        public ApplicationService getService(){
+            return ApplicationService.this;
+        }
+    }
+
 	/* (non-Javadoc)
 	 * @see android.app.Service#onBind(android.content.Intent)
 	 */
 	@Override
 	public IBinder onBind(Intent intent) {
-		// TODO Auto-generated method stub
-		return null;
+		return mBinder;
 	}
 
 	/* (non-Javadoc)
