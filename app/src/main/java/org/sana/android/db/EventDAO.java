@@ -48,8 +48,9 @@ public class EventDAO {
 			cv.put(Contract.SUBJECT, patientRef);
 		if (userRef != null)
 			cv.put(Contract.OBSERVER, userRef);
-		
-		c.getContentResolver().insert(Events.CONTENT_URI, cv);
+		// TODO insert if we need to record events. Should probably be a
+        // Preference, etc.
+		// c.getContentResolver().insert(Events.CONTENT_URI, cv);
 	}
 	
 	/**
