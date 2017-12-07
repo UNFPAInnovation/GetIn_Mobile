@@ -727,13 +727,14 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
 
     public static int bulkInsertOrUpdate(Context context, Uri uri, Collection<ContentValues> values) {
 
-        //List<ContentValues> insert = new ArrayList<>();
-        //List<ModelEntity> update = new ArrayList<>();
-
         ArrayList<ContentProviderOperation> ops = new ArrayList<>();
 
         for (ContentValues fields : values) {
             String uuid = fields.getAsString(BaseContract.UUID);
+            // Assume record is "up to date" if we are doing a bulk operation
+            if(Models.isSynchable(uri)){
+                Models.markUpToDate(fields);
+            }
             if (!TextUtils.isEmpty(uuid)) {
                 Uri instanceUri = Uris.withAppendedUuid(uri, uuid);
                 if (!exists(context, instanceUri)) {
@@ -748,6 +749,8 @@ public abstract class ModelWrapper<T extends IModel> extends CursorWrapper
                             .withYieldAllowed(true)
                             .build());
                 }
+            } else {
+
             }
         }
         int delta = 0;
