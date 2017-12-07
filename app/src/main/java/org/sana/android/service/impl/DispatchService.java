@@ -1553,7 +1553,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Patient p = iterator.next();
             ContentValues vals = PatientWrapper.toValues(p);
-            vals.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
+            Models.markUpToDate(vals);
             ////////////////////////////////////////////////////////////
             // Handle images
             ////////////////////////////////////////////////////////////
@@ -1568,6 +1568,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             */
             // Don't add uuid initially
             if(!exists(Subjects.CONTENT_URI, p)){
+                // TODO This is redundant?
                 vals.put(Patients.Contract.UUID, p.uuid);
                 insert.add(vals);
             } else {
@@ -1615,7 +1616,6 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                 value.put(EncounterTasks.Contract.PROCEDURE , task.procedure.uuid);
                 value.put(EncounterTasks.Contract.SUBJECT , task.subject.uuid );
                 subjects.put(task.subject.uuid, task.subject);
-                value.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
                 if(task.encounter != null)
                     value.put(EncounterTasks.Contract.ENCOUNTER, task.encounter.uuid);
                 value.put(EncounterTasks.Contract.OBSERVER , task.assigned_to.uuid);
@@ -1628,6 +1628,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                     value.put(EncounterTasks.Contract.STARTED,
                             DateUtil.format(task.started));
                 }
+                Models.markUpToDate(value);
                 if(!exists(EncounterTasks.CONTENT_URI, task))
                     insert.add(value);
                 else
@@ -1707,8 +1708,6 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                 +((t != null)?t.size():"null"));
         int result = 400;
         //ContentValues[] values = null;
-        List<ContentValues> insert = new ArrayList<ContentValues>();
-        List<ModelEntity> update = new ArrayList<ModelEntity>();
         List<ContentValues> values = new ArrayList<>();
 
         Iterator<Encounter> iterator =  t.iterator();
@@ -1716,26 +1715,9 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         while(iterator.hasNext()){
             Encounter obj = iterator.next();
             ContentValues value = EncounterWrapper.toValues(obj);
-            value.put(BaseContract.SYNCH, Models.Synch.UP_TO_DATE);
+            Models.markUpToDate(value);
             values.add(value);
-            /*
-            if(!exists(Encounters.CONTENT_URI, obj))
-                insert.add(value);
-            else
-                update.add(
-                        new ModelEntity(
-                                Uris.withAppendedUuid(Encounters.CONTENT_URI, obj.uuid),
-                                value));
-                                */
         }
-        /*
-        int inserted = getContentResolver().bulkInsert(Encounters.CONTENT_URI, toArray(insert));
-        int updated = 0;
-        for(ModelEntity me:update){
-            updated += getContentResolver().update(me.getUri(),me.getEntityValues(),null,null);
-        }
-        Log.d(TAG, "....inserted=" + inserted+", updated=" + updated);
-        */
         int delta = ModelWrapper.bulkInsertOrUpdate(this, Encounters.CONTENT_URI, values);
         result = 200;
         return result;
@@ -1768,11 +1750,6 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                 Log.w(TAG, "....cleaned="+deleted);
                 insert.add(value);
             }
-            /*
-            else
-                update.add(new ModelEntity(Uris.withAppendedUuid(Observations.CONTENT_URI,
-                        obj.uuid),value));
-             */
         }
 
         int inserted = getContentResolver().bulkInsert(Observations.CONTENT_URI, toArray(insert));
@@ -1991,12 +1968,8 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
     }
 
     class QueueControl{
-        //LinkedList<Integer> queue = new LinkedList<Integer>();
         LinkedList<Uri> queue = new LinkedList<Uri>();
-
-        //Hashtable<Integer,MessageHolder> pending = new Hashtable<Integer,MessageHolder>();
         Hashtable<Uri,MessageHolder> pending = new Hashtable<Uri,MessageHolder>();
-        //Hashtable<Integer,ArrayList<MessageHolder>> pending = Hashtable<Integer,ArrayList<MessageHolder>>();
 
         private final ScheduledExecutorService scheduler =
             Executors.newScheduledThreadPool(1);
@@ -2086,12 +2059,9 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             protected List<Intent> doInBackground(Object... params) {
                 Context mContext = (Context) params[0];
                 ObserverParcel obs = (ObserverParcel) params[1];
-                List<Uri> list = Models.getReadyToSynchNew(mContext);
-                List<Uri> updated = Models.getReadyToSynch(mContext);
-                // Need to handle non dirty starts
-                List<Uri> pending = Models.getReadyToSynchPending(mContext);
                 List<Intent> result = new ArrayList<>();
 
+                List<Uri> list = Models.getReadyToSynchNew(mContext);
                 for (Uri uri : list) {
                     int what = Uris.getDescriptor(uri);
                     Intent intent = new Intent(Intents.ACTION_CREATE, uri);
@@ -2099,6 +2069,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                     intent.addFlags(Intents.FLAG_RETRY_ON_FAIL | Intents.FLAG_NOTIFY);
                     result.add(intent);
                 }
+                List<Uri> updated = Models.getReadyToSynch(mContext);
                 for (Uri uri : updated) {
                     int what = Uris.getDescriptor(uri);
                     Intent intent = new Intent(Intents.ACTION_CREATE, uri);
@@ -2106,6 +2077,7 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
                     intent.addFlags(Intents.FLAG_RETRY_ON_FAIL | Intents.FLAG_NOTIFY);
                     result.add(intent);
                 }
+                List<Uri> pending = Models.getReadyToSynchPending(mContext);
                 if (sendAll) {
                     for (Uri uri : pending) {
                         int what = Uris.getDescriptor(uri);
@@ -2124,10 +2096,30 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
             }
         };
         task.execute(getApplicationContext(), obs);
-        initialized.set(true);
     }
 
     public final void onStartupComplete(List<Intent> objs) {
+        initialized.set(true);
+        for (Intent intent : objs) {
+            startService(intent);
+        }
+    }
 
+    public final void onShutdown() {
+        MessageHolder[] messages = failQueue.toArray();
+
+        for(MessageHolder holder: messages){
+            String action = holder.intent.getAction();
+            if(!TextUtils.isEmpty(action)){
+                Uri uri = holder.uri;
+                if(Models.isSynchable(uri)){
+                    ContentValues values = new ContentValues();
+                    Models.markModified(values);
+                    getContentResolver().update(uri, values, null, null);
+                }
+
+            }
+        }
+        initialized.set(false);
     }
 }
