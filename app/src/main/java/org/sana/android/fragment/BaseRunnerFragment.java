@@ -38,6 +38,7 @@ import org.sana.android.procedure.ProcedureParseException;
 import org.sana.android.procedure.ValidationError;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Events.EventType;
+import org.sana.android.provider.Models;
 import org.sana.android.provider.Observations;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
@@ -755,7 +756,8 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
                 	cv.put(Encounters.Contract.FINISHED, true);
                 	cv.put(Encounters.Contract.UPLOADED, false);
                 	cv.put(Encounters.Contract.UPLOAD_STATUS, 0);
-                	uEncounter = getActivity().getContentResolver().insert(
+                    Models.markDelay(cv);
+                    uEncounter = getActivity().getContentResolver().insert(
                             Encounters.CONTENT_URI, cv);
                         //String euuid = ModelWrapper.getUuid(uEncounter,getActivity().getContentResolver());
                         //uEncounter = Uris.withAppendedUuid(Encounters.CONTENT_URI, euuid);
