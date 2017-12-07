@@ -86,6 +86,36 @@ public class Models {
         int DELAY = 4;
     }
 
+
+    public static Uri insertWithSynch(Context context, Uri uri,
+                                          ContentValues values,
+                                          int state){
+        Uri result = Uri.EMPTY;
+        if(isSynchable(uri)){
+            values.put(BaseContract.SYNCH, state);
+            result = context.getContentResolver().insert(uri, values);
+        }
+        return result;
+
+    }
+
+    public static boolean updateWithSynch(Context context, Uri uri,
+                                          ContentValues values,
+                                          int state){
+        boolean marked = false;
+        if(isSynchable(uri) && Uris.isItemType(uri)){
+            values.put(BaseContract.SYNCH, state);
+            int updated = context.getContentResolver().update(uri, values, null, null);
+            marked = (updated > 1);
+        }
+        return marked;
+    }
+
+    public static void markSynch(ContentValues values, int state){
+        if (!values.containsKey(BaseContract.SYNCH))
+            values.put(BaseContract.SYNCH, state);
+    }
+
     public static void markModified(Context context, Collection<Uri> list) {
         for (Uri uri : list) {
             markPending(context, uri);
@@ -237,5 +267,27 @@ public class Models {
         List<Uri> list = new ArrayList<>();
         list.addAll(getWaitingToSynch(context, uri, Models.Synch.PENDING));
         return list;
+    }
+
+    /**
+     * Returns whether the Uri corresponds to a content type which includes
+     * {@see org.sana.android.provider.BaseContract.SYNCH SYNCH} inluded with
+     * it's content type contract.
+     *
+     * @param uri
+     * @return {@code true} if the Uri is stored with a {@see org.sana.android.provider.BaseContract.SYNCH SYNCH}
+     *  flag
+     */
+    public static boolean isSynchable(Uri uri){
+        boolean synchable = false;
+        // TODO these should really not be hard coded
+        switch(Uris.getContentDescriptor(uri)){
+            case Uris.ENCOUNTER:
+            case Uris.ENCOUNTER_TASK:
+            case Uris.SUBJECT:
+                synchable = true;
+        }
+        return synchable;
+
     }
 }
