@@ -88,7 +88,7 @@
     <string name="general_synchronizing">Synchronizing</string>
     <string name="general_fetching_patients">Getting patient list</string>
     <string name="general_fetching_drivers">Getting drivers list</string>
-    <string name="general_fetching_vhts">Getting vht list</string>
+    <string name="general_fetching_vhts">Getting CHEW list</string>
     <string name="general_upload_in_progress">Upload in progress</string>
     <string name="general_uploading">Uploading</string>
     <string name="general_incomplete">incomplete</string>
@@ -276,7 +276,7 @@
     <string name="prompt_default">Use default value</string>
     <string name="title_activity_ambulance_driver_list">Ambulance Drivers
     </string>
-    <string name="title_vht_list">VHTs </string>
+    <string name="title_vht_list">CHEWs </string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_encounter_list_detail">
         EncounterListDetailActivity

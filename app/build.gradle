@@ -94,7 +94,7 @@ android {
             minSdkVersion 11
             targetSdkVersion 17
             versionCode 9
-            versionName '2.1.0-vht'
+            versionName '2.1.0-chew'
         }
         midwife {
             minSdkVersion 11
