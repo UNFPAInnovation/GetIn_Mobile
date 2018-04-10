@@ -2122,4 +2122,9 @@ public final int createOrUpdateAmbulanceDrivers(Collection<AmbulanceDriver> t, i
         }
         initialized.set(false);
     }
+
+    public static Intent shutdown(Context context) {
+        Intent intent = new Intent(context,DispatchService.class);
+        return intent;
+    }
 }
