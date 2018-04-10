@@ -57,6 +57,7 @@ public class CrashService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d(TAG, "onHandleIntent()");
         if (intent != null) {
             final String action = intent.getAction();
             if (ACTION_SEND.equals(action)) {
@@ -72,6 +73,7 @@ public class CrashService extends IntentService {
      * parameters.
      */
     private void handleActionSend(Uri report, String message) {
+        Log.d(TAG, "handleActionSend()");
         try {
             if (!Uris.isEmpty(report)) {
                 File file = new File(report.getPath());
