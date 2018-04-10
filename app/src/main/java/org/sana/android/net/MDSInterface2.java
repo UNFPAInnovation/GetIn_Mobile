@@ -103,6 +103,24 @@ public class MDSInterface2 {
 
 	public static final String TAG = MDSInterface2.class.getSimpleName();
 
+    public static String getAuthority(Context context){
+        String host = getHost(context);
+        int port = getPort(context);
+        return (port != 0)? host + ":" + port:host;
+    }
+
+    public static String getHost(Context context){
+        String host = null;
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        if(preferences.contains(Constants.PREFERENCE_MDS_URL)){
+            host = preferences.getString(Constants.PREFERENCE_MDS_URL, null);
+        }
+        if(TextUtils.isEmpty(host)){
+            host = context.getString(R.string.host_mds);
+        }
+        return host;
+    }
+
     protected static Uri.Builder getBuilder(Context context){
         String host = context.getString(R.string.host_mds);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
