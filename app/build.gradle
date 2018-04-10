@@ -1,6 +1,33 @@
 apply plugin: 'com.android.application'
+
+
 def Properties props = new Properties()
-def propFile = file('../secure.properties')
+def propsTemplateDir = rootProject.file("templates")
+def localPropsDir = rootProject.file("private")
+def propFile = file("${localPropsDir}/secure.properties")
+
+/*  Initializes local secure properties files */
+task copyTemplates(type: Copy){
+    def srcDir = propsTemplateDir
+    def destination = localPropsDir
+    description = "copying local properties files"
+    if(!localPropsDir.exists()){
+        def created = localPropsDir.mkdir()
+        println "...created local config directory: ${created}"
+    }
+    println '...preparing to copy templates'
+    duplicatesStrategy 'exclude'
+    from srcDir
+    into destination
+    eachFile {
+        if (it.getRelativePath().getFile(destination).exists()) {
+            it.exclude()
+        }
+    }
+    println '...template file initialization complete'
+    println "...WARNING! Check ${propFile.path} is UP-TO-DATE!"
+}
+
 def storepass = '';
 def keypass = '';
 def debugHost = '';
@@ -10,7 +37,6 @@ def keyClientAPIRelease = '';
 // Reads the store password and key password from properties file
 if (propFile.canRead()){
     props.load(new FileInputStream(propFile))
-
     if (props!=null){
         if(props.containsKey('store.password')) {
             storepass = props['store.password']
@@ -31,6 +57,8 @@ if (propFile.canRead()){
             keyClientAPIRelease = props['key.clients.api.release']
         }
     }
+} else {
+    println "...WARNING! Check ${propFile.path} exists and update"
 }
 android {
     signingConfigs {
@@ -60,6 +88,8 @@ android {
         versionCode 9
         versionName '2.1.0'
         resValue('string', 'key_clients_api', keyClientAPI)
+        resValue('bool', 'debug', 'false')
+        resValue('bool', 'debug_credentials', 'false')
     }
     buildTypes {
         debug {
@@ -67,6 +97,8 @@ android {
             signingConfig signingConfigs.dev
             resValue('string', 'host_mds', debugHost)
             resValue('string', 'key_clients_api', keyClientAPI)
+            resValue('bool', 'debug', 'true')
+            resValue('bool', 'debug_credentials', 'true')
         }
         release {
             minifyEnabled false
@@ -121,4 +153,11 @@ dependencies {
     compile 'commons-codec:commons-codec:1.9'
     compile 'org.apache.httpcomponents:httpcore:4.3.3'
     compile 'org.apache.httpcomponents:httpmime:4.3.5'
+}
+
+
+
+project.afterEvaluate {
+    println "execute -> copyTemplates"
+    preBuild.dependsOn copyTemplates
 }
