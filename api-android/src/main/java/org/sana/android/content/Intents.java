@@ -31,6 +31,7 @@ package org.sana.android.content;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.sana.android.provider.Models;
 import org.sana.android.util.Logf;
 
 import android.content.Intent;
@@ -122,8 +123,9 @@ public final class Intents{
     public static final String ACTION_CANCEL = "org.sana.android.intent.action.CANCEL";
     
     public static final String ACTION_OK = "org.sana.android.intent.action.OK";
-    
-    
+    public static final String ACTION_STOP = Models.AUTHORITY + ".intent.action.STOP";
+
+
     /** Intent action string for picking the activity to run next. */
     public static final String ACTION_PICK_ACTIVITY = "org.sana.android.intent.action.PICK_ACTIVITY";
     
@@ -286,8 +288,11 @@ public final class Intents{
 			".extra.ON_COMPLETE";
 
 	public static final String SERVICE_DISPATCH = "org.sana.service.START_DISPATCH";
-	
 
+    public static final String EXTRA_REPORT = Models.AUTHORITY + ".intent" +
+            ".extra.CRASH_REPORT";
+    public static final String EXTRA_MESSAGE = Models.AUTHORITY + ".intent" +
+            ".extra.MESSAGE";
 
     //-------------------------------------------------------------------------
     // Intent flags
