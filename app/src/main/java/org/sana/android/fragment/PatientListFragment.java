@@ -140,7 +140,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         CursorLoader loader = new CursorLoader(getActivity(), 
         		mUri,
         		mProjection,
-                null, null, Patients.GIVEN_NAME_SORT_ORDER);
+                null, null, Patients.GIVEN_NAME_SORT_ORDER_NO_CASE);
         return loader;
     }
 
