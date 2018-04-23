@@ -40,6 +40,7 @@ public final class Patients{
 
 	/** Sort patients by first name. */
 	public static final String GIVEN_NAME_SORT_ORDER = Contract.GIVEN_NAME + " ASC";
+    public static final String GIVEN_NAME_SORT_ORDER_NO_CASE = Contract.GIVEN_NAME + " COLLATE NOCASE ASC";
 
 	private Patients() {}
 
