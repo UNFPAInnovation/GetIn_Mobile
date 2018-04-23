@@ -598,11 +598,6 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     protected void syncAll(){
         ObserverParcel observer = SessionManager.getObserver(this);
-        String subcounty = observer.getSubcounty().getName();
-        Uri observerUri = Observers.CONTENT_URI.buildUpon()
-                .appendQueryParameter("subcounty__name", subcounty)
-                .build();
-        SynchronizationManager.sync(this, observerUri);
         List<String> villageNames = getVillageNamesForObserver(observer);
         for(String village:villageNames) {
             // Append the village list query parameter
