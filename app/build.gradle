@@ -4,7 +4,7 @@ apply plugin: 'com.android.application'
 def Properties props = new Properties()
 def propsTemplateDir = rootProject.file("templates")
 def localPropsDir = rootProject.file("private")
-def propFile = file("${localPropsDir}/secure.properties")
+def propFile = file("${localPropsDir.path}/secure.properties")
 
 /*  Initializes local secure properties files */
 task copyTemplates(type: Copy){
@@ -56,9 +56,11 @@ if (propFile.canRead()){
         if(props.containsKey('key.clients.api.release')) {
             keyClientAPIRelease = props['key.clients.api.release']
         }
+    } else {
+        println "...WARN couldn't read props file!";
     }
 } else {
-    println "...WARNING! Check ${propFile.path} exists and update"
+    println "...WARNING! Check ${propFile.path} exists and update";
 }
 android {
     signingConfigs {
@@ -85,7 +87,7 @@ android {
         applicationId "org.sana.android"
         minSdkVersion 11
         targetSdkVersion 17
-        versionCode 9
+        versionCode 10
         versionName '2.1.0'
         resValue('string', 'key_clients_api', keyClientAPI)
         resValue('bool', 'debug', 'false')
@@ -125,13 +127,13 @@ android {
         vht {
             minSdkVersion 11
             targetSdkVersion 17
-            versionCode 9
+            versionCode 10
             versionName '2.1.0-chew'
         }
         midwife {
             minSdkVersion 11
             targetSdkVersion 17
-            versionCode 9
+            versionCode 10
             versionName '2.1.0-midwife'
         }
     }
