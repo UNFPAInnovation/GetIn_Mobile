@@ -52,6 +52,7 @@ public class Main extends Application implements ErrorHandler {
             //TODO Add dirty start flag
             //SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(this);
             //SharedPreferences.Editor editor = sp.edit();
+            // Get restart intent
             PackageManager pm = getApplicationContext().getPackageManager();
             String packageName = getApplicationContext().getPackageName();
             Intent intent = pm.getLaunchIntentForPackage(packageName);
@@ -59,14 +60,15 @@ public class Main extends Application implements ErrorHandler {
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.putExtra(Intents.EXTRA_REPORT, reportUri);
             intent.putExtra(Intents.EXTRA_MESSAGE, message);
+            intent.putExtra(Intents.EXTRA_ERROR, 1);
             startActivity(intent);
-            Intent error = ErrorManager.getReport(this, reportUri, message);
 
-            AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-            PendingIntent next = PendingIntent.getService(getBaseContext(), 1, error, PendingIntent.FLAG_ONE_SHOT);
-            PendingIntent crash = PendingIntent.getService(getBaseContext(), 2, error, PendingIntent.FLAG_ONE_SHOT);
-            am.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, next);
-            am.set(AlarmManager.RTC, System.currentTimeMillis() + 4000, crash);
+            //Intent error = ErrorManager.getReport(this, reportUri, message);
+            //AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+            //PendingIntent next = PendingIntent.getService(getBaseContext(), 1, error, PendingIntent.FLAG_ONE_SHOT);
+            //PendingIntent crash = PendingIntent.getService(getBaseContext(), 2, error, PendingIntent.FLAG_ONE_SHOT);
+            //am.set(AlarmManager.RTC, System.currentTimeMillis() + 2000, next);
+            //am.set(AlarmManager.RTC, System.currentTimeMillis() + 4000, crash);
         } catch (Exception e) {
             e.printStackTrace();
         }
