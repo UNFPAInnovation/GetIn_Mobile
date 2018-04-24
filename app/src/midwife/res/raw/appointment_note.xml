@@ -71,9 +71,10 @@
     <Page>
         <Element
             id="5"
-            type="ENTRY"
+            type="SELECT"
             concept="ACTION TAKEN"
             question="Action Taken"
+            choices="ANC1;ANC2;ANC3;ANC4;Delivery"
             answer=""
         />
        <!-- <Page>
