@@ -1325,20 +1325,38 @@
             required="true"
             answer=""
         />
-    </Page>
-    <!--
-        </Page>
         <Page>
+        <Element
+            id="15"
+            type="RADIO" choices="Yes;No"
+            question="Are you on the Marie Stoppes Voucher Programme?"
+            concept="VOUCHER Status"
+            required="true"
+            answer=""
+        />
+    </Page>
+         <Page>
             <ShowIf>
-                <Criteria type="EQUALS" id="14" value="Yes"/>
+                <Criteria type="EQUALS" id="15" value="Yes"/>
             </ShowIf>
-            <Element id="15a" type="DATE"
-                     concept="ANC VISIT"
-                     question="Enter Next ANC visit from Card"
-                     required="true"
-                     answer=""
+            <Element id="15b"
+                type="ENTRY"
+                concept="SYSTEM ID"
+                question="Enter Patient Voucher Number"
+                answer=""/>
             />
-        </Page> -->
+        </Page>
+   <!-- <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="14" value="Yes"/>
+        </ShowIf>
+        <Element id="15a" type="DATE"
+            concept="ANC VISIT"
+            question="Enter Next ANC visit from Card"
+            required="true"
+            answer=""
+        />
+    </Page>-->
     <!-- Are these supposed to be patient fields -->
     <!--
         They are not included in the Patient Model if they are
