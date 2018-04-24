@@ -1,0 +1,77 @@
+<Procedure
+    title="Postnatal_note_VHT"
+    author="Donald"
+    uuid="7c159a9c-9caa-495e-b2c2-9ca3c5b593af"
+    version="1.0"
+    locale="en"
+>
+    <!-- copy follow_up_note_vht1 here -->
+    <Page>
+        <Element
+            id="1z"
+            type="TEXT"
+            question="GIRLS POSTNATAL NOTES"/>
+        <Element
+            id="1"
+            concept="PREGNANCY OUTCOME RESULT"
+            type="RADIO"
+            required="true"
+            question="What was the delivery Outcome?"
+            answer="Mother Alive,Baby Alive"
+            choices="Mother Alive,Baby Alive;Mother Alive, Baby Dead;Mother Dead, Baby Alive;Mother Dead, Baby Dead"/>
+        <Element
+            id="2"
+            concept="PREGNANCY OUTCOME PLACE"
+            type="RADIO"
+            required="true"
+            question="What was the Place of delivery Outcome?"
+            answer=""
+            choices="Health Facility;Not Health Facility"/>
+</Page>
+
+    <Page>
+        <Element
+            id="4"
+            concept="POSTNATAL CARE"
+            type="RADIO"
+            required="true"
+            question="Did you receive Postnatal Care by 6 weeks after delivery?"
+            answer=""
+            choices="Yes;No"/>
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="4" value="No" />
+        </ShowIf>
+
+        <Element
+            id="4a"
+            concept="VHT POSTNATAL MISSING REASON"
+            type="RADIO"
+            required="true"
+            question="Why didnt you go for Postnatal care?"
+            answer=""
+            choices="I was feeling well;I had no transport;I didnt know about the service"
+        />
+    </Page>
+    <Page>
+        <Element
+            id="4b"
+            concept="VHT MISSING REASON"
+            type="RADIO"
+            required="true"
+            question="Are u using any method of Family Planning?"
+            choices="Yes;No"
+            answer=""
+        />
+        <Element
+            id="3"
+            concept="POSTNATAL ACTION TAKEN"
+            type="RADIO"
+            required="true"
+            question="What action was taken after meeting the girl?"
+            answer=""
+            choices="Referral to a Higher level Facilty;Post Natal Care;Post Partum Family Planning;Others"/>
+        </Page>
+
+</Procedure>
