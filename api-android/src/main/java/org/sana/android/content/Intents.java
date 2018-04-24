@@ -293,6 +293,8 @@ public final class Intents{
             ".extra.CRASH_REPORT";
     public static final String EXTRA_MESSAGE = Models.AUTHORITY + ".intent" +
             ".extra.MESSAGE";
+    public static final String EXTRA_ERROR = Models.AUTHORITY + ".intent" +
+            ".extra.ERROR";
 
     //-------------------------------------------------------------------------
     // Intent flags
