@@ -334,16 +334,10 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Logf.I(TAG, "onCreate()");
-
+        onDirtyStartCheck();
         mDebug = this.getResources().getBoolean(R.bool.debug);
         Locales.updateLocale(this, getString(R.string.force_locale));
         setContentView(R.layout.main);
-        /*
-        if(mDebug)
-            setContentView(R.layout.main);
-        else
-            setContentView(R.layout.main_ht);
-        */
         // TODO rethink where to integrate this
         checkUpdate(Uris.buildUri("package", "org.sana.provider" , ""));
         runner = new DefaultActivityRunner();
