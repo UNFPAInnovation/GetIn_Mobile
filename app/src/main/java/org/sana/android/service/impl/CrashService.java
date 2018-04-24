@@ -154,7 +154,7 @@ public class CrashService extends IntentService {
     }
 
     public static String getAuth(Context context) {
-        return "Bearer " + context.getString(R.string.key_api_secret);
+        return "Bearer: " + context.getString(R.string.key_clients_api);
     }
 
     public static Uri getUri(Context context) {

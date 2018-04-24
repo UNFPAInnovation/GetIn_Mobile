@@ -130,7 +130,7 @@ public class ApplicationService extends IntentService {
     }
 
     private static String getAuth(Context context){
-        return "Bearer " + context.getString(R.string.key_clients_api);
+        return "Bearer: " + context.getString(R.string.key_clients_api);
     }
 
     public static URI getCheckUri(Context context) throws MalformedURLException, URISyntaxException {
