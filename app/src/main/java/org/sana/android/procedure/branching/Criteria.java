@@ -50,7 +50,7 @@ public class Criteria {
     public static Criteria fromXML(Node node,
             HashMap<String, ProcedureElement> elts)
             throws ProcedureParseException {
-        Log.i(TAG, "Criteria.fromXML(" + node.toString() + ")");
+        //Log.i(TAG, "Criteria.fromXML(" + node.toString() + ")");
         if (!node.getNodeName().equals("ShowIf")) {
             throw new ProcedureParseException("Criteria got NodeName "
                     + node.getNodeName());

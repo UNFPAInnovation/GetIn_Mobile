@@ -68,8 +68,8 @@ public abstract class SelectionElement extends ProcedureElement {
      * @param choices The visible labels for the allowed selections
      */
     protected void mapValues(String[] values, String[] choices) {
-        Log.i(TAG, "["+id+"]mapValues() " + values.length +"," +
-                "" + choices.length);
+        //Log.i(TAG, "["+id+"]mapValues() " + values.length +"," +
+        //       "" + choices.length);
         for(int i = 0;i < choices.length;i++) {
             valueToLabelMap.put(values[i], choices[i]);
             labelToValueMap.put(choices[i], values[i]);
@@ -83,16 +83,16 @@ public abstract class SelectionElement extends ProcedureElement {
      * @return The persisted value.
      */
     protected String getValueFromLabel(String answer) {
-        Log.i(TAG,"["  + id +"]getValueFromLabel()");
+        //Log.i(TAG,"["  + id +"]getValueFromLabel()");
         String value = labelToValueMap.get(answer);
-        Log.d(TAG,"...["  + id +"]value " + value);
+        //Log.d(TAG,"...["  + id +"]value " + value);
         return (value == null)?"":value;
     }
 
     protected String getLabelFromValue(String answer) {
-        Log.i(TAG,"["  + id +"]getLabelFromValue() --> " + answer);
+        //Log.i(TAG,"["  + id +"]getLabelFromValue() --> " + answer);
         String choice = valueToLabelMap.get(answer);
-        Log.d(TAG,"...["  + id +"] choice = " + choice);
+        //Log.d(TAG,"...["  + id +"] choice = " + choice);
         return (choice == null)?"":choice;
     }
 

@@ -26,6 +26,7 @@ import android.widget.Toast;
 
 import org.sana.R;
 import org.sana.android.Constants;
+import org.sana.android.app.ErrorManager;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
 import org.sana.android.app.SessionManager;
@@ -598,11 +599,6 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     protected void syncAll(){
         ObserverParcel observer = SessionManager.getObserver(this);
-        String subcounty = observer.getSubcounty().getName();
-        Uri observerUri = Observers.CONTENT_URI.buildUpon()
-                .appendQueryParameter("subcounty__name", subcounty)
-                .build();
-        SynchronizationManager.sync(this, observerUri);
         List<String> villageNames = getVillageNamesForObserver(observer);
         for(String village:villageNames) {
             // Append the village list query parameter
@@ -643,5 +639,18 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
             villages.add(location.getName());
         }
         return villages;
+    }
+
+    protected void onDirtyStartCheck(){
+        Log.d(TAG, "onDirtyStartCheck()");
+        Intent intent = getIntent();
+        int dirty = getIntent().getIntExtra(Intents.EXTRA_ERROR, 0);
+        Log.d(TAG, "...dirty flag=" + dirty);
+        if(dirty == 1){
+            String message = intent.getStringExtra(Intents.EXTRA_MESSAGE);
+            Uri report = intent.getParcelableExtra(Intents.EXTRA_REPORT);
+            Intent error = ErrorManager.getReport(this, report, message);
+            startService(error);
+        }
     }
 }

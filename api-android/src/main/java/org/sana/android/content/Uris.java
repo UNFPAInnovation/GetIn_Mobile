@@ -582,5 +582,58 @@ public final class Uris {
 		URI u  = url.toURI();
 		return u;
 	}
+    /**
+     * Converts Android "content" style resource identifiers to URIs to use with the
+     * new MDS REST API. Only works for those objects whose path components in the new
+     * REST API are consistent with MDS.
+     *
+     * @param uri The internal resource identifier to convert.
+     * @param scheme The scheme to use for the conversion
+     * @param host The mds host
+     * @param port The mds port to talk to.
+     * @param rootPath Additional
+     * @return
+     * @throws MalformedURLException
+     * @throws URISyntaxException
+     */
+    /**
+     * Converts Android "content" style resource identifiers to Uris which
+     * can be used with the MDS REST API
+     * @param uri The internal resource identifier to convert.
+     * @param scheme The scheme to use for the conversion
+     * @param authority The mds host and port
+     * @return
+     */
+    public static Uri iriToUri(String scheme, String authority, String rootPath, Uri uri)
+    {
+        String query = uri.getEncodedQuery();
+        Uri.Builder builder = new Uri.Builder();
+        builder.encodedAuthority(authority)
+                .scheme(scheme);
 
+        if(!TextUtils.isEmpty(rootPath)){
+            if (rootPath.startsWith("/")) {
+                rootPath = rootPath.substring(1);
+            }
+            builder.encodedPath(rootPath);
+        }
+        builder.appendEncodedPath(normalizePath(uri).getEncodedPath());
+        if(!TextUtils.isEmpty(query)){
+            builder.encodedQuery(query);
+        }
+        return builder.build();
+    }
+
+    public static Uri iriToUri(String scheme, String authority, Uri uri){
+        return iriToUri(scheme,authority,null,uri);
+    }
+
+    public static Uri normalizePath(Uri uri){
+        if(!uri.getPath().endsWith("/")){
+            return uri.buildUpon().appendPath("").build();
+        } else {
+            return uri;
+        }
+
+    }
 }
