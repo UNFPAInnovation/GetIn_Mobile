@@ -352,6 +352,9 @@ public class PatientsList extends FragmentActivity implements
                                 getString(R.string.procs_subject_short_form1)))
                         .putExtra(Intents.EXTRA_PROCEDURE_ID,
                                 R.raw.mapping_form)
+                        .putExtra(Intents.EXTRA_PROCEDURE_ID,Uris.withAppendedUuid(Procedures.CONTENT_URI,
+                                getString(R.string.postnatal_form)))
+
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
                 /*
                 int resId = getProcedureResourceId("registration_short");
