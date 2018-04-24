@@ -1315,9 +1315,6 @@
             choices="Yes;No"
             question="Have you used Contraceptives before?"
             answer=""/>
-
-
-
         <Element
             id="14"
             type="RADIO" choices="Yes;No"
@@ -1325,6 +1322,27 @@
             concept="ANC Status"
             required="true"
             answer=""
+        />
+    </Page>
+    <Page>
+        <Element
+            id="15"
+            type="RADIO" choices="Yes;No"
+            question="Are you on the Marie Stoppes Voucher Programme?"
+            concept="VOUCHER Status"
+            required="true"
+            answer=""
+        />
+    </Page>
+    <Page>
+        <ShowIf>
+            <Criteria type="EQUALS" id="15" value="Yes"/>
+        </ShowIf>
+        <Element id="15b"
+            type="ENTRY"
+            concept="SYSTEM ID"
+            question="Enter Patient Voucher Number"
+            answer=""/>
         />
     </Page>
 <!--
