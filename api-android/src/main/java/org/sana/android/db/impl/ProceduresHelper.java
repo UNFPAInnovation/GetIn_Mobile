@@ -32,6 +32,7 @@ import android.net.Uri;
 import android.util.Log;
 
 import org.sana.android.db.TableHelper;
+import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Procedures.Contract;
 import org.sana.core.Procedure;
 
@@ -90,7 +91,9 @@ public class ProceduresHelper extends TableHelper<Procedure>{
 				+ Contract.AUTHOR 	+ " TEXT NOT NULL, "
 				+ Contract.PROCEDURE+ " TEXT, "
 				+ Contract.VERSION 	+ " TEXT, "
-				+ Contract.LOCALE 	+ " TEXT "
+				+ Contract.LOCALE 	+ " TEXT, "
+                + Contract.DESCRIPTION 	+ " TEXT, "
+                + Contract.CONCEPT + " TEXT "
         		+ ");";
 	}
 
@@ -99,8 +102,19 @@ public class ProceduresHelper extends TableHelper<Procedure>{
 	 */
 	@Override
 	public String onUpgrade(int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
-		return null;
+        String sql = null;
+        if(oldVersion < newVersion){
+            StringBuilder sqlBuilder = new StringBuilder();
+            if (newVersion == 9){
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        Contract.CONCEPT + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        Contract.DESCRIPTION + " TEXT;");
+
+            }
+            sql = sqlBuilder.toString();
+        }
+		return sql;
 	}
 	
 }

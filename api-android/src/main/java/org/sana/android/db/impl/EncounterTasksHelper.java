@@ -27,100 +27,73 @@
  */
 package org.sana.android.db.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
-import java.util.UUID;
 
 import org.sana.android.db.TableHelper;
 import org.sana.android.provider.BaseContract;
 import org.sana.android.provider.EncounterTasks.Contract;
 import org.sana.android.provider.Models;
-import org.sana.api.IModel;
+import org.sana.android.util.Dates;
 import org.sana.api.task.EncounterTask;
 import org.sana.api.task.Status;
 
 import android.content.ContentValues;
 import android.net.Uri;
 import android.util.Log;
-import android.text.TextUtils;
 
 /**
  * @author Sana Development
  *
  */
 public class EncounterTasksHelper extends TableHelper<EncounterTask>{
+    public static final String TAG = EncounterTasksHelper.class.getSimpleName();
 
-    static final SimpleDateFormat sdf = new SimpleDateFormat(IModel.DATE_FORMAT, 
-			Locale.US);
-	public static final String SELECT_COMPOUND = "SELECT"
-		+ "encountertask._id AS encountertask_id,"
-		+ "encountertask.uuid AS encountertask_uuid,"
-		+ "encountertask.due_on AS due_on ,"
-		+ "encountertask.modified AS modified,"
-		+ "patient._id AS patient_id,"
-		+ "patient.uuid AS patient_uuid,"
-		+ "patient.given_name AS patient_given_name,"
-		+ "patient.family_name AS patient_family_name,"
-		+ "procedure._id AS procedure_id,"
-		+ "procedure.uuid AS procedure_uuid,"
-		+ "procedure.title AS procedure_title"
-		+ " FROM"
-		+ " encountertask"
-		+ " LEFT JOIN patient ON encountertask.patient = patient.uuid"
-		+ " LEFT JOIN procedure ON encountertask.procedure = procedure.uuid";
-	
 	private EncounterTasksHelper(){
 		super(EncounterTask.class);
 	}
-	
 
-	/* (non-Javadoc)
-	 * @see org.sana.android.db.InsertHelper#onInsert(android.net.Uri, android.content.ContentValues)
-	 */
 	@Override
 	public ContentValues onInsert(ContentValues values) {
 		ContentValues vals = new ContentValues();
-		//vals.put(Contract.UUID, UUID.randomUUID().toString());
-        vals.put(Contract.STATUS,"");
+        // Default to ASSIGNED
+        vals.put(Contract.STATUS, Status.ASSIGNED.name());
+        // Default to NEW(value=2) if not included.
+        vals.put(BaseContract.SYNCH, Models.Synch.NEW);
+        // Default to empty string
         vals.put( Contract.OBSERVER, "");
         vals.put(Contract.ENCOUNTER, "");
         vals.put( Contract.PROCEDURE, "");
         vals.put( Contract.SUBJECT, "");
+
+        // Default for the date fields
+        Date now = new Date();
+        /*
         String dueStr = values.getAsString(Contract.DUE_DATE);
 		Date dueDate = new Date();
 		try {
-			dueDate = (dueStr != null)? sdf.parse(dueStr): new Date();
+			dueDate = (dueStr != null)? Dates.fromSQL(dueStr): new Date();
 
             Date checkDate;
         
             String completed = values.getAsString(Contract.COMPLETED);
             if(!TextUtils.isEmpty(completed)){
-                checkDate = sdf.parse(completed);
-                vals.put( Contract.COMPLETED, sdf.format(checkDate));
+                checkDate = Dates.fromSQL(completed);
+                vals.put( Contract.COMPLETED, Dates.toSQL(checkDate));
             }
             String started = values.getAsString(Contract.STARTED);
             if(!TextUtils.isEmpty(started)){
-                checkDate = sdf.parse(started);
-                vals.put( Contract.STARTED, sdf.format(checkDate));
+                checkDate = Dates.fromSQL(started);
+                vals.put( Contract.STARTED, Dates.toSQL(checkDate));
             }
         } catch (ParseException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-        vals.put( Contract.DUE_DATE, sdf.format(dueDate));
-        
+		    e.printStackTrace();
+	    }
+	    */
+        vals.put( Contract.DUE_DATE, Dates.toSQL(now));
         vals.putAll(values);
-        if(!values.containsKey(BaseContract.SYNCH)){
-            values.put(BaseContract.SYNCH, Models.Synch.NEW);
-        }
 		return super.onInsert(vals);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.sana.android.db.UpdateHelper#onUpdate(java.lang.String, android.content.ContentValues, java.lang.String, java.lang.String[])
-	 */
 	@Override
 	public ContentValues onUpdate(Uri uri, ContentValues values) {
         if(!values.containsKey(BaseContract.SYNCH)){
@@ -129,9 +102,6 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 		return super.onUpdate(uri, values);
 	}
 
-	/* (non-Javadoc)
-	 * @see org.sana.android.db.CreateHelper#onCreate(android.database.sqlite.SQLiteDatabase)
-	 */
 	@Override
 	public String onCreate() {
 		Log.i(TAG, "onCreate()");
@@ -146,9 +116,9 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
 				+ Contract.ENCOUNTER + " TEXT, "
 				+ Contract.PROCEDURE + " TEXT, "
 				+ Contract.SUBJECT + " TEXT, "
-
                 + Contract.CREATED + " DATE,"
                 + Contract.MODIFIED + " DATE,"
+                + Contract.CONCEPT + " TEXT, "
                 + BaseContract.SYNCH + " INTEGER DEFAULT '-1'"
 				+ ");";
 		
@@ -165,6 +135,8 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
             if (newVersion == 9){
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
                     BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        Contract.CONCEPT + " TEXT;");
             }
             sql = sqlBuilder.toString();
         }

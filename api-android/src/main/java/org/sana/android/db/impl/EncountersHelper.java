@@ -54,23 +54,6 @@ import org.sana.util.UUIDUtil;
 public class EncountersHelper extends TableHelper<Encounter>{
     public static final String TAG = EncountersHelper.class.getSimpleName();
 
-    public static final String SELECT_COMPOUND = "SELECT"
-            + "encountertask._id AS encountertask_id,"
-            + "encountertask.uuid AS encountertask_uuid,"
-            + "encountertask.due_on AS ,"
-            + "encountertask.modified AS modified,"
-            + "patient._id AS patient_id,"
-            + "patient.uuid AS patient_uuid,"
-            + "patient.given_name AS patient_given_name,"
-            + "patient.family_name AS patient_family_name,"
-            + "procedure._id AS procedure_id,"
-            + "procedure.uuid AS procedure_uuid,"
-            + "procedure.title AS procedure_title"
-            + " FROM"
-            + " encountertask"
-            + " LEFT JOIN patient ON encountertask.patient = patient.uuid"
-            + " LEFT JOIN procedure ON encountertask.procedure = procedure.uuid";
-    
     static final Map<String, String> sProjectionMap = new HashMap<String, String>();
     
     static{
@@ -154,6 +137,7 @@ public class EncountersHelper extends TableHelper<Encounter>{
                 + Encounters.Contract.UPLOAD_QUEUE + " INTEGER,"
                 + Encounters.Contract.CREATED + " TEXT,"
                 + Encounters.Contract.MODIFIED + " TEXT,"
+                + Encounters.Contract.CONCEPT + " TEXT,"
                 + BaseContract.SYNCH + " INTEGER DEFAULT '-1'"
                 + ");";
     }
@@ -167,9 +151,10 @@ public class EncountersHelper extends TableHelper<Encounter>{
         if(oldVersion < newVersion){
             StringBuilder sqlBuilder = new StringBuilder();
             if (newVersion == 9){
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " +
-                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';";
-
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        Encounters.Contract.CONCEPT + " TEXT;");
             }
             sql = sqlBuilder.toString();
         }
