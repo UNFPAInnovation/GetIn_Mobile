@@ -30,6 +30,7 @@ package org.sana.android.content.core;
 import java.text.ParseException;
 import java.util.Arrays;
 
+import org.sana.android.provider.BaseContract;
 import org.sana.core.Model;
 import org.sana.util.DateUtil;
 
@@ -90,4 +91,23 @@ public class ModelParcel extends Model implements Parcelable {
             return array;
         }
     };
+
+    public static void writeToParcel(Model obj, Parcel dest) {
+        dest.writeString(obj.getUuid());
+        dest.writeString(DateUtil.format(obj.getCreated()));
+        dest.writeString(DateUtil.format(obj.getModified()));
+    }
+
+    public static void readFromParcel(Model obj, Parcel in){
+        obj.setUuid(in.readString());
+        String field = BaseContract.CREATED;
+        try {
+            obj.setCreated(DateUtil.parseDate(in.readString()));
+            field = BaseContract.MODIFIED;
+            obj.setModified(DateUtil.parseDate(in.readString()));
+        } catch (ParseException e) {
+            e.printStackTrace();
+            throw new IllegalArgumentException("Invalid timestamp: '" + field + "'");
+        }
+    }
 }
