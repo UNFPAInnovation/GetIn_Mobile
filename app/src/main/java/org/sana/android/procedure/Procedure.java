@@ -22,6 +22,8 @@ import org.sana.android.db.PatientInfo;
 import org.sana.android.db.PatientValidator;
 
 import org.sana.android.util.EnvironmentUtil;
+import org.sana.core.Concept;
+import org.sana.util.UUIDUtil;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -55,7 +57,8 @@ public class Procedure {
     private String title;
     private String author;
     private String guid;
-    private String concept = null;
+    private Concept concept = null;
+    private String description = null;
 
     private List<ProcedurePage> pages;
     public ListIterator<ProcedurePage> pagesIterator;
@@ -480,9 +483,20 @@ public class Procedure {
         this.onComplete = onComplete;
     }
 
-    public String getConcept(){ return concept; }
+    public Concept getConcept(){ return concept; }
 
-    public void setConcept(String concept){ this.concept=concept; }
+    public String getConceptName(){
+        return ((concept != null)? concept.getName(): "");
+    }
+
+    public void setConcept(String val){
+        Concept concept = new Concept();
+        if(UUIDUtil.isValid(val)){
+            concept.setUuid(val);
+        } else {
+            concept.setName(val);
+        }
+        this.concept=concept; }
 
     public boolean idsShown(){
         return showQuestionIds;
@@ -533,8 +547,9 @@ public class Procedure {
     			+ "\" guid =\"" + guid 
     			+ "\" version=\"" + version
                 + "\" uuid=\"" + guid
-                + "\" concept=\"" + guid
-                + "\" onComplete=\"" + guid
+                + "\" concept=\"" + concept
+                + "\" onComplete=\"" + onComplete
+                + "\" description=\"" + description
     			+ "\">\n");
         
         for (ProcedurePage p : pages) {
@@ -649,7 +664,7 @@ public class Procedure {
         n = node.getAttributes().getNamedItem("concept");
         if(n != null) {
             concept = n.getNodeValue();
-            Log.i(TAG, "Concept: " + version);
+            Log.i(TAG, "Concept: " + concept);
         }
         Procedure procedure = new Procedure(title, author, uuid, pages, elts);
         procedure.setVersion(version);
