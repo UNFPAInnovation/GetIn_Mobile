@@ -793,6 +793,10 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
                 }
                 if (p != null) {
                     p.setInstanceUri(uEncounter);
+                    ContentValues values = new ContentValues();
+                    // TODO Assign concept dynamically based on criteria
+                    values.put(Encounters.Contract.CONCEPT, p.getConceptName());
+                    getContext().getContentResolver().update(uEncounter, values, null, null);
                 }
 
                 result.p = p;
