@@ -82,6 +82,12 @@ public final class Procedures {
 		
 		/** A list of supported locales. */
 		public static final String LOCALE = "locale";
+
+
+        public static final String DESCRIPTION = "description";
+
+        /** Classification term to associate with the object **/
+        public static final String CONCEPT = "concept";
     
 	}
 }

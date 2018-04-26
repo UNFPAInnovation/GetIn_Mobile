@@ -151,5 +151,8 @@ public final class Encounters {
     	 * </blockquote></pre>
     	 */
     	public static final String UPLOAD_QUEUE = "_upload_queue";
+
+        /** Classification term to associate with the object **/
+        public static final String CONCEPT = "concept";
     }
 }

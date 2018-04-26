@@ -48,6 +48,8 @@ public interface Tasks {
 		public static final String STATUS = "status";
 		public static final String SUBJECT = "subject";
 		public static final String PROCEDURE = "procedure";
+        /** Classification term to associate with the object **/
+        public static final String CONCEPT = "concept";
 		
 	}
 
