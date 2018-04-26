@@ -27,16 +27,14 @@
  */
 package org.sana.android.content.core;
 
-import java.text.ParseException;
-
+import org.sana.api.IConcept;
 import org.sana.core.Concept;
-import org.sana.util.DateUtil;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Parcelable implementation of {@link org.sana.Concept}.
+ * Parcelable implementation of {@link org.sana.core.Concept}.
  * 
  * @author Sana Development
  *
@@ -50,32 +48,29 @@ public class ConceptParcel extends Concept implements Parcelable{
 	public ConceptParcel(){}
 	
 	public ConceptParcel(Parcel in){
-		setUuid(in.readString());
-		try {
-			setCreated(DateUtil.parseDate(in.readString()));
-			setModified(DateUtil.parseDate(in.readString()));
-		} catch (ParseException e) {			
-			e.printStackTrace();
-			throw new IllegalArgumentException(e);
-		}
-		//TODO Complete reading fields from the Parcel
+        ModelParcel.readFromParcel(this, in);
+        setName(in.readString());
+        setConstraints(in.readString());
+        setDescription(in.readString());
+        setDatatype(in.readString());
+        setDisplayName(in.readString());
+        setMediatype(in.readString());
 	}
-	
-	/* (non-Javadoc)
-	 * @see android.os.Parcelable#describeContents()
-	 */
+
 	@Override
 	public int describeContents() {
 		return 0;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.os.Parcelable#writeToParcel(android.os.Parcel, int)
-	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		// TODO Auto-generated method stub
-		
+        ModelParcel.writeToParcel(this, dest);
+		dest.writeString(getName());
+        dest.writeString(getConstraints());
+        dest.writeString(getDescription());
+        dest.writeString(getDatatype());
+        dest.writeString(getDisplayName());
+        dest.writeString(getMediatype());
 	}
 	
 	public static final Parcelable.Creator<ConceptParcel> CREATOR = 
@@ -83,14 +78,37 @@ public class ConceptParcel extends Concept implements Parcelable{
 
 				@Override
 				public ConceptParcel createFromParcel(Parcel source) {
-					// TODO Auto-generated method stub
-					return null;
+					return new ConceptParcel(source);
 				}
 
 				@Override
 				public ConceptParcel[] newArray(int size) {
-					// TODO Auto-generated method stub
-					return null;
+					ConceptParcel[] array = new ConceptParcel[size];
+                    for(int i=0; i < size;i++){
+                        array[i] = new ConceptParcel();
+                    }
+                    return array;
 				}
 			};
+
+    /**
+     * Initialize a new Parcelable Concept from an object adhering to
+     * the IConcept interface.
+     *
+     * @param obj The object to copy
+     * @return A new instance
+     */
+    public static ConceptParcel get(IConcept obj){
+        ConceptParcel parcel = new ConceptParcel();
+        parcel.setUuid(obj.getUuid());
+        parcel.setCreated(obj.getCreated());
+        parcel.setModified(obj.getModified());
+        parcel.setName(obj.getName());
+        parcel.setConstraints(obj.getConstraints());
+        parcel.setDescription(obj.getDescription());
+        parcel.setDatatype(obj.getDatatype());
+        parcel.setDisplayName(obj.getDisplayName());
+        parcel.setMediatype(obj.getMediatype());
+        return parcel;
+    }
 }
