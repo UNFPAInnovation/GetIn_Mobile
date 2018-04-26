@@ -25,6 +25,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
+import java.util.regex.Pattern;
 
 /**
  * A ProcedureElement is an item that can be placed on a page in a Sana 
@@ -142,11 +143,13 @@ public abstract class ProcedureElement {
     // Optional attributes - specific element types must implement as necessary
     protected String defaultValue = null;
     protected String defaultPrompt = null;
+    protected String pattern = null;
     private Procedure procedure;
     private Context cachedContext;
     private View cachedView;
     private AudioPlayer mAudioPlayer;
     private String helpText;
+    private String patternText = null;
 
     /**
      * Constructs the view of this ProcedureElement
@@ -294,12 +297,18 @@ public abstract class ProcedureElement {
      * @throws ValidationError
      */
     public boolean validate() throws ValidationError {
-    	if (bRequired && "".equals(getAnswer().trim())) {
-    		String msg = TextUtils.isEmpty(helpText)? 
+        boolean valid = true;
+        if (bRequired && TextUtils.isEmpty(getAnswer())) {
+            valid = false;
+        } else if (!TextUtils.isEmpty(pattern)){
+            valid = matchesPattern();
+        }
+        if (!valid) {
+            String msg = TextUtils.isEmpty(helpText)?
     				getString(R.string.general_input_required): helpText;
     		throw new ValidationError(msg);
     	}
-    	return true;
+        return valid;
     }
     
     /**
@@ -333,10 +342,32 @@ public abstract class ProcedureElement {
     protected void appendOptionalAttributes(StringBuilder sb){
     	if(!TextUtils.isEmpty(action))
     		sb.append("action=\"" + action+ "\" ");
-        if(hasDefault())
-            sb.append("default=\"" + getDefault()+ "\" ");
-    	return;
+        if (!TextUtils.isEmpty(pattern))
+            sb.append("pattern=\"" + pattern + "\" ");
     }
+
+
+    protected boolean matchesPattern() {
+        Log.i(TAG, "matchesPattern()");
+        try {
+            if (!TextUtils.isEmpty(pattern)) {
+                String compare = getAnswer();
+                // Use required attribute to handle empty values
+                if (TextUtils.isEmpty(getAnswer())) {
+                    return true;
+                }
+                boolean matches = Pattern.matches(pattern, getAnswer());
+                Log.i(TAG, "Pattern matches=" + matches);
+                return matches;
+            } else {
+                Log.d(TAG, "no pattern");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
     
     /**
 	 * Build the XML representation of this ProcedureElement. Should only use
@@ -463,7 +494,7 @@ public abstract class ProcedureElement {
         	throw new ProcedureParseException("Failed to parse node with id " 
         			+ idStr);
         }
-
+        /*
         String helpStr = SanaUtil.getNodeAttributeOrDefault(node, "helpText",
         		"");
         el.setHelpText(helpStr);
@@ -479,7 +510,8 @@ public abstract class ProcedureElement {
         			"attribute invalid for id " + idStr 
         			+ ". Must be \'true\' or \'false\'");
         }
-        
+        */
+        parseOptionalAttributes(node, el);
         return el;
     }
     
@@ -516,6 +548,12 @@ public abstract class ProcedureElement {
                     "attribute invalid for id " + el.getId()+
                     ". Must be \'true\' or \'false\'");
         }
+        // Input Validator
+        attr = SanaUtil.getNodeAttributeOrDefault(node, "pattern", "");
+        if (!TextUtils.isEmpty(attr)) {
+            el.pattern = new String(attr);
+        }
+
     }
     
     
