@@ -12,17 +12,20 @@ import org.sana.api.IConcept;
 import org.sana.api.IEncounter;
 import org.sana.api.IProcedure;
 import org.sana.api.ISubject;
+import org.sana.core.Concept;
 import org.sana.core.Encounter;
 import org.sana.core.Observer;
 import org.sana.core.Procedure;
 import org.sana.core.Subject;
 import org.sana.util.DateUtil;
+import org.sana.util.UUIDUtil;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 
 /**
  * @author ewinkler
@@ -45,11 +48,23 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 	public IProcedure getProcedure() {
 		return new Procedure(getString(getColumnIndex(Encounters.Contract.PROCEDURE)));
 	}
- //changed from Contract.PROCEDURE to Contract.Observer
+
 	@Override
 	public Observer getObserver() {
 		return new Observer(getString(getColumnIndex(Encounters.Contract.PROCEDURE)));
 	}
+
+    @Override
+    public IConcept getConcept() {
+        Concept concept = new Concept();
+        String val = getString(getColumnIndex(Encounters.Contract.CONCEPT));
+        if(UUIDUtil.isValid(val)){
+            concept.setUuid(val);
+        } else {
+            concept.setName(val);
+        }
+        return concept;
+    }
 
 	@Override
 	public IEncounter getObject() {
@@ -60,6 +75,7 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
 		e.subject = (Subject) getSubject();
 		e.observer = getObserver();
 		e.procedure = (Procedure) getProcedure();
+        e.concept = (Concept) getConcept();
 		return e;
 	}
 
@@ -125,6 +141,9 @@ public class EncounterWrapper extends ModelWrapper<IEncounter> implements IEncou
         values.put(Encounters.Contract.PROCEDURE , obj.getProcedure().getUuid());
         values.put(Encounters.Contract.SUBJECT , obj.getSubject().getUuid() );
         values.put(Encounters.Contract.OBSERVER , obj.getObserver().getUuid());
+        if(obj.getConcept() != null && !TextUtils.isEmpty(obj.getConcept().getName())) {
+            values.put(Encounters.Contract.CONCEPT, obj.getConcept().getName());
+        }
         return values;
     }
 
