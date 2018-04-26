@@ -3,6 +3,7 @@
  */
 package org.sana.core;
 
+import org.sana.api.IConcept;
 import org.sana.api.IProcedure;
 
 
@@ -18,6 +19,7 @@ public class Procedure extends Model implements IProcedure{
 	public String description;
     public String src;
 	public String title;
+    public Concept concept = null;
 	
 	/** Default Constructor */
 	public Procedure(){}
@@ -100,5 +102,20 @@ public class Procedure extends Model implements IProcedure{
 	public void setTitle(String title){
 		this.title = title;
 	}
-	
+
+    /**
+     * Returns the {@linkplain org.sana.api.IConcept} for this object.
+     * @return The {@linkplain org.sana.api.IConcept} or {@code null}.
+     */
+    public IConcept getConcept() {
+        return concept;
+    }
+
+    /**
+     * Sets the {@linkplain org.sana.core.Concept} for this object
+     * @param concept The {@linkplain org.sana.core.Concept} to set.
+     */
+    public void setConcept(Concept concept) {
+        this.concept = concept;
+    }
 }

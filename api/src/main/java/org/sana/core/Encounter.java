@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.sana.api.IConcept;
 import org.sana.api.IEncounter;
 import org.sana.api.IObservation;
 import org.sana.api.IProcedure;
@@ -25,6 +26,8 @@ public class Encounter extends Model implements IEncounter{
 	public Procedure procedure;
 	public Observer observer;
 	public List<Observation> observations;
+
+    public Concept concept = null;
 	
 	/** Default Constructor */
 	public Encounter(){
@@ -108,7 +111,7 @@ public class Encounter extends Model implements IEncounter{
 	/**
 	 * Sets the observations for this encounter.
 	 * 
-	 * @param observations the observations to set
+	 * @param observation the observation to set
 	 */
 	public void addObservation(Observation observation) {
 		observations.add(observation);
@@ -124,12 +127,28 @@ public class Encounter extends Model implements IEncounter{
 	}
 	
 	/**
-	 * Sets the observations for this encounter.
+	 * Removes an observation from this encounter.
 	 * 
-	 * @param observations the observations to set
+	 * @param observation the observations to remove
 	 */
 	public void removeObservation(IObservation observation) {
 		observations.remove(observation);
 	}
-	
+
+
+    /**
+     * Returns the {@linkplain org.sana.core.Concept} for this object.
+     * @return The {@linkplain org.sana.core.Concept} or {@code null}.
+     */
+    public IConcept getConcept() {
+        return concept;
+    }
+
+    /**
+     * Sets the {@linkplain org.sana.core.Concept} for this object
+     * @param concept The {@linkplain org.sana.core.Concept} to set.
+     */
+    public void setConcept(Concept concept) {
+        this.concept = concept;
+    }
 }

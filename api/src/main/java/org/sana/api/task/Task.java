@@ -29,7 +29,9 @@ package org.sana.api.task;
 
 import java.util.Date;
 
+import org.sana.api.IConcept;
 import org.sana.api.IObserver;
+import org.sana.core.Concept;
 import org.sana.core.Model;
 import org.sana.core.Observer;
 
@@ -44,6 +46,7 @@ public abstract class Task extends Model implements ITask{
 	public Date completed;
 	public Date started;
 	public Observer assigned_to;
+    public Concept concept = null;
 
 	public static class Status{
 		public String current;
@@ -73,4 +76,20 @@ public abstract class Task extends Model implements ITask{
 	public String getStatus() {
 		return status.current;
 	}
+
+    /**
+     * Returns the {@linkplain org.sana.core.Concept} for this object.
+     * @return The {@linkplain org.sana.core.Concept} or {@code null}.
+     */
+    public IConcept getConcept() {
+        return concept;
+    }
+
+    /**
+     * Sets the {@linkplain org.sana.core.Concept} for this object
+     * @param concept The {@linkplain org.sana.core.Concept} to set.
+     */
+    public void setConcept(Concept concept) {
+        this.concept = concept;
+    }
 }
