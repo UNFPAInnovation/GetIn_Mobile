@@ -153,20 +153,22 @@ public class SubjectsHelper extends TableHelper<Subject>{
 		Log.i(TAG, "onUpgrade()");
 		String sql = null;
 		if (newVersion > oldVersion) {
+            StringBuilder sqlBuilder = new StringBuilder();
             if (oldVersion == 2 && newVersion == 3) {
-                sql = "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_NEED + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.VILLAGE + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DISTRICT + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.COUNTY + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY + " TEXT;";
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH + " TEXT;";
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_NEED + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.AMBULANCE_RESPONSE + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.VILLAGE + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.DISTRICT + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.COUNTY + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY + " TEXT;");
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH + " TEXT;");
             }
             if (newVersion == 9) {
-                sql += "ALTER TABLE " + getTable() + " ADD COLUMN " +
-                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';";
+                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
 
             }
+            sql = sqlBuilder.toString();
         }
 		return sql;
 	}
