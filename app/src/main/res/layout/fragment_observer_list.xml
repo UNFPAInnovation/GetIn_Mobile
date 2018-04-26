@@ -8,11 +8,17 @@
     android:layout_height="match_parent"
     android:layout_marginLeft="16dp"
     android:layout_marginRight="16dp"
-    tools:context="org.sana.android.fragment.ObserverListFragment">
+    tools:context="org.sana.android.fragment.ObserverListFragment"
+    android:orientation="vertical">
 <ListView
     android:id="@android:id/list"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:listitem="@layout/list_item_observer"/>
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
 </LinearLayout>
