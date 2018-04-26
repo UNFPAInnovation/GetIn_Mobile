@@ -29,6 +29,7 @@ package org.sana.api.task;
 
 import java.util.Date;
 
+import org.sana.api.IConcept;
 import org.sana.api.IModel;
 import org.sana.api.IObserver;
 
@@ -56,4 +57,6 @@ public interface ITask extends IModel{
 	 * @return
 	 */
 	public String getStatus();
+
+    IConcept getConcept();
 }

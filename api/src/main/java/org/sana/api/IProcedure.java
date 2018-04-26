@@ -54,4 +54,15 @@ public interface IProcedure extends IModel{
 	 */
 	public abstract String getSrc();
 
+    /**
+     *
+     * @return the title {@linkplain java.lang.String}
+     */
+    String getTitle();
+
+    /**
+     *
+     * @return the concept
+     */
+    IConcept getConcept();
 }

@@ -50,4 +50,9 @@ public interface IEncounter extends IModel {
 	 */
 	public abstract Observer getObserver();
 
+    /**
+     *
+     * @return the concept
+     */
+    IConcept getConcept();
 }
