@@ -27,10 +27,8 @@
  */
 package org.sana.android.content.core;
 
-import java.text.ParseException;
-
+import org.sana.core.Concept;
 import org.sana.core.Procedure;
-import org.sana.util.DateUtil;
 
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -49,15 +47,14 @@ public class ProcedureParcel extends Procedure implements Parcelable {
 	 * @param in The {@link android.os.Parcel} to read from.
 	 */
 	public ProcedureParcel(Parcel in){
-		setUuid(in.readString());
-		try {
-			setCreated(DateUtil.parseDate(in.readString()));
-			setModified(DateUtil.parseDate(in.readString()));
-		} catch (ParseException e) {			
-			e.printStackTrace();
-			throw new IllegalArgumentException(e);
-		}
-		//TODO Complete
+		ModelParcel.readFromParcel(this, in);
+        setAuthor(in.readString());
+        setDescription(in.readString());
+        setTitle(in.readString());
+        String name = in.readString();
+        Concept concept = new Concept();
+        concept.setName(name);
+        setConcept(concept);
 	}
 	
 	/* (non-Javadoc)
@@ -73,10 +70,15 @@ public class ProcedureParcel extends Procedure implements Parcelable {
 	 */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		dest.writeString(getUuid());
-		dest.writeString(DateUtil.format(getCreated()));
-		dest.writeString(DateUtil.format(getModified()));
-		//TODO Complete this
+        ModelParcel.writeToParcel(this, dest);
+        dest.writeString(getAuthor());
+        dest.writeString(getDescription());
+        dest.writeString(getTitle());
+        if(getConcept() != null) {
+            dest.writeString(getConcept().getName());
+        } else {
+            dest.writeString(null);
+        }
 	}
 	
 
