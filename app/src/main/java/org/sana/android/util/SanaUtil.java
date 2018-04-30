@@ -38,6 +38,7 @@ import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
 import android.telephony.TelephonyManager;
+import android.text.TextUtils;
 import android.util.Log;
 
 //TODO
@@ -242,6 +243,8 @@ public class SanaUtil {
             cv.put(Procedures.Contract.UUID, guid);
             cv.put(Procedures.Contract.VERSION, version);
             cv.put(Procedures.Contract.PROCEDURE, xmlFullProcedure);
+            if(!TextUtils.isEmpty(p.getConceptName()))
+                cv.put(Procedures.Contract.CONCEPT, p.getConceptName());
 
             if (searchDuplicateTitleAuthor(ctx, title, author)){
                 Log.d(TAG, "Duplicate found!");
@@ -332,7 +335,6 @@ public class SanaUtil {
         }
         return false;
     }
-
     
     
     /** Loading Sana with XML-described procedures is currently hard-coded. New
