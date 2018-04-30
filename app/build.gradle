@@ -13,19 +13,21 @@ task copyTemplates(type: Copy){
     description = "copying local properties files"
     if(!localPropsDir.exists()){
         def created = localPropsDir.mkdir()
-        println "...created local config directory: ${created}"
+        println "${project.name}:TEMPLATES...created local config directory: ${created}"
+    } else {
+        println "${project.name}:TEMPLATES...local config directory ${localPropsDir.path} exists."
     }
-    println '...preparing to copy templates'
+    println "${this.name}:TEMPLATES...preparing to copy templates"
     duplicatesStrategy 'exclude'
     from srcDir
     into destination
     eachFile {
         if (it.getRelativePath().getFile(destination).exists()) {
             it.exclude()
+            println "${project.name}:TEMPLATES...WARNING! ${it.file.name} exists! Check against template!"
         }
     }
-    println '...template file initialization complete'
-    println "...WARNING! Check ${propFile.path} is UP-TO-DATE!"
+    println "${project.name}:TEMPLATES...template file initialization complete"
 }
 
 def storepass = '';
