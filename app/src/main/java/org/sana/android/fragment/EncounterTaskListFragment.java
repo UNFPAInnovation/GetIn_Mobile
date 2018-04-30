@@ -102,7 +102,8 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         Contract.UUID,
         Contract.STATUS,
                 Contract.COMPLETED,
-                Contract.ENCOUNTER
+                Contract.ENCOUNTER,
+            Contract.CONCEPT
         };
     protected String orderBy = Contract.STATUS + " ASC, "
             + Contract.DUE_DATE + " ASC";
@@ -162,11 +163,6 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             Log.i(TAG, "sync: observer = " + observer);
             // sync subjects first
             //sync(getActivity(), Subjects.CONTENT_URI);
-            String observerUuid = ModelWrapper.getUuid(
-                observer, getActivity().getContentResolver());
-            //Uri u = EncounterTasks.CONTENT_URI.buildUpon().appendQueryParameter(
-            //    "assigned_to__uuid",observerUuid).build();
-            String uuids = getLocationUUIDs();
             Uri u = EncounterTasks.CONTENT_URI;
             List<String> villageNames = getVillageNamesForObserver();
             for(String village:villageNames) {
@@ -178,11 +174,7 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
             Log.i(TAG, "sync: all ");
             // sync subjects first
             //sync(getActivity(), Subjects.CONTENT_URI);
-            String uuids = getLocationUUIDs();
             Uri u = EncounterTasks.CONTENT_URI;
-            //Uri.Builder builder = u.buildUpon();
-            //builder.appendQueryParameter("assigned_to__locations__in",uuids);
-            //sync(getActivity(), builder.build());
             List<String> villageNames = getVillageNamesForObserver();
             for(String village:villageNames) {
                 Uri.Builder builder = u.buildUpon();
@@ -514,18 +506,20 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         Log.d(TAG+".setProcedure", "procedure uuid: " + uuid);
         Cursor c = null;
         String title = null;
+        String concept = null;
         TextView procedureTitle = (TextView)view.findViewById(R.id.procedure_title);
         try{
             Uri uri = Uris.withAppendedUuid(Procedures.CONTENT_URI, uuid);
-            c = context.getContentResolver().query(uri, new String[]{ Procedures.Contract.TITLE } , null,null,null);
+            c = context.getContentResolver().query(uri, new String[]{ Procedures.Contract.TITLE, Procedures.Contract.CONCEPT } , null,null,null);
             if(c != null && c.moveToFirst()){
                 title = c.getString(0);
+                concept = c.getString(1);
             }
         } finally {
             if(c != null) c.close();
-            procedureTitle.setText((TextUtils.isEmpty(title)? "Appointment_note": title));
+            procedureTitle.setText(String.format("%s", title).replace("_", " "));
         }
-        Log.d(TAG+".setProcedure", "finished setting view: " + title);
+        Log.d(TAG, "...procedure view: " + title +":" + concept);
     }
 
     public void setDate(View view, String due_on, long id){
@@ -533,7 +527,6 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
     }
     public void setDate(View view, boolean completed, String due_on, long id){
         TextView dueOn = (TextView)view.findViewById(R.id.due_on);
-        Log.i(TAG, "due_on:" + due_on);
 
         Date date = new Date();
         Date now = new Date();
@@ -551,8 +544,6 @@ public class EncounterTaskListFragment extends ListFragment implements LoaderCal
         int year = dt.getYear();
         String localizedMonth = months[month - 1];
         due_on = String.format("%02d %s %04d", dayOfMonth, localizedMonth, year);
-
-        Log.i(TAG, "due_on(formatted):" + due_on);
         dueOn.setText(due_on);
         if(completed){
             dueOn.setTextColor(getResources().getColor(R.color.complete));
