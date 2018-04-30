@@ -22,7 +22,11 @@ public class SynchronizationManager {
     public static final String TAG = SynchronizationManager.class.getSimpleName();
 
     public static void sync(Context context, Uri uri){
-        long last = getLastSynch(context, uri);
+        sync(context, uri, null);
+    }
+
+    public static void sync(Context context, Uri uri, String keyExtra){
+        long last = getLastSynch(context, uri, keyExtra);
         Uri synchUri = uri;
         if(last > 0){
             Calendar calendar = Calendar.getInstance();
@@ -34,19 +38,34 @@ public class SynchronizationManager {
     }
 
     public static String getSynchKey(Uri uri){
-        return String.valueOf(Uris.getDescriptor(uri));
+        String type = Uris.getType(uri);
+        String[] resolver = type.split("\\.");
+        return String.format("%s_sync", resolver[resolver.length - 1].toLowerCase());
+    }
+
+    public static String getSynchKey(Uri uri, String suffix){
+        String type = Uris.getType(uri);
+        String[] resolver = type.split("\\.");
+        if(TextUtils.isEmpty(suffix))
+            return String.format("%s_sync", resolver[resolver.length - 1].toLowerCase());
+        else
+            return String.format("%s_%s_sync", resolver[resolver.length - 1].toLowerCase(), suffix);
     }
 
     public static long getLastSynch(Context context, Uri uri){
+        return getLastSynch(context, uri, null);
+    }
+
+    public static long getLastSynch(Context context, Uri uri, String keyExtra){
         long last = 0L;
-        String key = getSynchKey(uri);
+        String key = getSynchKey(uri, keyExtra);
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         last = preferences.getLong(key, 0L);
         return last;
     }
 
-    public static void setLastSynch(Context context, Uri uri){
+    public static void setLastSynch(Context context, Uri uri, String keyExtra){
         if(Uris.isItemType(uri)){
             return;
         }
@@ -62,9 +81,13 @@ public class SynchronizationManager {
                 e.printStackTrace();
             }
         }
-        String key = getSynchKey(uri);
+        String key = getSynchKey(uri,keyExtra);
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putLong(key, synch).commit();
+    }
+
+    public static void setLastSynch(Context context, Uri uri){
+        setLastSynch(context, uri, null);
     }
 }
