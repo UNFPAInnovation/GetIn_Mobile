@@ -29,10 +29,9 @@ import android.widget.TextView;
 import org.joda.time.DateTime;
 import org.sana.R;
 import org.sana.android.Constants;
-import org.sana.android.activity.BaseActivity;
 import org.sana.android.app.Locales;
 import org.sana.android.app.Preferences;
-import org.sana.android.content.Intents;
+import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.core.ObserverWrapper;
 import org.sana.android.provider.Patients;
 import org.sana.android.provider.Patients.Contract;
@@ -164,7 +163,6 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
     	Log.d(TAG, "onLoaderReset() ");
-    	//mAdapter.swapCursor(null);
     	((PatientCursorAdapter) this.getListAdapter()).swapCursor(null);
     }
 
@@ -327,7 +325,6 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         
         @Override
         public void bindView(View view, Context context, Cursor cursor) {
-        	Log.d(TAG+".mAdapter", "bindView(): cursor position: " + ((cursor != null)? cursor.getPosition(): 0));
         	int position = this.getCursor().getPosition();
             String uuid = cursor.getString(uuidCol);
             view.setTag(uuid);
@@ -388,8 +385,6 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             int pos = ((Cursor) getItem(position)).getPosition();
             char currentSectionLabel = getSectionLabel(displayName);
 
-            Log.d(TAG, "...Checking if needs row separator label. " +
-                    "position="+pos);
             switch (mRowStates[pos]) {
                 case STATE_LABELED:
                     needsSeparator = true;
@@ -406,8 +401,6 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                     } else {
                         char prevSectionLabel = getSectionLabel(
                                 formatName(((Cursor) getItem(position -1))));
-                        Log.d(TAG,"...prev section=" + prevSectionLabel +", " +
-                                "current section=" + currentSectionLabel);
                         if (prevSectionLabel != currentSectionLabel) {
                             needsSeparator = true;
                             mRowStates[pos] = STATE_LABELED;
@@ -420,17 +413,13 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                     break;
             }
             if (needsSeparator) {
-                Log.d(TAG, "...adding separator");
                 view.findViewById(R.id.header).setVisibility(View.VISIBLE);
                 TextView label = (TextView) view.findViewById(R.id.txt_section);
                 label.setText(("" + currentSectionLabel).toUpperCase(Locale.getDefault()));
             } else {
-                Log.d(TAG, "...hiding separator");
                 view.findViewById(R.id.header).setVisibility(View.GONE);
             }
             // Handle scroll complete when we bind last item in cursor
-            Log.d(TAG, "...cursor count=" + cursor.getCount());
-            Log.d(TAG, "...cursor position=" + cursor.getPosition());
             if(cursor.isLast() || cursor.getPosition() >= (cursor.getCount()*0.8)){
                 if(mScrollListener != null)
                     mScrollListener.onScrollComplete();
@@ -438,15 +427,12 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         }
         
         public View getView(int position, View convertView, ViewGroup parent) {
-        	Log.d(TAG+".mAdapter", "get view ");
             return super.getView(position,convertView, parent);
         }
         
         @Override
         public View newView(Context context, Cursor cursor, ViewGroup viewGroup) {
-        	Log.d(TAG+".mAdapter", "new view  cursor position: " + ((cursor != null)? cursor.getPosition(): 0)); 
-            View view = mInflater.inflate(R.layout.patient_list_item, null);
-            //bindView(view, context, cursor);
+        	View view = mInflater.inflate(R.layout.patient_list_item, null);
             return view;
         }
 
@@ -528,10 +514,8 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                 // Append the village list query parameter
                 Uri.Builder builder = uri.buildUpon();
                 builder.appendQueryParameter("village", village);
-                Intent intent = new Intent(Intents.ACTION_READ, builder.build());
-                context.startService(intent);
+                SynchronizationManager.sync(context,builder.build());
             }
-            Logf.W(TAG, "sync(): synchronizing patient list");
             prefs.edit().putLong("patient_sync", now).commit();
             result = true;
     	}
@@ -545,8 +529,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         for(String village:villageNames) {
             Uri.Builder builder = uri.buildUpon();
             builder.appendQueryParameter("village", village);
-            Intent intent = new Intent(Intents.ACTION_READ, builder.build());
-            context.startService(intent);
+            SynchronizationManager.sync(context,builder.build());
 
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());

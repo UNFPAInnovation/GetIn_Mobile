@@ -10,7 +10,7 @@ import android.support.v4.app.Fragment;
 
 import org.sana.R;
 import org.sana.android.app.SessionManager;
-import org.sana.android.content.Intents;
+import org.sana.android.app.SynchronizationManager;
 import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.fragment.ModelSelectedListener;
 import org.sana.android.provider.Observers;
@@ -54,8 +54,7 @@ public class ObserverList extends BaseActivity implements ModelSelectedListener<
             Uri observerUri = Observers.CONTENT_URI.buildUpon()
                     .appendQueryParameter("subcounty__name", subcounty)
                     .build();
-            Intent intent = new Intent(Intents.ACTION_READ,uri);
-            context.startService(intent);
+            SynchronizationManager.sync(context, observerUri);
             result = true;
         }
         return result;
