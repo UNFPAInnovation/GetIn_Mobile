@@ -10,7 +10,7 @@ public class Defaults {
 
     public static final int[] procedures(){
         return new int[]{
-                R.raw.mapping_form,R.raw.postnatal_form,
+                R.raw.mapping_form,R.raw.vht_postnatal_form,
                 R.raw.appointment_note
         };
     }
