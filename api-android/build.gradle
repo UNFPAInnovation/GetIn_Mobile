@@ -19,6 +19,8 @@ android {
     defaultConfig{
         minSdkVersion 11
         targetSdkVersion 17
+        buildConfigField("Integer", "DB_VERSION", "9")
+        resValue("string", "cfg_db_version_value", "9")
     }
 }
 
