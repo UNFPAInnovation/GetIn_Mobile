@@ -50,8 +50,6 @@ public class TextElement extends ProcedureElement {
     	String concept, String figure, String audio, Node node)    
 		throws ProcedureParseException 
     {
-    	TextElement el = new TextElement(id, question, answer, concept, figure, audio);
-    	ProcedureElement.parseOptionalAttributes(node, el);
-    	return el;
+    	return new TextElement(id, question, answer, concept, figure, audio);
     }
 }

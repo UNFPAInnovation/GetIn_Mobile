@@ -116,8 +116,6 @@ public class HiddenElement extends ProcedureElement {
     	String concept, String figure, String audio, Node node)    
 		throws ProcedureParseException 
     {
-    	HiddenElement el = new HiddenElement(id, question, answer, concept, figure, audio);
-    	ProcedureElement.parseOptionalAttributes(node, el);
-    	return el;
+    	return new HiddenElement(id, question, answer, concept, figure, audio);
     }
 }
