@@ -4,7 +4,8 @@
     uuid="ae0775ec-5a8c-4f2c-8c78-13325e26f03f"
     version="1.0"
     locale="en"
-    class= "org.sana.core.Subject"
+    class= "org.sana.core.Encounter"
+    concept="ENCOUNTER"
     >
     <!-- copy midwife_appointment_note here -->
     <Page>

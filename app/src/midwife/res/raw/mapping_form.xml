@@ -4,6 +4,7 @@
     uuid="9b4ca27f-83ea-4b23-884b-5dffa97eb429"
     version="1.0"
     locale="en"
+    concept="MIDWIFE MAPPING FORM"
     class="org.sana.core.Subject"
     on_complete="intent://org.sana.provider/core/procedure/ae0775ec-5a8c-4f2c-8c78-13325e26f03f#Intent;scheme=content;action=org.sana.android.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end">
     <!-- This uuid was picked from registration xml file  !-->
@@ -57,6 +58,8 @@
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
+            pattern="[0-9]{10}"
+            helpText="Enter 10 digit number"
         />
         <Element
             id="7"
@@ -66,6 +69,8 @@
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
+            pattern="[0-9]{10}"
+            helpText="Enter 10 digit number"
         />
         <Element
             id="8"
@@ -94,8 +99,8 @@
             type="HIDDEN"
             required="false"
             question="Girl's Address/Location"
-            Default ="29da1cb1a8da486d80c80fbd4ee3f9ca:"
-            action="intent://org.sana.provider/observation/1#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
+            Default ="29da1cb1a8da486d80c80fbd4ee3f9ca"
+            action="intent://org.sana.provider/subject/{uuid}#Intent;scheme=content;action=org.sana.android.intent.ACTION_RECORD_GPS;end"
         />
     </Page>
 

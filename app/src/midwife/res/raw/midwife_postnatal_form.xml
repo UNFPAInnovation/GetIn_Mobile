@@ -4,6 +4,8 @@
     uuid="2073c47c-478d-483b-9674-9ebb6b0298ae"
     version="1.0"
     locale="en"
+    class="org.sana.core.Encounter"
+    concept="ENCOUNTER_POSTNATAL"
 >
     <!-- copy follow_up_note_vht1 here -->
     <Page>
