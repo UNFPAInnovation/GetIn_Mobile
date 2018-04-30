@@ -123,6 +123,7 @@ import org.sana.net.http.handler.EncounterTaskResponseHandler;
 import org.sana.net.http.handler.ObservationResponseHandler;
 import org.sana.net.http.handler.ObserverResponseHandler;
 import org.sana.net.http.handler.PatientResponseHandler;
+import org.sana.net.http.handler.ProcedureResponseHandler;
 import org.sana.net.http.handler.VHTResponseHandler;
 import org.sana.util.DateUtil;
 
@@ -525,117 +526,122 @@ public class DispatchService extends Service{
 
 
                         switch (msg.what) {
-                        case Uris.ITEM_FILE:
-                            if(MDSInterface2.getFile(DispatchService.this, msgUri)){
-                                Log.d(TAG, "....File download success: " + msgUri);
-                            } else {
-                                Log.d(TAG, "....File download fail: " + msgUri);
-                            }
-                            bcastCode = NO_BROADCAST;
-                            break;
-                        case Uris.ENCOUNTER_DIR:
-                            // TODO implement as a query from msg.data
-                            EncounterResponseHandler eHandler = new EncounterResponseHandler();
-                            Response<Collection<Encounter>> encounterResponse = MDSInterface2.apiGet(
-                                    uri,username, password,eHandler);
-                            if(encounterResponse.getMessage() != null)
-                                bcastCode = createOrUpdateEncounters(encounterResponse.getMessage(),startId);
-                            else
-                                bcastCode = encounterResponse.getCode();
-                            break;
-                        case Uris.ENCOUNTER_UUID:
-                        case Uris.ENCOUNTER_ITEM:
-
-                            // TODO Allows GET or POST
-                            if (method.equals("GET"))
-                                request = new HttpGet(uri);
-                            else if (method.equals("POST")) {
-                                try{
-                                boolean encounterPost = MDSInterface2
-                                        .postProcedureToDjangoServer(
-                                                intent.getData(),
-                                                DispatchService.this);
-                                // Send notification to notification bar
-
-                                // Notification intent
-                                Intent notifyIntent = new Intent(
-                                        DispatchService.this,
-                                        EncounterList.class);
-                                // Sets the Activity to start in a new, empty
-                                // task
-                                notifyIntent
-                                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                                if (encounterPost) {
-                                    update.put(
-                                            Encounters.Contract.UPLOAD_STATUS,
-                                            QueueManager.UPLOAD_STATUS_SUCCESS);
-                                    DispatchService.this.getContentResolver()
-                                            .update(intent.getData(), update,
-                                                    null, null);
-                                    //DispatchService.this.notify(
-                                    //      R.string.upload_success,
-                                    //      notifyIntent);
-                                    //DispatchService.this.notifyForeground(
-                                    //      UPLOAD_RESPONSE,
-                                    //      R.string.upload_success,
-                                    //      notifyIntent);
-                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    bcastMessage = getString(R.string.upload_success);
-                                    bcastCode = 200;
+                            case Uris.ITEM_FILE:
+                                if (MDSInterface2.getFile(DispatchService.this, msgUri)) {
+                                    Log.d(TAG, "....File download success: " + msgUri);
                                 } else {
-                                    update.put(
-                                            Encounters.Contract.UPLOAD_STATUS,
-                                            QueueManager.UPLOAD_STATUS_FAILURE);
-                                    DispatchService.this.getContentResolver()
-                                            .update(intent.getData(), update,
-                                                    null, null);
-
-                                    addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
-                                    //DispatchService.this.notifyForeground(
-                                    //      UPLOAD_RESPONSE,
-                                    //      R.string.upload_fail,
-                                    //      notifyIntent);
-
-                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    bcastMessage = getString(R.string.upload_fail);
-                                    bcastCode = 400;
+                                    Log.d(TAG, "....File download fail: " + msgUri);
                                 }
-                                }
-                                catch (Exception e){
-                                    addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
-                                    Log.e(TAG, "POST failed: " + msgUri);
-                                    Log.e(TAG,"...." + e.getMessage());
-                                    Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
-                                    bcastMessage = getString(R.string.upload_fail);
-                                    bcastCode = 400;
-                                }
+                                bcastCode = NO_BROADCAST;
+                                break;
+                            case Uris.ENCOUNTER_DIR:
+                                // TODO implement as a query from msg.data
+                                EncounterResponseHandler eHandler = new EncounterResponseHandler();
+                                Response<Collection<Encounter>> encounterResponse = MDSInterface2.apiGet(
+                                        uri, username, password, eHandler);
+                                if (encounterResponse.getMessage() != null)
+                                    bcastCode = createOrUpdateEncounters(encounterResponse.getMessage(), startId);
+                                else
+                                    bcastCode = encounterResponse.getCode();
+                                break;
+                            case Uris.ENCOUNTER_UUID:
+                            case Uris.ENCOUNTER_ITEM:
 
-                            }
-                            break;
-                        case Uris.OBSERVATION_DIR:
-                            ObservationResponseHandler oHandler = new ObservationResponseHandler();
-                            Response<Collection<Observation>> oResponse = MDSInterface2.apiGet(
-                                    uri,username, password,oHandler);
-                            if(oResponse.getMessage() != null)
-                                bcastCode = createOrUpdateObservations(oResponse.getMessage(),startId);
-                            else
-                                bcastCode = oResponse.getCode();
-                            break;
-                        case Uris.OBSERVATION_UUID:
-                            // TODO Allows GET or POST
-                            if (method.equals("GET"))
-                                request = new HttpGet(uri);
-                            else if (method.equals("POST")) {
-                                request = new HttpPost(uri);
-                            }
-                            break;
-                        case Uris.PROCEDURE_DIR:
-                            // TODO Allows GET only for updating procedures from
-                            // repository
-                            //uri = MDSInterface2.getURI(DispatchService.this, );
-                            // only allows get
-                            request = new HttpGet(uri);
+                                // TODO Allows GET or POST
+                                if (method.equals("GET"))
+                                    request = new HttpGet(uri);
+                                else if (method.equals("POST")) {
+                                    try {
+                                        boolean encounterPost = MDSInterface2
+                                                .postProcedureToDjangoServer(
+                                                        intent.getData(),
+                                                        DispatchService.this);
+                                        // Send notification to notification bar
+
+                                        // Notification intent
+                                        Intent notifyIntent = new Intent(
+                                                DispatchService.this,
+                                                EncounterList.class);
+                                        // Sets the Activity to start in a new, empty
+                                        // task
+                                        notifyIntent
+                                                .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                                        if (encounterPost) {
+                                            update.put(
+                                                    Encounters.Contract.UPLOAD_STATUS,
+                                                    QueueManager.UPLOAD_STATUS_SUCCESS);
+                                            DispatchService.this.getContentResolver()
+                                                    .update(intent.getData(), update,
+                                                            null, null);
+                                            //DispatchService.this.notify(
+                                            //      R.string.upload_success,
+                                            //      notifyIntent);
+                                            //DispatchService.this.notifyForeground(
+                                            //      UPLOAD_RESPONSE,
+                                            //      R.string.upload_success,
+                                            //      notifyIntent);
+                                            Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                            bcastMessage = getString(R.string.upload_success);
+                                            bcastCode = 200;
+                                        } else {
+                                            update.put(
+                                                    Encounters.Contract.UPLOAD_STATUS,
+                                                    QueueManager.UPLOAD_STATUS_FAILURE);
+                                            DispatchService.this.getContentResolver()
+                                                    .update(intent.getData(), update,
+                                                            null, null);
+
+                                            addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
+                                            //DispatchService.this.notifyForeground(
+                                            //      UPLOAD_RESPONSE,
+                                            //      R.string.upload_fail,
+                                            //      notifyIntent);
+
+                                            Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                            bcastMessage = getString(R.string.upload_fail);
+                                            bcastCode = 400;
+                                        }
+                                    } catch (Exception e) {
+                                        addFailedToQueue(what, arg1, arg2, obj, data, msgUri);
+                                        Log.e(TAG, "POST failed: " + msgUri);
+                                        Log.e(TAG, "...." + e.getMessage());
+                                        Locales.updateLocale(DispatchService.this, getString(R.string.force_locale));
+                                        bcastMessage = getString(R.string.upload_fail);
+                                        bcastCode = 400;
+                                    }
+
+                                }
+                                break;
+                            case Uris.OBSERVATION_DIR:
+                                ObservationResponseHandler oHandler = new ObservationResponseHandler();
+                                Response<Collection<Observation>> oResponse = MDSInterface2.apiGet(
+                                        uri, username, password, oHandler);
+                                if (oResponse.getMessage() != null)
+                                    bcastCode = createOrUpdateObservations(oResponse.getMessage(), startId);
+                                else
+                                    bcastCode = oResponse.getCode();
+                                break;
+                            case Uris.OBSERVATION_UUID:
+                                // TODO Allows GET or POST
+                                if (method.equals("GET"))
+                                    request = new HttpGet(uri);
+                                else if (method.equals("POST")) {
+                                    request = new HttpPost(uri);
+                                }
+                                break;
+                            case Uris.PROCEDURE_DIR:
+                                // TODO Allows GET only for updating procedures from
+                                // repository
+                                //uri = MDSInterface2.getURI(DispatchService.this, );
+                                // only allows get
+                                if (method.equals("GET")){
+                                    ProcedureResponseHandler prh = new ProcedureResponseHandler();
+                                    Response<Collection<Procedure>> pr = MDSInterface2.apiGet(
+                                        uri, username, password, prh);
+                                    // TODO Fetch the Raw XML from server
+                                    // TODO Insert or update
+                                }
                             break;
                         case Uris.PROCEDURE_UUID:
                             // TODO Allows GET. This should pull raw xml
