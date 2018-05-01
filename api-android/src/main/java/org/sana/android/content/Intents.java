@@ -295,6 +295,11 @@ public final class Intents{
             ".extra.MESSAGE";
     public static final String EXTRA_ERROR = Models.AUTHORITY + ".intent" +
             ".extra.ERROR";
+    public static final String EXTRA_SYNCH = Models.AUTHORITY + ".intent" +
+            ".extra.SYNCH";
+    public static final String EXTRA_SYNCH_KEY = Models.AUTHORITY + ".intent" +
+            ".extra.SYNCH_KEY";
+
 
     //-------------------------------------------------------------------------
     // Intent flags
