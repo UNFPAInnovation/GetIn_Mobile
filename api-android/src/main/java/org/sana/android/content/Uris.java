@@ -472,7 +472,7 @@ public final class Uris {
 	 * @throws IllegalArgumentException if the type can not be determined.
 	 */
 	public static boolean isDirType(Uri uri){
-		return (getContentDescriptor(uri) & TYPE_MASK) == ITEMS;
+		return (getTypeDescriptor(uri) & TYPE_MASK) == ITEMS;
 	}
 	
 	/**
@@ -484,7 +484,7 @@ public final class Uris {
 	 * @throws IllegalArgumentException if the type can not be determined.
 	 */
 	public static boolean isItemType(Uri uri){
-		int val = getContentDescriptor(uri) & TYPE_MASK;
+		int val = getTypeDescriptor(uri) & TYPE_MASK;
 		return (val == ITEM_ID) || (val == ITEM_UUID);
 	}
 	
