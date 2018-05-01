@@ -11,6 +11,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -53,6 +54,7 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 import org.sana.R;
 import org.sana.android.Constants;
+import org.sana.android.app.Preferences;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.PatientWrapper;
 import org.sana.android.db.ModelWrapper;
@@ -1320,10 +1322,40 @@ public class MDSInterface2 {
             normalizedPath = normalizedPath + "/";
         }
         normalizedPath = normalizedPath.replace("//", "/" );
-		URI uri =  new URI(scheme, null, host, port, normalizedPath, query, null);
+        String normalizedQuery = !TextUtils.isEmpty(query)?
+                URLDecoder.decode(query): query;
+		URI uri =  new URI(scheme, null, host, port, normalizedPath,
+                normalizedQuery, null);
         Log.i(TAG, "uri: " + uri.toString() +", path:" + normalizedPath);
 		return uri;
 	}
+
+    public static URI getURI(Context context, Uri uri) throws URISyntaxException {
+        URI remote = null;
+
+        String path = uri.getPath();
+        Map<String,String> params = new HashMap<>();
+        for(String key:uri.getQueryParameterNames()){
+            params.put(key, uri.getQueryParameter(key));
+        }
+
+        String scheme = getScheme(context);
+        String host = getHost(context);
+        int port = getPort(context);
+        String root = context.getString(R.string.path_root);
+        // Clean up path
+        String normalizedPath = root + path;
+        if(!normalizedPath.endsWith("/")){
+            normalizedPath = normalizedPath + "/";
+        }
+        normalizedPath = normalizedPath.replace("//", "/" );
+        // Clean up the query string
+        String query = uri.getQuery();
+        String normalizedQuery = !TextUtils.isEmpty(query)?
+                URLDecoder.decode(query): query;
+        remote =  new URI(scheme, null, host, port, normalizedPath, null, null);
+        return remote;
+    }
 
 	public static void logObservations(Context context, String uuid){
 		Cursor cursor = context.getContentResolver().query(
