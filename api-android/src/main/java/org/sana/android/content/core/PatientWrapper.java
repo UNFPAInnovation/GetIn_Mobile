@@ -466,17 +466,17 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 
         if (object.getANC_visit()!=null){
         cv.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
-        cv.put(Patients.Contract.AMBULANCE_NEED, object.getAMBULANCE_need());
-        cv.put(Patients.Contract.AMBULANCE_RESPONSE, object.getAMBULANCE_response());
+        //cv.put(Patients.Contract.AMBULANCE_NEED, object.getAMBULANCE_need());
+        //cv.put(Patients.Contract.AMBULANCE_RESPONSE, object.getAMBULANCE_response());
         cv.put(Patients.Contract.EDD, object.getEDD());
         cv.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         cv.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
         cv.put(Patients.Contract.CUG_STATUS, object.getCUG_status());
-        cv.put(Patients.Contract.COMMENT, object.getComment());
-        cv.put(Patients.Contract.BLEEDING, object.getBleeding());
-        cv.put(Patients.Contract.FEVER, object.getFever());
-        cv.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
-        cv.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
+        //cv.put(Patients.Contract.COMMENT, object.getComment());
+        //cv.put(Patients.Contract.BLEEDING, object.getBleeding());
+        //cv.put(Patients.Contract.FEVER, object.getFever());
+        //cv.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
+        //cv.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         if(object.getLocation() != null)
             cv.put(Patients.Contract.LOCATION, object.getLocation());
         cv.put(Patients.Contract.DISTRICT, object.getDistrict());
@@ -507,17 +507,17 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
 
         if(object.getANC_visit()!= null){
         form.put(Patients.Contract.ANC_VISIT, Dates.toSQL(object.getANC_visit()));}
-        form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_need());
-        form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_response());
+        //form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_need());
+        //form.put(Patients.Contract.AMBULANCE_NEED,object.getAMBULANCE_response());
         form.put(Patients.Contract.EDD, object.getEDD());
         form.put(Patients.Contract.RECEIVE_SMS, object.getReceive_sms());
         form.put(Patients.Contract.FOLLOW_UP, object.getFollow_up());
         form.put(Patients.Contract.CUG_STATUS, object.getCUG_status());
-        form.put(Patients.Contract.COMMENT, object.getComment());
-        form.put(Patients.Contract.BLEEDING, object.getBleeding());
-        form.put(Patients.Contract.FEVER, object.getFever());
-        form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
-        form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
+        //form.put(Patients.Contract.COMMENT, object.getComment());
+        //form.put(Patients.Contract.BLEEDING, object.getBleeding());
+        //form.put(Patients.Contract.FEVER, object.getFever());
+        //form.put(Patients.Contract.SWOLLEN_FEET, object.getSwollen_feet());
+        //form.put(Patients.Contract.BLURRED_VISION, object.getBlurred_vision());
         form.put(Patients.Contract.LOCATION, object.getLocation());
         form.put(Patients.Contract.DISTRICT, object.getDistrict());
         form.put(Patients.Contract.COUNTY, object.getCounty());
