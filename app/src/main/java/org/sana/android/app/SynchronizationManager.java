@@ -28,13 +28,18 @@ public class SynchronizationManager {
     public static void sync(Context context, Uri uri, String keyExtra){
         long last = getLastSynch(context, uri, keyExtra);
         Uri synchUri = uri;
-        if(last > 0){
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(last);
-            synchUri = uri.buildUpon().appendQueryParameter("modified__gt",
+        Calendar calendar = Calendar.getInstance();
+        long now = calendar.getTimeInMillis();
+        calendar.setTimeInMillis(last);
+        synchUri = uri.buildUpon().appendQueryParameter("modified__gt",
                     Dates.toSQL(calendar.getTime())).build();
-        }
-        context.startService(new Intent(Intents.ACTION_READ, synchUri));
+
+        // Build the synch Intent
+        Intent intent = new Intent(Intents.ACTION_READ, synchUri);
+        intent.putExtra(Intents.EXTRA_SYNCH, now);
+        if(!TextUtils.isEmpty(keyExtra))
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, keyExtra);
+        context.startService(intent);
     }
 
     public static String getSynchKey(Uri uri){
@@ -89,5 +94,16 @@ public class SynchronizationManager {
 
     public static void setLastSynch(Context context, Uri uri){
         setLastSynch(context, uri, null);
+    }
+
+    public static void setSynchTime(Context context, Uri uri, String keyExtra,
+                                    long time){
+        if(Uris.isItemType(uri)){
+            return;
+        }
+        String key = getSynchKey(uri,keyExtra);
+        SharedPreferences preferences =
+                PreferenceManager.getDefaultSharedPreferences(context);
+        preferences.edit().putLong(key, time).commit();
     }
 }
