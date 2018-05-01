@@ -524,6 +524,7 @@ public class PatientWrapper extends ModelWrapper<IPatient> implements IPatient {
         form.put(Patients.Contract.SUBCOUNTY, object.getSubCounty());
         form.put(Patients.Contract.PARISH, object.getParish());
         form.put(Patients.Contract.VILLAGE,object.getVillage());
+        form.put(Patients.Contract.PATIENT_ID, object.getSystemId());
         return form;
     }
 }
