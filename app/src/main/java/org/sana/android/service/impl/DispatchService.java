@@ -655,7 +655,9 @@ public class DispatchService extends Service{
                                 Response<Collection<Patient>> patientListResponse = MDSInterface2.apiGet(uri,username,password,
                                     pHandler);
                                 if(patientListResponse.getMessage() != null)
-                                    bcastCode = createOrUpdateSubjects(patientListResponse.message, startId);
+                                    bcastCode = (patientListResponse.message.size() > 0)?
+                                            createOrUpdateSubjects(patientListResponse.message, startId):
+                                            patientListResponse.code;
                                 else
                                     bcastCode = patientListResponse.getCode();
                                 bcastMessage = "";
@@ -903,7 +905,13 @@ public class DispatchService extends Service{
                         if(bcastCode != NO_BROADCAST)
                             broadcastResult(intent.getData(),bcastCode,bcastMessage);
                         if(bcastCode == 200){
-                            SynchronizationManager.setLastSynch(DispatchService.this, msgUri);
+                            if(method.equals("GET")) {
+                                if (Uris.isDirType(msgUri)) {
+                                    long time = intent.getLongExtra(Intents.EXTRA_SYNCH, 0L);
+                                    String key = intent.getStringExtra(Intents.EXTRA_SYNCH_KEY);
+                                    SynchronizationManager.setSynchTime(DispatchService.this,msgUri, key, time);
+                                }
+                            }
                         }
                         break;
 
