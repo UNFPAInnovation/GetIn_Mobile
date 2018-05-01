@@ -609,7 +609,7 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
             // Append the village list query parameter
             Uri.Builder builder = Subjects.CONTENT_URI.buildUpon();
             builder.appendQueryParameter("village", village);
-            SynchronizationManager.sync(this, builder.build());
+            SynchronizationManager.sync(this, builder.build(), village);
         }
         SynchronizationManager.sync(this, Encounters.CONTENT_URI);
         SynchronizationManager.sync(this, Observations.CONTENT_URI);

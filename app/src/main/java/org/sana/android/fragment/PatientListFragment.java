@@ -514,7 +514,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
                 // Append the village list query parameter
                 Uri.Builder builder = uri.buildUpon();
                 builder.appendQueryParameter("village", village);
-                SynchronizationManager.sync(context,builder.build());
+                SynchronizationManager.sync(context,builder.build(), village);
             }
             prefs.edit().putLong("patient_sync", now).commit();
             result = true;
@@ -529,7 +529,7 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
         for(String village:villageNames) {
             Uri.Builder builder = uri.buildUpon();
             builder.appendQueryParameter("village", village);
-            SynchronizationManager.sync(context,builder.build());
+            SynchronizationManager.sync(context,builder.build(), village);
 
         }
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
