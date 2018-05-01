@@ -4,7 +4,7 @@
     uuid="9b4ca27f-83ea-4b23-884b-5dffa97eb429"
     version="1.0"
     locale="en"
-    concept="MIDWIFE MAPPING FORM"
+    concept="MAPPING FORM"
     class="org.sana.core.Subject"
     on_complete="intent://org.sana.provider/core/procedure/ae0775ec-5a8c-4f2c-8c78-13325e26f03f#Intent;scheme=content;action=org.sana.android.intent.action.RUN_PROCEDURE;type=vnd.android.cursor.item/org.sana.procedure;end">
     <!-- This uuid was picked from registration xml file  !-->
@@ -1349,7 +1349,9 @@
                 type="ENTRY"
                 concept="SYSTEM ID"
                 question="Enter Patient Voucher Number"
-                answer=""/>
+                answer=""
+                pattern="HBBH[0-9]{6}|FPUG [0-9]{6}|SMA[0-9]{6}"
+                helpText="Invalid Voucher Number format."/>
             />
         </Page>
    <!-- <Page>
