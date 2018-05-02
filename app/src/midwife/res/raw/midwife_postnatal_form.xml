@@ -5,7 +5,7 @@
     version="1.0"
     locale="en"
     class="org.sana.core.Encounter"
-    concept="ENCOUNTER_POSTNATAL"
+    concept="ENCOUNTER_POSTNATAL_MIDWIFE"
 >
     <!-- copy follow_up_note_vht1 here -->
     <Page>
@@ -57,9 +57,10 @@
         />
     </Page>
     <Page>
+        <!-- Changed from concept="VHT MISSING REASON" -->
         <Element
             id="4b"
-            concept="VHT MISSING REASON"
+            concept="POSTNATAL FAMILY PLANNING USE"
             type="RADIO"
             required="true"
             question="Are u using any method of Family Planning?"
