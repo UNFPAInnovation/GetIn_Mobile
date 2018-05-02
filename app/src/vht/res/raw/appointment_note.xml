@@ -4,6 +4,8 @@
     uuid="a6bae73a-d07a-4df0-9830-f243383d9778"
     version="1.0"
     locale="en"
+    class= "org.sana.core.Encounter"
+    concept="ENCOUNTER_VHT"
     >
     <!-- copy follow_up_note_vht1 here -->
     <Page>
