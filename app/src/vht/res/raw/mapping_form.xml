@@ -1350,6 +1350,7 @@
             concept="SYSTEM ID"
             question="Enter Patient Voucher Number"
             answer=""
+            pattern="HBBH[0-9]{6}|FPUG [0-9]{6}|SMA[0-9]{6}|LKUP[0-9]{6}"
             helpText="Invalid Voucher Number format."/>
         />
     </Page>
