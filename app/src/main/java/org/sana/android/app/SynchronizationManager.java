@@ -43,18 +43,31 @@ public class SynchronizationManager {
     }
 
     public static String getSynchKey(Uri uri){
+        String key = "";
         String type = Uris.getType(uri);
-        String[] resolver = type.split("\\.");
-        return String.format("%s_sync", resolver[resolver.length - 1].toLowerCase());
+        if(!TextUtils.isEmpty(type)) {
+            String[] resolver = type.split("\\.");
+            if (resolver.length >= 1) {
+                key = resolver[resolver.length - 1].toLowerCase();
+            }
+        }
+        return String.format("%s_sync", key);
+
     }
 
     public static String getSynchKey(Uri uri, String suffix){
+        String key = "";
         String type = Uris.getType(uri);
-        String[] resolver = type.split("\\.");
+        if(!TextUtils.isEmpty(type)) {
+            String[] resolver = type.split("\\.");
+            if (resolver.length >= 1) {
+                key = resolver[resolver.length - 1].toLowerCase();
+            }
+        }
         if(TextUtils.isEmpty(suffix))
-            return String.format("%s_sync", resolver[resolver.length - 1].toLowerCase());
+            return String.format("%s_sync", key);
         else
-            return String.format("%s_%s_sync", resolver[resolver.length - 1].toLowerCase(), suffix);
+            return String.format("%s_%s_sync", key, suffix);
     }
 
     public static long getLastSynch(Context context, Uri uri){
