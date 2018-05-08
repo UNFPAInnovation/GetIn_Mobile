@@ -640,8 +640,10 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
 
     public List<String> getVillageNamesForObserver(Observer observer){
         List<String> villages = new ArrayList<>();
-        for(Location location: observer.getLocations()){
-            villages.add(location.getName());
+        if(observer.getLocations() != null) {
+            for (Location location : observer.getLocations()) {
+                villages.add(location.getName());
+            }
         }
         return villages;
     }
