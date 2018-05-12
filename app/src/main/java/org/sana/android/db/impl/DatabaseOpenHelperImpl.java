@@ -35,6 +35,7 @@ import org.sana.android.db.TableHelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.text.TextUtils;
 import android.util.Log;
 
 /**
@@ -125,7 +126,7 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 				} else {
 					String sql = helper.onUpgrade(oldVersion, newVersion);
 					Log.i(TAG, String.format(helper.getTable() +": onUpgrade(int,int)", ((sql == null)?"NULL":sql)));
-					if(sql != null)
+					if(!TextUtils.isEmpty(sql))
 						db.execSQL(helper.onUpgrade(oldVersion, newVersion));
 				}
 			}
