@@ -163,7 +163,7 @@ public class SubjectsHelper extends TableHelper<Subject>{
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.SUBCOUNTY + " TEXT;");
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " + Contract.PARISH + " TEXT;");
             }
-            if (newVersion == 9) {
+            if (newVersion == 8) {
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
                         BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
 

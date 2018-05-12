@@ -151,8 +151,8 @@ public class EncountersHelper extends TableHelper<Encounter>{
         if(oldVersion < newVersion){
             StringBuilder sqlBuilder = new StringBuilder();
             if (newVersion == 9){
-                sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
-                        BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
+                //sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
+                //        BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
                         Encounters.Contract.CONCEPT + " TEXT;");
             }
