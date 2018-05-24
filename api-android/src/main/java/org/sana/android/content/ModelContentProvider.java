@@ -36,6 +36,8 @@ import org.sana.android.db.DatabaseOpenHelper;
 import org.sana.android.db.TableHelper;
 import org.sana.android.db.impl.AmbulanceDriversHelper;
 import org.sana.android.db.impl.ConceptsHelper;
+import org.sana.android.db.impl.CountiesHelper;
+import org.sana.android.db.impl.DistrictsHelper;
 import org.sana.android.db.impl.EncounterTasksHelper;
 import org.sana.android.db.impl.EncountersHelper;
 import org.sana.android.db.impl.EventsHelper;
@@ -44,7 +46,9 @@ import org.sana.android.db.impl.LocationsHelper;
 import org.sana.android.db.impl.NotificationsHelper;
 import org.sana.android.db.impl.ObservationsHelper;
 import org.sana.android.db.impl.ObserversHelper;
+import org.sana.android.db.impl.ParishesHelper;
 import org.sana.android.db.impl.ProceduresHelper;
+import org.sana.android.db.impl.SubcountiesHelper;
 import org.sana.android.db.impl.SubjectsHelper;
 import org.sana.android.provider.BaseContract;
 
@@ -93,30 +97,38 @@ public abstract class ModelContentProvider extends ContentProvider {
 	protected TableHelper<?> getTableHelper(Uri uri){
 		int match = Uris.getContentDescriptor(uri);
 		switch(match){
-		case(Uris.CONCEPT):
-			return ConceptsHelper.getInstance();
-		case(Uris.ENCOUNTER):
-			return EncountersHelper.getInstance();
-		case(Uris.EVENT):
-			return EventsHelper.getInstance();
-		case(Uris.INSTRUCTION):
-			return InstructionsHelper.getInstance();
-		case(Uris.NOTIFICATION):
-			return NotificationsHelper.getInstance();
-		case(Uris.OBSERVATION):
-			return ObservationsHelper.getInstance();
-		case(Uris.OBSERVER):
-			return ObserversHelper.getInstance();
-		case(Uris.PROCEDURE):
-			return ProceduresHelper.getInstance();
-		case(Uris.SUBJECT):
-			return SubjectsHelper.getInstance();
-		case(Uris.ENCOUNTER_TASK):
-			return EncounterTasksHelper.getInstance();
+            case (Uris.CONCEPT):
+                return ConceptsHelper.getInstance();
+            case (Uris.ENCOUNTER):
+                return EncountersHelper.getInstance();
+            case (Uris.EVENT):
+                return EventsHelper.getInstance();
+            case (Uris.INSTRUCTION):
+                return InstructionsHelper.getInstance();
+            case (Uris.NOTIFICATION):
+                return NotificationsHelper.getInstance();
+            case (Uris.OBSERVATION):
+                return ObservationsHelper.getInstance();
+            case (Uris.OBSERVER):
+                return ObserversHelper.getInstance();
+            case (Uris.PROCEDURE):
+                return ProceduresHelper.getInstance();
+            case (Uris.SUBJECT):
+                return SubjectsHelper.getInstance();
+            case (Uris.ENCOUNTER_TASK):
+                return EncounterTasksHelper.getInstance();
             case Uris.AMBULANCE_DRIVER:
                 return AmbulanceDriversHelper.getInstance();
             case (Uris.LOCATION):
                 return LocationsHelper.getInstance();
+            case Uris.PARISH:
+                return ParishesHelper.getInstance();
+            case Uris.SUBCOUNTY:
+                return SubcountiesHelper.getInstance();
+            case Uris.COUNTY:
+                return CountiesHelper.getInstance();
+            case Uris.DISTRICT:
+                return DistrictsHelper.getInstance();
 		default:
 			throw new IllegalArgumentException("Invalid uri in "
 						+"getTableHelper(): " + uri.toString());
