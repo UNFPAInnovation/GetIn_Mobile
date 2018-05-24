@@ -132,7 +132,7 @@ public class EncounterTasksHelper extends TableHelper<EncounterTask>{
         String sql = null;
 		if(oldVersion < newVersion){
             StringBuilder sqlBuilder = new StringBuilder();
-            if (newVersion == 9){
+            if (newVersion == 9 || (oldVersion < 9 && newVersion > 9)){
                 //sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
                 //    BaseContract.SYNCH + " INTEGER DEFAULT '-1';");
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +

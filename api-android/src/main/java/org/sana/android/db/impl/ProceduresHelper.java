@@ -105,7 +105,7 @@ public class ProceduresHelper extends TableHelper<Procedure>{
         String sql = null;
         if(oldVersion < newVersion){
             StringBuilder sqlBuilder = new StringBuilder();
-            if (newVersion == 9){
+            if (newVersion == 9 || (oldVersion < 9 && newVersion > 9)){
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
                         Contract.CONCEPT + " TEXT;");
                 sqlBuilder.append("ALTER TABLE " + getTable() + " ADD COLUMN " +
