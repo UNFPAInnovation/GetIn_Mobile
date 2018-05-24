@@ -31,13 +31,19 @@ import java.util.UUID;
 
 import org.sana.android.content.Uris;
 import org.sana.android.provider.Concepts;
+import org.sana.android.provider.Counties;
+import org.sana.android.provider.Districts;
+import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Events;
 import org.sana.android.provider.Instructions;
+import org.sana.android.provider.Locations;
 import org.sana.android.provider.Notifications;
 import org.sana.android.provider.Observations;
 import org.sana.android.provider.Observers;
+import org.sana.android.provider.Parishes;
 import org.sana.android.provider.Procedures;
+import org.sana.android.provider.Subcounties;
 import org.sana.android.provider.Subjects;
 
 import android.content.ContentUris;
@@ -163,7 +169,46 @@ public class UrisTest extends AndroidTestCase {
     	uri = Uris.withAppendedUuid(Subjects.CONTENT_URI, uuid.toString());
     	assertEquals(Uris.getDescriptor(uri), Uris.SUBJECT_UUID);
 	}
-	
+    public void testEncounterTaskDescriptors(){
+        assertEquals(Uris.getDescriptor(EncounterTasks.CONTENT_URI), Uris.ENCOUNTER_TASK_DIR);
+        uri = ContentUris.withAppendedId(EncounterTasks.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.ENCOUNTER_TASK_ITEM);
+        uri = Uris.withAppendedUuid(EncounterTasks.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.ENCOUNTER_TASK_UUID);
+    }
+
+    public void testLocalityDescriptors(){
+        // Village
+        assertEquals(Uris.getDescriptor(Locations.CONTENT_URI), Uris.LOCATION_DIR);
+        uri = ContentUris.withAppendedId(Locations.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.LOCATION_ITEM);
+        uri = Uris.withAppendedUuid(Locations.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.LOCATION_UUID);
+        // Parishes
+        assertEquals(Uris.getDescriptor(Parishes.CONTENT_URI), Uris.PARISH_DIR);
+        uri = ContentUris.withAppendedId(Parishes.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.PARISH_ITEM);
+        uri = Uris.withAppendedUuid(Parishes.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.PARISH_UUID);
+        // Subcounties
+        assertEquals(Uris.getDescriptor(Subcounties.CONTENT_URI), Uris.SUBCOUNTY_DIR);
+        uri = ContentUris.withAppendedId(Subcounties.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.SUBCOUNTY_ITEM);
+        uri = Uris.withAppendedUuid(Subcounties.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.SUBCOUNTY_UUID);
+        // Counties
+        assertEquals(Uris.getDescriptor(Counties.CONTENT_URI), Uris.COUNTY_DIR);
+        uri = ContentUris.withAppendedId(Counties.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.COUNTY_ITEM);
+        uri = Uris.withAppendedUuid(Counties.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.COUNTY_UUID);
+        // Districts
+        assertEquals(Uris.getDescriptor(Districts.CONTENT_URI), Uris.DISTRICT_DIR);
+        uri = ContentUris.withAppendedId(Districts.CONTENT_URI, 1);
+        assertEquals(Uris.getDescriptor(uri), Uris.DISTRICT_ITEM);
+        uri = Uris.withAppendedUuid(Districts.CONTENT_URI, uuid.toString());
+        assertEquals(Uris.getDescriptor(uri), Uris.DISTRICT_UUID);
+    }
 	public void testWithAppendedUuid(){
 		String uriString = Observers.CONTENT_URI.toString() +  "/" + uuid.toString();
 		Log.i("UrisTest", "str " + uriString);
