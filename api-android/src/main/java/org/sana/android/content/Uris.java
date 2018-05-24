@@ -33,6 +33,8 @@ import android.text.TextUtils;
 
 import org.sana.android.provider.AmbulanceDrivers;
 import org.sana.android.provider.Concepts;
+import org.sana.android.provider.Counties;
+import org.sana.android.provider.Districts;
 import org.sana.android.provider.EncounterTasks;
 import org.sana.android.provider.Encounters;
 import org.sana.android.provider.Events;
@@ -43,7 +45,9 @@ import org.sana.android.provider.Notifications;
 import org.sana.android.provider.ObservationTasks;
 import org.sana.android.provider.Observations;
 import org.sana.android.provider.Observers;
+import org.sana.android.provider.Parishes;
 import org.sana.android.provider.Procedures;
+import org.sana.android.provider.Subcounties;
 import org.sana.android.provider.Subjects;
 import org.sana.android.provider.VHTs;
 import org.sana.util.UUIDUtil;
@@ -134,8 +138,10 @@ public final class Uris {
 	*/
 	//--------------------------------------------------------------------------
 	// Model codes
-	//--------------------------------------------------------------------------
-	public static final int CONCEPT = 1 << CONTENT_SHIFT;
+    //
+    // Note Max int value is 2^32 or roughly < 32 data types in the system
+    //--------------------------------------------------------------------------
+    public static final int CONCEPT = 1 << CONTENT_SHIFT;
 	public static final int ENCOUNTER = 2 << CONTENT_SHIFT;
 	public static final int EVENT = 4 << CONTENT_SHIFT;
 	public static final int INSTRUCTION = 8 << CONTENT_SHIFT;
@@ -150,7 +156,10 @@ public final class Uris {
     public static final int AMBULANCE_DRIVER = 4096 << CONTENT_SHIFT;
 	public static final int VHT = 8192 << CONTENT_SHIFT;
     public static final int LOCATION = 16384 << CONTENT_SHIFT;
-
+    public static final int PARISH = 32768 << CONTENT_SHIFT;
+    public static final int SUBCOUNTY = 65536 << CONTENT_SHIFT;
+    public static final int COUNTY = 131072 << CONTENT_SHIFT;
+    public static final int DISTRICT = 262144 << CONTENT_SHIFT;
 
     // dir match codes OBJECT | ITEMS
 	public static final int CONCEPT_DIR = CONCEPT | ITEMS;
@@ -168,6 +177,10 @@ public final class Uris {
     public static final int AMBULANCE_DRIVER_DIR = AMBULANCE_DRIVER | ITEMS;
     public static final int VHT_DIR = VHT | ITEMS;
     public static final int LOCATION_DIR = LOCATION | ITEMS;
+    public static final int PARISH_DIR = PARISH | ITEMS;
+    public static final int SUBCOUNTY_DIR = SUBCOUNTY | ITEMS;
+    public static final int COUNTY_DIR = COUNTY | ITEMS;
+    public static final int DISTRICT_DIR = DISTRICT | ITEMS;
 	
 	// item match codes OBJECT | ITEM_ID
 	public static final int CONCEPT_ITEM = CONCEPT | ITEM_ID;
@@ -185,6 +198,10 @@ public final class Uris {
     public static final int AMBULANCE_DRIVER_ITEM= AMBULANCE_DRIVER | ITEM_ID;
     public static final int VHT_ITEM = VHT | ITEM_ID;
     public static final int LOCATION_ITEM = LOCATION | ITEM_ID;
+    public static final int PARISH_ITEM = PARISH | ITEM_ID;
+    public static final int SUBCOUNTY_ITEM = SUBCOUNTY | ITEM_ID;
+    public static final int COUNTY_ITEM = COUNTY | ITEM_ID;
+    public static final int DISTRICT_ITEM = DISTRICT | ITEM_ID;
 	
 	// item match codes OBJECT | ITEM_UUID
 	public static final int CONCEPT_UUID = CONCEPT | ITEM_UUID;
@@ -202,6 +219,10 @@ public final class Uris {
     public static final int AMBULANCE_DRIVER_UUID= AMBULANCE_DRIVER | ITEM_UUID;
     public static final int VHT_UUID = VHT | ITEM_UUID;
     public static final int LOCATION_UUID = LOCATION | ITEM_UUID;
+    public static final int PARISH_UUID = PARISH | ITEM_UUID;
+    public static final int SUBCOUNTY_UUID = SUBCOUNTY | ITEM_UUID;
+    public static final int COUNTY_UUID = COUNTY | ITEM_UUID;
+    public static final int DISTRICT_UUID = DISTRICT | ITEM_UUID;
 	
 	// Matcher for mapping the Uri to code mappings 
 	private static final UriMatcher mMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -269,7 +290,23 @@ public final class Uris {
         mMatcher.addURI(Models.AUTHORITY, "core/location/", LOCATION_DIR);
         mMatcher.addURI(Models.AUTHORITY, "core/location/#", LOCATION_ITEM);
         mMatcher.addURI(Models.AUTHORITY, "core/location/*", LOCATION_UUID);
-		
+
+        // Add Locality identifiers
+        mMatcher.addURI(Models.AUTHORITY, "core/parish/", PARISH_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/parish/#", PARISH_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/parish/*", PARISH_UUID);
+
+        mMatcher.addURI(Models.AUTHORITY, "core/subcounty/", SUBCOUNTY_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/subcounty/#", SUBCOUNTY_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/subcounty/*", SUBCOUNTY_UUID);
+
+        mMatcher.addURI(Models.AUTHORITY, "core/county/", COUNTY_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/county/#", COUNTY_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/county/*", COUNTY_UUID);
+
+        mMatcher.addURI(Models.AUTHORITY, "core/district/", DISTRICT_DIR);
+        mMatcher.addURI(Models.AUTHORITY, "core/district/#", DISTRICT_ITEM);
+        mMatcher.addURI(Models.AUTHORITY, "core/district/*", DISTRICT_UUID);
 	}
 	
 	/**
@@ -456,6 +493,33 @@ public final class Uris {
             case VHT_ITEM:
             case VHT_UUID:
                 return VHTs.CONTENT_ITEM_TYPE;
+            // Locality sub-items
+            case LOCATION_DIR:
+                return Locations.CONTENT_TYPE;
+            case LOCATION_ITEM:
+            case LOCATION_UUID:
+                return Locations.CONTENT_ITEM_TYPE;
+            case PARISH_DIR:
+                return Parishes.CONTENT_TYPE;
+            case PARISH_ITEM:
+            case PARISH_UUID:
+                return Parishes.CONTENT_ITEM_TYPE;
+            case SUBCOUNTY:
+                return Subcounties.CONTENT_TYPE;
+            case SUBCOUNTY_ITEM:
+            case SUBCOUNTY_UUID:
+                return Subcounties.CONTENT_ITEM_TYPE;
+            case COUNTY_DIR:
+                return Counties.CONTENT_TYPE;
+            case COUNTY_ITEM:
+            case COUNTY_UUID:
+                return Counties.CONTENT_ITEM_TYPE;
+            case DISTRICT_DIR:
+                return Districts.CONTENT_TYPE;
+            case DISTRICT_ITEM:
+            case DISTRICT_UUID:
+                return Districts.CONTENT_ITEM_TYPE;
+
             case PACKAGE_DIR:
 			    return "application/vnd.android.package-archive";
 		default:
