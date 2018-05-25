@@ -28,10 +28,12 @@
 package org.sana.android.provider;
 
 import org.sana.android.content.Uris;
+import org.sana.android.util.Dates;
 import org.sana.core.Concept;
 import org.sana.core.Encounter;
 import org.sana.core.Event;
 import org.sana.core.Instruction;
+import org.sana.core.Model;
 import org.sana.core.Notification;
 import org.sana.core.Observation;
 import org.sana.core.Observer;
@@ -43,6 +45,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -289,5 +292,20 @@ public class Models {
         }
         return synchable;
 
+    }
+
+    public static ContentValues toValues(Model object){
+        ContentValues contentValues = new ContentValues();
+        if(object.getCreated() != null) {
+            String date = Dates.toSQL(object.getCreated());
+            contentValues.put(BaseContract.CREATED, date);
+        }
+        if(object.getModified() != null) {
+            String date = Dates.toSQL(object.getModified());
+            contentValues.put(BaseContract.CREATED, date);
+        }
+        if(!TextUtils.isEmpty(object.getUuid()))
+            contentValues.put(BaseContract.UUID, object.getUuid());
+        return contentValues;
     }
 }
