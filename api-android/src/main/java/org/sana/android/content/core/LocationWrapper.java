@@ -44,6 +44,7 @@ import org.sana.core.Location;
 import org.sana.util.UUIDUtil;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -229,6 +230,25 @@ public class LocationWrapper extends ModelWrapper<ILocation> implements ILocatio
             }
         }
         return object;
+    }
+
+    public static void insertOrUpdate(Context context, Collection<Location> objects){
+        if(objects == null) return;
+        if(objects.size() == 0) return;
+        Collection<ContentValues> collection = new ArrayList<>(objects.size());
+        Iterator<Location> iterator = objects.iterator();
+        while(iterator.hasNext()){
+            collection.add(toValues(iterator.next()));
+        }
+        ModelWrapper.bulkInsertOrUpdate(context, Locations.CONTENT_URI, collection);
+    }
+
+    public static ContentValues toValues(Location object){
+        ContentValues contentValues = Models.toValues(object);
+        contentValues.put(Locations.Contract.NAME, object.name);
+        if(object.parish != null && !TextUtils.isEmpty(object.parish.name))
+            contentValues.put(Locations.Contract.PARISH, object.parish.name);
+        return contentValues;
     }
 
     // Copied code
