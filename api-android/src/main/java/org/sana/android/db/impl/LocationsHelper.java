@@ -44,7 +44,8 @@ public class LocationsHelper extends TableHelper<Location> {
                 + Locations.Contract.CREATED + " DATE,"
                 + Locations.Contract.MODIFIED + " DATE,"
                 + Locations.Contract.NAME + " TEXT,"
-                + Locations.Contract.CODE + " INTEGER DEFAULT '0'"
+                + Locations.Contract.CODE + " INTEGER DEFAULT '0',"
+                + Locations.Contract.PARISH + " TEXT"
                 + ");";
     }
 
