@@ -83,11 +83,16 @@ import org.sana.android.content.Intents;
 import org.sana.android.content.ModelContext;
 import org.sana.android.content.ModelEntity;
 import org.sana.android.content.Uris;
+import org.sana.android.content.core.CountyWrapper;
+import org.sana.android.content.core.DistrictWrapper;
 import org.sana.android.content.core.EncounterWrapper;
+import org.sana.android.content.core.LocationWrapper;
 import org.sana.android.content.core.ObservationWrapper;
 import org.sana.android.content.core.ObserverParcel;
 import org.sana.android.content.core.ObserverWrapper;
+import org.sana.android.content.core.ParishWrapper;
 import org.sana.android.content.core.PatientWrapper;
+import org.sana.android.content.core.SubcountyWrapper;
 import org.sana.android.db.ModelWrapper;
 import org.sana.android.net.MDSInterface2;
 import org.sana.android.provider.AmbulanceDrivers;
@@ -107,23 +112,33 @@ import org.sana.android.util.Logf;
 import org.sana.android.util.SanaUtil;
 import org.sana.api.task.EncounterTask;
 import org.sana.core.AmbulanceDriver;
+import org.sana.core.County;
+import org.sana.core.District;
 import org.sana.core.Encounter;
+import org.sana.core.Location;
 import org.sana.core.Model;
 import org.sana.core.Observation;
 import org.sana.core.Observer;
+import org.sana.core.Parish;
 import org.sana.core.Patient;
 import org.sana.core.Procedure;
+import org.sana.core.Subcounty;
 import org.sana.core.Subject;
 import org.sana.core.VHT;
 import org.sana.net.Response;
 import org.sana.net.http.HttpTaskFactory;
 import org.sana.net.http.handler.AmbulanceDriverResponseHandler;
+import org.sana.net.http.handler.CountyResponseHandler;
+import org.sana.net.http.handler.DistrictResponseHandler;
 import org.sana.net.http.handler.EncounterResponseHandler;
 import org.sana.net.http.handler.EncounterTaskResponseHandler;
+import org.sana.net.http.handler.LocationResponseHandler;
 import org.sana.net.http.handler.ObservationResponseHandler;
 import org.sana.net.http.handler.ObserverResponseHandler;
+import org.sana.net.http.handler.ParishResponseHandler;
 import org.sana.net.http.handler.PatientResponseHandler;
 import org.sana.net.http.handler.ProcedureResponseHandler;
+import org.sana.net.http.handler.SubcountyResponseHandler;
 import org.sana.net.http.handler.VHTResponseHandler;
 import org.sana.util.DateUtil;
 
@@ -175,31 +190,20 @@ public class DispatchService extends Service{
     public static final String RESPONSE_CODE = "code";
 
     public static final int NO_BROADCAST = -1;
-
+    /*
     public class DispatchCallback implements Handler.Callback{
 
         PatientResponseHandler pHandler = new PatientResponseHandler();
-            /**
-             * Message passed should have the following values
-             * what - REQUEST(0) or RESPONSE(1)
-             * arg1 - startId passed to startService()
-             * arg2 - Uri descriptor
-             * obj - Uri string of the intent
-             * data - additional query/post parameters
-             *
-             * Request will be sent from initial call to handle message which
-             * will trigger a second callback placed on the Handler for the
-             * response. Hence, Response may not be handled in the same order as
-             * the original request.
-             */
+
             @Override
             public boolean handleMessage(Message msg) {
 
                 return true;
             }
     }
-
+    */
     //TODO Refactor this out.
+    /*
     abstract static class SyncHandler<T> {
         SyncHandler(){}
 
@@ -330,7 +334,7 @@ public class DispatchService extends Service{
                         e.printStackTrace();
                     }
                 }
-                */
+                *
                 list.add(vals);
             }
             return list;
@@ -386,6 +390,7 @@ public class DispatchService extends Service{
             return values;
         }
     };
+    */
     EncounterTaskResponseHandler eTaskHandler = new EncounterTaskResponseHandler();
     static final int create = 0x00000001;
     static final int read = 0x00000010;
@@ -890,6 +895,63 @@ public class DispatchService extends Service{
                                     e.printStackTrace();
                                 }
                                 break;
+                            // Locality designations
+                            case Uris.LOCATION_DIR:
+                                if(!method.equals("GET")) break;
+                                Response<Collection<Location>> locations = MDSInterface2.apiGet(uri,
+                                            username, password, new LocationResponseHandler());
+                                bcastCode = locations.getCode();
+                                try{
+                                    LocationWrapper.insertOrUpdate(DispatchService.this, locations.getMessage());
+                                } catch (Exception e){
+                                    bcastCode = 500;
+                                }
+                                break;
+                            case Uris.PARISH_DIR:
+                                if(!method.equals("GET")) break;
+                                Response<Collection<Parish>> parishes = MDSInterface2.apiGet(uri,
+                                        username, password, new ParishResponseHandler());
+                                bcastCode = parishes.getCode();
+                                try{
+                                    ParishWrapper.insertOrUpdate(DispatchService.this, parishes.getMessage());
+                                } catch (Exception e){
+                                    bcastCode = 500;
+                                }
+                                break;
+                            case Uris.SUBCOUNTY_DIR:
+                                if(!method.equals("GET")) break;
+                                Response<Collection<Subcounty>> subcounties = MDSInterface2.apiGet(uri,
+                                    username, password, new SubcountyResponseHandler());
+                                bcastCode = subcounties.getCode();
+                                try{
+                                    SubcountyWrapper.insertOrUpdate(DispatchService.this, subcounties.getMessage());
+                                } catch (Exception e){
+                                    bcastCode = 500;
+                                }
+                                break;
+                            case Uris.COUNTY_DIR:
+                                if(!method.equals("GET")) break;
+                                Response<Collection<County>> counties = MDSInterface2.apiGet(uri,
+                                    username, password, new CountyResponseHandler());
+                                bcastCode = counties.getCode();
+                                try{
+                                    CountyWrapper.insertOrUpdate(DispatchService.this, counties.getMessage());
+                                } catch (Exception e){
+                                    bcastCode = 500;
+                                }
+                                break;
+                            case Uris.DISTRICT_DIR:
+                                if(!method.equals("GET")) break;
+                                Response<Collection<District>> districts = MDSInterface2.apiGet(uri,
+                                    username, password, new DistrictResponseHandler());
+                                bcastCode = districts.getCode();
+                                try{
+                                    DistrictWrapper.insertOrUpdate(DispatchService.this, districts.getMessage());
+                                } catch (Exception e){
+                                    bcastCode = 500;
+                                }
+                                break;
+
                         case Uris.PACKAGE_DIR:
                             Logf.D(TAG, "handleMessage(Message)",
                                     "PACKAGE update request");
