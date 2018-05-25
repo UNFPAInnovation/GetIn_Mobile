@@ -40,6 +40,8 @@ public class Location extends Model implements ILocation {
 	public String name;
 	@Expose
 	public int code;
+    @Expose
+    public Parish parish = null;
 	/* (non-Javadoc)
 	 * @see org.sana.api.ILocation#getName()
 	 */
