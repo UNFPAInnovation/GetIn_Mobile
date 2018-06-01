@@ -504,7 +504,7 @@ public final class Uris {
             case PARISH_ITEM:
             case PARISH_UUID:
                 return Parishes.CONTENT_ITEM_TYPE;
-            case SUBCOUNTY:
+            case SUBCOUNTY_DIR:
                 return Subcounties.CONTENT_TYPE;
             case SUBCOUNTY_ITEM:
             case SUBCOUNTY_UUID:
@@ -523,7 +523,7 @@ public final class Uris {
             case PACKAGE_DIR:
 			    return "application/vnd.android.package-archive";
 		default:
-			throw new IllegalArgumentException("Invalid uri. No match");
+			throw new IllegalArgumentException("Invalid uri. No match::"+uri);
 		}
 	}
 	
