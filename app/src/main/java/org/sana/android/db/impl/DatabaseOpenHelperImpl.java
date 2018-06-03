@@ -83,7 +83,11 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 				ProceduresHelper.getInstance().onCreate(),
 				SubjectsHelper.getInstance().onCreate(),
                 AmbulanceDriversHelper.getInstance().onCreate(),
-                LocationsHelper.getInstance().onCreate()
+                LocationsHelper.getInstance().onCreate(),
+                ParishesHelper.getInstance().onCreate(),
+                SubcountiesHelper.getInstance().onCreate(),
+                CountiesHelper.getInstance().onCreate(),
+                DistrictsHelper.getInstance().onCreate()
 		};
 		//db.acquireReference();
 		for(String sql:create){
@@ -104,18 +108,22 @@ public class DatabaseOpenHelperImpl extends DatabaseOpenHelper{
 		// No bump in version - return quietly
 		if(newVersion > oldVersion){
 			TableHelper<?>[] helpers = new TableHelper<?>[]{
-				ConceptsHelper.getInstance(),
-				EncountersHelper.getInstance(),
-				EncounterTasksHelper.getInstance(),
-				EventsHelper.getInstance(),
-				InstructionsHelper.getInstance(),
-				NotificationsHelper.getInstance(),
-				ObservationsHelper.getInstance(),
-				ObserversHelper.getInstance(),
-				ProceduresHelper.getInstance(),
-				SubjectsHelper.getInstance(),
+                    ConceptsHelper.getInstance(),
+                    EncountersHelper.getInstance(),
+                    EncounterTasksHelper.getInstance(),
+                    EventsHelper.getInstance(),
+                    InstructionsHelper.getInstance(),
+                    NotificationsHelper.getInstance(),
+                    ObservationsHelper.getInstance(),
+                    ObserversHelper.getInstance(),
+                    ProceduresHelper.getInstance(),
+                    SubjectsHelper.getInstance(),
                     LocationsHelper.getInstance(),
-                    AmbulanceDriversHelper.getInstance()
+                    AmbulanceDriversHelper.getInstance(),
+                    ParishesHelper.getInstance(),
+                    SubcountiesHelper.getInstance(),
+                    CountiesHelper.getInstance(),
+                    DistrictsHelper.getInstance()
             };
 
 			
