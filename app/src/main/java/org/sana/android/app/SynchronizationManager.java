@@ -140,7 +140,7 @@ public class SynchronizationManager {
         Uri uri = Locations.CONTENT_URI;
         String key = getSynchKey(uri);
         last = getLastSynch(context,uri);
-        if(last > delta) {
+        if((now - last) > delta) {
             Intent intent = new Intent(Intents.ACTION_READ, uri);
             intent.putExtra(Intents.EXTRA_SYNCH, now);
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
@@ -149,7 +149,7 @@ public class SynchronizationManager {
         uri = Parishes.CONTENT_URI;
         key = getSynchKey(uri);
         last = getLastSynch(context,uri);
-        if(last > delta) {
+        if((now - last) > delta) {
             Intent intent = new Intent(Intents.ACTION_READ, uri);
             intent.putExtra(Intents.EXTRA_SYNCH, now);
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
@@ -158,7 +158,7 @@ public class SynchronizationManager {
         uri = Subcounties.CONTENT_URI;
         key = getSynchKey(uri);
         last = getLastSynch(context,uri);
-        if(last > delta) {
+        if((now - last) > delta) {
             Intent intent = new Intent(Intents.ACTION_READ, uri);
             intent.putExtra(Intents.EXTRA_SYNCH, now);
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
@@ -167,7 +167,7 @@ public class SynchronizationManager {
         uri = Counties.CONTENT_URI;
         key = getSynchKey(uri);
         last = getLastSynch(context,uri);
-        if(last > delta) {
+        if((now - last) > delta) {
             Intent intent = new Intent(Intents.ACTION_READ, uri);
             intent.putExtra(Intents.EXTRA_SYNCH, now);
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
@@ -176,7 +176,7 @@ public class SynchronizationManager {
         uri = Districts.CONTENT_URI;
         key = getSynchKey(uri);
         last = getLastSynch(context,uri);
-        if(last > delta) {
+        if((now - last) > delta) {
             Intent intent = new Intent(Intents.ACTION_READ, uri);
             intent.putExtra(Intents.EXTRA_SYNCH, now);
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
@@ -185,7 +185,8 @@ public class SynchronizationManager {
     }
 
     /**
-     * Sync the locality objects for the system-i.e. Location, Parish, etc.
+     * Sync the locality objects for the system-i.e. Location, Parish, etc,-
+     * and set to sync no more than one the value of {@linkplain #DELTA_SYNC_LOCALITY}
      *
      * @param context
      */
