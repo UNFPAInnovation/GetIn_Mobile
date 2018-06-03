@@ -131,7 +131,7 @@ public abstract class ModelContentProvider extends ContentProvider {
                 return DistrictsHelper.getInstance();
 		default:
 			throw new IllegalArgumentException("Invalid uri in "
-						+"getTableHelper(): " + uri.toString());
+						+"getTableHelper()::"+match+":: " + uri.toString());
 		}
 	}
 	
