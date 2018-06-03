@@ -55,6 +55,9 @@ public class CountiesHelper extends TableHelper<County> {
     public String onUpgrade(int oldVersion, int newVersion) {
         StringBuilder builder = new StringBuilder();
         if (oldVersion < newVersion) {
+            if(newVersion == 10 || (oldVersion < 10 && newVersion > 10)){
+                builder.append(onCreate());
+            }
         }
         if(builder.length() > 0)
             return builder.toString();

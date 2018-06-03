@@ -39,7 +39,7 @@ public class DistrictsHelper extends TableHelper<District> {
                 + Districts.Contract.UUID + " TEXT NOT NULL,"
                 + Districts.Contract.CREATED + " DATE,"
                 + Districts.Contract.MODIFIED + " DATE,"
-                + Districts.Contract.NAME + " TEXT,"
+                + Districts.Contract.NAME + " TEXT"
                 + ");";
     }
 
@@ -55,6 +55,9 @@ public class DistrictsHelper extends TableHelper<District> {
     public String onUpgrade(int oldVersion, int newVersion) {
         StringBuilder builder = new StringBuilder();
         if (oldVersion < newVersion) {
+            if(newVersion == 10 || (oldVersion < 10 && newVersion > 10)){
+                builder.append(onCreate());
+            }
         }
         if(builder.length() > 0)
             return builder.toString();
