@@ -156,10 +156,10 @@ public final class Uris {
     public static final int AMBULANCE_DRIVER = 4096 << CONTENT_SHIFT;
 	public static final int VHT = 8192 << CONTENT_SHIFT;
     public static final int LOCATION = 16384 << CONTENT_SHIFT;
-    public static final int PARISH = 32768 << CONTENT_SHIFT;
-    public static final int SUBCOUNTY = 65536 << CONTENT_SHIFT;
-    public static final int COUNTY = 131072 << CONTENT_SHIFT;
-    public static final int DISTRICT = 262144 << CONTENT_SHIFT;
+    public static final int PARISH = 16385 << CONTENT_SHIFT;
+    public static final int SUBCOUNTY = 16386 << CONTENT_SHIFT;
+    public static final int COUNTY = 16387 << CONTENT_SHIFT;
+    public static final int DISTRICT = 16388 << CONTENT_SHIFT;
 
     // dir match codes OBJECT | ITEMS
 	public static final int CONCEPT_DIR = CONCEPT | ITEMS;
