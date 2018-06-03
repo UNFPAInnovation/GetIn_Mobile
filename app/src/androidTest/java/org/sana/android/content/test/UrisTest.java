@@ -179,30 +179,35 @@ public class UrisTest extends AndroidTestCase {
 
     public void testLocalityDescriptors(){
         // Village
+        assertEquals(Uris.getContentDescriptor(Locations.CONTENT_URI), Uris.LOCATION);
         assertEquals(Uris.getDescriptor(Locations.CONTENT_URI), Uris.LOCATION_DIR);
         uri = ContentUris.withAppendedId(Locations.CONTENT_URI, 1);
         assertEquals(Uris.getDescriptor(uri), Uris.LOCATION_ITEM);
         uri = Uris.withAppendedUuid(Locations.CONTENT_URI, uuid.toString());
         assertEquals(Uris.getDescriptor(uri), Uris.LOCATION_UUID);
         // Parishes
+        assertEquals(Uris.getContentDescriptor(Parishes.CONTENT_URI), Uris.PARISH);
         assertEquals(Uris.getDescriptor(Parishes.CONTENT_URI), Uris.PARISH_DIR);
         uri = ContentUris.withAppendedId(Parishes.CONTENT_URI, 1);
         assertEquals(Uris.getDescriptor(uri), Uris.PARISH_ITEM);
         uri = Uris.withAppendedUuid(Parishes.CONTENT_URI, uuid.toString());
         assertEquals(Uris.getDescriptor(uri), Uris.PARISH_UUID);
         // Subcounties
+        assertEquals(Uris.getContentDescriptor(Subcounties.CONTENT_URI), Uris.SUBCOUNTY);
         assertEquals(Uris.getDescriptor(Subcounties.CONTENT_URI), Uris.SUBCOUNTY_DIR);
         uri = ContentUris.withAppendedId(Subcounties.CONTENT_URI, 1);
         assertEquals(Uris.getDescriptor(uri), Uris.SUBCOUNTY_ITEM);
         uri = Uris.withAppendedUuid(Subcounties.CONTENT_URI, uuid.toString());
         assertEquals(Uris.getDescriptor(uri), Uris.SUBCOUNTY_UUID);
         // Counties
+        assertEquals(Uris.getContentDescriptor(Counties.CONTENT_URI), Uris.COUNTY);
         assertEquals(Uris.getDescriptor(Counties.CONTENT_URI), Uris.COUNTY_DIR);
         uri = ContentUris.withAppendedId(Counties.CONTENT_URI, 1);
         assertEquals(Uris.getDescriptor(uri), Uris.COUNTY_ITEM);
         uri = Uris.withAppendedUuid(Counties.CONTENT_URI, uuid.toString());
         assertEquals(Uris.getDescriptor(uri), Uris.COUNTY_UUID);
         // Districts
+        assertEquals(Uris.getContentDescriptor(Districts.CONTENT_URI), Uris.DISTRICT);
         assertEquals(Uris.getDescriptor(Districts.CONTENT_URI), Uris.DISTRICT_DIR);
         uri = ContentUris.withAppendedId(Districts.CONTENT_URI, 1);
         assertEquals(Uris.getDescriptor(uri), Uris.DISTRICT_ITEM);
