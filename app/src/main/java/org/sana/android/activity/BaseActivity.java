@@ -603,6 +603,7 @@ public abstract class BaseActivity extends FragmentActivity implements Authentic
         Uri observersUri = Observers.CONTENT_URI.buildUpon()
                 .appendQueryParameter("subcounty__name", subcounty)
                 .build();
+        SynchronizationManager.syncLocalities(getBaseContext());
         SynchronizationManager.sync(this, observersUri);
         List<String> villageNames = getVillageNamesForObserver(observer);
         for(String village:villageNames) {
