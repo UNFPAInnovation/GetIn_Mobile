@@ -9,6 +9,11 @@ import android.text.TextUtils;
 
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
+import org.sana.android.provider.Counties;
+import org.sana.android.provider.Districts;
+import org.sana.android.provider.Locations;
+import org.sana.android.provider.Parishes;
+import org.sana.android.provider.Subcounties;
 import org.sana.android.util.Dates;
 
 import java.text.ParseException;
@@ -20,6 +25,9 @@ import java.util.Date;
  */
 public class SynchronizationManager {
     public static final String TAG = SynchronizationManager.class.getSimpleName();
+
+    /** Default sync delta set to one hour */
+    public static final long DELTA_SYNC_LOCALITY = 1000*60*60;
 
     public static void sync(Context context, Uri uri){
         sync(context, uri, null);
@@ -118,5 +126,70 @@ public class SynchronizationManager {
         SharedPreferences preferences =
                 PreferenceManager.getDefaultSharedPreferences(context);
         preferences.edit().putLong(key, time).commit();
+    }
+
+    /**
+     * Sync the locality objects for the system-i.e. Location, Parish, etc.
+     *
+     * @param context
+     * @param delta Time difference for invoking sync
+     */
+    public static void syncLocalities(Context context, long delta){
+        long last = 0;
+        long now = Calendar.getInstance().getTimeInMillis();
+        Uri uri = Locations.CONTENT_URI;
+        String key = getSynchKey(uri);
+        last = getLastSynch(context,uri);
+        if(last > delta) {
+            Intent intent = new Intent(Intents.ACTION_READ, uri);
+            intent.putExtra(Intents.EXTRA_SYNCH, now);
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
+            context.startService(intent);
+        }
+        uri = Parishes.CONTENT_URI;
+        key = getSynchKey(uri);
+        last = getLastSynch(context,uri);
+        if(last > delta) {
+            Intent intent = new Intent(Intents.ACTION_READ, uri);
+            intent.putExtra(Intents.EXTRA_SYNCH, now);
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
+            context.startService(intent);
+        }
+        uri = Subcounties.CONTENT_URI;
+        key = getSynchKey(uri);
+        last = getLastSynch(context,uri);
+        if(last > delta) {
+            Intent intent = new Intent(Intents.ACTION_READ, uri);
+            intent.putExtra(Intents.EXTRA_SYNCH, now);
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
+            context.startService(intent);
+        }
+        uri = Counties.CONTENT_URI;
+        key = getSynchKey(uri);
+        last = getLastSynch(context,uri);
+        if(last > delta) {
+            Intent intent = new Intent(Intents.ACTION_READ, uri);
+            intent.putExtra(Intents.EXTRA_SYNCH, now);
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
+            context.startService(intent);
+        }
+        uri = Districts.CONTENT_URI;
+        key = getSynchKey(uri);
+        last = getLastSynch(context,uri);
+        if(last > delta) {
+            Intent intent = new Intent(Intents.ACTION_READ, uri);
+            intent.putExtra(Intents.EXTRA_SYNCH, now);
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, key);
+            context.startService(intent);
+        }
+    }
+
+    /**
+     * Sync the locality objects for the system-i.e. Location, Parish, etc.
+     *
+     * @param context
+     */
+    public static void syncLocalities(Context context){
+        syncLocalities(context, DELTA_SYNC_LOCALITY);
     }
 }
