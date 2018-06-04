@@ -49,6 +49,22 @@ public class SynchronizationManager {
             intent.putExtra(Intents.EXTRA_SYNCH_KEY, keyExtra);
         context.startService(intent);
     }
+    public static void sync(Context context, Uri uri, String keyExtra, boolean force){
+        long last = getLastSynch(context, uri, keyExtra);
+        Calendar calendar = Calendar.getInstance();
+        long now = calendar.getTimeInMillis();
+        calendar.setTimeInMillis(last);
+        Uri synchUri = (force)? uri:
+                uri.buildUpon().appendQueryParameter("modified__gt",
+                Dates.toSQL(calendar.getTime())).build();
+
+        // Build the synch Intent
+        Intent intent = new Intent(Intents.ACTION_READ, synchUri);
+        intent.putExtra(Intents.EXTRA_SYNCH, now);
+        if(!TextUtils.isEmpty(keyExtra))
+            intent.putExtra(Intents.EXTRA_SYNCH_KEY, keyExtra);
+        context.startService(intent);
+    }
 
     public static String getSynchKey(Uri uri){
         String key = "";
@@ -193,4 +209,13 @@ public class SynchronizationManager {
     public static void syncLocalities(Context context){
         syncLocalities(context, DELTA_SYNC_LOCALITY);
     }
+
+    public static void syncLocalitiesForce(Context context){
+        sync(context, Districts.CONTENT_URI, null, true);
+        sync(context, Counties.CONTENT_URI, null, true);
+        sync(context, Subcounties.CONTENT_URI, null, true);
+        sync(context, Parishes.CONTENT_URI, null, true);
+        sync(context, Locations.CONTENT_URI, null, true);
+    }
+
 }
