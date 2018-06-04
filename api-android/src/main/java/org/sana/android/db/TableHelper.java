@@ -33,7 +33,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-import java.util.UUID;
 
 import org.sana.android.provider.BaseContract;
 import org.sana.api.IModel;
@@ -89,7 +88,7 @@ public abstract class TableHelper<T extends IModel> implements  CreateHelper,
 	/**
 	 * Returns the name of the column in this table where a file path is stored.
 	 * @return The name of the file column
-	 * @throws UnsupportedOperationExeception if no file column is defined.
+	 * @throws java.lang.UnsupportedOperationException if no file column is defined.
 	 */
 	public String getFileColumn(){
 		if(fColumn == null)
@@ -101,7 +100,7 @@ public abstract class TableHelper<T extends IModel> implements  CreateHelper,
 	/**
 	 * Returns a default extension if this table has a column for storing files.
 	 * @return The default extension.
-	 * @throws UnsupportedOperationExeception if no file column is defined.
+     * @throws java.lang.UnsupportedOperationException if no file column is defined.
 	 */
 	public String getFileExtension(){
 		if(fColumn == null)
@@ -197,4 +196,8 @@ public abstract class TableHelper<T extends IModel> implements  CreateHelper,
 		qb.setTables(getTable());
 		return qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
 	}
+
+    public String onSort(){
+        return null;
+    }
 }

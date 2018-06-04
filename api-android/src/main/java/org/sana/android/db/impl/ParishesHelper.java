@@ -64,4 +64,9 @@ public class ParishesHelper extends TableHelper<Parish> {
         else
             return null;
     }
+
+    @Override
+    public String onSort(){
+        return Parishes.DEFAULT_SORT_ORDER;
+    }
 }

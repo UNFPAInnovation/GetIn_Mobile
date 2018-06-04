@@ -64,4 +64,9 @@ public class CountiesHelper extends TableHelper<County> {
         else
             return null;
     }
+
+    @Override
+    public String onSort(){
+        return Counties.DEFAULT_SORT_ORDER;
+    }
 }

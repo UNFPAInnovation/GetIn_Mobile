@@ -64,4 +64,9 @@ public class DistrictsHelper extends TableHelper<District> {
         else
             return null;
     }
+
+    @Override
+    public String onSort(){
+        return Districts.DEFAULT_SORT_ORDER;
+    }
 }
