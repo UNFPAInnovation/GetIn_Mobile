@@ -223,8 +223,8 @@ public abstract class ProcedureElement {
      */
     public View toView(Context c) {
         if(cachedView == null || cachedContext != c) {
-            cachedView = createView(c);
             cachedContext = c;
+            cachedView = createView(c);
 
         }
         return cachedView;

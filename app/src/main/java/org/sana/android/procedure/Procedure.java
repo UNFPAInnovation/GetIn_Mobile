@@ -784,8 +784,8 @@ public class Procedure {
         Log.i(TAG,"toView(Context)");
         if(cachedView == null || cachedContext != c) {
             Log.d(TAG, "...generating cached view");
-            cachedView = createView(c);
             cachedContext = c;
+            cachedView = createView(c);
         }
         return cachedView;
     }
