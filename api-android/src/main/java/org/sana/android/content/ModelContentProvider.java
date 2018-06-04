@@ -228,6 +228,7 @@ public abstract class ModelContentProvider extends ContentProvider {
         }
         SQLiteDatabase db = DatabaseManager.getInstance().openReadableDatabase();//mOpener.getReadableDatabase();
         //Cursor cursor = helper.onQuery(db, projection, selection, selectionArgs, sortOrder);
+        sortOrder = (TextUtils.isEmpty(sortOrder))? helper.onSort(): null;
         Cursor cursor = qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
         Log.d(TAG, ".query(" + uri.toString() +") count = " + ((cursor!=null)?cursor.getCount():0));
