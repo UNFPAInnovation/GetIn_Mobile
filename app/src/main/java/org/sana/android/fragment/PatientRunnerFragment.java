@@ -726,13 +726,13 @@ public class PatientRunnerFragment extends BaseRunnerFragment  {
 
     @Override
     public void onViewChanged(ProcedurePage page){
+        super.onViewChanged(page);
         onViewChanged(page, mPatient);
     }
 
     public final void onViewChanged(ProcedurePage page, Patient data) {
         Log.i(TAG, "onViewChanged(Page,Patient");
         if (data != null && page.shouldDisplay()) {
-
             // Set any patient fields from current page elements
             for (ProcedureElement element : page.getElements()) {
                 String field = element.getConcept().replace(" ", "_").toLowerCase();

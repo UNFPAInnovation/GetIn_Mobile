@@ -299,13 +299,14 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
             //mProcedure.advance();
             ProcedurePage cp = mProcedure.advanceNext();
             while (cp != null){
-            	onViewChanged(cp);
             	if(cp.displayForeground()) {
+                    onViewChanged(cp);
             		break;
             	} else {
                     storeCurrentProcedure(false,false);
             	}
             	cp = mProcedure.advanceNext();
+
             }
             logEvent(EventType.ENCOUNTER_NEXT_PAGE, Integer.toString(mProcedure.getCurrentIndex()));
 
@@ -1326,7 +1327,11 @@ public abstract class BaseRunnerFragment extends BaseFragment implements View.On
      * Default implementation does noting.
      * @param page
      */
-    public void onViewChanged(ProcedurePage page){}
+    public void onViewChanged(ProcedurePage page){
+        for (ProcedureElement e:page.getElements()){
+            e.refreshWidget();
+        }
+    }
 
     public void hideKeyboard(Context context, View view) {
         InputMethodManager imm = (InputMethodManager) context.getSystemService(Activity.INPUT_METHOD_SERVICE);
