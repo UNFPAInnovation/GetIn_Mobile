@@ -1,7 +1,9 @@
 package org.sana.android.procedure;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.sana.R;
 import org.sana.android.util.SanaUtil;
@@ -47,6 +49,7 @@ public class SelectElement extends SelectionElement {
         View v = ((Activity)c).getLayoutInflater().inflate(R.layout.widget_element_select, null);
         spin = (Spinner)v.findViewById(R.id.answer);
         //new Spinner(c);
+        //refreshWidget();
         adapter = new ArrayAdapter<String>(c,
                 R.layout.simple_spinner_item,
                 labels);
@@ -55,7 +58,6 @@ public class SelectElement extends SelectionElement {
         int selected =  adapter.getPosition(getLabelFromValue(answer));
         if(selected != -1)
             spin.setSelection(selected);
-
         // Set callback for user selection
         spin.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
 
@@ -95,9 +97,25 @@ public class SelectElement extends SelectionElement {
         Log.i(TAG, "[" + id + "]getAnswer()");
         if(!isViewActive())
             return answer;
-        answer = getValueFromLabel(adapter.getItem(spin
-                .getSelectedItemPosition()));
+        int index = spin.getSelectedItemPosition();
+        if(index > -1) {
+            answer = getValueFromLabel(adapter.getItem(index));
+        }
         return answer;
+    }
+
+    @Override
+    public void refreshWidget(){
+        super.refreshWidget();
+        adapter = new ArrayAdapter<String>(
+                getContext(),
+                R.layout.simple_spinner_item,
+                labels);
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item);
+        spin.setAdapter(adapter);
+        int selected =  adapter.getPosition(getLabelFromValue(answer));
+        if(selected != -1)
+            spin.setSelection(selected);
     }
 
     /** Default constructor */
@@ -125,9 +143,13 @@ public class SelectElement extends SelectionElement {
                 "");
         String valuesStr = SanaUtil.getNodeAttributeOrDefault(node, "values",
                 choicesStr);
-        return new SelectElement(id, question, answer, concept, figure, audio, 
+        String query = SanaUtil.getNodeAttributeOrDefault(node, "query",
+                "");
+        SelectElement element = new SelectElement(id, question, answer, concept, figure, audio,
         		choicesStr.split(SelectionElement.TOKEN_DELIMITER),
                 valuesStr.split(SelectionElement.TOKEN_DELIMITER)
         );
+        element.setQuery(query);
+        return element;
     }
 }

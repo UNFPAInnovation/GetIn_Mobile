@@ -1,7 +1,12 @@
 package org.sana.android.procedure;
 
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
+import android.database.Cursor;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -23,6 +28,9 @@ public abstract class SelectionElement extends ProcedureElement {
     protected String[] values;
     protected View mView;
     protected Adapter mAdapter;
+    protected String query = null;
+    protected Uri queryUri = Uri.EMPTY;
+    Map<String,String> selectionMap = new HashMap<>();
 
     private LinkedHashMap<String,String> valueToLabelMap;
     private LinkedHashMap<String,String> labelToValueMap;
@@ -58,6 +66,7 @@ public abstract class SelectionElement extends ProcedureElement {
     protected void appendOptionalAttributes(StringBuilder sb){
         sb.append("\" choices=\"" + TextUtils.join(TOKEN_DELIMITER, labels));
         sb.append("\" values=\"" + TextUtils.join(TOKEN_DELIMITER, values));
+        sb.append("\" query=\"" + query);
     }
 
     /**
@@ -94,6 +103,73 @@ public abstract class SelectionElement extends ProcedureElement {
         String choice = valueToLabelMap.get(answer);
         //Log.d(TAG,"...["  + id +"] choice = " + choice);
         return (choice == null)?"":choice;
+    }
+
+    public void setQuery(String rawQuery){
+        query = rawQuery;
+    }
+
+    public void refreshWidget() {
+        refreshQuery();
+    }
+
+    public void refreshQuery(){
+        if(!TextUtils.isEmpty(query)){
+            Uri uri = Uri.parse(query);
+            String path = uri.getPath();
+            String authority = uri.getAuthority();
+            String scheme = uri.getScheme();
+            queryUri = Uri.parse(scheme + "://" + authority + "/" + path);
+            Uri.Builder builder = uri.buildUpon();
+            for(String name:uri.getQueryParameterNames()){
+                String value = uri.getQueryParameter(name);
+                if(value.startsWith("@")){
+                    String qid = value.replace("@","");
+                    String val = getProcedure().toElementMap().get(qid).get("answer");
+                    selectionMap.put(name, val);
+                }
+            }
+            Iterator<String> it = selectionMap.keySet().iterator();
+            StringBuilder selection = new StringBuilder();
+            int index = 0;
+            while(it.hasNext()){
+                String key = it.next();
+                String val = selectionMap.get(key);
+                if(!TextUtils.isEmpty(val)){
+                    if(index > 0) {
+                        selection.append(" AND ");
+                    }
+                    index = index + 1;
+                    selection.append(key +" = '" + val +"'");
+                }
+            }
+            Cursor cursor = getContext().getContentResolver().query(queryUri,
+                    new String[]{"name"},
+                    selection.toString(),
+                    null,null);
+            if(cursor != null){
+                if(cursor.getCount() > 0) {
+                    int len = cursor.getCount();
+                    values = new String[len];
+                    labels = new String[len];
+                    index = 0;
+                    while (cursor.moveToNext()) {
+                        String v = cursor.getString(0);
+                        values[index] = v;
+                        labels[index] = v;
+                        index = index + 1;
+                    }
+                    cursor.close();
+                } else {
+                    values = new String[]{};
+                    labels = new String[]{};
+                }
+            } else {
+                values = new String[]{};
+                labels = new String[]{};
+            }
+        }
+        mapValues(values,labels);
     }
 
     /**
