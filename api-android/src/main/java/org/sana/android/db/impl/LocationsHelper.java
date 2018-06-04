@@ -60,13 +60,19 @@ public class LocationsHelper extends TableHelper<Location> {
     @Override
     public String onUpgrade(int oldVersion, int newVersion) {
         Log.v(TAG, "onUpgrade(" + oldVersion + ", " + newVersion + ")");
-        String sql = null;
+        StringBuilder builder = null;
         if (oldVersion < newVersion) {
-            //sql = "";
             if (oldVersion == 6 && newVersion == 7){
-                sql = onCreate();
+                builder.append(onCreate());
+            }
+            if(newVersion == 10 || (newVersion < 10 && newVersion > 10)){
+                builder.append("ALTER TABLE " + getTable() + " ADD COLUMN "
+                        + Locations.Contract.PARISH + " TEXT;");
             }
         }
-        return sql;
+        if(builder.length() > 0)
+            return builder.toString();
+        else
+            return null;
     }
 }
