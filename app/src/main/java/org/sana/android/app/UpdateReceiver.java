@@ -14,6 +14,6 @@ public class UpdateReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         Intent update = new Intent(context, ApplicationService.class);
         update.setAction(ApplicationService.UPDATE_CHECK);
-        context.startService(intent);
+        context.startService(update);
     }
 }
