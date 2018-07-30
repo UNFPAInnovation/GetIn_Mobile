@@ -1,5 +1,5 @@
 <Procedure
-    title="Postnatal_note_VHT"
+    title="Postnatal_note_Midwife"
     author="Donald"
     uuid="	2085303a-5896-4cad-9fa3-ff343bca9e75"
     version="1.0"
@@ -83,7 +83,7 @@
 
         <Element
             id="4a"
-            concept="POSTNAL FAMILY PLANNING"
+            concept="POSTNATAL FAMILY PLANNING"
             type="SELECT"
             required="true"
             question="What Method was offered?"
