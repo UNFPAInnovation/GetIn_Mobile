@@ -1,7 +1,7 @@
 <Procedure
     title="Postnatal_note_Midwife"
     author="Donald"
-    uuid="	2085303a-5896-4cad-9fa3-ff343bca9e75"
+    uuid="2085303a-5896-4cad-9fa3-ff343bca9e75"
     version="1.0"
     locale="en"
     class="org.sana.core.Encounter"
