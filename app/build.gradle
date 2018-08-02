@@ -89,7 +89,7 @@ android {
         applicationId "org.sana.android"
         minSdkVersion 11
         targetSdkVersion 17
-        versionCode 10
+        versionCode 11
         versionName '2.1.0'
         resValue('string', 'key_clients_api', keyClientAPI)
         resValue('bool', 'debug', 'false')
@@ -129,13 +129,13 @@ android {
         vht {
             minSdkVersion 11
             targetSdkVersion 17
-            versionCode 10
+            versionCode 11
             versionName '2.1.0-chew'
         }
         midwife {
             minSdkVersion 11
             targetSdkVersion 17
-            versionCode 10
+            versionCode 11
             versionName '2.1.0-midwife'
         }
     }
