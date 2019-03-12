@@ -1,4 +1,4 @@
-Sana Mobile Client
+GetIN App using Sana Mobile Client
 ==================
 
 Overview
