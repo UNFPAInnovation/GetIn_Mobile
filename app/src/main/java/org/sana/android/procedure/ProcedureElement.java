@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import org.joda.time.format.DateTimeFormatter;
 import org.sana.R;
 import org.sana.android.media.AudioPlayer;
 import org.sana.android.media.EducationResource;
@@ -25,6 +26,10 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Text;
 
 import java.net.URISyntaxException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 /**
@@ -297,6 +302,7 @@ public abstract class ProcedureElement {
      * @throws ValidationError
      */
     public boolean validate() throws ValidationError {
+        Log.d(TAG, "validate: data started");
         boolean valid = true;
         if (bRequired && TextUtils.isEmpty(getAnswer())) {
             valid = false;
@@ -349,6 +355,10 @@ public abstract class ProcedureElement {
 
     protected boolean matchesPattern() {
         Log.i(TAG, "matchesPattern()");
+        boolean matches;
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date currentDate = Calendar.getInstance().getTime();
+
         try {
             if (!TextUtils.isEmpty(pattern)) {
                 String compare = getAnswer();
@@ -356,7 +366,38 @@ public abstract class ProcedureElement {
                 if (TextUtils.isEmpty(getAnswer())) {
                     return true;
                 }
-                boolean matches = Pattern.matches(pattern, getAnswer());
+
+                Log.d(TAG, "matchesPattern: " + getAnswer());
+                Log.d(TAG, "matchesPattern: " + getType());
+
+                if (getType() == ElementType.DATE && getQuestion().toLowerCase().contains("date of birth")) {
+                    // ensure that girl's age is greater than 13
+                    int birthYear = Integer.parseInt(String.valueOf(getAnswer()).trim().split("-")[0]);
+                    int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+                    matches = (currentYear - birthYear) > 9;
+                } else if (getType() == ElementType.DATE && getQuestion().toLowerCase().contains("anc visit")) {
+                    // anc visit date must be greater than or equal to today
+                    Date ancVisitDate = df.parse(String.valueOf(getAnswer()).toLowerCase().trim().split("\\s+")[0]);
+                    Log.d(TAG, "matchesPattern: current date " + currentDate + " anc date " + ancVisitDate);
+                    matches = ancVisitDate.after(currentDate) || ancVisitDate.equals(currentDate);
+                } else if (getType() == ElementType.DATE && getQuestion().toLowerCase().contains("last menstruation")) {
+                    // patient last menstruation date should be greater than 3 years ago and less than today
+                    Date lastMenstruationDate = df.parse(String.valueOf(getAnswer()).trim().split("\\s+")[0]);
+                    Log.d(TAG, "matchesPattern: current date " + currentDate + " last menstruation date " + lastMenstruationDate);
+
+                    Calendar cal = Calendar.getInstance();
+                    cal.setTime(currentDate);
+                    cal.add(Calendar.MONTH, -10);
+                    Date lastMenstruationDateLimit = cal.getTime();
+                    Log.d(TAG, "matchesPattern: limit " + lastMenstruationDateLimit);
+                    Log.d(TAG, "matchesPattern: limit boolean " + lastMenstruationDate.after(lastMenstruationDateLimit));
+
+                    matches = ((lastMenstruationDate.before(currentDate)
+                            || lastMenstruationDate.equals(currentDate))
+                            && lastMenstruationDate.after(lastMenstruationDateLimit));
+                } else {
+                    matches = Pattern.matches(pattern, getAnswer());
+                }
                 Log.i(TAG, "Pattern matches=" + matches);
                 return matches;
             } else {

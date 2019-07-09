@@ -23,6 +23,7 @@
             question="Enter First Name"
             answer=""
             helpText="Please enter the given name"
+            pattern="[a-z|A-Z]{2,}"
         />
         <Element
             id="3"
@@ -31,6 +32,8 @@
             required="true"
             question="Enter Last Name"
             answer=""
+            helpText="Please enter the last name"
+            pattern="[a-z|A-Z]{2,}"
         />
         <Element
             id="4"
@@ -39,6 +42,8 @@
             required="true"
             question="Enter Date of Birth"
             answer=""
+            helpText="Please enter a correct date of birth"
+            pattern="([0-3][2-9]|[1-3]1)-10-2011|[0-3][0-9]-1[12]-2011|[0-3][0-9]-[01][0-9]-201[2-9]"
         />
 
         <Element
@@ -58,7 +63,7 @@
             required="true"
             question="Enter Girl's Phone Number"
             answer=""
-            pattern="[0-9]{10}"
+            pattern="(0)7[0-9]{8}"
             helpText="Enter 10 digit number"
         />
         <Element
@@ -69,7 +74,7 @@
             required="true"
             question="Enter PowerHolder's Number"
             answer=""
-            pattern="[0-9]{10}"
+            pattern="(0)7[0-9]{8}"
             helpText="Enter 10 digit number"
         />
         <Element
@@ -79,6 +84,8 @@
             concept="LMD"
             required="true"
             answer=""
+            helpText="Please enter a correct date"
+            pattern="([0-3][2-9]|[1-3]1)-10-2011|[0-3][0-9]-1[12]-2011|[0-3][0-9]-[01][0-9]-201[2-9]"
         />
     </Page>
     <Page>
