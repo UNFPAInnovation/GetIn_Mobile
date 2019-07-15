@@ -205,30 +205,31 @@
             answer=""
         />
     </Page>
-    <Page>
-        <Element
-            id="15"
-            type="RADIO" choices="Yes;No"
-            question="Are you on any Voucher Programme?"
-            concept="VOUCHER Status"
-            required="true"
-            answer=""
-        />
-    </Page>
-    <Page>
-        <ShowIf>
-            <Criteria type="EQUALS" id="15" value="Yes"/>
-        </ShowIf>
-        <Element
-            id="15b"
-            type="ENTRY"
-            concept="SYSTEM ID"
-            question="Enter Patient Voucher Number"
-            answer=""
-            pattern="HBBH[0-9]{6}|FPUG [0-9]{6}|SMA[0-9]{6}|LKUP[0-9]{6}"
-            helpText="Invalid Voucher Number format."/>
-        />
-    </Page>
+    <!--TODO remove voucher system for Arua-->
+    <!--<Page>-->
+        <!--<Element-->
+            <!--id="15"-->
+            <!--type="RADIO" choices="Yes;No"-->
+            <!--question="Are you on any Voucher Programme?"-->
+            <!--concept="VOUCHER Status"-->
+            <!--required="true"-->
+            <!--answer=""-->
+        <!--/>-->
+    <!--</Page>-->
+    <!--<Page>-->
+        <!--<ShowIf>-->
+            <!--<Criteria type="EQUALS" id="15" value="Yes"/>-->
+        <!--</ShowIf>-->
+        <!--<Element-->
+            <!--id="15b"-->
+            <!--type="ENTRY"-->
+            <!--concept="SYSTEM ID"-->
+            <!--question="Enter Patient Voucher Number"-->
+            <!--answer=""-->
+            <!--pattern="HBBH[0-9]{6}|FPUG [0-9]{6}|SMA[0-9]{6}|LKUP[0-9]{6}"-->
+            <!--helpText="Invalid Voucher Number format."/>-->
+        <!--/>-->
+    <!--</Page>-->
 <!--
     </Page>
     <Page>
