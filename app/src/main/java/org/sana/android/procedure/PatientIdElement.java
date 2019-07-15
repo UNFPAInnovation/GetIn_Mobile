@@ -133,12 +133,12 @@ public class PatientIdElement extends ProcedureElement implements
     @Override
     public void onClick(View v) {
     	if (v == barcodeButton) {
-    		String procedureId = 
-    			getProcedure().getInstanceUri().getPathSegments().get(1); 
+    		String procedureId =
+    			getProcedure().getInstanceUri().getPathSegments().get(1);
     		String[] params = {procedureId, id};
     		Intent intent = new Intent("com.google.zxing.client.android.SCAN");
     		try {
-    			((Activity)this.getContext()).startActivityForResult(intent, 
+    			((Activity)this.getContext()).startActivityForResult(intent,
     					BARCODE_INTENT_REQUEST_CODE);
     		} catch (Exception e) {
     			Log.e(TAG, "Exception opening barcode reader, probably not "

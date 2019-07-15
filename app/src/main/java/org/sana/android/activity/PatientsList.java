@@ -40,7 +40,6 @@ import org.sana.android.provider.Patients;
 import org.sana.android.provider.Procedures;
 import org.sana.android.provider.Subjects;
 import org.sana.android.util.SanaUtil;
-import org.sana.android.widget.ScrollCompleteListener;
 import org.sana.net.Response;
 
 /** Activity for creating new and display existing patients. The resulting
@@ -48,7 +47,7 @@ import org.sana.net.Response;
  * 
  * @author Sana Development Team */
 public class PatientsList extends FragmentActivity implements
-        OnPatientSelectedListener, ScrollCompleteListener {
+        OnPatientSelectedListener {
 
     public static final String TAG = PatientsList.class.getSimpleName();
 
@@ -82,8 +81,6 @@ public class PatientsList extends FragmentActivity implements
         super.onCreate(savedInstanceState);
     	Locales.updateLocale(this, getString(R.string.force_locale));
         setContentView(R.layout.patient_list_activity);
-        // Set the registration disabled by default
-        findViewById(R.id.register).setEnabled(false);
     }
 
     /** {@inheritDoc} */
@@ -95,7 +92,6 @@ public class PatientsList extends FragmentActivity implements
         if (fragment.getClass() == PatientListFragment.class) {
             mFragmentPatientList = (PatientListFragment) fragment;
             mFragmentPatientList.setOnPatientSelectedListener(this);
-            mFragmentPatientList.setOnScrollCompleteListener(this);
             if(mFragmentPatientList.sync(this, Subjects.CONTENT_URI)) {
                 showProgressDialog(getString(R.string.general_synchronizing),
                         getString(R.string.general_fetching_patients));
@@ -136,9 +132,11 @@ public class PatientsList extends FragmentActivity implements
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.menu_new_patient:
+                Log.d(TAG, "onOptionsItemSelected: new patient called");
                 registerNewPatient();
                 return true;
             case R.id.menu_sync_patients:
+                Log.d(TAG, "onOptionsItemSelected: sync started");
                 getContentResolver().delete(Subjects.CONTENT_URI, null,null);
             	mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
                 return true;
@@ -342,47 +340,20 @@ public class PatientsList extends FragmentActivity implements
         Intent intent = null;
         switch(view.getId()){
             case R.id.register:
+                Log.d(TAG, "submit: register new user");
                 ObserverParcel observer = SessionManager.getObserver(this);
                 Uri mObserver = Uris.withAppendedUuid(Observers.CONTENT_URI,
                         observer.getUuid());
                 intent = new Intent(Intent.ACTION_INSERT);
-                //intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE);
                 intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
                         .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
                                 getString(R.string.procs_subject_short_form1)))
-                        .putExtra(Intents.EXTRA_PROCEDURE_ID,
-                                R.raw.mapping_form)
-                        .putExtra(Intents.EXTRA_PROCEDURE_ID,Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                                getString(R.string.postnatal_form)))
-
+                        .putExtra(Intents.EXTRA_PROCEDURE_ID, R.raw.mapping_form)
                         .putExtra(Intents.EXTRA_OBSERVER, mObserver);
-                /*
-                int resId = getProcedureResourceId("registration_short");
-                // Default to english version
-                //resId  = (resId != 0)? resId: R.raw.registration_short_en;
-                resId  = (resId != 0)? resId: R.raw.mapping_form;
-                // build launch intent
-                intent = new Intent(Intents.ACTION_RUN_PROCEDURE);
-                intent.setDataAndType(Patients.CONTENT_URI, Subjects.CONTENT_TYPE)
-                        .putExtra(Intents.EXTRA_PROCEDURE, Uris.withAppendedUuid(Procedures.CONTENT_URI,
-                               // getString(R.string.procs_subject_short_form)))
-                                getString(R.string.cfg_midwife_procedure)))
-                        .putExtra(Intents.EXTRA_PROCEDURE_ID, resId);
-                */
-                startActivityForResult(intent, CREATE_PATIENT);
-                break;
-            case R.id.sync:
-                //getContentResolver().delete(Subjects.CONTENT_URI, null,null);
-                mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
+                startActivityForResult(intent, Intents.RUN_PROCEDURE);
                 break;
             default:
         }
-    }
-
-    public void onScrollComplete(){
-        Log.i(TAG, "onScrollComplete");
-        View v = findViewById(R.id.register);
-        v.setEnabled(true);
     }
 
    public int getProcedureResourceId(String name){

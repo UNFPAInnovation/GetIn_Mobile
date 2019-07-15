@@ -22,23 +22,21 @@
         android:layout_weight="1"
         android:measureWithLargestChild="false" android:longClickable="false">
 
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:layout_weight="1"
             android:id="@+id/register"
-            android:layout_weight="0.5"
-            android:background="@color/light_blue"
-            android:minHeight="96dip"
-            android:src="@drawable/ic_menu_invite" android:onClick="submit"/>
-
-        <ImageButton
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/sync"
-            android:layout_weight="0.5"
+            android:text="@string/map_girl"
+            android:textColor="@color/background_holo_light"
             android:background="@color/goldenrod"
-            android:minHeight="96dip"
-            android:src="@drawable/ic_menu_refresh" android:onClick="submit"/>
+            android:drawableStart="@drawable/ic_menu_invite"
+            android:drawableLeft="@drawable/ic_menu_invite"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="130dp"
+            android:paddingRight="130dp"
+            android:onClick="submit" />
     </LinearLayout>
 
 </LinearLayout>

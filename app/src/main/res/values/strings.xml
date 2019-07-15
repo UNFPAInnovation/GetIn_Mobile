@@ -283,5 +283,6 @@
     </string>
     <string name="title_observer_list">Observer List</string>
     <string name="error_unable_to_call">ERROR! Unable to dial number!</string>
+    <string name="map_girl">Map Girl</string>
 
 </resources>
