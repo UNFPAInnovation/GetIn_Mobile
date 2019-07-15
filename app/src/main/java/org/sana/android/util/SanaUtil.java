@@ -9,6 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
@@ -33,13 +35,23 @@ import android.app.AlertDialog.Builder;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.telephony.TelephonyManager;
 import android.text.TextUtils;
 import android.util.Log;
+
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+
+import android.os.StrictMode;
+
+import java.net.HttpURLConnection;
+import java.net.URL;
 
 //TODO
 /** Application utilities
@@ -457,5 +469,48 @@ public class SanaUtil {
             if(os != null) os.close();
         }
         return result;
+    }
+
+    public static void saveAppLastOpened(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastAppOpenedKey = "lastAppOpenedKey";
+        Date currentDate = Calendar.getInstance().getTime();
+        preferences.edit().putLong(lastAppOpenedKey, currentDate.getTime()).commit();
+    }
+
+    public static long getAppLastOpened(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastAppOpenedKey = "lastAppOpenedKey";
+        return preferences.getLong(lastAppOpenedKey, 0);
+    }
+
+    public static boolean isConnectedToInternet(Context context) {
+        ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivity != null) {
+            NetworkInfo[] info = connectivity.getAllNetworkInfo();
+            if (info != null)
+                for (int i = 0; i < info.length; i++)
+                    if (info[i].getState() == NetworkInfo.State.CONNECTED) {
+                        try {
+                            //todo replace with async task
+                            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+                            StrictMode.setThreadPolicy(policy);
+
+                            HttpURLConnection urlc = (HttpURLConnection) (new URL("http://clients3.google.com").openConnection());
+                            urlc.setRequestProperty("User-Agent", "Test");
+                            urlc.setRequestProperty("Connection", "close");
+                            urlc.setConnectTimeout(2000);
+                            urlc.setReadTimeout(2000);
+                            urlc.connect();
+                            boolean isConnected = (urlc.getResponseCode() == 200);
+                            urlc.disconnect();
+                            return isConnected;
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                        return false;
+                    }
+        }
+        return false;
     }
 }

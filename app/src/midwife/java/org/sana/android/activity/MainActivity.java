@@ -1,12 +1,18 @@
 package org.sana.android.activity;
 
+import android.app.AlarmManager;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.net.Uri;
 import android.os.AsyncTask.Status;
 import android.os.Bundle;
@@ -14,6 +20,7 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.RemoteException;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.content.LocalBroadcastManager;
@@ -34,6 +41,7 @@ import org.sana.android.activity.settings.Settings;
 import org.sana.android.app.DefaultActivityRunner;
 import org.sana.android.app.EncounterTaskManager;
 import org.sana.android.app.Locales;
+import org.sana.android.app.NotificationAlarmReceiver;
 import org.sana.android.content.Intents;
 import org.sana.android.content.Uris;
 import org.sana.android.content.core.EncounterWrapper;
@@ -51,6 +59,7 @@ import org.sana.android.provider.Subjects;
 import org.sana.android.provider.Tasks;
 import org.sana.android.service.ISessionCallback;
 import org.sana.android.service.ISessionService;
+import org.sana.android.service.NotificationUtils;
 import org.sana.android.service.impl.DispatchService;
 import org.sana.android.service.impl.SessionService;
 import org.sana.android.task.ResetDatabaseTask;
@@ -64,6 +73,7 @@ import org.sana.core.Patient;
 import org.sana.net.Response;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -73,6 +83,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Random;
 import java.util.UUID;
+
+import static org.sana.android.util.SanaUtil.isConnectedToInternet;
 
 /**
  * Main Activity which handles user authentication and initializes services that
@@ -104,6 +116,8 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
     private Intent mPrevious = new Intent(Intent.ACTION_MAIN);
     private boolean checkUpdate = true;
     private boolean init = false;
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
 
     @Override
     protected void onNewIntent(Intent intent){
@@ -344,6 +358,47 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
         init();
         if(Uris.isEmpty(mObserver)){
             onNext(null);
+        }
+        SanaUtil.saveAppLastOpened(this);
+        startAppUsageAlarm();
+
+        boolean isConnected = isConnectedToInternet(this);
+        Log.d(TAG, "onCreate: isConnected " + isConnected);
+
+        if (!isConnected)
+            showNoNetworkDialog();
+    }
+
+    private void showNoNetworkDialog() {
+        AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(this);
+        alertDialogBuilder.setMessage("You are OFFLINE. Please turn on mobile data");
+                alertDialogBuilder.setPositiveButton("OK",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface arg0, int arg1) {
+                                Log.d(TAG, "onClick: ok button");
+                            }
+                        });
+        AlertDialog alertDialog = alertDialogBuilder.create();
+        alertDialog.show();
+    }
+
+    private void startAppUsageAlarm() {
+        // start app reminder alarm at 11 pm when the user doesn't use the app in 3 days
+        Log.d(TAG, "startAppUsageAlarm: started");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, NotificationAlarmReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 435, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        boolean alarmUp = (pendingIntent != null);
+        Log.d(TAG, "startAppUsageAlarm: alarm status " + alarmUp);
+        if (!alarmUp) {
+            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            Log.d(TAG, "startAppUsageAlarm: scheduled");
         }
     }
 
