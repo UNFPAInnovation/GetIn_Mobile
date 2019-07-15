@@ -40,22 +40,46 @@ public class NotificationTriggerService extends IntentService {
             Log.d(TAG, "onStop: save show pref true");
         } else {
             Log.d(TAG, "onHandleIntent: display notification started");
-            Date currentDate = Calendar.getInstance().getTime();
-            long lastOpenedDateLong = SanaUtil.getAppLastOpened(getApplicationContext());
-            Date diff = new Date(lastOpenedDateLong - currentDate.getTime());
-            Log.d(TAG, "onHandleIntent: date difference " + diff);
-
-            int days = daysBetween(new Date(lastOpenedDateLong), currentDate);
-            Log.d(TAG, "onHandleIntent: days between " + days);
-
-            if (days >= 3) {
-                Log.d(TAG, "onHandleIntent: days greater than 3");
-                Intent intentActivity = new Intent(this, MainActivity.class);
-                NotificationUtils notificationUtils = new NotificationUtils(this);
-                notificationUtils.showNotificationMessage("Use GetIn", "Please don't forget to use the GetIn app to accept jobs", intentActivity, 20);
-            }
+            showAppUsageReminder();
+            showConnectToInternetReminder();
         }
         stopService(intent);
+    }
+
+    private void showConnectToInternetReminder() {
+        // show no internet connection after 3 days and each day after if user does not open app
+        Date currentDate = Calendar.getInstance().getTime();
+        long lastInternetConnection = SanaUtil.getLastInternetConnection(getApplicationContext());
+        Date diff = new Date(lastInternetConnection - currentDate.getTime());
+        Log.d(TAG, "onHandleIntent: date difference " + diff);
+
+        int days = daysBetween(new Date(lastInternetConnection), currentDate);
+        Log.d(TAG, "onHandleIntent: days between " + days);
+
+        if (days >= 3) {
+            Log.d(TAG, "onHandleIntent: days greater than 3");
+            Intent intentActivity = new Intent(this, MainActivity.class);
+            NotificationUtils notificationUtils = new NotificationUtils(this);
+            notificationUtils.showNotificationMessage("GetIn Internet connection", "Please connect your phone to the Internet to properly utilise the GetIn mobile app", intentActivity, 20);
+        }
+    }
+
+    private void showAppUsageReminder() {
+        // show app usage reminder after 3 days and each day after if user does not open app
+        Date currentDate = Calendar.getInstance().getTime();
+        long lastOpenedDateLong = SanaUtil.getAppLastOpened(getApplicationContext());
+        Date diff = new Date(lastOpenedDateLong - currentDate.getTime());
+        Log.d(TAG, "onHandleIntent: date difference " + diff);
+
+        int days = daysBetween(new Date(lastOpenedDateLong), currentDate);
+        Log.d(TAG, "onHandleIntent: days between " + days);
+
+        if (days >= 3) {
+            Log.d(TAG, "onHandleIntent: days greater than 3");
+            Intent intentActivity = new Intent(this, MainActivity.class);
+            NotificationUtils notificationUtils = new NotificationUtils(this);
+            notificationUtils.showNotificationMessage("Use GetIn", "Please don't forget to use the GetIn app to accept jobs", intentActivity, 20);
+        }
     }
 
     public int daysBetween(Date d1, Date d2){

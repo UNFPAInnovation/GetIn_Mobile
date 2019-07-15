@@ -85,6 +85,7 @@ import java.util.Random;
 import java.util.UUID;
 
 import static org.sana.android.util.SanaUtil.isConnectedToInternet;
+import static org.sana.android.util.SanaUtil.saveAppLastOpened;
 
 /**
  * Main Activity which handles user authentication and initializes services that
@@ -364,6 +365,9 @@ public class MainActivity extends BaseActivity implements AuthenticationDialogLi
 
         boolean isConnected = isConnectedToInternet(this);
         Log.d(TAG, "onCreate: isConnected " + isConnected);
+
+        if(isConnected)
+            SanaUtil.saveLastInternetConnection(this);
 
         if (!isConnected)
             showNoNetworkDialog();

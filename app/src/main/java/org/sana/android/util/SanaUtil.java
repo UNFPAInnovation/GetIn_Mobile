@@ -484,6 +484,19 @@ public class SanaUtil {
         return preferences.getLong(lastAppOpenedKey, 0);
     }
 
+    public static void saveLastInternetConnection(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastInternetConnectionKey = "lastInternetConnection";
+        Date currentDate = Calendar.getInstance().getTime();
+        preferences.edit().putLong(lastInternetConnectionKey, currentDate.getTime()).commit();
+    }
+
+    public static long getLastInternetConnection(Context context) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+        String lastInternetConnectionKey = "lastInternetConnection";
+        return preferences.getLong(lastInternetConnectionKey, 0);
+    }
+
     public static boolean isConnectedToInternet(Context context) {
         ConnectivityManager connectivity = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         if (connectivity != null) {
