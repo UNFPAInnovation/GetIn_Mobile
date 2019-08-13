@@ -124,6 +124,8 @@ public class PatientsList extends FragmentActivity implements
     	else
     		getMenuInflater().inflate(R.menu.patients_list_menu, menu);
     		*/
+//        Log.d(TAG, "onCreateOptionsMenu: started#");
+//        getMenuInflater().inflate(R.menu.patients_list_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -131,17 +133,20 @@ public class PatientsList extends FragmentActivity implements
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_new_patient:
-                Log.d(TAG, "onOptionsItemSelected: new patient called");
-                registerNewPatient();
-                return true;
-            case R.id.menu_sync_patients:
-                Log.d(TAG, "onOptionsItemSelected: sync started");
-                getContentResolver().delete(Subjects.CONTENT_URI, null,null);
-            	mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
-                return true;
-            case R.id.menu_delete_patients:
-            	getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+//            case R.id.menu_new_patient:
+//                Log.d(TAG, "onOptionsItemSelected: new patient called");
+//                registerNewPatient();
+//                return true;
+//            case R.id.menu_sync_patients:
+//                Log.d(TAG, "onOptionsItemSelected: sync started");
+//                getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+//            	mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
+//                return true;
+//            case R.id.menu_delete_patients:
+//            	getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+//                return true;
+            case R.id.menu_search_girl:
+                Log.d(TAG, "onOptionsItemSelected: search girl");
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -182,6 +187,24 @@ public class PatientsList extends FragmentActivity implements
         // Use uuid based for consistency
         Uri uri = ContentUris.withAppendedId(Patients.CONTENT_URI,patientId);
         String uuid = ModelWrapper.getUuid(uri,this);
+//        ModelWrapper.getAllByField(Subjects.CONTENT_URI, getContentResolver(), uuid);
+//
+//        Cursor cursor = null;
+//        try {
+//            cursor = ctx.getContentResolver().query(
+//                    Procedures.CONTENT_URI, PROJECTION,
+//                    "(title LIKE\"" + title + "\")", null, null);
+//            if (cursor.getCount() > 0) {
+//                return true;
+//            }
+//        } catch (Exception e) {
+//
+//        } finally {
+//            if (cursor != null)
+//                cursor.close();
+//        }
+
+
         uri = Uris.withAppendedUuid(Patients.CONTENT_URI, uuid);
 
         final Intent data = new Intent();

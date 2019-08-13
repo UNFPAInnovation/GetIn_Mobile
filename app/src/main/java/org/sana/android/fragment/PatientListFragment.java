@@ -14,10 +14,15 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.CursorAdapter;
+import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AlphabetIndexer;
@@ -91,11 +96,12 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
     /** {@inheritDoc} */
     @Override
     public void onCreate(Bundle savedInstanceState) {
-    	Log.d(TAG, "onCreate()");
+    	Log.d(TAG, "onCreate()##");
         super.onCreate(savedInstanceState);
         //setRetainInstance(true);
     	Locales.updateLocale(this.getActivity(), getString(R.string.force_locale));
         delta = getResources().getInteger(R.integer.sync_delta_subjects);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -582,5 +588,68 @@ public class PatientListFragment extends ListFragment implements LoaderCallbacks
             villages.add(location.getName());
         }
         return villages;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        Log.d(TAG, "onCreateOptionsMenu: started##");
+        inflater.inflate(R.menu.patients_list_menu, menu);
+
+
+
+        final MenuItem searchItem = menu.findItem(R.id.menu_search_girl);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                Log.d(TAG, "onQueryTextSubmit: ");
+//                listAdapter.filter(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                Log.d(TAG, "onQueryTextChange: ");
+//                listAdapter.filter(newText);
+                return true;
+            }
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+//                listAdapter.swapCursor(queryHymnTable());
+                return false;
+            }
+        });
+
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        Log.d(TAG, "onOptionsItemSelected: started##");
+        switch (item.getItemId()) {
+//            case R.id.menu_new_patient:
+//                Log.d(TAG, "onOptionsItemSelected: new patient called");
+//                registerNewPatient();
+//                return true;
+//            case R.id.menu_sync_patients:
+//                Log.d(TAG, "onOptionsItemSelected: sync started");
+//                getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+//            	mFragmentPatientList.syncForced(this, Subjects.CONTENT_URI);
+//                return true;
+//            case R.id.menu_delete_patients:
+//            	getContentResolver().delete(Subjects.CONTENT_URI, null,null);
+//                return true;
+            case R.id.menu_search_girl:
+                Log.d(TAG, "onOptionsItemSelected: search girl");
+
+
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

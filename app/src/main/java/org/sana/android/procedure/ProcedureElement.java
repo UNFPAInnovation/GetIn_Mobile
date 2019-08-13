@@ -67,7 +67,7 @@ public abstract class ProcedureElement {
     	TEXT(""),
     	
     	/** Provides text capture. */
-        ENTRY(""), 
+        ENTRY(""),
         
         /** Provides exclusive option selector  as a dropdown box. */
         SELECT(""), 
