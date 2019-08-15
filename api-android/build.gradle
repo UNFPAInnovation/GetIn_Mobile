@@ -6,14 +6,14 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.3.0'
+        classpath 'com.android.tools.build:gradle:3.4.2'
     }
 }
 apply plugin: 'com.android.library'
 
 android {
     compileSdkVersion 28
-//    flavorDimensions "default"
+    flavorDimensions "default"
     buildToolsVersion "29.0.0"
     compileOptions{
         encoding "UTF-8"
@@ -29,6 +29,6 @@ android {
 
 dependencies {
     implementation project(':api')
-    implementation 'com.android.support:support-v4:28.0.0'
+//    implementation 'com.android.support:support-v4:28.0.0'
     implementation 'org.apache.httpcomponents:httpcore:4.3.3'
 }
